@@ -15,7 +15,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import Cookies from 'js-cookie';
-
+import AdminLogin from '../../../../adminLogin/AdminLogin.jsx'
 import "./login-view.css"
 import { useRouter } from '../../routes/hooks';
 
@@ -27,6 +27,7 @@ import { AuthContext } from '../../../../../Authentication/AuthContext.js';
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
+
   const theme = useTheme();
 
   const router = useRouter();
@@ -77,7 +78,7 @@ export default function LoginView() {
 
   const renderForm = (
     <>
-      <Stack spacing={3}>
+      {/* <Stack spacing={3}>
         <TextField name="email"
           label="Username Admin"
           className='login-input-css'
@@ -99,7 +100,8 @@ export default function LoginView() {
             ),
           }}
         />
-      </Stack>
+
+      </Stack> */}
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
         <Link variant="subtitle2" underline="hover">
@@ -107,7 +109,7 @@ export default function LoginView() {
         </Link>
       </Stack>
 
-      <LoadingButton
+      {/* <LoadingButton
         fullWidth
         size="large"
         type="submit"
@@ -117,7 +119,10 @@ export default function LoginView() {
         id='btn-Login'
       >
         Login
-      </LoadingButton>
+      </LoadingButton> */}
+      <div className="center-content">
+        <AdminLogin />
+      </div>
     </>
   );
 
