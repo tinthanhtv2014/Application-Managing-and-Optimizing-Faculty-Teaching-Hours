@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './adminLogin.scss';
 import { GoogleLogin } from '@react-oauth/google';
+import LoginPage from '../dashbroand/src/pages/login';
 const AdminLogin = () => {
     const [user, setUser] = useState(null);
 
@@ -33,14 +34,14 @@ const AdminLogin = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-                <button onClick={handleLogin}><GoogleLogin
+                <GoogleLogin onClick={handleLogin}
                     onSuccess={credentialResponse => {
                         console.log(credentialResponse);
                     }}
                     onError={() => {
                         console.log('Login Failed');
                     }}
-                />;</button>
+                />
             )}
         </div>
     );
