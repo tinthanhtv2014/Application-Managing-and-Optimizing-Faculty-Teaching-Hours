@@ -16,7 +16,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import Cookies from 'js-cookie';
 import AdminLogin from '../../../../adminLogin/AdminLogin.jsx'
-import "./login-view.css"
+import "./login-view.scss"
 import { useRouter } from '../../routes/hooks';
 
 import { bgGradient } from '../../theme/css';
@@ -154,7 +154,7 @@ export default function LoginView() {
             <Typography variant="h4" ><p className='sign-in-toAdmin'>Sign in</p></Typography>
 
             <Typography className='text-login' variant="body2" sx={{ mt: 2, mb: 5 }}>
-              Welcome to Khoa Kĩ Thuật Công Nghệ TVU
+              Welcome to <span className='text-login-color'>Khoa Kĩ Thuật Công Nghệ TVU</span>
 
             </Typography>
             <div className="center-content">
