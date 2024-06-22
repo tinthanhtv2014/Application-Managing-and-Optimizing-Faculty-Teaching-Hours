@@ -1,3 +1,9 @@
+.container-login {
+    padding: 0px;
+    margin: 0px;
+    margin-top: 20px;
+}
+
 #btn-Login {
     background-color: #212b36;
     z-index: 2000;
@@ -15,13 +21,33 @@
     height: 30px;
 }
 
+.text-login {
+    user-select: none;
+    cursor: pointer;
+}
+
 .imglogo-changepass1 {
     width: 52px;
     height: 52px;
 }
 
 .center-content {
-    margin-top: 20px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
 }
+
+.sign-in-toAdmin {
+
+    font-weight: 600;
+    user-select: none;
+    cursor: pointer;
+}
+
+.login-input-css {
+
+    width: 100%;
+    height: 50px;
+}
+
+/* ---------------------- */

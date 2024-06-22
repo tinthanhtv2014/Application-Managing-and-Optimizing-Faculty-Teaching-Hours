@@ -78,16 +78,16 @@ export default function LoginView() {
 
   const renderForm = (
     <>
-      {/* <Stack spacing={3}>
+      <Stack spacing={3}>
         <TextField name="email"
-          label="Username Admin"
+          label="Email "
           className='login-input-css'
           onChange={((event) => setUsernameAdminLogin(event.target.value))} />
 
         <TextField
           className='login-input-css'
           name="password"
-          label="Password Admin"
+          label="Mật khẩu"
           type={showPassword ? 'text' : 'password'}
           onChange={((event) => setPasswordAdminLogin(event.target.value))}
           InputProps={{
@@ -101,112 +101,80 @@ export default function LoginView() {
           }}
         />
 
-      </Stack> */}
+      </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover">
+        <Link className='text-login' variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>
 
-      {/* <LoadingButton
+      <LoadingButton
         fullWidth
         size="large"
         type="submit"
         variant="contained"
-        color="inherit"
+        // color="inherit"
         onClick={handleLogin}
         id='btn-Login'
       >
-        Login
-      </LoadingButton> */}
-      <div className="center-content">
-        <AdminLogin />
-      </div>
+        Đăng Nhập
+      </LoadingButton>
+
     </>
   );
 
   return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
-        }),
-        height: 1,
-      }}
-    >
-      <Logo
+    <div className='container-login'>
+      <Box
         sx={{
-          position: 'fixed',
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
+          ...bgGradient({
+            color: alpha(theme.palette.background.default, 0.9),
+            imgUrl: '/assets/background/overlay_4.jpg',
+          }),
+          height: 1,
         }}
-      />
-
-      <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-        <Card
+      >
+        <Logo
           sx={{
-            p: 5,
-            width: 1,
-            maxWidth: 420,
+            position: 'fixed',
+            top: { xs: 16, md: 24 },
+            left: { xs: 16, md: 24 },
           }}
-        >
-          <Typography variant="h4">Sign in to Admin</Typography>
+        />
 
-          <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
-            </Link>
-          </Typography>
+        <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+          <Card
+            sx={{
+              p: 5,
+              width: 1,
+              maxWidth: 420,
+            }}
+          >
+            <Typography variant="h4" ><p className='sign-in-toAdmin'>Sign in</p></Typography>
 
-          <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <img src={require('../../../public/assets/images/avatars/Untitled-1.png')}
-                className='imglogo-changepass1' alt="" />
-            </Button>
+            <Typography className='text-login' variant="body2" sx={{ mt: 2, mb: 5 }}>
+              Welcome to Khoa Kĩ Thuật Công Nghệ TVU
 
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <img src={require('../../../public/assets/images/avatars/iconlogo.png')}
-                className='imglogo-changepass' alt="" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <img src={require('../../../public/assets/images/avatars/logoB.png')}
-                className='imglogo-changepass1' alt="" />
-              {/* <Iconify icon="eva:twitter-fill" color="#1C9CEA" /> */}
-
-            </Button>
-          </Stack>
-
-          <Divider sx={{ my: 3 }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              OR
             </Typography>
-          </Divider>
+            <div className="center-content">
+              <AdminLogin />
+            </div>
+            <Stack direction="row" spacing={3}>
 
-          {renderForm}
-        </Card>
-      </Stack>
-    </Box>
+
+            </Stack>
+
+            <Divider sx={{ my: 3 }}>
+              <Typography className='text-login' variant="body2" sx={{ color: 'text.secondary' }}>
+                Hoặc đăng nhập với email
+              </Typography>
+            </Divider>
+
+            {renderForm}
+          </Card>
+        </Stack>
+      </Box>
+    </div>
   );
 }

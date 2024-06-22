@@ -3,39 +3,43 @@ import axios from 'axios';
 import './adminLogin.scss';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
-
+import logoGG from "../../../src/public/logo/google.png"
 const AdminLogin = () => {
     const [user, setUser] = useState(null);
     const [tokenGoogle, setTokenGoogle] = useState(null);
     const [tokenadmin, setTokenAdmin] = useState(null);
 
 
-    // const login = useGoogleLogin({
-    //     onSuccess: tokenResponse => setTokenGoogle(tokenResponse),
-    // });
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            console.log('Token Response:', tokenResponse);
+            setTokenGoogle(tokenResponse.access_token);
 
-
-    useEffect(() => {
-        if (tokenGoogle) {
-            const decoded = jwtDecode(tokenGoogle);
-            console.log('Decoded Token:', decoded);
-            setTokenAdmin(decoded)
-            // You can send the token to your backend if needed
-            axios.post('/api/google-login', { token: tokenGoogle })
-                .then(response => {
-                    setUser(response.data);
-                })
-                .catch(error => {
-                    console.error('Error during backend token validation:', error);
+            // Lấy thông tin người dùng từ Google API
+            try {
+                const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: {
+                        Authorization: `Bearer ${tokenResponse.access_token}`,
+                    },
                 });
-        }
-    }, [tokenGoogle]);
+
+                setUser(userInfo.data);
+                console.log(userInfo.data)
+                console.log('User Info:', userInfo.data);
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+            }
+        },
+        onError: error => {
+            console.error('Login Failed:', error);
+        },
+    });
+
 
     const handleLogout = () => {
-        axios.get('/logout').then(() => {
-            setUser(null);
-            setTokenGoogle(null);
-        });
+
+        setUser(null);
+        setTokenGoogle(null);
     };
 
     return (
@@ -46,14 +50,18 @@ const AdminLogin = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-                <GoogleLogin
-                    onSuccess={credentialResponse => {
-                        setTokenGoogle(credentialResponse.credential);
-                    }}
-                    onError={() => {
-                        console.log('Login Failed');
-                    }}
-                />
+
+                // <GoogleLogin className="Button-gg"
+                //     onSuccess={credentialResponse => {
+                //         setTokenGoogle(credentialResponse.credential);
+                //     }}
+                //     onError={() => {
+                //         console.log('Login Failed');
+                //     }}
+                // />
+                <div>
+                    <button className='Button-gg' onClick={() => login()}><img src={logoGG} alt="Logo" className='logo-gg' /> <p>Sign in with Google</p></button>
+                </div>
             )}
         </div>
     );
