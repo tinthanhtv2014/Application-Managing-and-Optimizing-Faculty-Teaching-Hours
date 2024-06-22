@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./Authentication/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import LoginAdmin from "../src/Admin/dashbroand/src/pages/login.jsx";
+import TruongKhoaLogin from "./TruongKhoa/TruongKhoaLogin/TruongKhoaLogin.jsx";
 import DashBroand from "./Admin/dashbroand/src/main";
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginAdmin />} />
           <Route path="/test" element={<DashBroand />} />
+          <Route path="/" element={<TruongKhoaLogin />} />
         </Routes>
         <ToastContainer
           position="top-right"
