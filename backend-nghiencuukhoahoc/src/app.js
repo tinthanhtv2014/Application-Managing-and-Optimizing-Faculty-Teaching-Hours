@@ -22,12 +22,15 @@ app.use(bodyParser.json());
 configViewEngine(app);
 
 // ------------------Test api
-const { getAllTaiKhoanController, createTaiKhoanController, updateTaiKhoanController } = require('./controllers/AdminController/adminController');
+const {
+  getAllTaiKhoanController,
+  createTaiKhoanController,
+  updateTaiKhoanController,
+} = require("./controllers/AdminController/adminController");
 
 app.get("/api/tai-khoan", getAllTaiKhoanController);
 app.post("/api/tao-tai-khoan", createTaiKhoanController);
 app.put("/api/sua-tai-khoan/:tenDangNhap", updateTaiKhoanController);
-
 
 //----------------------------------------
 
@@ -38,4 +41,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-

@@ -2,15 +2,17 @@ import "./TruongKhoaLogin.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import {
+  GoogleLogin,
+  GoogleOAuthProvider,
+  useGoogleLogin,
+} from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 const TruongKhoaLogin = () => {
   const [user, setUser] = useState(null);
   const [tokenGoogle, setTokenGoogle] = useState(null);
-  const clientId =
-    "450673360873-ok5mu6bm0unjbr16f6eaf8f66mvrespq.apps.googleusercontent.com";
-  const redirectUri = "http://localhost:3000";
+
   useEffect(() => {
     const fetchData = async () => {
       if (tokenGoogle) {
@@ -38,25 +40,32 @@ const TruongKhoaLogin = () => {
     // });
     setUser(null);
   };
+  const login = useGoogleLogin({
+    onSuccess: (response) => console.log(response),
+    onError: () => console.log("Login Failed"),
+  });
 
   return (
-    <div className="admin-login">
-      {user ? (
-        <div>
-          <h1>Welcome, {user}</h1>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            setTokenGoogle(credentialResponse.credential);
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
-      )}
-    </div>
+    <GoogleOAuthProvider clientId="450673360873-ok5mu6bm0unjbr16f6eaf8f66mvrespq.apps.googleusercontent.com">
+      <div className="admin-login">
+        {user ? (
+          <div>
+            <h1>Welcome, {user}</h1>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        ) : (
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              setTokenGoogle(credentialResponse.credential);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
+        )}
+        <button onClick={() => login()}>Login with Google using Hook</button>
+      </div>
+    </GoogleOAuthProvider>
   );
 };
 export default TruongKhoaLogin;

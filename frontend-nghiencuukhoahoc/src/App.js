@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginAdmin />} />
           <Route path="/test" element={<DashBroand />} />
-          <Route path="/" element={<TruongKhoaLogin />} />
+          {/* <Route path="/" element={<TruongKhoaLogin />} /> */}
         </Routes>
         <ToastContainer
           position="top-right"

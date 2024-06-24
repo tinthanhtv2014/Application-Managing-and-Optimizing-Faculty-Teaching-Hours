@@ -1,90 +1,77 @@
-const { getAllTaiKhoan, createTaiKhoan, updateTaiKhoan } = require('../../services/AdminServices/CRUDAdmin')
-
+const {
+  getAllTaiKhoan,
+  createTaiKhoan,
+  updateTaiKhoan,
+} = require("../../services/AdminServices/CRUDAdmin");
 
 const getAllTaiKhoanController = async (req, res) => {
-    try {
-
-        let danhSachTaiKhoang = await getAllTaiKhoan();
-        console.log("Lấy dach sách tài khoảng thành công >>>> ", danhSachTaiKhoang)
-        return res.status(200).json({
-            EM: "Lấy dach sách tài khoảng thành công", //error mesage
-            EC: 200, //error code
-            DT: danhSachTaiKhoang //data
-        })
-    } catch (error) {
-        console.log("getAllTaiKhoanController Lấy dach sách tài khoảng không thành công >>>> ", error)
-        return res.status(200).json({
-            EM: "Lấy dach sách tài khoảng không thành công", //error mesage
-            EC: 400, //error code
-            DT: '' //data
-        })
-    }
-}
+  try {
+    let results = await getAllTaiKhoan();
+    console.log("Lấy dach sách tài khoảng thành công >>>> ", results);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(
+      "getAllTaiKhoanController Lấy dach sách tài khoảng không thành công >>>> ",
+      error
+    );
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
 
 const createTaiKhoanController = async (req, res) => {
-    try {
+  try {
+    const tendangnhap = req.body.tenDangNhap;
+    const matkhau = req.body.matKhau;
+    const phanQuyen = req.body.phanQuyen;
 
-        const tendangnhap = req.body.tenDangNhap;
-        const matkhau = req.body.matKhau;
-        const phanQuyen = req.body.phanQuyen;
-
-        let results = await createTaiKhoan(tendangnhap, matkhau, phanQuyen)
-        if (results == 'error') {
-            return res.status(200).json({
-                EM: "Tạo tài khoảng không thành công do tài khoảng đã tồn tại", //error mesage
-                EC: 400, //error code
-                DT: '' //data
-            })
-        }
-
-        return res.status(200).json({
-            EM: "Tạo tài khoảng thành công", //error mesage
-            EC: 200, //error code
-            DT: results //data
-        })
-    } catch (error) {
-        console.log("createTaiKhoanController error>>>> ", error)
-        return res.status(200).json({
-            EM: "Tạo tài khoảng không thành công", //error mesage
-            EC: 400, //error code
-            DT: '' //data
-        })
-    }
-}
+    let results = await createTaiKhoan(tendangnhap, matkhau, phanQuyen);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log("createTaiKhoanController error>>>> ", error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
 
 const updateTaiKhoanController = async (req, res) => {
-    try {
-
-        const tendangnhap = req.params.tenDangNhap;
-        const matkhau = req.body.matKhau;
-        const phanQuyen = req.body.phanQuyen;
-
-        let results = await updateTaiKhoan(tendangnhap, matkhau, phanQuyen)
-        if (results == 'error') {
-            return res.status(200).json({
-                EM: "Sửa tài khoảng không thành công do tài khoảng không tồn tại", //error mesage
-                EC: 400, //error code
-                DT: '' //data
-            })
-        }
-
-        return res.status(200).json({
-            EM: "Sửa tài khoảng thành công", //error mesage
-            EC: 200, //error code
-            DT: results //data
-        })
-    } catch (error) {
-        console.log("updateTaiKhoanController error>>>> ", error)
-        return res.status(200).json({
-            EM: "Sửa tài khoảng không thành công", //error mesage
-            EC: 400, //error code
-            DT: '' //data
-        })
-    }
-}
+  try {
+    const tendangnhap = req.params.tenDangNhap;
+    const matkhaucu = req.body.matKhaucu;
+    const phanQuyen = req.body.phanQuyen;
+    const matkhaumoi = req.body.matKhaumoi;
+    let results = await updateTaiKhoan(
+      tendangnhap,
+      matkhaucu,
+      matkhaumoi,
+      phanQuyen
+    );
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
-    getAllTaiKhoanController,
-    createTaiKhoanController,
-    updateTaiKhoanController,
+  getAllTaiKhoanController,
+  createTaiKhoanController,
+  updateTaiKhoanController,
 };
