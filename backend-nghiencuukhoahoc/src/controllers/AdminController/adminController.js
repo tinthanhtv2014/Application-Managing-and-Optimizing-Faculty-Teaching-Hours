@@ -1,4 +1,4 @@
-const { getAllTaiKhoan, createTaiKhoan } = require('../../services/AdminServices/CRUDAdmin')
+const { getAllTaiKhoan, createTaiKhoan, updateTaiKhoan } = require('../../services/AdminServices/CRUDAdmin')
 
 
 const getAllTaiKhoanController = async (req, res) => {
@@ -52,7 +52,39 @@ const createTaiKhoanController = async (req, res) => {
     }
 }
 
+const updateTaiKhoanController = async (req, res) => {
+    try {
+
+        const tendangnhap = req.params.tenDangNhap;
+        const matkhau = req.body.matKhau;
+        const phanQuyen = req.body.phanQuyen;
+
+        let results = await updateTaiKhoan(tendangnhap, matkhau, phanQuyen)
+        if (results == 'error') {
+            return res.status(200).json({
+                EM: "Sửa tài khoảng không thành công do tài khoảng không tồn tại", //error mesage
+                EC: 400, //error code
+                DT: '' //data
+            })
+        }
+
+        return res.status(200).json({
+            EM: "Sửa tài khoảng thành công", //error mesage
+            EC: 200, //error code
+            DT: results //data
+        })
+    } catch (error) {
+        console.log("updateTaiKhoanController error>>>> ", error)
+        return res.status(200).json({
+            EM: "Sửa tài khoảng không thành công", //error mesage
+            EC: 400, //error code
+            DT: '' //data
+        })
+    }
+}
+
 module.exports = {
     getAllTaiKhoanController,
     createTaiKhoanController,
+    updateTaiKhoanController,
 };

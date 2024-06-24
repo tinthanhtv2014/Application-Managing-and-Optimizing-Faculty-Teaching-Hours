@@ -47,7 +47,28 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen) => {
     }
 };
 
+const updateTaiKhoan = async (tenDangnhap, matKhau, phanQuyen) => {
+    try {
+
+        let exists = await checkTaiKhoanExists(tenDangnhap);
+        if (!exists) {
+            console.log("TENDANGNHAP không tồn tại");
+            return 'error';
+        }
+
+        let [results, fields] = await pool.execute(
+            `UPDATE taikhoan SET MATKHAU = ?, PHANQUYEN = ? WHERE TENDANGNHAP = ?`,
+            [matKhau, phanQuyen, tenDangnhap]
+        );
+        return results;
+    } catch (error) {
+        console.log("updateTaiKhoan errr >>>", error);
+        return '';
+    }
+};
+
 module.exports = {
     getAllTaiKhoan,
     createTaiKhoan,
+    updateTaiKhoan,
 };
