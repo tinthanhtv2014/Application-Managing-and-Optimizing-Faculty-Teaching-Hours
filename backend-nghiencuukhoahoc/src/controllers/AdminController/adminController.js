@@ -2,7 +2,7 @@ const {
   getAllTaiKhoan,
   createTaiKhoan,
   updateTaiKhoan,
-} = require("../../services/AdminServices/CRUDAdmin");
+} = require("../../services/AdminServices/CRUDTaiKhoan");
 
 const getAllTaiKhoanController = async (req, res) => {
   try {
