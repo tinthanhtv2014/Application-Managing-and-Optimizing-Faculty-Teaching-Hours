@@ -8,32 +8,40 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: 'dashboard',
+    title: 'Khoa Và Bộ Môn',
     path: '/',
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
-    path: '/user',
+    title: 'Giảng Viên',
+    path: '/quan-ly-giang-vien',
     icon: icon('ic_user'),
   },
   {
-    title: 'Kho Sách',
-    path: '/products',
+    title: 'Chức Vụ Giảng Viên',
+    path: '/quan-ly-chuc-vu',
     icon: icon('ic_cart'),
   },
   {
-    title: 'List Orders',
-    path: '/orders',
+    title: 'Danh Mục Giờ Chuẩn',
+    path: '/quan-ly-danh-muc-gio-chuan',
     icon: icon('ic_blog'),
   },
   {
-    title: 'Chat',
-    path: '/chat',
+    title: 'Chức Danh Giảng Viên',
+    path: '/quan-ly-chuc-danh',
     icon: icon('ic_blog'),
   }, {
-    title: 'ChangePassword',
-    path: '/changePass',
+    title: 'Quản Lý Lớp Học',
+    path: '/nhap-lop-tu-file',
+    icon: icon('ic_blog'),
+  }, {
+    title: 'Chương Trình Học',
+    path: '/nhap-chuong-trinh-tu-file',
+    icon: icon('ic_blog'),
+  }, {
+    title: 'Quản Lý Môn Học',
+    path: '/quan-ly-mon-hoc',
     icon: icon('ic_blog'),
   },
   {

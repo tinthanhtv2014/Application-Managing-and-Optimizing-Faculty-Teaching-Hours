@@ -50,15 +50,6 @@ const AdminLogin = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-
-                // <GoogleLogin className="Button-gg"
-                //     onSuccess={credentialResponse => {
-                //         setTokenGoogle(credentialResponse.credential);
-                //     }}
-                //     onError={() => {
-                //         console.log('Login Failed');
-                //     }}
-                // />
                 <div>
                     <button className='Button-gg' onClick={() => login()}><img src={logoGG} alt="Logo" className='logo-gg' /> <p>Sign in with Google</p></button>
                 </div>

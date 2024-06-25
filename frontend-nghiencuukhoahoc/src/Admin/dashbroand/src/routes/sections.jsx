@@ -34,7 +34,7 @@ export default function Router() {
       )
     },
     {
-      path: '/user',
+      path: '/quan-ly-giang-vien',
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -45,7 +45,7 @@ export default function Router() {
       )
     },
     {
-      path: '/products', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly-chuc-vu', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -57,7 +57,7 @@ export default function Router() {
       )
     }
     , {
-      path: '/orders', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly-danh-muc-gio-chuan', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -70,7 +70,7 @@ export default function Router() {
     }
     ,
     {
-      path: '/ordersDaHuy', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly-chuc-danh', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -83,7 +83,7 @@ export default function Router() {
     }
     ,
     {
-      path: '/ordersDaGiao', // Thêm ký tự '*' vào cuối đường dẫn
+      path: ' /nhap-lop-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -95,7 +95,7 @@ export default function Router() {
       )
     }
     , {
-      path: '/ordersChiTiet', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/nhap-chuong-trinh-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -107,7 +107,7 @@ export default function Router() {
       )
     }
     , {
-      path: '/ordersDaGiao/:madonhangParam', // Thêm ký tự '*' vào cuối đường dẫn
+      path: ' /quan-ly-mon-hoc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -119,24 +119,6 @@ export default function Router() {
       )
     }
     , {
-      path: '/chat', // Thêm ký tự '*' vào cuối đường dẫn
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <ChatAdmin />
-          </Suspense>
-        </DashboardLayout>
-      )
-    }, {
-      path: '/changePass', // Thêm ký tự '*' vào cuối đường dẫn
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <ChangePassword />
-          </Suspense>
-        </DashboardLayout>
-      )
-    }, {
       path: '/excel', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>

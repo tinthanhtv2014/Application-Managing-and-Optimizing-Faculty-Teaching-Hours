@@ -6,14 +6,14 @@ import { AuthProvider } from "./Authentication/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import LoginAdmin from "../src/Admin/dashbroand/src/pages/login.jsx";
 import TruongKhoaLogin from "./TruongKhoa/TruongKhoaLogin/TruongKhoaLogin.jsx";
-import DashBroand from "./Admin/dashbroand/src/main";
+import DashBroandAdmin from "./Admin/dashbroand/src/main";
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
           <Route path="/login" element={<LoginAdmin />} />
-          <Route path="/test" element={<DashBroand />} />
+          <Route path="/test" element={<DashBroandAdmin />} />
           {/* <Route path="/" element={<TruongKhoaLogin />} /> */}
         </Routes>
         <ToastContainer
