@@ -1,0 +1,57 @@
+.container-login {
+    padding: 0px;
+    margin: 0px;
+    margin-top: 20px;
+}
+
+#btn-Login {
+    background-color: #212b36;
+    z-index: 2000;
+    color: white;
+    text-transform: none;
+    border-radius: 11px;
+}
+
+#btn-Login:hover {
+    background-color: #212b36;
+}
+
+.imglogo-changepass {
+    width: 30px;
+    height: 30px;
+}
+
+.text-login {
+    user-select: none;
+    cursor: pointer;
+
+    .text-login-color {
+        color: #006838;
+    }
+}
+
+.imglogo-changepass1 {
+    width: 52px;
+    height: 52px;
+}
+
+.center-content {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.sign-in-toAdmin {
+
+    font-weight: 600;
+    user-select: none;
+    cursor: pointer;
+}
+
+.login-input-css {
+
+    width: 100%;
+    height: 50px;
+}
+
+/* ---------------------- */

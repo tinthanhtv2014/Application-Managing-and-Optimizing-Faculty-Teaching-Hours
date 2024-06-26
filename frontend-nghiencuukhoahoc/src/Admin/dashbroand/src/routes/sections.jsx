@@ -39,7 +39,6 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <UserPage />
-
           </Suspense>
         </DashboardLayout>
       )
