@@ -52,7 +52,7 @@ const getAllTaiKhoan = async () => {
   }
 };
 
-const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen) => {
+const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   try {
     let exists = await checkTaiKhoanExists(tenDangnhap);
     if (exists === true) {
@@ -64,8 +64,8 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen) => {
     }
     let hashpass = await hashPassword(matKhau);
     let [results, fields] = await pool.execute(
-      `INSERT INTO taikhoan (TENDANGNHAP, MATKHAU, PHANQUYEN) VALUES (?, ?, ?)`,
-      [tenDangnhap, hashpass, phanQuyen]
+      `INSERT INTO taikhoan (TENDANGNHAP, MATKHAU, PHANQUYEN,TRANGTHAI) VALUES (?, ?, ?)`,
+      [tenDangnhap, hashpass, phanQuyen, trangThai]
     );
     return {
       EM: "tạo tài khoản thành công",
@@ -85,7 +85,8 @@ const updateTaiKhoan = async (
   tenDangnhap,
   matKhaucu,
   matkhaumoi,
-  phanQuyen
+  phanQuyen,
+  trangThai
 ) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -101,8 +102,8 @@ const updateTaiKhoan = async (
       if (isCorrectPass) {
         let hashpass = await hashPassword(matkhaumoi);
         let [results, fields] = await pool.execute(
-          `UPDATE taikhoan SET MATKHAU = ?, PHANQUYEN = ? WHERE TENDANGNHAP = ?`,
-          [hashpass, phanQuyen, tenDangnhap]
+          `UPDATE taikhoan SET MATKHAU = ?, PHANQUYEN = ?, TRANGTHAI = ? WHERE TENDANGNHAP = ?`,
+          [hashpass, phanQuyen, trangThai, tenDangnhap]
         );
         return {
           EM: "update thành công",

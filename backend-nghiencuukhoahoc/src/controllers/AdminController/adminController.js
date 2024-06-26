@@ -7,17 +7,14 @@ const {
 const getAllTaiKhoanController = async (req, res) => {
   try {
     let results = await getAllTaiKhoan();
-    console.log("Lấy dach sách tài khoảng thành công >>>> ", results);
+
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
       DT: results.DT,
     });
   } catch (error) {
-    console.log(
-      "getAllTaiKhoanController Lấy dach sách tài khoảng không thành công >>>> ",
-      error
-    );
+    console.log(error);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -31,15 +28,19 @@ const createTaiKhoanController = async (req, res) => {
     const tendangnhap = req.body.tenDangNhap;
     const matkhau = req.body.matKhau;
     const phanQuyen = req.body.phanQuyen;
-
-    let results = await createTaiKhoan(tendangnhap, matkhau, phanQuyen);
+    const trangThai = req.body.trangThai;
+    let results = await createTaiKhoan(
+      tendangnhap,
+      matkhau,
+      phanQuyen,
+      trangThai
+    );
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
       DT: results.DT,
     });
   } catch (error) {
-    console.log("createTaiKhoanController error>>>> ", error);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
