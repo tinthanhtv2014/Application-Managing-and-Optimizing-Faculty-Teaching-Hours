@@ -2,7 +2,7 @@ const pool = require("../../config/database");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
-
+const { createJWT } = require("../../middlewares/JWTAction");
 //hàm hash mật khẩu
 const hashPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -81,6 +81,58 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   }
 };
 
+const LoginTaikhoan = async (tenDangnhap, matKhau) => {
+  try {
+    const [results, fields] = await connection.execute(
+      "SELECT * FROM `taikhoan` where `TENDANGNHAP` = ?",
+      [tenDangnhap]
+    );
+    if (results.length > 0) {
+      const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
+      if (isCorrectPass) {
+        let payload = {
+          taikhoan: results[0].TENDANGNHAP,
+          matkhau: results[0].MATKHAU,
+          phanquyen: results[0].PHANQUYEN,
+        };
+        let token = createJWT(payload);
+        return {
+          EM: "đăng nhập thành công",
+          EC: 1,
+          DT: {
+            access_token: token,
+            data: results,
+          },
+        };
+      } else {
+        return {
+          EM: "đăng nhập thất bại, mật khẩu không đúng",
+          EC: 1,
+          DT: {
+            access_token: token,
+            data: results,
+          },
+        };
+      }
+    } else {
+      return {
+        EM: "đăng nhập thất bại, tài khoản không đúng",
+        EC: 1,
+        DT: {
+          access_token: token,
+          data: results,
+        },
+      };
+    }
+  } catch (error) {
+    return {
+      EM: "lỗi services createTaiKhoan",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 const updateTaiKhoan = async (
   tenDangnhap,
   matKhaucu,
@@ -135,4 +187,6 @@ module.exports = {
   getAllTaiKhoan,
   createTaiKhoan,
   updateTaiKhoan,
+
+  LoginTaikhoan,
 };

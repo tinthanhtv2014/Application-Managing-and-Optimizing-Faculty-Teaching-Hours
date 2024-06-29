@@ -2,6 +2,7 @@ const {
   getAllTaiKhoan,
   createTaiKhoan,
   updateTaiKhoan,
+  LoginTaikhoan,
 } = require("../../services/AdminServices/CRUDTaiKhoan");
 
 const getAllTaiKhoanController = async (req, res) => {
@@ -71,8 +72,49 @@ const updateTaiKhoanController = async (req, res) => {
   }
 };
 
+const loginTaikhoanAdminController = async (req, res) => {
+  try {
+    const username = req.body.tendangnhap;
+    const password = req.body.matkhau;
+
+    const results = await LoginTaikhoan(username, password);
+    if (results && results.DT && results.DT.access_token) {
+      res.cookie("jwt", results.DT.access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+      });
+    }
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const logoutTaikhoanAdminController = async (req, res) => {
+  try {
+    res.clearCookie("jwt");
+    return res.status(200).json({
+      EM: "Logout Thành Công !!!",
+      EC: 0,
+      DT: " ",
+    });
+  } catch {
+    return res.status(500).json({
+      EM: "error from server",
+      EC: "-1",
+      DT: " ",
+    });
+  }
+};
+
 module.exports = {
   getAllTaiKhoanController,
   createTaiKhoanController,
   updateTaiKhoanController,
+  loginTaikhoanAdminController,
+  logoutTaikhoanAdminController,
 };
