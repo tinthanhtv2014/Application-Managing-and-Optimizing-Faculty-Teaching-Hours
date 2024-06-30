@@ -23,6 +23,7 @@ const createKhoa = async (makhoa, tenkhoa) => {
       `select * from khoa where TENKHOA = ?`,
       [tenkhoa]
     );
+
     if (results1.length > 0) {
       return {
         EM: "khoa này đã tồn tại",
@@ -40,6 +41,7 @@ const createKhoa = async (makhoa, tenkhoa) => {
       EC: 1,
       DT: results,
     };
+
   } catch (error) {
     return {
       EM: "lỗi services createTaiKhoan",

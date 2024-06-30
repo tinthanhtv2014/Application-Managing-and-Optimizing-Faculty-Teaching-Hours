@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 const { createJWT } = require("../../middlewares/JWTAction");
+
 //hàm hash mật khẩu
 const hashPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
