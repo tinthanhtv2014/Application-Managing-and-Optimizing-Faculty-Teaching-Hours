@@ -30,6 +30,10 @@ const createTaiKhoanController = async (req, res) => {
     const matkhau = req.body.matKhau;
     const phanQuyen = req.body.phanQuyen;
     const trangThai = req.body.trangThai;
+    console.log(tendangnhap);
+    console.log(matkhau);
+    console.log(phanQuyen);
+    console.log(trangThai);
     let results = await createTaiKhoan(
       tendangnhap,
       matkhau,
@@ -76,7 +80,6 @@ const loginTaikhoanAdminController = async (req, res) => {
   try {
     const username = req.body.tendangnhap;
     const password = req.body.matkhau;
-
     const results = await LoginTaikhoan(username, password);
     if (results && results.DT && results.DT.access_token) {
       res.cookie("jwt", results.DT.access_token, {

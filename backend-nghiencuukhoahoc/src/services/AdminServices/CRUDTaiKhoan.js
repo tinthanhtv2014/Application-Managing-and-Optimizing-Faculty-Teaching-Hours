@@ -18,7 +18,7 @@ const checkPassword = (inputpassword, hashpass) => {
 const checkTaiKhoanExists = async (tenDangnhap) => {
   try {
     const [results, fields] = await pool.execute(
-      "SELECT * FROM taikhoan WHERE TENDANGNHAP = ?",
+      "SELECT * FROM TAIKHOAN WHERE TENDANGNHAP = ?",
       [tenDangnhap]
     );
 
@@ -54,7 +54,10 @@ const getAllTaiKhoan = async () => {
 
 const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   try {
+    console.log("Checking if account exists...");
     let exists = await checkTaiKhoanExists(tenDangnhap);
+    console.log("Account exists:", exists);
+
     if (exists === true) {
       return {
         EM: "tài khoản đã tồn tại không thể tạo thêm",
@@ -62,17 +65,26 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
         DT: [],
       };
     }
+
+    console.log("Hashing password...");
     let hashpass = await hashPassword(matKhau);
+    console.log("Hashed password:", hashpass);
+
+    console.log("Inserting into database...");
     let [results, fields] = await pool.execute(
-      `INSERT INTO taikhoan (TENDANGNHAP, MATKHAU, PHANQUYEN,TRANGTHAI) VALUES (?, ?, ?)`,
+      `INSERT INTO TAIKHOAN (TENDANGNHAP, MATKHAU, PHANQUYEN, TRANGTHAI) VALUES (?, ?, ?, ?)`,
       [tenDangnhap, hashpass, phanQuyen, trangThai]
     );
+
+    console.log("Insert results:", results);
+
     return {
       EM: "tạo tài khoản thành công",
       EC: 1,
       DT: results,
     };
   } catch (error) {
+    console.error("Error in createTaiKhoan:", error);
     return {
       EM: "lỗi services createTaiKhoan",
       EC: 1,
@@ -83,12 +95,14 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
 
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {
   try {
-    const [results, fields] = await connection.execute(
-      "SELECT * FROM `taikhoan` where `TENDANGNHAP` = ?",
+    const [results, fields] = await pool.execute(
+      "SELECT * FROM `TAIKHOAN` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
     );
+
     if (results.length > 0) {
       const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
+
       if (isCorrectPass) {
         let payload = {
           taikhoan: results[0].TENDANGNHAP,
@@ -107,26 +121,27 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
       } else {
         return {
           EM: "đăng nhập thất bại, mật khẩu không đúng",
-          EC: 1,
+          EC: 0,
           DT: {
-            access_token: token,
-            data: results,
+            access_token: null,
+            data: [],
           },
         };
       }
     } else {
       return {
         EM: "đăng nhập thất bại, tài khoản không đúng",
-        EC: 1,
+        EC: 0,
         DT: {
-          access_token: token,
-          data: results,
+          access_token: null,
+          data: [],
         },
       };
     }
   } catch (error) {
+    console.error("Error in LoginTaikhoan:", error);
     return {
-      EM: "lỗi services createTaiKhoan",
+      EM: "lỗi services LoginTaikhoan",
       EC: 1,
       DT: [],
     };
