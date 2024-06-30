@@ -12,8 +12,8 @@ const configViewEngine = require("./config/ViewEngine");
 // Router =========================================================================
 const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
-const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter")
-const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter")
+const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter");
+const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter");
 //=================================================================================
 
 const corsOptions = {
@@ -23,7 +23,7 @@ const corsOptions = {
 
 //===============================sử dụng các dependency
 app.use(cors(corsOptions));
-app.use(cors()); //config cors cho tất cả truy cập
+// app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,10 +33,10 @@ configViewEngine(app);
 //===============================
 
 //route config ========================================================================================
-CRUDTaiKhoan(app) // route CRUD bảng taikhoan dành cho admin
-CRUDKhoa(app) //CRUD bảng khoa
-CRUDBoMon(app) // CRUD bộ môn
-CRUDGiangVien(app) // CRUD giảng viên
+CRUDTaiKhoan(app); // route CRUD bảng taikhoan dành cho admin
+CRUDKhoa(app); //CRUD bảng khoa
+CRUDBoMon(app); // CRUD bộ môn
+CRUDGiangVien(app); // CRUD giảng viên
 //=====================================================================================================
 
 app.get("/", (req, res) => {

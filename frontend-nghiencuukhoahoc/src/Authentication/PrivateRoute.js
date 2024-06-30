@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 // import App from "../../src/app.jsx";
-import Loading from "../../../component/ComponentLoading/CompnentLoading.tsx";
+import Loading from "../component/ComponentLoading/CompnentLoading.tsx";
 import Cookies from "js-cookie";
 // import CookiesAxios from "../../../config/AxiosConfig.js";
 import axios from "axios";
+import LoginPage from "../Admin/dashbroand/src/pages/login.jsx";
 const PrivateRoute = () => {
   const [loading, setLoading] = useState(true);
   const [redirect, setRedirect] = useState(true);
@@ -60,7 +61,7 @@ const PrivateRoute = () => {
     return <Navigate to="/admin" />;
   }
 
-  return <App />;
+  return <LoginPage />;
 };
 
 export default PrivateRoute;

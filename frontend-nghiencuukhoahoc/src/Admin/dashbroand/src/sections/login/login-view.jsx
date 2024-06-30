@@ -14,16 +14,18 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-import Cookies from 'js-cookie';
+
 import AdminLogin from '../../../../adminLogin/AdminLogin.jsx'
 import "./login-view.scss"
 import { useRouter } from '../../routes/hooks';
-
+// import 'dotenv/config'
 import { bgGradient } from '../../theme/css';
-
+import Cookies from 'js-cookie';
 import Logo from '../../components/logo';
 import Iconify from '../../components/iconify';
 import { AuthContext } from '../../../../../Authentication/AuthContext.js';
+
+import { jwtDecode } from "jwt-decode";
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
@@ -40,28 +42,48 @@ export default function LoginView() {
   // const { login } = useContext(AuthContext);
   const handleLogin = (event) => {
     console.log('ok')
+    console.log('Server URL:', process.env.REACT_APP_URL_SERVER);
     event.preventDefault();
     if (!UsernameAdminLogin || !PasswordAdminLogin) {
       toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
+
+
     } else {
       axios
-        .post("http://localhost:3003/admin/v1/login", {
-          username: UsernameAdminLogin,
-          password: PasswordAdminLogin,
+        .post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/login`, {
+          tendangnhap: UsernameAdminLogin,
+          matkhau: PasswordAdminLogin,
         })
         .then((response) => {
           console.log('check', response.data);
-          console.log(response.data.data.token);
+          console.log(response.data.DT.access_token);
 
 
           // Trong hàm then của axios.post
-          if (response.data.data.EC === 1) {
+          if (response.data.EC === 1) {
             toast.success("Đăng nhập thành công");
 
-            Cookies.set('accessToken', response.data.data.token, { expires: 3 });
-            // sessionStorage.setItem('accessToken', response.data.DT.access_token);
-            // login(response.data.DT.access_token);
-            navigate(`/dashboard`, { state: { accessToken: response.data.data.token } });
+            Cookies.set('accessToken', response.data.DT.access_token, { expires: 3, path: '/' });
+
+            try {
+              const decoded = jwtDecode(response.data.DT.access_token);
+              console.log(decoded.phanquyen);
+              if (decoded.phanquyen == "admin") {
+                navigate("/admin")
+              }
+              if (decoded.phanquyen == "giangvien") {
+                navigate("/giang-vien")
+              }
+              if (decoded.phanquyen == "truongkhoa") {
+                navigate("/truongkhoa")
+              }
+              if (decoded.phanquyen == "truongbomon") {
+                navigate("/truong-bm")
+              }
+
+            } catch (err) {
+              console.error('Error decoding token:', err);
+            }
 
           } else {
             toast.error("Đăng nhập thất bại");
@@ -69,7 +91,7 @@ export default function LoginView() {
 
         })
         .catch((error) => {
-          // Xử lý lỗi nếu cần
+          console.log(error)
         });
     }
   };
