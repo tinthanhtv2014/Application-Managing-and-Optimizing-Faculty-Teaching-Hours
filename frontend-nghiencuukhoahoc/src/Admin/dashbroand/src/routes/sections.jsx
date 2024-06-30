@@ -34,11 +34,12 @@ export default function Router() {
       )
     },
     {
-      path: '/quan-ly-giang-vien',
+      path: '/giangvien',
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <UserPage />
+
           </Suspense>
         </DashboardLayout>
       )

@@ -16,6 +16,7 @@ const corsOptions = {
   credentials: true, // Cho phép gửi cookie
 };
 //===============================sử dụng các dependency
+app.use(cors(corsOptions));
 app.use(cors()); //config cors cho tất cả truy cập
 app.use(cookieParser());
 app.use(express.json());

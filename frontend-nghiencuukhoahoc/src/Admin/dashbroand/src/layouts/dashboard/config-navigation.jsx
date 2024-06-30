@@ -14,7 +14,7 @@ const navConfig = [
   },
   {
     title: 'Giảng Viên',
-    path: '/quan-ly-giang-vien',
+    path: '/giangvien',
     icon: icon('ic_user'),
   },
   {

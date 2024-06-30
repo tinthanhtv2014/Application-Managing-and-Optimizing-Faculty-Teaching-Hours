@@ -20,11 +20,11 @@ export default function UserTableRow({
   selected,
   name,
   avatarUrl,
-  taikhoan,
+  email,
   makhachhang,
-  sodienthoai,
+  phanquyen,
   isVerified,
-  diachi,
+  trangthai,
   handleClick,
 
 }) {
@@ -52,21 +52,21 @@ export default function UserTableRow({
             <Avatar alt={name}
               src={`http://localhost:3003/images/${avatarUrl}`} />
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {email}
 
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{diachi}</TableCell>
+        <TableCell>{phanquyen}</TableCell>
 
-        <TableCell>{makhachhang}</TableCell>
-        <TableCell>{sodienthoai}</TableCell>
+        <TableCell>{trangthai}</TableCell>
+
         {/* <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
         <TableCell>
           {/* <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label> */}
-          <Label>{taikhoan}</Label>
+          {/* <Label>{taikhoan}</Label> */}
         </TableCell>
 
         <TableCell align="right">

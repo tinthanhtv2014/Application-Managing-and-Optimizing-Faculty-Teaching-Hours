@@ -49,7 +49,7 @@ export default function UserPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const AllUser = await axiosWithCredentials.get("http://localhost:3003/api/v1/user");
+        const AllUser = await axiosWithCredentials.get("http://localhost:8081/admin/taikhoan");
         setDataAllUserBackend(AllUser.data.DT);
 
 
@@ -122,7 +122,7 @@ export default function UserPage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Giảng Viên</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
           New User
@@ -148,11 +148,13 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
 
                 headLabel={[
+
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Địa chỉ' },
-                  { id: 'role', label: 'Mã Khách Hàng' },
-                  { id: 'isVerified', label: 'Số điện thoại', align: 'center' },
-                  { id: 'status', label: 'tài khoản' },
+                  { id: 'company', label: 'Phân quyền' },
+                  { id: 'role', label: 'Trạng thái' },
+                  // { id: 'isVerified', label: 'Số điện thoại', align: 'center' },
+                  { id: 'id', label: 'id' },
+                  // { id: 'status', label: 'tài khoản' },
                   { id: '' },
                 ]}
               />
@@ -163,9 +165,9 @@ export default function UserPage() {
                     <UserTableRow
                       key={row.id}
                       name={row.ten}
-                      taikhoan={row.taikhoan}
-                      makhachhang={row.makhachhang}
-                      sodienthoai={row.sodienthoai}
+                      email={row.TENDANGNHAP}
+                      phanquyen={row.PHANQUYEN}
+                      trangthai={row.TRANGTHAI}
                       diachi={row.diachi}
                       avatarUrl={row.avatar}
                       isVerified={row.isVerified}

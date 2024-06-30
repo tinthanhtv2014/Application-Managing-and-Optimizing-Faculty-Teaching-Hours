@@ -37,7 +37,7 @@ const checkTaiKhoanExists = async (tenDangnhap) => {
 //hàm chức năng
 const getAllTaiKhoan = async () => {
   try {
-    let [results, fields] = await pool.execute("select * from taikhoan");
+    let [results, fields] = await pool.execute("select * from TAIKHOAN");
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,
