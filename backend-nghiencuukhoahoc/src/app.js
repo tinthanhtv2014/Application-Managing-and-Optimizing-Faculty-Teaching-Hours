@@ -13,6 +13,7 @@ const configViewEngine = require("./config/ViewEngine");
 const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
 const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter")
+const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter")
 //=================================================================================
 
 const corsOptions = {
@@ -34,6 +35,7 @@ configViewEngine(app);
 CRUDTaiKhoan(app) // route CRUD bảng taikhoan dành cho admin
 CRUDKhoa(app) //CRUD bảng khoa
 CRUDBoMon(app) // CRUD bộ môn
+CRUDGiangVien(app) // CRUD giảng viên
 //=====================================================================================================
 
 app.get("/", (req, res) => {
