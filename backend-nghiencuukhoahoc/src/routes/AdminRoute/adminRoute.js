@@ -1,4 +1,6 @@
 const express = require("express");
+const app = express();
+
 const router = express.Router();
 const {
   getAllTaiKhoanController,
@@ -8,19 +10,29 @@ const {
   logoutTaikhoanAdminController,
 } = require("../../controllers/AdminController/adminController.js");
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
-//login cho admin
-router.post("/login", loginTaikhoanAdminController);
-router.post("/logout", logoutTaikhoanAdminController);
-router.post("/register", createTaiKhoanController);
-//chức năng của admin
-router.get("/tai-khoan", checkUserJWT, getAllTaiKhoanController);
-router.get("/protected", checkUserJWT, (req, res) => {
-  res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
-});
-router.put(
-  "/sua-tai-khoan/:tenDangNhap",
-  checkUserJWT,
-  updateTaiKhoanController
-);
 
-module.exports = router;
+const CRUDTaiKhoan = (app) => {
+
+  //login cho admin
+  router.post("/login", loginTaikhoanAdminController);
+  router.post("/logout", logoutTaikhoanAdminController);
+
+  //chức năng CRUD tài khoản của admin
+  router.post("/register", createTaiKhoanController); //Tạo 
+  router.get("/xem", checkUserJWT, getAllTaiKhoanController); //xem
+
+  router.get("/protected", checkUserJWT, (req, res) => {
+    res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
+  });
+
+  //Sửa
+  router.put(
+    "/sua/:tenDangNhap",
+    checkUserJWT,
+    updateTaiKhoanController
+  );
+
+  return app.use("/api/v1/admin/taikhoan", router);
+}
+
+module.exports = CRUDTaiKhoan;
