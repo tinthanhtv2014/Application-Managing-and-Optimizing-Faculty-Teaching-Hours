@@ -55,9 +55,7 @@ const getAllTaiKhoan = async () => {
 
 const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   try {
-    console.log("Checking if account exists...");
     let exists = await timTaiKhoan_TENDANGNHAP(tenDangnhap);
-    console.log("Account exists:", exists);
 
     if (exists === true) {
       return {
