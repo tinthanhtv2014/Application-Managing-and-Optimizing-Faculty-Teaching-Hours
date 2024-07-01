@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -8,7 +7,7 @@
 -- Thời gian đã tạo: Th7 01, 2024 lúc 03:52 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
->>>>>>> fa45bb86cbecf4a58835079343b4b6b62bbb534a
+
 
 
 CREATE TABLE `bangphancong` (

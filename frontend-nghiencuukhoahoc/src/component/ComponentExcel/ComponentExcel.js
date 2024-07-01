@@ -20,8 +20,9 @@ const ExcelReader = () => {
     }
     //api truyền dữ liệu excel về backend
     try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/protected`,
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/tao/excel`,
+        [data],
         {
           headers: {
             Authorization: `Bearer ${auth}`,

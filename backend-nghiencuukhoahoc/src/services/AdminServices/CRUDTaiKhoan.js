@@ -54,7 +54,7 @@ const getAllTaiKhoan = async () => {
 };
 
 const createTaiKhoan = async (dataTaiKhoan) => {
-  //dataTaiKhoan bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN	
+  //dataTaiKhoan bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
   try {
     let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoan.TENDANGNHAP);
 
@@ -69,13 +69,13 @@ const createTaiKhoan = async (dataTaiKhoan) => {
     let hashpass = await hashPassword(dataTaiKhoan.MATKHAU);
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO taikhoan (TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?, ?)`,
       [
         dataTaiKhoan.TENDANGNHAP,
         dataTaiKhoan.MAGV,
         hashpass,
         dataTaiKhoan.PHANQUYEN,
-        dataTaiKhoan.TRANGTHAITAIKHOAN
+        dataTaiKhoan.TRANGTHAITAIKHOAN,
       ]
     );
 
@@ -84,7 +84,6 @@ const createTaiKhoan = async (dataTaiKhoan) => {
       EC: 1,
       DT: results,
     };
-
   } catch (error) {
     return {
       EM: "lỗi services createTaiKhoan",
@@ -145,6 +144,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
 
     return results;
   } catch (error) {
+    console.log(error);
     return {
       EM: "Lỗi services createTaiKhoan",
       EC: 1,
@@ -156,7 +156,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {
   try {
     const [results, fields] = await pool.execute(
-      "SELECT * FROM `TAIKHOAN` WHERE `TENDANGNHAP` = ?",
+      "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
     );
 
