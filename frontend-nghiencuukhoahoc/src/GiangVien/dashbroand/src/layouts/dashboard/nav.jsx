@@ -173,7 +173,7 @@ function NavItem({ item }) {
   return (
     <ListItemButton
       component={RouterLink}
-      href={"/dashboard" + item.path}
+      href={"/giang-vien" + item.path}
       sx={{
         minHeight: 44,
         borderRadius: 0.75,

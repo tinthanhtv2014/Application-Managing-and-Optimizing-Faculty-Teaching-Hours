@@ -49,16 +49,18 @@ export default function AccountPopover() {
     setOpen(!open)
   };
   const handleLogout = async () => {
+    const token = Cookies.get('accessToken');
+    console.log('check token =>', token)
     try {
-      const token = Cookies.get('accessToken');
+
 
       if (!token) {
         toast.error('Không có token');
         return;
       }
-      console.log(token)
+
       console.log(process.env.REACT_APP_URL_SERVER)
-      const response = await CookiesAxios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/logout`, null, {
+      const response = await CookiesAxios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

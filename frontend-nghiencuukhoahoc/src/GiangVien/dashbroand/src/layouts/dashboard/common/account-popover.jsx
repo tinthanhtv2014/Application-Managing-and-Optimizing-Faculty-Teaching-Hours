@@ -56,17 +56,18 @@ export default function AccountPopover() {
         toast.error('Không có token');
         return;
       }
-
-      const response = await axios.post('http://localhost:3003/admin/v1/logout', null, {
+      console.log(token)
+      console.log(process.env.REACT_APP_URL_SERVER)
+      const response = await CookiesAxios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(response.data)
       console.log(response.data.EC);
       if (response.data.EC === 0) {
         Cookies.remove('accessToken');
-        navigate('/admin');
+        navigate('/login');
         toast.success(response.data.EM);
       } else {
         toast.error(response.data.EM);
@@ -76,7 +77,6 @@ export default function AccountPopover() {
       toast.error('Đã xảy ra lỗi khi đăng xuất');
     }
   };
-
   return (
     <>
       <IconButton

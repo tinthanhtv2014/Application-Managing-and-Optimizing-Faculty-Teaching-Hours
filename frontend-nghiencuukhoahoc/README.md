@@ -37,4 +37,12 @@
 
 ---
 
+tài khoản
+tbm 0 phân quyền Trưởng Bộ Môn
+tk 0 phân quyền Trưởng Khoa
+gv 0 phân quyền Giảng viên
+admin 0 phân quyền Admin
+
+---
+
 npm i passport passport-google-oauth20 -> nodejs

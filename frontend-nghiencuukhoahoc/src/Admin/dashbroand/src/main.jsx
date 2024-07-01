@@ -7,7 +7,7 @@ import App from './app';
 
 // ----------------------------------------------------------------------
 
-const Dashboard = () => {
+const DashboardAdmin = () => {
 
   return (
 
@@ -21,4 +21,4 @@ const Dashboard = () => {
     </HelmetProvider>
   );
 }
-export default Dashboard
+export default DashboardAdmin

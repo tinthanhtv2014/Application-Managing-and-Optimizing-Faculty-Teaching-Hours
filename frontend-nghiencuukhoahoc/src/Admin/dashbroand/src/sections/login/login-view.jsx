@@ -50,7 +50,7 @@ export default function LoginView() {
 
     } else {
       axios
-        .post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/login`, {
+        .post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhap`, {
           tendangnhap: UsernameAdminLogin,
           matkhau: PasswordAdminLogin,
         })
@@ -68,16 +68,16 @@ export default function LoginView() {
             try {
               const decoded = jwtDecode(response.data.DT.access_token);
               console.log(decoded.phanquyen);
-              if (decoded.phanquyen == "admin") {
+              if (decoded.phanquyen == "Admin") {
                 navigate("/admin")
               }
-              if (decoded.phanquyen == "giangvien") {
+              if (decoded.phanquyen == "Giảng Viên") {
                 navigate("/giang-vien")
               }
-              if (decoded.phanquyen == "truongkhoa") {
+              if (decoded.phanquyen == "Trưởng Khoa") {
                 navigate("/truongkhoa")
               }
-              if (decoded.phanquyen == "truongbomon") {
+              if (decoded.phanquyen == "Trưởng Bộ Môn") {
                 navigate("/truong-bm")
               }
 

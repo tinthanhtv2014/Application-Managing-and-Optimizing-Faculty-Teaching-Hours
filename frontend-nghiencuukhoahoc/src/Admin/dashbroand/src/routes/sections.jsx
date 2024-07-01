@@ -83,13 +83,11 @@ export default function Router() {
     }
     ,
     {
-      path: ' /nhap-lop-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/nhap-lop-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <ListOrdersDaGiao />
-
-
           </Suspense>
         </DashboardLayout>
       )
@@ -107,7 +105,7 @@ export default function Router() {
       )
     }
     , {
-      path: ' /quan-ly-mon-hoc', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly-mon-hoc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -146,10 +144,10 @@ export default function Router() {
       path: '/404',
       element: <Page404 />
     },
-    {
-      path: '*',
-      element: <Navigate to="/dashboard/404" replace />
-    }
+    // {
+    //   path: '*',
+    //   element: <Navigate to="/dashboard/404" replace />
+    // }
 
   ]);
 
