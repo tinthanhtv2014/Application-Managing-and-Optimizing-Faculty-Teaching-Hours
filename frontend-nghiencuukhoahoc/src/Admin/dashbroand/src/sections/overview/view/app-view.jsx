@@ -21,11 +21,46 @@ import bag from "../../../../public/assets/icons/glass/ic_glass_bag.png";
 import buy from "../../../../public/assets/icons/glass/ic_glass_buy.png";
 import shoes from "../../../../public/assets/icons/glass/shoes.png";
 import user from "../../../../public/assets/icons/glass/ic_glass_users.png";
-
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 // ----------------------------------------------------------------------
 
 function AppView() {
   const currentDate = new Date();
+
+  const auth = Cookies.get("accessToken");
+  const CookiesAxios = axios.create({
+    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
+  });
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(auth);
+      if (!auth) {
+        navigate("/login");
+      }
+      try {
+        const response = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/protected`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth}`,
+            },
+          }
+        );
+        // console.log(response.data.code);
+      } catch (error) {
+        console.error("Error fetching protected data:", error);
+        if (error.response && error.response.status === 401) {
+          navigate("/login");
+        }
+      }
+    };
+    fetchData();
+  }, [auth, navigate]);
+
+
+
   const [Thongke, setThongke] = useState("");
   const [SoTien, setThongKeTien] = useState("");
   const [Tongsodonhang, setThongKeTongSoDonHang] = useState("");

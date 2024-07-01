@@ -1,5 +1,5 @@
 
-// import ExcelReader from "../../../../component/ComponentExcel/ComponentExcel.js";
+import ExcelReader from "../../../../../component/ComponentExcel/ComponentExcel.js";
 
 
 const FileExcel = () => {
@@ -7,7 +7,7 @@ const FileExcel = () => {
 
     return (
         <>
-            {/* <ExcelReader /> */}
+            <ExcelReader />
         </>
     )
 }

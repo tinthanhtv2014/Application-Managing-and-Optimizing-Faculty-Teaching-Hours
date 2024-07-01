@@ -78,7 +78,7 @@ const PrivateRoute = () => {
   }
 
   if (redirect) {
-    return <Navigate to="/admin" />;
+    return <Navigate to="/" />;
   }
 
   if (phanQuyenAdmin) {
