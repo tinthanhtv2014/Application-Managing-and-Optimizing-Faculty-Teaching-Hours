@@ -27,20 +27,9 @@ const getAllTaiKhoanController = async (req, res) => {
 
 const createTaiKhoanController = async (req, res) => {
   try {
-    const tendangnhap = req.body.tenDangNhap;
-    const matkhau = req.body.matKhau;
-    const phanQuyen = req.body.phanQuyen;
-    const trangThai = req.body.trangThai;
-    console.log(tendangnhap);
-    console.log(matkhau);
-    console.log(phanQuyen);
-    console.log(trangThai);
-    let results = await createTaiKhoan(
-      tendangnhap,
-      matkhau,
-      phanQuyen,
-      trangThai
-    );
+    const dataTaiKhoan = req.body;
+
+    let results = await createTaiKhoan(dataTaiKhoan);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,

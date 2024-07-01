@@ -66,14 +66,14 @@ const createTaiKhoan = async (dataTaiKhoan) => {
       };
     }
 
-    let hashpass = await hashPassword(matKhau);
+    let hashpass = await hashPassword(dataTaiKhoan.MATKHAU);
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO TAIKHOAN (TENDANGNHAP, MATKHAU, PHANQUYEN, TRANGTHAI) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?, ?)`,
       [
         dataTaiKhoan.TENDANGNHAP,
         dataTaiKhoan.MAGV,
-        dataTaiKhoan.MATKHAU,
+        hashpass,
         dataTaiKhoan.PHANQUYEN,
         dataTaiKhoan.TRANGTHAITAIKHOAN
       ]
