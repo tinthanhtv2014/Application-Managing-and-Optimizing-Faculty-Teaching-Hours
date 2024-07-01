@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+=======
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th7 01, 2024 lúc 03:52 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
+>>>>>>> fa45bb86cbecf4a58835079343b4b6b62bbb534a
 
 
 CREATE TABLE `bangphancong` (
@@ -131,6 +142,20 @@ CREATE TABLE `co_chuc_danh` (
   `MACHUCDANH` int(11) NOT NULL,
   `MAGV` varchar(255) NOT NULL,
   `THOIGIANNHAN` date DEFAULT NULL,
+  `TRANGTHAI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `dang_ky_thuc_hien_quy_doi`
+--
+
+CREATE TABLE `dang_ky_thuc_hien_quy_doi` (
+  `MADANHMUC` int(11) NOT NULL,
+  `MAGV` varchar(255) NOT NULL,
+  `MANAMHOC` int(11) NOT NULL,
+  `SOGIOQUYDOI` int(11) DEFAULT NULL,
   `TRANGTHAI` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -312,20 +337,6 @@ CREATE TABLE `thuoc` (
   `SOTHUTUHOCKI` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `_ang_ky_thuc_hien_quy__oi`
---
-
-CREATE TABLE `_ang_ky_thuc_hien_quy__oi` (
-  `MADANHMUC` int(11) NOT NULL,
-  `MAGV` varchar(255) NOT NULL,
-  `MANAMHOC` int(11) NOT NULL,
-  `SOGIOQUYDOI` int(11) DEFAULT NULL,
-  `TRANGTHAI` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Chỉ mục cho các bảng đã đổ
 --
@@ -394,6 +405,14 @@ ALTER TABLE `chuongtrinhdaotao`
 ALTER TABLE `co_chuc_danh`
   ADD PRIMARY KEY (`MACHUCDANH`,`MAGV`),
   ADD KEY `FK_CO_CHUC_DANH2` (`MAGV`);
+
+--
+-- Chỉ mục cho bảng `dang_ky_thuc_hien_quy_doi`
+--
+ALTER TABLE `dang_ky_thuc_hien_quy_doi`
+  ADD PRIMARY KEY (`MADANHMUC`,`MAGV`,`MANAMHOC`),
+  ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI2` (`MAGV`),
+  ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI3` (`MANAMHOC`);
 
 --
 -- Chỉ mục cho bảng `danhmucquydoispkhcn`
@@ -474,14 +493,6 @@ ALTER TABLE `thuoc`
   ADD KEY `FK_THUOC2` (`MAMONHOC`);
 
 --
--- Chỉ mục cho bảng `_ang_ky_thuc_hien_quy__oi`
---
-ALTER TABLE `_ang_ky_thuc_hien_quy__oi`
-  ADD PRIMARY KEY (`MADANHMUC`,`MAGV`,`MANAMHOC`),
-  ADD KEY `FK__ANG_KY_THUC_HIEN_QUY__OI2` (`MAGV`),
-  ADD KEY `FK__ANG_KY_THUC_HIEN_QUY__OI3` (`MANAMHOC`);
-
---
 -- Các ràng buộc cho các bảng đã đổ
 --
 
@@ -535,6 +546,14 @@ ALTER TABLE `co_chuc_danh`
   ADD CONSTRAINT `FK_CO_CHUC_DANH2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`);
 
 --
+-- Các ràng buộc cho bảng `dang_ky_thuc_hien_quy_doi`
+--
+ALTER TABLE `dang_ky_thuc_hien_quy_doi`
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI` FOREIGN KEY (`MADANHMUC`) REFERENCES `danhmucquydoispkhcn` (`MADANHMUC`),
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI3` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`);
+
+--
 -- Các ràng buộc cho bảng `giangvien`
 --
 ALTER TABLE `giangvien`
@@ -571,14 +590,6 @@ ALTER TABLE `taikhoan`
 ALTER TABLE `thuoc`
   ADD CONSTRAINT `FK_THUOC` FOREIGN KEY (`MACHUONGTRINH`) REFERENCES `chuongtrinhdaotao` (`MACHUONGTRINH`),
   ADD CONSTRAINT `FK_THUOC2` FOREIGN KEY (`MAMONHOC`) REFERENCES `monhoc` (`MAMONHOC`);
-
---
--- Các ràng buộc cho bảng `_ang_ky_thuc_hien_quy__oi`
---
-ALTER TABLE `_ang_ky_thuc_hien_quy__oi`
-  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI` FOREIGN KEY (`MADANHMUC`) REFERENCES `danhmucquydoispkhcn` (`MADANHMUC`),
-  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
-  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI3` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
