@@ -4,6 +4,7 @@ const {
   createTaiKhoanExcel,
   updateTaiKhoan,
   LoginTaikhoan,
+  LoginTaikhoanwithGOOGLE,
 } = require("../../services/AdminServices/CRUDTaiKhoan");
 
 const getAllTaiKhoanController = async (req, res) => {
@@ -49,6 +50,7 @@ const createTaiKhoanExcelController = async (req, res) => {
   try {
     const dataTaiKhoanExcelArray = req.body;
 
+    console.log("check req: ", req.body);
     let results = await createTaiKhoanExcel(dataTaiKhoanExcelArray);
 
     return res.status(200).json({
@@ -86,12 +88,33 @@ const updateTaiKhoanController = async (req, res) => {
     console.log(error);
   }
 };
-
+//login với tài khoản và mật khẩu
 const loginTaikhoanAdminController = async (req, res) => {
   try {
     const username = req.body.tendangnhap;
     const password = req.body.matkhau;
     const results = await LoginTaikhoan(username, password);
+    if (results && results.DT && results.DT.access_token) {
+      res.cookie("jwt", results.DT.access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+      });
+    }
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+//login với email từ google
+const loginTaikhoanGOOGLEController = async (req, res) => {
+  try {
+    const username = req.body.tendangnhap;
+
+    const results = await LoginTaikhoan(username);
     if (results && results.DT && results.DT.access_token) {
       res.cookie("jwt", results.DT.access_token, {
         httpOnly: true,
@@ -133,4 +156,5 @@ module.exports = {
 
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
+  loginTaikhoanGOOGLEController,
 };

@@ -7,7 +7,7 @@ const {
   createTaiKhoanController,
   createTaiKhoanExcelController,
   updateTaiKhoanController,
-
+  loginTaikhoanGOOGLEController,
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
 } = require("../../controllers/AdminController/adminController.js");
@@ -15,9 +15,9 @@ const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 
 const CRUDTaiKhoan = (app) => {
   //login cho admin
-  router.post("/dangnhap", loginTaikhoanAdminController); //đăng nhập
+  router.post("/dangnhap", loginTaikhoanAdminController); //đăng nhập với tài khoản và mk
   router.post("/dangxuat", logoutTaikhoanAdminController); // đăng xuất
-
+  router.post("/dangnhapgoogle", loginTaikhoanGOOGLEController); // đăng nhập với email google
   //chức năng CRUD tài khoản của admin
   router.post("/tao", createTaiKhoanController); //Tạo
   router.post("/tao/excel", createTaiKhoanExcelController); //Tạo hàng loạt tài khoản bằng một mảng

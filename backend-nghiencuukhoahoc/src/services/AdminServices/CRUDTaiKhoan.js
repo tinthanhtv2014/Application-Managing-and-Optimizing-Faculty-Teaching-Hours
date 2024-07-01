@@ -34,6 +34,13 @@ const timTaiKhoan_TENDANGNHAP = async (tenDangnhap) => {
   }
 };
 
+//hàm check mail
+function isValidEmail(email) {
+  // Biểu thức chính quy để kiểm tra định dạng email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 // =============================================================================================================================
 //hàm chức năng
 const getAllTaiKhoan = async () => {
@@ -98,51 +105,63 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
   // không được để trống TENDANGNHAP và MAGV
   try {
     let results = [];
-    for (let dataTaiKhoanExcel of dataTaiKhoanExcelArray) {
+    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
       // Kiểm tra TENDANGNHAP và MAGV
-      if (!dataTaiKhoanExcel.TENDANGNHAP || !dataTaiKhoanExcel.MAGV) {
-        results.push({
-          EM: "TENDANGNHAP và MAGV không được để trống",
+      if (
+        !dataTaiKhoanExcelArray[i].tenDangNhap ||
+        !dataTaiKhoanExcelArray[i].MAGV
+      ) {
+        return {
+          EM: "bị trống thông tin",
           EC: 0,
-          DT: dataTaiKhoanExcel,
-        });
-        continue; // Tiếp tục thực hiện các lệnh khác
+          DT: [],
+        }; // Tiếp tục thực hiện các lệnh khác
       }
 
       // Kiểm tra tài khoản đã tồn tại
-      let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcel.TENDANGNHAP);
+      let exists = await timTaiKhoan_TENDANGNHAP(
+        dataTaiKhoanExcelArray[i].tenDangNhap
+      );
       if (exists) {
-        results.push({
-          EM: "Tài khoản đã tồn tại không thể tạo thêm",
+        return {
+          EM: "tồn tại tk rồi",
           EC: 0,
-          DT: dataTaiKhoanExcel,
-        });
-        continue; // Tiếp tục thực hiện các lệnh khác
+          DT: [],
+        }; // Tiếp tục thực hiện các lệnh khác
       }
 
       // Hash mật khẩu
-      let hashpass = await hashPassword(dataTaiKhoanExcel.MATKHAU);
-
+      // let hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
+      let [result1, fields1] = await pool.execute(
+        `INSERT INTO giangvien (MAGV) VALUES (?)`,
+        [dataTaiKhoanExcelArray[i].MAGV]
+      );
       // Tạo tài khoản mới
       let [result, fields] = await pool.execute(
-        `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?,  ?, ?)`,
         [
-          dataTaiKhoanExcel.TENDANGNHAP,
-          dataTaiKhoanExcel.MAGV,
-          hashpass,
-          dataTaiKhoanExcel.PHANQUYEN,
-          dataTaiKhoanExcel.TRANGTHAITAIKHOAN,
+          dataTaiKhoanExcelArray[i].tenDangNhap,
+          dataTaiKhoanExcelArray[i].MAGV,
+
+          dataTaiKhoanExcelArray[i].phanQuyen,
+          dataTaiKhoanExcelArray[i].trangThai,
         ]
       );
-
       results.push({
-        EM: "Tạo tài khoản thành công",
-        EC: 1,
-        DT: result,
+        EM: "tạo tài khoản thành công",
+        EC: 0,
+        DT: {
+          result,
+          result1,
+        },
       });
     }
 
-    return results;
+    return {
+      EM: "thêm thông tin thành công",
+      EC: 1,
+      DT: results,
+    };
   } catch (error) {
     console.log(error);
     return {
@@ -155,6 +174,15 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
 
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {
   try {
+    const checkmail = isValidEmail(tenDangnhap);
+    if (!checkmail) {
+      return {
+        EM: "định dạng mail không đúng",
+        EC: 0,
+        DT: [],
+      };
+    }
+
     const [results, fields] = await pool.execute(
       "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
@@ -188,6 +216,48 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
           },
         };
       }
+    } else {
+      return {
+        EM: "đăng nhập thất bại, tài khoản không đúng",
+        EC: 0,
+        DT: {
+          access_token: null,
+          data: [],
+        },
+      };
+    }
+  } catch (error) {
+    console.error("Error in LoginTaikhoan:", error);
+    return {
+      EM: "lỗi services LoginTaikhoan",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
+const LoginTaikhoanwithGOOGLE = async (tenDangnhap) => {
+  try {
+    const [results, fields] = await pool.execute(
+      "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
+      [tenDangnhap]
+    );
+
+    if (results.length > 0) {
+      let payload = {
+        taikhoan: results[0].TENDANGNHAP,
+
+        phanquyen: results[0].PHANQUYEN,
+      };
+      let token = createJWT(payload);
+      return {
+        EM: "đăng nhập thành công",
+        EC: 1,
+        DT: {
+          access_token: token,
+          data: results,
+        },
+      };
     } else {
       return {
         EM: "đăng nhập thất bại, tài khoản không đúng",
@@ -264,4 +334,5 @@ module.exports = {
   createTaiKhoanExcel,
   updateTaiKhoan,
   LoginTaikhoan,
+  LoginTaikhoanwithGOOGLE,
 };
