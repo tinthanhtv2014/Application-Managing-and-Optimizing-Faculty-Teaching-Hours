@@ -27,6 +27,7 @@ const getAllTaiKhoanController = async (req, res) => {
 
 const createTaiKhoanController = async (req, res) => {
   try {
+    const MaGV = req.body.MaGV;
     const tendangnhap = req.body.tenDangNhap;
     const matkhau = req.body.matKhau;
     const phanQuyen = req.body.phanQuyen;
@@ -36,6 +37,7 @@ const createTaiKhoanController = async (req, res) => {
     console.log(phanQuyen);
     console.log(trangThai);
     let results = await createTaiKhoan(
+      MaGV,
       tendangnhap,
       matkhau,
       phanQuyen,
@@ -66,9 +68,7 @@ const createTaiKhoanExcelController = async (req, res) => {
       EC: results.EC,
       DT: results.DT,
     });
-
   } catch (error) {
-
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -142,7 +142,6 @@ module.exports = {
   createTaiKhoanController,
   createTaiKhoanExcelController,
   updateTaiKhoanController,
-
 
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,

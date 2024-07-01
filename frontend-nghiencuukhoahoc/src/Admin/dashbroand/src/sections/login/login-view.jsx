@@ -46,8 +46,6 @@ export default function LoginView() {
     event.preventDefault();
     if (!UsernameAdminLogin || !PasswordAdminLogin) {
       toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
-
-
     } else {
       axios
         .post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhap`, {

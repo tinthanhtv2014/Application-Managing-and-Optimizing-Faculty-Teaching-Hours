@@ -144,7 +144,6 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
     }
 
     return results;
-
   } catch (error) {
     return {
       EM: "Lỗi services createTaiKhoan",
@@ -264,6 +263,5 @@ module.exports = {
   createTaiKhoan,
   createTaiKhoanExcel,
   updateTaiKhoan,
-
   LoginTaikhoan,
 };

@@ -8,7 +8,6 @@ const {
   createTaiKhoanExcelController,
   updateTaiKhoanController,
 
-
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
 } = require("../../controllers/AdminController/adminController.js");
@@ -27,7 +26,6 @@ const CRUDTaiKhoan = (app) => {
   router.get("/protected", checkUserJWT, (req, res) => {
     res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
   });
-
   //Sửa
   router.put("/sua/:tenDangNhap", checkUserJWT, updateTaiKhoanController);
 
