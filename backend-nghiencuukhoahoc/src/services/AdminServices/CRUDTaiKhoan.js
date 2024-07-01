@@ -16,7 +16,7 @@ const checkPassword = (inputpassword, hashpass) => {
 };
 
 //hàm kiểm tra tài khoản
-const checkTaiKhoanExists = async (tenDangnhap) => {
+const timTaiKhoan_TENDANGNHAP = async (tenDangnhap) => {
   try {
     const [results, fields] = await pool.execute(
       "SELECT * FROM TAIKHOAN WHERE TENDANGNHAP = ?",
@@ -29,7 +29,7 @@ const checkTaiKhoanExists = async (tenDangnhap) => {
       return false;
     }
   } catch (error) {
-    console.log("checkTaiKhoanExists errr >>>", error);
+    console.log("timTaiKhoan_TENDANGNHAP errr >>>", error);
     return false;
   }
 };
@@ -56,7 +56,7 @@ const getAllTaiKhoan = async () => {
 const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   try {
     console.log("Checking if account exists...");
-    let exists = await checkTaiKhoanExists(tenDangnhap);
+    let exists = await timTaiKhoan_TENDANGNHAP(tenDangnhap);
     console.log("Account exists:", exists);
 
     if (exists === true) {
@@ -92,6 +92,51 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
       DT: [],
     };
   }
+};
+
+const createTaiKhoanExcel = async (dataTaiKhoanExcel) => {
+  try {
+    // dataTaiKhoanExcel phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
+    // không được để trống TENDANGNHAP và MAGV
+
+    let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcel.TENDANGNHAP);
+    if (exists) {
+      return {
+        EM: "tài khoản đã tồn tại không thể tạo thêm",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    console.log("Hashing password...");
+    let hashpass = await hashPassword(matKhau);
+    console.log("Hashed password:", hashpass);
+
+    console.log("Inserting into database...");
+    let [results, fields] = await pool.execute(
+      `INSERT INTO TAIKHOAN (TENDANGNHAP, MATKHAU, PHANQUYEN, TRANGTHAI) VALUES (?, ?, ?, ?)`,
+      [
+        dataTaiKhoanExcel.TENDANGNHAP,
+        dataTaiKhoanExcel.MAGV,
+        dataTaiKhoanExcel.MATKHAU,
+        dataTaiKhoanExcel.PHANQUYEN,
+        dataTaiKhoanExcel.TRANGTHAITAIKHOAN]
+    );
+
+    return {
+      EM: "tạo tài khoản thành công",
+      EC: 1,
+      DT: results,
+    };
+
+  } catch (error) {
+    return {
+      EM: "lỗi services createTaiKhoan",
+      EC: 1,
+      DT: [],
+    };
+  }
+
 };
 
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {
@@ -202,6 +247,7 @@ const updateTaiKhoan = async (
 module.exports = {
   getAllTaiKhoan,
   createTaiKhoan,
+  createTaiKhoanExcel,
   updateTaiKhoan,
 
   LoginTaikhoan,

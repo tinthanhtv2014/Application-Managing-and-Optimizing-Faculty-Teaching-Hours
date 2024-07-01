@@ -1,384 +1,613 @@
-/*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     7/1/2024 12:21:11 AM                         */
-/*==============================================================*/
-
-
-drop table if exists BANGPHANCONG;
-
-drop table if exists BAO_CAO_KET_THUC_MON;
-
-drop table if exists BOMON;
-
-drop table if exists CHITIETPHANCONG;
-
-drop table if exists CHON_KHUNG;
-
-drop table if exists CHUCDANH;
-
-drop table if exists CHUCVU;
-
-drop table if exists CHUONGTRINHDAOTAO;
-
-drop table if exists CO_CHUC_DANH;
-
-drop table if exists DANG_KY_THUC_HIEN_QUY_DOI;
-
-drop table if exists DANHMUCQUYDOISPKHCN;
-
-drop table if exists GIANGVIEN;
-
-drop table if exists GIU_CHUC_VU;
-
-drop table if exists HINHTHUCDANHGIA;
-
-drop table if exists HOCKYNIENKHOA;
-
-drop table if exists KHOA;
-
-drop table if exists KHUNGGIOCHUAN;
-
-drop table if exists LOP;
-
-drop table if exists MONHOC;
-
-drop table if exists NAMHOC;
-
-drop table if exists TAIKHOAN;
-
-drop table if exists THUOC;
-
-/*==============================================================*/
-/* Table: BANGPHANCONG                                          */
-/*==============================================================*/
-create table BANGPHANCONG
-(
-   MAPHANCONG           int not null,
-   MAGV                 varchar(255) not null,
-   THOIGIANLAP          date,
-   primary key (MAPHANCONG)
-);
-
-/*==============================================================*/
-/* Table: BAO_CAO_KET_THUC_MON                                  */
-/*==============================================================*/
-create table BAO_CAO_KET_THUC_MON
-(
-   MADANHGIAKETTHUC     int not null,
-   MACHITIETPHANCONG    int not null,
-   LANDANHGIA           int,
-   NGAYDANHGIA          date,
-   NGAYBAOCAOKETTHUC    date,
-   TRANGTHAI            text,
-   primary key (MADANHGIAKETTHUC, MACHITIETPHANCONG)
-);
-
-/*==============================================================*/
-/* Table: BOMON                                                 */
-/*==============================================================*/
-create table BOMON
-(
-   MABOMON              int not null,
-   MAKHOA               int not null,
-   TENBOMON             text,
-   primary key (MABOMON)
-);
-
-/*==============================================================*/
-/* Table: CHITIETPHANCONG                                       */
-/*==============================================================*/
-create table CHITIETPHANCONG
-(
-   MACHITIETPHANCONG    int not null,
-   MAMONHOC             int not null,
-   MAPHANCONG           int not null,
-   MALOP                varchar(255) not null,
-   MAHKNK               int not null,
-   THOIGIANBATDAUPHANCONG date,
-   THOIGIANKETTHUCPHANCONG date,
-   primary key (MACHITIETPHANCONG)
-);
-
-/*==============================================================*/
-/* Table: CHON_KHUNG                                            */
-/*==============================================================*/
-create table CHON_KHUNG
-(
-   MAGV                 varchar(255) not null,
-   MANAMHOC             int not null,
-   MAKHUNG              int not null,
-   primary key (MAGV, MANAMHOC, MAKHUNG)
-);
-
-/*==============================================================*/
-/* Table: CHUCDANH                                              */
-/*==============================================================*/
-create table CHUCDANH
-(
-   MACHUCDANH           int not null,
-   TENCHUCDANH          text,
-   primary key (MACHUCDANH)
-);
-
-/*==============================================================*/
-/* Table: CHUCVU                                                */
-/*==============================================================*/
-create table CHUCVU
-(
-   MACHUCVU             int not null,
-   TENCHUCVU            text,
-   primary key (MACHUCVU)
-);
-
-/*==============================================================*/
-/* Table: CHUONGTRINHDAOTAO                                     */
-/*==============================================================*/
-create table CHUONGTRINHDAOTAO
-(
-   MACHUONGTRINH        int not null,
-   MABOMON              int not null,
-   TENCHUONGTRINH       text,
-   primary key (MACHUONGTRINH)
-);
-
-/*==============================================================*/
-/* Table: CO_CHUC_DANH                                          */
-/*==============================================================*/
-create table CO_CHUC_DANH
-(
-   MACHUCDANH           int not null,
-   MAGV                 varchar(255) not null,
-   THOIGIANNHAN         date,
-   TRANGTHAI            text,
-   primary key (MACHUCDANH, MAGV)
-);
-
-/*==============================================================*/
-/* Table: DANG_KY_THUC_HIEN_QUY_DOI                             */
-/*==============================================================*/
-create table DANG_KY_THUC_HIEN_QUY_DOI
-(
-   MADANHMUC            int not null,
-   MAGV                 varchar(255) not null,
-   MANAMHOC             int not null,
-   SOGIOQUYDOI          int,
-   TRANGTHAI            text,
-   primary key (MADANHMUC, MAGV, MANAMHOC)
-);
-
-/*==============================================================*/
-/* Table: DANHMUCQUYDOISPKHCN                                   */
-/*==============================================================*/
-create table DANHMUCQUYDOISPKHCN
-(
-   MADANHMUC            int not null,
-   GIOQUYDOI            int,
-   NOIDUNGDANHMUC       text,
-   primary key (MADANHMUC)
-);
-
-/*==============================================================*/
-/* Table: GIANGVIEN                                             */
-/*==============================================================*/
-create table GIANGVIEN
-(
-   MAGV                 varchar(255) not null,
-   MABOMON              int not null,
-   TENGV                varchar(100),
-   EMAIL                text,
-   DIENTHOAI            varchar(50),
-   DIACHI               text,
-   primary key (MAGV)
-);
-
-/*==============================================================*/
-/* Table: GIU_CHUC_VU                                           */
-/*==============================================================*/
-create table GIU_CHUC_VU
-(
-   MAGV                 varchar(255) not null,
-   MACHUCVU             int not null,
-   SOQUYETDINH          varchar(255),
-   TUNGAY               date,
-   primary key (MAGV, MACHUCVU)
-);
-
-/*==============================================================*/
-/* Table: HINHTHUCDANHGIA                                       */
-/*==============================================================*/
-create table HINHTHUCDANHGIA
-(
-   MADANHGIAKETTHUC     int not null,
-   TENDANHGIA           text,
-   primary key (MADANHGIAKETTHUC)
-);
-
-/*==============================================================*/
-/* Table: HOCKYNIENKHOA                                         */
-/*==============================================================*/
-create table HOCKYNIENKHOA
-(
-   MAHKNK               int not null,
-   TENHKNK              text,
-   NGAYBATDAUNIENKHOA   date,
-   NGAYKETTHUCNIENKHOA  date,
-   primary key (MAHKNK)
-);
-
-/*==============================================================*/
-/* Table: KHOA                                                  */
-/*==============================================================*/
-create table KHOA
-(
-   MAKHOA               int not null,
-   TENKHOA              text,
-   primary key (MAKHOA)
-);
-
-/*==============================================================*/
-/* Table: KHUNGGIOCHUAN                                         */
-/*==============================================================*/
-create table KHUNGGIOCHUAN
-(
-   MAKHUNG              int not null,
-   MACHUCDANH           int not null,
-   TENKHUNGCHUAN        text,
-   GIOGIANGDAY          int,
-   GIONGHIENCUUKHOAHOC  int,
-   GIOPHUCVUCONGDONG    int,
-   primary key (MAKHUNG)
-);
-
-/*==============================================================*/
-/* Table: LOP                                                   */
-/*==============================================================*/
-create table LOP
-(
-   MALOP                varchar(255) not null,
-   MACHUONGTRINH        int not null,
-   TENLOP               text,
-   NAMTUYENSINH         int,
-   SISO                 int,
-   primary key (MALOP)
-);
-
-/*==============================================================*/
-/* Table: MONHOC                                                */
-/*==============================================================*/
-create table MONHOC
-(
-   MAMONHOC             int not null,
-   TENMONHOC            text,
-   SOTINCHILYTHUYET     int,
-   SOTINCHITHUCHANH     int,
-   primary key (MAMONHOC)
-);
-
-/*==============================================================*/
-/* Table: NAMHOC                                                */
-/*==============================================================*/
-create table NAMHOC
-(
-   MANAMHOC             int not null,
-   TENNAMHOC            text,
-   primary key (MANAMHOC)
-);
-
-/*==============================================================*/
-/* Table: TAIKHOAN                                              */
-/*==============================================================*/
-create table TAIKHOAN
-(
-   TENDANGNHAP          varchar(255) not null,
-   MAGV                 varchar(255) not null,
-   MATKHAU              text,
-   PHANQUYEN            text,
-   primary key (TENDANGNHAP)
-);
-
-/*==============================================================*/
-/* Table: THUOC                                                 */
-/*==============================================================*/
-create table THUOC
-(
-   MACHUONGTRINH        int not null,
-   MAMONHOC             int not null,
-   SOTHUTUHOCKI         int,
-   primary key (MACHUONGTRINH, MAMONHOC)
-);
-
-alter table BANGPHANCONG add constraint FK__UOC_PHAN_CONG foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table BAO_CAO_KET_THUC_MON add constraint FK_BAO_CAO_KET_THUC_MON foreign key (MADANHGIAKETTHUC)
-      references HINHTHUCDANHGIA (MADANHGIAKETTHUC);
-
-alter table BAO_CAO_KET_THUC_MON add constraint FK_BAO_CAO_KET_THUC_MON2 foreign key (MACHITIETPHANCONG)
-      references CHITIETPHANCONG (MACHITIETPHANCONG);
-
-alter table BOMON add constraint FK_THUOC_KHOA foreign key (MAKHOA)
-      references KHOA (MAKHOA);
-
-alter table CHITIETPHANCONG add constraint FK_CO foreign key (MAPHANCONG)
-      references BANGPHANCONG (MAPHANCONG);
-
-alter table CHITIETPHANCONG add constraint FK_PHAN_CONG_DAY foreign key (MALOP)
-      references LOP (MALOP);
-
-alter table CHITIETPHANCONG add constraint FK_PHAN_CONG_HOC_KY_NIEN_KHOA foreign key (MAHKNK)
-      references HOCKYNIENKHOA (MAHKNK);
-
-alter table CHITIETPHANCONG add constraint FK_PHAN_CONG_MON_HOC foreign key (MAMONHOC)
-      references MONHOC (MAMONHOC);
-
-alter table CHON_KHUNG add constraint FK_CHON_KHUNG foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table CHON_KHUNG add constraint FK_CHON_KHUNG2 foreign key (MANAMHOC)
-      references NAMHOC (MANAMHOC);
-
-alter table CHON_KHUNG add constraint FK_CHON_KHUNG3 foreign key (MAKHUNG)
-      references KHUNGGIOCHUAN (MAKHUNG);
-
-alter table CHUONGTRINHDAOTAO add constraint FK_THUOC_CHUONG_TRINH__AO_TAO foreign key (MABOMON)
-      references BOMON (MABOMON);
-
-alter table CO_CHUC_DANH add constraint FK_CO_CHUC_DANH foreign key (MACHUCDANH)
-      references CHUCDANH (MACHUCDANH);
-
-alter table CO_CHUC_DANH add constraint FK_CO_CHUC_DANH2 foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table DANG_KY_THUC_HIEN_QUY_DOI add constraint FK_DANG_KY_THUC_HIEN_QUY_DOI foreign key (MADANHMUC)
-      references DANHMUCQUYDOISPKHCN (MADANHMUC);
-
-alter table DANG_KY_THUC_HIEN_QUY_DOI add constraint FK_DANG_KY_THUC_HIEN_QUY_DOI2 foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table DANG_KY_THUC_HIEN_QUY_DOI add constraint FK_DANG_KY_THUC_HIEN_QUY_DOI3 foreign key (MANAMHOC)
-      references NAMHOC (MANAMHOC);
-
-alter table GIANGVIEN add constraint FK_THUOC_BO_MON foreign key (MABOMON)
-      references BOMON (MABOMON);
-
-alter table GIU_CHUC_VU add constraint FK_GIU_CHUC_VU foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table GIU_CHUC_VU add constraint FK_GIU_CHUC_VU2 foreign key (MACHUCVU)
-      references CHUCVU (MACHUCVU);
-
-alter table KHUNGGIOCHUAN add constraint FK_CO_KHUNG_GIO_CHUAN foreign key (MACHUCDANH)
-      references CHUCDANH (MACHUCDANH);
-
-alter table LOP add constraint FK_HOC foreign key (MACHUONGTRINH)
-      references CHUONGTRINHDAOTAO (MACHUONGTRINH);
-
-alter table TAIKHOAN add constraint FK_TAI_KHOAN_CUA_GIANG_VIEN foreign key (MAGV)
-      references GIANGVIEN (MAGV);
-
-alter table THUOC add constraint FK_THUOC foreign key (MACHUONGTRINH)
-      references CHUONGTRINHDAOTAO (MACHUONGTRINH);
-
-alter table THUOC add constraint FK_THUOC2 foreign key (MAMONHOC)
-      references MONHOC (MAMONHOC);
-
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th7 01, 2024 lúc 12:55 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `nghiencuukhoahoc`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `bangphancong`
+--
+
+CREATE TABLE `bangphancong` (
+  `MAPHANCONG` int(11) NOT NULL,
+  `MAGV` varchar(255) NOT NULL,
+  `THOIGIANLAP` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `bao_cao_ket_thuc_mon`
+--
+
+CREATE TABLE `bao_cao_ket_thuc_mon` (
+  `MADANHGIAKETTHUC` int(11) NOT NULL,
+  `MACHITIETPHANCONG` int(11) NOT NULL,
+  `LANDANHGIA` int(11) DEFAULT NULL,
+  `NGAYDANHGIA` date DEFAULT NULL,
+  `NGAYBAOCAOKETTHUC` date DEFAULT NULL,
+  `TRANGTHAI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `bomon`
+--
+
+CREATE TABLE `bomon` (
+  `MABOMON` int(11) NOT NULL,
+  `MAKHOA` int(11) NOT NULL,
+  `TENBOMON` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `bomon`
+--
+
+INSERT INTO `bomon` (`MABOMON`, `MAKHOA`, `TENBOMON`) VALUES
+(1, 1, 'Bộ Môn Khoa Học Máy Tính'),
+(2, 1, 'Bộ Môn Công Nghệ Phần Mềm'),
+(3, 2, 'Bộ Môn Quản Trị Kinh Doanh'),
+(4, 2, 'Bộ Môn Kế Toán'),
+(5, 3, 'Bộ Môn Kỹ Thuật Điện'),
+(6, 3, 'Bộ Môn Kỹ Thuật Cơ Khí'),
+(7, 4, 'Bộ Môn Dược Học'),
+(8, 4, 'Bộ Môn Y Học Cơ Sở');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `chitietphancong`
+--
+
+CREATE TABLE `chitietphancong` (
+  `MACHITIETPHANCONG` int(11) NOT NULL,
+  `MAMONHOC` int(11) NOT NULL,
+  `MAPHANCONG` int(11) NOT NULL,
+  `MALOP` varchar(255) NOT NULL,
+  `MAHKNK` int(11) NOT NULL,
+  `THOIGIANBATDAUPHANCONG` date DEFAULT NULL,
+  `THOIGIANKETTHUCPHANCONG` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `chon_khung`
+--
+
+CREATE TABLE `chon_khung` (
+  `MAGV` varchar(255) NOT NULL,
+  `MANAMHOC` int(11) NOT NULL,
+  `MAKHUNG` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `chucdanh`
+--
+
+CREATE TABLE `chucdanh` (
+  `MACHUCDANH` int(11) NOT NULL,
+  `TENCHUCDANH` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `chucvu`
+--
+
+CREATE TABLE `chucvu` (
+  `MACHUCVU` int(11) NOT NULL,
+  `TENCHUCVU` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `chucvu`
+--
+
+INSERT INTO `chucvu` (`MACHUCVU`, `TENCHUCVU`) VALUES
+(0, 'Trưởng Khoa'),
+(1, 'Phó Trưởng Khoa'),
+(2, 'Trưởng Bộ Môn'),
+(3, 'Phó Trưởng Bộ Môn'),
+(4, 'Giảng Viên Chính'),
+(5, 'Giảng Viên');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `chuongtrinhdaotao`
+--
+
+CREATE TABLE `chuongtrinhdaotao` (
+  `MACHUONGTRINH` int(11) NOT NULL,
+  `MABOMON` int(11) NOT NULL,
+  `TENCHUONGTRINH` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `co_chuc_danh`
+--
+
+CREATE TABLE `co_chuc_danh` (
+  `MACHUCDANH` int(11) NOT NULL,
+  `MAGV` varchar(255) NOT NULL,
+  `THOIGIANNHAN` date DEFAULT NULL,
+  `TRANGTHAI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `danhmucquydoispkhcn`
+--
+
+CREATE TABLE `danhmucquydoispkhcn` (
+  `MADANHMUC` int(11) NOT NULL,
+  `GIOQUYDOI` int(11) DEFAULT NULL,
+  `NOIDUNGDANHMUC` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `giangvien`
+--
+
+CREATE TABLE `giangvien` (
+  `MAGV` varchar(255) NOT NULL,
+  `MABOMON` int(11) NOT NULL,
+  `TENGV` varchar(100) DEFAULT NULL,
+  `EMAIL` text DEFAULT NULL,
+  `DIENTHOAI` varchar(50) DEFAULT NULL,
+  `DIACHI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `giangvien`
+--
+
+INSERT INTO `giangvien` (`MAGV`, `MABOMON`, `TENGV`, `EMAIL`, `DIENTHOAI`, `DIACHI`) VALUES
+('GV001', 1, 'Nguyễn Văn A', 'nguyenvana@example.com', '0123456789', '123 Đường ABC, Quận 1, TP.HCM'),
+('GV002', 2, 'Trần Thị B', 'tranthib@example.com', '0987654321', '456 Đường DEF, Quận 2, TP.HCM'),
+('GV003', 3, 'Lê Văn C', 'levanc@example.com', '0912345678', '789 Đường GHI, Quận 3, TP.HCM'),
+('GV004', 4, 'Phạm Thị D', 'phamthid@example.com', '0923456789', '123 Đường JKL, Quận 4, TP.HCM'),
+('GV005', 5, 'Hoàng Văn E', 'hoangvane@example.com', '0934567890', '456 Đường MNO, Quận 5, TP.HCM'),
+('GV006', 6, 'Đặng Thị F', 'dangthif@example.com', '0945678901', '789 Đường PQR, Quận 6, TP.HCM'),
+('GV007', 7, 'Ngô Văn G', 'ngovang@example.com', '0956789012', '123 Đường STU, Quận 7, TP.HCM'),
+('GV008', 8, 'Vũ Thị H', 'vuthih@example.com', '0967890123', '456 Đường VWX, Quận 8, TP.HCM');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `giu_chuc_vu`
+--
+
+CREATE TABLE `giu_chuc_vu` (
+  `MAGV` varchar(255) NOT NULL,
+  `MACHUCVU` int(11) NOT NULL,
+  `SOQUYETDINH` varchar(255) DEFAULT NULL,
+  `TUNGAY` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `hinhthucdanhgia`
+--
+
+CREATE TABLE `hinhthucdanhgia` (
+  `MADANHGIAKETTHUC` int(11) NOT NULL,
+  `TENDANHGIA` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `hockynienkhoa`
+--
+
+CREATE TABLE `hockynienkhoa` (
+  `MAHKNK` int(11) NOT NULL,
+  `TENHKNK` text DEFAULT NULL,
+  `NGAYBATDAUNIENKHOA` date DEFAULT NULL,
+  `NGAYKETTHUCNIENKHOA` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `khoa`
+--
+
+CREATE TABLE `khoa` (
+  `MAKHOA` int(11) NOT NULL,
+  `TENKHOA` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `khoa`
+--
+
+INSERT INTO `khoa` (`MAKHOA`, `TENKHOA`) VALUES
+(1, 'Khoa Công Nghệ Thông Tin'),
+(2, 'Khoa Kinh Tế'),
+(3, 'Khoa Kỹ Thuật'),
+(4, 'Khoa Y Dược');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `khunggiochuan`
+--
+
+CREATE TABLE `khunggiochuan` (
+  `MAKHUNG` int(11) NOT NULL,
+  `MACHUCDANH` int(11) NOT NULL,
+  `TENKHUNGCHUAN` text DEFAULT NULL,
+  `GIOGIANGDAY` int(11) DEFAULT NULL,
+  `GIONGHIENCUUKHOAHOC` int(11) DEFAULT NULL,
+  `GIOPHUCVUCONGDONG` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `lop`
+--
+
+CREATE TABLE `lop` (
+  `MALOP` varchar(255) NOT NULL,
+  `MACHUONGTRINH` int(11) NOT NULL,
+  `TENLOP` text DEFAULT NULL,
+  `NAMTUYENSINH` int(11) DEFAULT NULL,
+  `SISO` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `monhoc`
+--
+
+CREATE TABLE `monhoc` (
+  `MAMONHOC` int(11) NOT NULL,
+  `TENMONHOC` text DEFAULT NULL,
+  `SOTINCHILYTHUYET` int(11) DEFAULT NULL,
+  `SOTINCHITHUCHANH` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `namhoc`
+--
+
+CREATE TABLE `namhoc` (
+  `MANAMHOC` int(11) NOT NULL,
+  `TENNAMHOC` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `taikhoan`
+--
+
+CREATE TABLE `taikhoan` (
+  `TENDANGNHAP` varchar(255) NOT NULL,
+  `MAGV` varchar(255) NOT NULL,
+  `MATKHAU` text DEFAULT NULL,
+  `PHANQUYEN` text DEFAULT NULL,
+  `TRANGTHAITAIKHOAN` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `thuoc`
+--
+
+CREATE TABLE `thuoc` (
+  `MACHUONGTRINH` int(11) NOT NULL,
+  `MAMONHOC` int(11) NOT NULL,
+  `SOTHUTUHOCKI` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `_ang_ky_thuc_hien_quy__oi`
+--
+
+CREATE TABLE `_ang_ky_thuc_hien_quy__oi` (
+  `MADANHMUC` int(11) NOT NULL,
+  `MAGV` varchar(255) NOT NULL,
+  `MANAMHOC` int(11) NOT NULL,
+  `SOGIOQUYDOI` int(11) DEFAULT NULL,
+  `TRANGTHAI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `bangphancong`
+--
+ALTER TABLE `bangphancong`
+  ADD PRIMARY KEY (`MAPHANCONG`),
+  ADD KEY `FK__UOC_PHAN_CONG` (`MAGV`);
+
+--
+-- Chỉ mục cho bảng `bao_cao_ket_thuc_mon`
+--
+ALTER TABLE `bao_cao_ket_thuc_mon`
+  ADD PRIMARY KEY (`MADANHGIAKETTHUC`,`MACHITIETPHANCONG`),
+  ADD KEY `FK_BAO_CAO_KET_THUC_MON2` (`MACHITIETPHANCONG`);
+
+--
+-- Chỉ mục cho bảng `bomon`
+--
+ALTER TABLE `bomon`
+  ADD PRIMARY KEY (`MABOMON`),
+  ADD KEY `FK_THUOC_KHOA` (`MAKHOA`);
+
+--
+-- Chỉ mục cho bảng `chitietphancong`
+--
+ALTER TABLE `chitietphancong`
+  ADD PRIMARY KEY (`MACHITIETPHANCONG`),
+  ADD KEY `FK_CO` (`MAPHANCONG`),
+  ADD KEY `FK_PHAN_CONG_DAY` (`MALOP`),
+  ADD KEY `FK_PHAN_CONG_HOC_KY_NIEN_KHOA` (`MAHKNK`),
+  ADD KEY `FK_PHAN_CONG_MON_HOC` (`MAMONHOC`);
+
+--
+-- Chỉ mục cho bảng `chon_khung`
+--
+ALTER TABLE `chon_khung`
+  ADD PRIMARY KEY (`MAGV`,`MANAMHOC`,`MAKHUNG`),
+  ADD KEY `FK_CHON_KHUNG2` (`MANAMHOC`),
+  ADD KEY `FK_CHON_KHUNG3` (`MAKHUNG`);
+
+--
+-- Chỉ mục cho bảng `chucdanh`
+--
+ALTER TABLE `chucdanh`
+  ADD PRIMARY KEY (`MACHUCDANH`);
+
+--
+-- Chỉ mục cho bảng `chucvu`
+--
+ALTER TABLE `chucvu`
+  ADD PRIMARY KEY (`MACHUCVU`);
+
+--
+-- Chỉ mục cho bảng `chuongtrinhdaotao`
+--
+ALTER TABLE `chuongtrinhdaotao`
+  ADD PRIMARY KEY (`MACHUONGTRINH`),
+  ADD KEY `FK_THUOC_CHUONG_TRINH__AO_TAO` (`MABOMON`);
+
+--
+-- Chỉ mục cho bảng `co_chuc_danh`
+--
+ALTER TABLE `co_chuc_danh`
+  ADD PRIMARY KEY (`MACHUCDANH`,`MAGV`),
+  ADD KEY `FK_CO_CHUC_DANH2` (`MAGV`);
+
+--
+-- Chỉ mục cho bảng `danhmucquydoispkhcn`
+--
+ALTER TABLE `danhmucquydoispkhcn`
+  ADD PRIMARY KEY (`MADANHMUC`);
+
+--
+-- Chỉ mục cho bảng `giangvien`
+--
+ALTER TABLE `giangvien`
+  ADD PRIMARY KEY (`MAGV`),
+  ADD KEY `FK_THUOC_BO_MON` (`MABOMON`);
+
+--
+-- Chỉ mục cho bảng `giu_chuc_vu`
+--
+ALTER TABLE `giu_chuc_vu`
+  ADD PRIMARY KEY (`MAGV`,`MACHUCVU`),
+  ADD KEY `FK_GIU_CHUC_VU2` (`MACHUCVU`);
+
+--
+-- Chỉ mục cho bảng `hinhthucdanhgia`
+--
+ALTER TABLE `hinhthucdanhgia`
+  ADD PRIMARY KEY (`MADANHGIAKETTHUC`);
+
+--
+-- Chỉ mục cho bảng `hockynienkhoa`
+--
+ALTER TABLE `hockynienkhoa`
+  ADD PRIMARY KEY (`MAHKNK`);
+
+--
+-- Chỉ mục cho bảng `khoa`
+--
+ALTER TABLE `khoa`
+  ADD PRIMARY KEY (`MAKHOA`);
+
+--
+-- Chỉ mục cho bảng `khunggiochuan`
+--
+ALTER TABLE `khunggiochuan`
+  ADD PRIMARY KEY (`MAKHUNG`),
+  ADD KEY `FK_CO_KHUNG_GIO_CHUAN` (`MACHUCDANH`);
+
+--
+-- Chỉ mục cho bảng `lop`
+--
+ALTER TABLE `lop`
+  ADD PRIMARY KEY (`MALOP`),
+  ADD KEY `FK_HOC` (`MACHUONGTRINH`);
+
+--
+-- Chỉ mục cho bảng `monhoc`
+--
+ALTER TABLE `monhoc`
+  ADD PRIMARY KEY (`MAMONHOC`);
+
+--
+-- Chỉ mục cho bảng `namhoc`
+--
+ALTER TABLE `namhoc`
+  ADD PRIMARY KEY (`MANAMHOC`);
+
+--
+-- Chỉ mục cho bảng `taikhoan`
+--
+ALTER TABLE `taikhoan`
+  ADD PRIMARY KEY (`TENDANGNHAP`),
+  ADD KEY `FK_TAI_KHOAN_CUA_GIANG_VIEN` (`MAGV`);
+
+--
+-- Chỉ mục cho bảng `thuoc`
+--
+ALTER TABLE `thuoc`
+  ADD PRIMARY KEY (`MACHUONGTRINH`,`MAMONHOC`),
+  ADD KEY `FK_THUOC2` (`MAMONHOC`);
+
+--
+-- Chỉ mục cho bảng `_ang_ky_thuc_hien_quy__oi`
+--
+ALTER TABLE `_ang_ky_thuc_hien_quy__oi`
+  ADD PRIMARY KEY (`MADANHMUC`,`MAGV`,`MANAMHOC`),
+  ADD KEY `FK__ANG_KY_THUC_HIEN_QUY__OI2` (`MAGV`),
+  ADD KEY `FK__ANG_KY_THUC_HIEN_QUY__OI3` (`MANAMHOC`);
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `bangphancong`
+--
+ALTER TABLE `bangphancong`
+  ADD CONSTRAINT `FK__UOC_PHAN_CONG` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`);
+
+--
+-- Các ràng buộc cho bảng `bao_cao_ket_thuc_mon`
+--
+ALTER TABLE `bao_cao_ket_thuc_mon`
+  ADD CONSTRAINT `FK_BAO_CAO_KET_THUC_MON` FOREIGN KEY (`MADANHGIAKETTHUC`) REFERENCES `hinhthucdanhgia` (`MADANHGIAKETTHUC`),
+  ADD CONSTRAINT `FK_BAO_CAO_KET_THUC_MON2` FOREIGN KEY (`MACHITIETPHANCONG`) REFERENCES `chitietphancong` (`MACHITIETPHANCONG`);
+
+--
+-- Các ràng buộc cho bảng `bomon`
+--
+ALTER TABLE `bomon`
+  ADD CONSTRAINT `FK_THUOC_KHOA` FOREIGN KEY (`MAKHOA`) REFERENCES `khoa` (`MAKHOA`);
+
+--
+-- Các ràng buộc cho bảng `chitietphancong`
+--
+ALTER TABLE `chitietphancong`
+  ADD CONSTRAINT `FK_CO` FOREIGN KEY (`MAPHANCONG`) REFERENCES `bangphancong` (`MAPHANCONG`),
+  ADD CONSTRAINT `FK_PHAN_CONG_DAY` FOREIGN KEY (`MALOP`) REFERENCES `lop` (`MALOP`),
+  ADD CONSTRAINT `FK_PHAN_CONG_HOC_KY_NIEN_KHOA` FOREIGN KEY (`MAHKNK`) REFERENCES `hockynienkhoa` (`MAHKNK`),
+  ADD CONSTRAINT `FK_PHAN_CONG_MON_HOC` FOREIGN KEY (`MAMONHOC`) REFERENCES `monhoc` (`MAMONHOC`);
+
+--
+-- Các ràng buộc cho bảng `chon_khung`
+--
+ALTER TABLE `chon_khung`
+  ADD CONSTRAINT `FK_CHON_KHUNG` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
+  ADD CONSTRAINT `FK_CHON_KHUNG2` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`),
+  ADD CONSTRAINT `FK_CHON_KHUNG3` FOREIGN KEY (`MAKHUNG`) REFERENCES `khunggiochuan` (`MAKHUNG`);
+
+--
+-- Các ràng buộc cho bảng `chuongtrinhdaotao`
+--
+ALTER TABLE `chuongtrinhdaotao`
+  ADD CONSTRAINT `FK_THUOC_CHUONG_TRINH__AO_TAO` FOREIGN KEY (`MABOMON`) REFERENCES `bomon` (`MABOMON`);
+
+--
+-- Các ràng buộc cho bảng `co_chuc_danh`
+--
+ALTER TABLE `co_chuc_danh`
+  ADD CONSTRAINT `FK_CO_CHUC_DANH` FOREIGN KEY (`MACHUCDANH`) REFERENCES `chucdanh` (`MACHUCDANH`),
+  ADD CONSTRAINT `FK_CO_CHUC_DANH2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`);
+
+--
+-- Các ràng buộc cho bảng `giangvien`
+--
+ALTER TABLE `giangvien`
+  ADD CONSTRAINT `FK_THUOC_BO_MON` FOREIGN KEY (`MABOMON`) REFERENCES `bomon` (`MABOMON`);
+
+--
+-- Các ràng buộc cho bảng `giu_chuc_vu`
+--
+ALTER TABLE `giu_chuc_vu`
+  ADD CONSTRAINT `FK_GIU_CHUC_VU` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
+  ADD CONSTRAINT `FK_GIU_CHUC_VU2` FOREIGN KEY (`MACHUCVU`) REFERENCES `chucvu` (`MACHUCVU`);
+
+--
+-- Các ràng buộc cho bảng `khunggiochuan`
+--
+ALTER TABLE `khunggiochuan`
+  ADD CONSTRAINT `FK_CO_KHUNG_GIO_CHUAN` FOREIGN KEY (`MACHUCDANH`) REFERENCES `chucdanh` (`MACHUCDANH`);
+
+--
+-- Các ràng buộc cho bảng `lop`
+--
+ALTER TABLE `lop`
+  ADD CONSTRAINT `FK_HOC` FOREIGN KEY (`MACHUONGTRINH`) REFERENCES `chuongtrinhdaotao` (`MACHUONGTRINH`);
+
+--
+-- Các ràng buộc cho bảng `taikhoan`
+--
+ALTER TABLE `taikhoan`
+  ADD CONSTRAINT `FK_TAI_KHOAN_CUA_GIANG_VIEN` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`);
+
+--
+-- Các ràng buộc cho bảng `thuoc`
+--
+ALTER TABLE `thuoc`
+  ADD CONSTRAINT `FK_THUOC` FOREIGN KEY (`MACHUONGTRINH`) REFERENCES `chuongtrinhdaotao` (`MACHUONGTRINH`),
+  ADD CONSTRAINT `FK_THUOC2` FOREIGN KEY (`MAMONHOC`) REFERENCES `monhoc` (`MAMONHOC`);
+
+--
+-- Các ràng buộc cho bảng `_ang_ky_thuc_hien_quy__oi`
+--
+ALTER TABLE `_ang_ky_thuc_hien_quy__oi`
+  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI` FOREIGN KEY (`MADANHMUC`) REFERENCES `danhmucquydoispkhcn` (`MADANHMUC`),
+  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
+  ADD CONSTRAINT `FK__ANG_KY_THUC_HIEN_QUY__OI3` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
