@@ -20,7 +20,11 @@ const CRUDTaiKhoan = (app) => {
   router.post("/dangnhapgoogle", loginTaikhoanGOOGLEController); // đăng nhập với email google
   //chức năng CRUD tài khoản của admin
   router.post("/tao", createTaiKhoanController); //Tạo
-  router.post("/tao/excel", createTaiKhoanExcelController); //Tạo hàng loạt tài khoản bằng một mảng
+
+  //Tạo hàng loạt tài khoản bằng một mảng
+  // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
+  router.post("/tao/excel", createTaiKhoanExcelController);
+
   router.get("/xem", checkUserJWT, getAllTaiKhoanController); //xem
 
   router.get("/protected", checkUserJWT, (req, res) => {

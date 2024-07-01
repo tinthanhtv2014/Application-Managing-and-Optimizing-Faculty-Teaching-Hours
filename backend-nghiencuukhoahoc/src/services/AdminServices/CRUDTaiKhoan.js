@@ -105,6 +105,8 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
   // không được để trống TENDANGNHAP và MAGV
   try {
     let results = [];
+
+    //Kiểm tra trước khi tạo tài khoản
     for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
       // Kiểm tra TENDANGNHAP và MAGV
       if (
@@ -127,9 +129,12 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           EM: "tồn tại tk rồi",
           EC: 0,
           DT: [],
-        }; // Tiếp tục thực hiện các lệnh khác
+        };
       }
+    }
 
+    //Bắt đầu tạo tài khoản
+    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
       // Hash mật khẩu
       // let hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
       let [result1, fields1] = await pool.execute(
@@ -162,6 +167,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       EC: 1,
       DT: results,
     };
+
   } catch (error) {
     console.log(error);
     return {
