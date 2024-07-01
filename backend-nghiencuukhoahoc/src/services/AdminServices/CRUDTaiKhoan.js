@@ -94,49 +94,64 @@ const createTaiKhoan = async (tenDangnhap, matKhau, phanQuyen, trangThai) => {
   }
 };
 
-const createTaiKhoanExcel = async (dataTaiKhoanExcel) => {
+const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
+  // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
+  // không được để trống TENDANGNHAP và MAGV
   try {
-    // dataTaiKhoanExcel phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
-    // không được để trống TENDANGNHAP và MAGV
+    let results = [];
+    for (let dataTaiKhoanExcel of dataTaiKhoanExcelArray) {
+      // Kiểm tra TENDANGNHAP và MAGV
+      if (!dataTaiKhoanExcel.TENDANGNHAP || !dataTaiKhoanExcel.MAGV) {
+        results.push({
+          EM: "TENDANGNHAP và MAGV không được để trống",
+          EC: 0,
+          DT: dataTaiKhoanExcel,
+        });
+        continue; // Tiếp tục thực hiện các lệnh khác
+      }
 
-    let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcel.TENDANGNHAP);
-    if (exists) {
-      return {
-        EM: "tài khoản đã tồn tại không thể tạo thêm",
-        EC: 0,
-        DT: [],
-      };
+      // Kiểm tra tài khoản đã tồn tại
+      let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcel.TENDANGNHAP);
+      if (exists) {
+        results.push({
+          EM: "Tài khoản đã tồn tại không thể tạo thêm",
+          EC: 0,
+          DT: dataTaiKhoanExcel,
+        });
+        continue; // Tiếp tục thực hiện các lệnh khác
+      }
+
+      // Hash mật khẩu
+      let hashpass = await hashPassword(dataTaiKhoanExcel.MATKHAU);
+
+      // Tạo tài khoản mới
+      let [result, fields] = await pool.execute(
+        `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?, ?)`,
+        [
+          dataTaiKhoanExcel.TENDANGNHAP,
+          dataTaiKhoanExcel.MAGV,
+          hashpass,
+          dataTaiKhoanExcel.PHANQUYEN,
+          dataTaiKhoanExcel.TRANGTHAITAIKHOAN,
+        ]
+      );
+
+      results.push({
+        EM: "Tạo tài khoản thành công",
+        EC: 1,
+        DT: result,
+      });
     }
 
-    console.log("Hashing password...");
-    let hashpass = await hashPassword(matKhau);
-    console.log("Hashed password:", hashpass);
-
-    console.log("Inserting into database...");
-    let [results, fields] = await pool.execute(
-      `INSERT INTO TAIKHOAN (TENDANGNHAP, MATKHAU, PHANQUYEN, TRANGTHAI) VALUES (?, ?, ?, ?)`,
-      [
-        dataTaiKhoanExcel.TENDANGNHAP,
-        dataTaiKhoanExcel.MAGV,
-        dataTaiKhoanExcel.MATKHAU,
-        dataTaiKhoanExcel.PHANQUYEN,
-        dataTaiKhoanExcel.TRANGTHAITAIKHOAN]
-    );
-
-    return {
-      EM: "tạo tài khoản thành công",
-      EC: 1,
-      DT: results,
-    };
+    return results;
 
   } catch (error) {
     return {
-      EM: "lỗi services createTaiKhoan",
+      EM: "Lỗi services createTaiKhoan",
       EC: 1,
       DT: [],
     };
   }
-
 };
 
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {

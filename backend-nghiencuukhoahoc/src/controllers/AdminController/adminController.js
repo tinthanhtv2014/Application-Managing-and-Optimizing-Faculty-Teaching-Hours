@@ -1,6 +1,7 @@
 const {
   getAllTaiKhoan,
   createTaiKhoan,
+  createTaiKhoanExcel,
   updateTaiKhoan,
   LoginTaikhoan,
 } = require("../../services/AdminServices/CRUDTaiKhoan");
@@ -46,6 +47,28 @@ const createTaiKhoanController = async (req, res) => {
       DT: results.DT,
     });
   } catch (error) {
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const createTaiKhoanExcelController = async (req, res) => {
+  try {
+    const dataTaiKhoanExcelArray = req.body;
+
+    let results = await createTaiKhoanExcel(dataTaiKhoanExcelArray);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+
+  } catch (error) {
+
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -117,7 +140,10 @@ const logoutTaikhoanAdminController = async (req, res) => {
 module.exports = {
   getAllTaiKhoanController,
   createTaiKhoanController,
+  createTaiKhoanExcelController,
   updateTaiKhoanController,
+
+
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
 };

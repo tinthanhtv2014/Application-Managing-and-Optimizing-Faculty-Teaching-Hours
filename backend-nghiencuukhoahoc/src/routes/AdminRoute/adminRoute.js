@@ -5,7 +5,10 @@ const router = express.Router();
 const {
   getAllTaiKhoanController,
   createTaiKhoanController,
+  createTaiKhoanExcelController,
   updateTaiKhoanController,
+
+
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
 } = require("../../controllers/AdminController/adminController.js");
@@ -18,6 +21,7 @@ const CRUDTaiKhoan = (app) => {
 
   //chức năng CRUD tài khoản của admin
   router.post("/tao", createTaiKhoanController); //Tạo
+  router.post("/tao/excel", createTaiKhoanExcelController); //Tạo hàng loạt tài khoản bằng một mảng
   router.get("/xem", checkUserJWT, getAllTaiKhoanController); //xem
 
   router.get("/protected", checkUserJWT, (req, res) => {
