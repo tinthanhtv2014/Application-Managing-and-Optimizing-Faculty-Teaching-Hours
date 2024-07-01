@@ -1,6 +1,6 @@
 const pool = require("../../config/database");
 
-const selectBomon = async (makhoa, tenkhoa) => {
+const selectBomon = async () => {
   try {
     let [results1, fields1] = await pool.execute(`select * from bomon`);
     return {
@@ -10,7 +10,7 @@ const selectBomon = async (makhoa, tenkhoa) => {
     };
   } catch (error) {
     return {
-      EM: "lỗi services createTaiKhoan",
+      EM: "lỗi services selectBomon",
       EC: 1,
       DT: [],
     };
@@ -42,7 +42,7 @@ const createBomon = async (mabomon, makhoa, tenbomon) => {
     };
   } catch (error) {
     return {
-      EM: "lỗi services createTaiKhoan",
+      EM: "lỗi services createBomon",
       EC: -1,
       DT: [],
     };

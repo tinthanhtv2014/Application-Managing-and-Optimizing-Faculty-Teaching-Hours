@@ -13,8 +13,8 @@ const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 
 const CRUDTaiKhoan = (app) => {
   //login cho admin
-  router.post("/dangnhap", loginTaikhoanAdminController);
-  router.post("/dangxuat", logoutTaikhoanAdminController);
+  router.post("/dangnhap", loginTaikhoanAdminController); //đăng nhập
+  router.post("/dangxuat", logoutTaikhoanAdminController); // đăng xuất
 
   //chức năng CRUD tài khoản của admin
   router.post("/tao", createTaiKhoanController); //Tạo

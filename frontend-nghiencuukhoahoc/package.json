@@ -50,6 +50,7 @@
     "simplebar-react": "^3.2.4",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "typescript": "^5.5.2",
     "universal-cookie": "^7.1.4",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
