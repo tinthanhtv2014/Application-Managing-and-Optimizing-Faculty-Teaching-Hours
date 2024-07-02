@@ -1,17 +1,8 @@
 const pool = require("../../config/database");
 
-const timChucVu_MaChucVu = async (MACHUCVU) => {
-  let [results1, fields1] = await pool.execute(
-    `select * from chucvu where TENCHUCVU = ?`,
-    [MACHUCVU]
-  );
-
-  return results1;
-};
-
-const selectChucVu = async () => {
+const selectChucdanh = async () => {
   try {
-    let [results1, fields1] = await pool.execute(`select * from chucvu`);
+    let [results1, fields1] = await pool.execute(`select * from chucdanh`);
     return {
       EM: " xem thông tin chức vụ thành công",
       EC: 1,
@@ -26,26 +17,26 @@ const selectChucVu = async () => {
   }
 };
 
-const createChucVu = async (TENCHUCVU) => {
+const createChucdanh = async (TENCHUCDANH) => {
   try {
     let [results1, fields1] = await pool.execute(
-      `select * from chucvu where TENCHUCVU = ?`,
-      [TENCHUCVU]
+      `select * from chucdanh where TENCHUCDANH = ?`,
+      [TENCHUCDANH]
     );
     if (results1.length > 0) {
       return {
-        EM: "Chức vụ này đã tồn tại",
+        EM: "Chức danh này đã tồn tại",
         EC: 0,
         DT: [],
       };
     }
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO chucvu (TENCHUCVU) VALUES (?)`,
-      [TENCHUCVU]
+      `INSERT INTO chucdanh (TENCHUCDANH) VALUES (?)`,
+      [TENCHUCDANH]
     );
     return {
-      EM: "thêm chức vụ mới mới thành công",
+      EM: "thêm chức danh mới mới thành công",
       EC: 1,
       DT: results,
     };
@@ -58,26 +49,26 @@ const createChucVu = async (TENCHUCVU) => {
   }
 };
 
-const updateChucVu = async (MACHUCVU, TENCHUCVU) => {
+const updateChucdanh = async (MACHUCDANH, TENCHUCDANH) => {
   try {
     let [results1, fields1] = await pool.execute(
-      `select * from chucvu where MACHUCVU = ?`,
-      [MACHUCVU]
+      `select * from chucdanh where MACHUCDANH = ?`,
+      [MACHUCDANH]
     );
     if (results1.length > 0) {
       let [results, fields] = await pool.execute(
-        `UPDATE chucvu
-              SET TENCHUCVU = ? where MACHUCVU = ?;`,
-        [TENCHUCVU, MACHUCVU]
+        `UPDATE chucdanh
+              SET TENCHUCDANH = ? where MACHUCDANH = ?;`,
+        [TENCHUCDANH, MACHUCDANH]
       );
       return {
-        EM: "sửa chức vụ thành công",
+        EM: "sửa chức danh thành công",
         EC: 1,
         DT: results,
       };
     }
     return {
-      EM: "chức vụ này không tồn tại",
+      EM: "chức danh này không tồn tại",
       EC: 0,
       DT: [],
     };
@@ -91,25 +82,25 @@ const updateChucVu = async (MACHUCVU, TENCHUCVU) => {
   }
 };
 
-const xoaChucVu = async (MACHUCVU) => {
+const xoaChucdanh = async (MACHUCDANH) => {
   try {
     let [results1, fields1] = await pool.execute(
-      `select * from chucvu where MACHUCVU = ?`,
-      [MACHUCVU]
+      `select * from chucdanh where MACHUCDANH = ?`,
+      [MACHUCDANH]
     );
     if (results1.length > 0) {
       let [results, fields] = await pool.execute(
-        `DELETE FROM chucvu WHERE MACHUCVU = ?`,
-        [MACHUCVU]
+        `DELETE FROM chucdanh WHERE MACHUCDANH = ?`,
+        [MACHUCDANH]
       );
       return {
-        EM: "xóa chức vụ thành công",
+        EM: "xóa chức danh thành công",
         EC: 1,
         DT: results,
       };
     }
     return {
-      EM: "Chức vụ này không tồn tại",
+      EM: "Chức danh này không tồn tại",
       EC: 0,
       DT: [],
     };
@@ -123,8 +114,8 @@ const xoaChucVu = async (MACHUCVU) => {
 };
 
 module.exports = {
-  selectChucVu,
-  createChucVu,
-  updateChucVu,
-  xoaChucVu,
+  selectChucdanh,
+  createChucdanh,
+  updateChucdanh,
+  xoaChucdanh,
 };

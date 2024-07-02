@@ -7,11 +7,13 @@ const {
   createKHOA,
   updateKHOA,
   deleteKHOA,
+  getOneKHOA,
 } = require("../../controllers/AdminController/khoaAdminCONTROLLER");
 
 const CRUDKhoa = (app) => {
   //route cho khoa
   router.get("/xem", getAllKHOA);
+  router.post("/only/xem", getOneKHOA);
   router.post("/tao", createKHOA);
   router.put("/sua/:makhoa", updateKHOA);
   router.delete("/xoa", deleteKHOA);

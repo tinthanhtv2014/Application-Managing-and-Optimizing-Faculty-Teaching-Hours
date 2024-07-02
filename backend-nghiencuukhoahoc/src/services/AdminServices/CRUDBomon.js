@@ -5,13 +5,13 @@ const selectBomon = async () => {
     let [results1, fields1] = await pool.execute(`select * from bomon`);
     return {
       EM: " xem thông tin bộ môn thành công",
-      EC: 0,
+      EC: 1,
       DT: results1,
     };
   } catch (error) {
     return {
       EM: "lỗi services selectBomon",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
@@ -24,16 +24,14 @@ const selectOnlyBomon = async (MAKHOA) => {
     );
     return {
       EM: "Xem thông tin bộ môn thành công",
-      EC: 0,
+      EC: 1,
       DT: results1,
-      MAKHOA: MAKHOA,
     };
   } catch (error) {
     return {
       EM: "Lỗi services selectBomon",
-      EC: 1,
+      EC: -1,
       DT: [],
-      MAKHOA: MAKHOA,
     };
   }
 };
@@ -104,7 +102,7 @@ const updateBomon = async (mabomon, makhoa, tenbomon) => {
     console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
@@ -137,7 +135,7 @@ const deleteBomon = async (mabomon) => {
     console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
