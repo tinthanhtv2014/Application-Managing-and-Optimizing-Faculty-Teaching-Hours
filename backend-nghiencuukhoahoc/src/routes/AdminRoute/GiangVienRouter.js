@@ -14,6 +14,12 @@ const {
   updateChucVuController,
   deleteChucVuController,
 } = require("../../controllers/AdminController/chucvuAdminCONTROLLER");
+const {
+  getAllChucdanh,
+  createChucdanhControler,
+  updateChucdanhController,
+  deleteChucdanhController,
+} = require("../../controllers/AdminController/chucdanhAdminCONTROLLER");
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
   router.get("/xem", getAllGiangVien);
@@ -25,7 +31,11 @@ const CRUDGiangVien = (app) => {
   router.post("/taochucvu", createChucVuControler);
   router.put("/suachucvu/:MACHUCVU", updateChucVuController);
   router.delete("/xoachucvu", deleteChucVuController);
-
+  //route cho chức danh
+  router.get("/xemchucdanh", getAllChucdanh);
+  router.post("/taochucdanh", createChucdanhControler);
+  router.put("/suachucdanh/:MACHUCDANH", updateChucdanhController);
+  router.delete("/xoachucdanh", deleteChucdanhController);
   return app.use("/api/v1/admin/giangvien", router);
 };
 
