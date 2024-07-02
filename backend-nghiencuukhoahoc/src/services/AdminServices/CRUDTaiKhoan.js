@@ -19,7 +19,7 @@ const checkPassword = (inputpassword, hashpass) => {
 const timTaiKhoan_TENDANGNHAP = async (tenDangnhap) => {
   try {
     const [results, fields] = await pool.execute(
-      "SELECT * FROM TAIKHOAN WHERE TENDANGNHAP = ?",
+      "SELECT * FROM taikhoan WHERE TENDANGNHAP = ?",
       [tenDangnhap]
     );
 
@@ -143,7 +143,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       );
       // Tạo tài khoản mới
       let [result, fields] = await pool.execute(
-        `INSERT INTO TAIKHOAN (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?,  ?, ?)`,
+        `INSERT INTO taikhoan (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?,  ?, ?)`,
         [
           dataTaiKhoanExcelArray[i].tenDangNhap,
           dataTaiKhoanExcelArray[i].MAGV,
@@ -167,7 +167,6 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       EC: 1,
       DT: results,
     };
-
   } catch (error) {
     console.log(error);
     return {

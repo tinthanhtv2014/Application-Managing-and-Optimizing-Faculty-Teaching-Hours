@@ -1,0 +1,44 @@
+.adminCreate-card {
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+  
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+      .adminCreate-img {
+        transform: scale(1.1);
+      }
+    }
+  
+    .adminCreate-center {  
+        width: 100%;
+        height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6fa441;
+    }
+  
+    .adminCreate-img {
+      width: 100px;
+      height: 100px;
+      transition: transform 0.3s ease-in-out;
+    }
+  
+    .adminCreate-button {
+      background-color: #006838;
+    }
+    .adminCreate-center-BM{
+        background-color: #dfe6d9;
+    } .adminCreate-center-GV{
+        background-color: #236199;
+    }.adminCreate-center-CV{
+        background-color: #E3E418
+    }
+    .adminCreate-center-CTDT{
+        background-color: #808285
+    }
+} 
+    
+  
+  

@@ -6,6 +6,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import ProductsPageFake from "../pages/products"
+import AdminCreate from '../sections/Admincreate/AdminCreate';
 
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
 const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
@@ -28,7 +29,8 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <IndexPage />
+            {/* <IndexPage /> */}
+            <AdminCreate />
           </Suspense>
         </DashboardLayout>
       )
