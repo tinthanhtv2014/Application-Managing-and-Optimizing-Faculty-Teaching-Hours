@@ -1,4 +1,5 @@
 .adminCreate-card {
+  user-select: none;
     cursor: pointer;
     transition: box-shadow 0.3s ease-in-out;
   
@@ -39,6 +40,11 @@
         background-color: #808285
     }
 } 
+
+.welcome-adminCreate{
+  user-select: none;
+  font-weight: 500;
+}
     
   
   

@@ -17,7 +17,7 @@ const selectKhoa = async (makhoa, tenkhoa) => {
   }
 };
 
-const createKhoa = async (makhoa, tenkhoa) => {
+const createKhoa = async (tenkhoa) => {
   try {
     let [results1, fields1] = await pool.execute(
       `select * from khoa where TENKHOA = ?`,
@@ -32,17 +32,17 @@ const createKhoa = async (makhoa, tenkhoa) => {
       };
     }
 
-    let [results, fields] = await pool.execute(
-      `INSERT INTO khoa VALUES (?,?)`,
-      [makhoa, tenkhoa]
+    const [results, fields] = await pool.execute(
+      `INSERT INTO khoa (tenkhoa) VALUES (?)`,
+      [tenkhoa]
     );
     return {
       EM: "thêm khoa mới thành công",
       EC: 1,
       DT: results,
     };
-
   } catch (error) {
+    console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
       EC: 1,

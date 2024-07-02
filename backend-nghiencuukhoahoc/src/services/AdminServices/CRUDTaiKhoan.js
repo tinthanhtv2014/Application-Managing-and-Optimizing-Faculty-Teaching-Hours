@@ -194,33 +194,22 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
     );
 
     if (results.length > 0) {
-      const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
+      // const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
 
-      if (isCorrectPass) {
-        let payload = {
-          taikhoan: results[0].TENDANGNHAP,
-          matkhau: results[0].MATKHAU,
-          phanquyen: results[0].PHANQUYEN,
-        };
-        let token = createJWT(payload);
-        return {
-          EM: "đăng nhập thành công",
-          EC: 1,
-          DT: {
-            access_token: token,
-            data: results,
-          },
-        };
-      } else {
-        return {
-          EM: "đăng nhập thất bại, mật khẩu không đúng",
-          EC: 0,
-          DT: {
-            access_token: null,
-            data: [],
-          },
-        };
-      }
+      let payload = {
+        taikhoan: results[0].TENDANGNHAP,
+        //  matkhau: results[0].MATKHAU, cái này không cần mật khẩu => phúc note
+        phanquyen: results[0].PHANQUYEN,
+      };
+      let token = createJWT(payload);
+      return {
+        EM: "đăng nhập thành công",
+        EC: 1,
+        DT: {
+          access_token: token,
+          data: results,
+        },
+      };
     } else {
       return {
         EM: "đăng nhập thất bại, tài khoản không đúng",

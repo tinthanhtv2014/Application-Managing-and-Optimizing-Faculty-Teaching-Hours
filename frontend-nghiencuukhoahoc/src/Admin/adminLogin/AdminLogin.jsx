@@ -4,11 +4,13 @@ import './adminLogin.scss';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import logoGG from "../../../src/public/logo/google.png"
+import Cookies from "js-cookie"
+import { useNavigate } from 'react-router-dom';
 const AdminLogin = () => {
     const [user, setUser] = useState(null);
     const [tokenGoogle, setTokenGoogle] = useState(null);
     const [tokenadmin, setTokenAdmin] = useState(null);
-
+    const navigate = useNavigate()
 
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
@@ -26,6 +28,7 @@ const AdminLogin = () => {
                 setUser(userInfo.data);
                 console.log(userInfo.data)
                 console.log('User Info:', userInfo.data);
+
             } catch (error) {
                 console.error('Error fetching user info:', error);
             }
@@ -35,7 +38,22 @@ const AdminLogin = () => {
         },
     });
 
+    useEffect(() => {
 
+        if (user) {
+            console.log('check user =>', user.email)
+            const FectData = async () => {
+                const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhapgoogle`, { tendangnhap: user.email })
+                console.log(response.data.DT.access_token)
+                if (response.data.EC === 1) {
+                    Cookies.set('accessToken', response.data.DT.access_token)
+                    navigate('/admin')
+                }
+
+            }
+            FectData();
+        }
+    }, [user])
     const handleLogout = () => {
 
         setUser(null);

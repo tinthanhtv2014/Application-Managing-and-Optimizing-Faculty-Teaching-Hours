@@ -111,6 +111,7 @@ const loginTaikhoanAdminController = async (req, res) => {
 };
 //login với email từ google
 const loginTaikhoanGOOGLEController = async (req, res) => {
+  console.log(req.body.tendangnhap);
   try {
     const username = req.body.tendangnhap;
 

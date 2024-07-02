@@ -10,7 +10,6 @@ const {
 } = require("../../controllers/AdminController/khoaAdminCONTROLLER");
 
 const CRUDKhoa = (app) => {
-
   //route cho khoa
   router.get("/xem", getAllKHOA);
   router.post("/tao", createKHOA);
@@ -18,6 +17,6 @@ const CRUDKhoa = (app) => {
   router.delete("/xoa", deleteKHOA);
 
   return app.use("/api/v1/admin/khoa", router);
-}
+};
 
 module.exports = CRUDKhoa;

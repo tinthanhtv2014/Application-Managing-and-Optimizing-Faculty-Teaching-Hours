@@ -8,7 +8,9 @@ import GiangVien from "../../../../../public/img-admin/GiangVien.png";
 import "./AdminCreate.scss";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 const AdminCreate = () => {
+  const navigate = useNavigate();
   const token = Cookies.get("accessToken");
   const [TenDangNhap, setTenDangNhap] = useState(null);
   useEffect(() => {
@@ -20,15 +22,33 @@ const AdminCreate = () => {
       console.log("check", name);
     }
   }, [token]);
+  const handleToCreateKhoa = () => {
+    navigate("/admin/create-khoa");
+  };
+  const handleToCreateBM = () => {
+    navigate("/admin/create-bm");
+  };
+  const handleToCreateGV = () => {
+    navigate("/admin/create-gv");
+  };
+
+  const handleToCreateChucVuGV = () => {
+    navigate("/admin/create-chucvu-gv");
+  };
+  const handleToCreateCTDT = () => {
+    navigate("/admin/create-chuong-trinh-dao-tao");
+  };
   return (
     <>
       <Container className="mt-4">
         {" "}
         <Row>
           {" "}
-          <h3>Chúc {TenDangNhap} ngày mới tốt lành!</h3>{" "}
+          <h3 className="welcome-adminCreate">
+            Chúc {TenDangNhap} ngày mới tốt lành!
+          </h3>{" "}
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card">
+            <Card className="adminCreate-card" onClick={handleToCreateKhoa}>
               <div className="adminCreate-center">
                 {" "}
                 <Card.Img
@@ -43,12 +63,12 @@ const AdminCreate = () => {
                 <Card.Text>
                   Bạn có thể tạo thêm một khoa mới vào hệ thống.
                 </Card.Text>
-                <Button className="adminCreate-button">Tạo Khoa</Button>
+                {/* <Button className="adminCreate-button">Tạo Khoa</Button> */}
               </Card.Body>
             </Card>
           </Col>
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card">
+            <Card className="adminCreate-card" onClick={handleToCreateBM}>
               <div className="adminCreate-center adminCreate-center-BM">
                 {" "}
                 <Card.Img
@@ -63,12 +83,12 @@ const AdminCreate = () => {
                 <Card.Text>
                   Bạn có thể tạo thêm một bộ môn mới vào hệ thống.
                 </Card.Text>
-                <Button className="adminCreate-button">Tạo Bộ Môn</Button>
+                {/* <Button className="adminCreate-button">Tạo Bộ Môn</Button> */}
               </Card.Body>
             </Card>
           </Col>
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card">
+            <Card className="adminCreate-card" onClick={handleToCreateGV}>
               <div className="adminCreate-center adminCreate-center-GV">
                 {" "}
                 <Card.Img
@@ -81,14 +101,14 @@ const AdminCreate = () => {
               <Card.Body>
                 <Card.Title>Giảng Viên Đại Học Trà Vinh</Card.Title>
                 <Card.Text>
-                  Bạn có thể tạo thêm một giảng viên mới vào hệ thống.
+                  Bạn có thể tạo thêm giảng viên mới vào hệ thống.
                 </Card.Text>
-                <Button className="adminCreate-button">Thêm Giảng Viên</Button>
+                {/* <Button className="adminCreate-button">Thêm Giảng Viên</Button> */}
               </Card.Body>
             </Card>
           </Col>
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card">
+            <Card className="adminCreate-card" onClick={handleToCreateChucVuGV}>
               <div className="adminCreate-center adminCreate-center-CV">
                 {" "}
                 <Card.Img
@@ -103,12 +123,12 @@ const AdminCreate = () => {
                 <Card.Text>
                   Bạn có thể tạo thêm một chức vụ giảng viên mới vào hệ thống.
                 </Card.Text>
-                <Button className="adminCreate-button">Tạo Chức Vụ</Button>
+                {/* <Button className="adminCreate-button">Tạo Chức Vụ</Button> */}
               </Card.Body>
             </Card>
           </Col>
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card ">
+            <Card className="adminCreate-card " onClick={handleToCreateCTDT}>
               <div className="adminCreate-center adminCreate-center-CTDT">
                 {" "}
                 <Card.Img
@@ -123,9 +143,9 @@ const AdminCreate = () => {
                 <Card.Text>
                   Bạn có thể thêm chương trình đào tạo mới của bộ vào hệ thống.
                 </Card.Text>
-                <Button className="adminCreate-button">
+                {/* <Button className="adminCreate-button">
                   Thêm Chương Trình Đào Tạo
-                </Button>
+                </Button> */}
               </Card.Body>
             </Card>
           </Col>

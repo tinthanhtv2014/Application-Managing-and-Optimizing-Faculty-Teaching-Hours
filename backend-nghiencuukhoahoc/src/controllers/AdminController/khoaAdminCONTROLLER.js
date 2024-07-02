@@ -6,6 +6,7 @@ const {
 } = require("../../services/AdminServices/CRUDKhoa");
 
 const {
+  selectOnlyBomon,
   selectBomon,
   createBomon,
   updateBomon,
@@ -33,9 +34,9 @@ const getAllKHOA = async (req, res) => {
 
 const createKHOA = async (req, res) => {
   try {
-    const makhoa = req.body.makhoa;
+    // const makhoa = req.body.makhoa;
     const tenkhoa = req.body.tenkhoa;
-    let results = await createKhoa(makhoa, tenkhoa);
+    let results = await createKhoa(tenkhoa);
 
     return res.status(200).json({
       EM: results.EM,
@@ -113,7 +114,25 @@ const getAllBOMON = async (req, res) => {
     });
   }
 };
+const getOnlyBoMon = async (req, res) => {
+  try {
+    const MAKHOA = req.body.MAKHOA;
+    let results = await selectOnlyBomon(MAKHOA);
 
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
 const createBOMON = async (req, res) => {
   try {
     const mabomon = req.body.mabomon;
@@ -188,4 +207,5 @@ module.exports = {
   createBOMON,
   updateBOMON,
   deleteBOMON,
+  getOnlyBoMon,
 };

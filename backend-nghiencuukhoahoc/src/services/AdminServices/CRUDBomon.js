@@ -16,6 +16,27 @@ const selectBomon = async () => {
     };
   }
 };
+const selectOnlyBomon = async (MAKHOA) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM bomon WHERE MAKHOA = ?`,
+      [MAKHOA]
+    );
+    return {
+      EM: "Xem thông tin bộ môn thành công",
+      EC: 0,
+      DT: results1,
+      MAKHOA: MAKHOA,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectBomon",
+      EC: 1,
+      DT: [],
+      MAKHOA: MAKHOA,
+    };
+  }
+};
 
 const createBomon = async (mabomon, makhoa, tenbomon) => {
   try {
@@ -116,4 +137,5 @@ module.exports = {
   createBomon,
   updateBomon,
   deleteBomon,
+  selectOnlyBomon,
 };

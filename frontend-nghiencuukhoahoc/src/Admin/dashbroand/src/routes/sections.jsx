@@ -8,6 +8,14 @@ import DashboardLayout from '../layouts/dashboard';
 import ProductsPageFake from "../pages/products"
 import AdminCreate from '../sections/Admincreate/AdminCreate';
 
+
+
+
+const CreateChucVuGV = lazy(() => import('../sections/KhoaTVU/CreateChucVuGV/CreateChucVuGV'));
+const CreateGV = lazy(() => import('../sections/KhoaTVU/CreateGV/CreateGV'));
+const CreateBM = lazy(() => import('../sections/KhoaTVU/CreateBM/CreateBM'));
+const CreateCTDT = lazy(() => import('../sections/KhoaTVU/CreateCTDT/CreateCTDT'));
+const CreateKhoa = lazy(() => import('../sections/KhoaTVU/CreateKhoa/CreateKhoa'));
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
 const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
 const ChatAdmin = lazy(() => import('../sections/ChatAdmin/ChatAdmin'));
@@ -23,6 +31,7 @@ const LoginPage = lazy(() => import('../pages/login'));
 const Page404 = lazy(() => import('../pages/page-not-found'));
 
 export default function Router() {
+
   const routes = useRoutes([
     {
       path: '/',
@@ -124,6 +133,64 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <FileExcel />
+          </Suspense>
+        </DashboardLayout>
+      )
+    }, {
+      path: '/create-khoa', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateKhoa />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+    {
+      path: '/create-chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateCTDT />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+    {
+      path: '/create-bm', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateBM />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+    {
+      path: '/create-gv', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateGV />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+    {
+      path: '/create-chucvu-gv', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateChucVuGV />
+          </Suspense>
+        </DashboardLayout>
+      )
+    }, {
+      path: '/create-chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CreateKhoa />
           </Suspense>
         </DashboardLayout>
       )
