@@ -4,6 +4,9 @@ const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 const { createJWT } = require("../../middlewares/JWTAction");
 
+const { selectBomon_TENBOMON } = require("./CRUDBomon");
+const { timGiangVien } = require("./CRUDGiangvien");
+
 //hàm hash mật khẩu
 const hashPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -106,71 +109,100 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
   try {
     let results = [];
 
-    //Kiểm tra trước khi tạo tài khoản
+    // Kiểm tra trước khi tạo tài khoản
     for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
       // Kiểm tra TENDANGNHAP và MAGV
       if (
-        !dataTaiKhoanExcelArray[i].tenDangNhap ||
-        !dataTaiKhoanExcelArray[i].MAGV
+        !dataTaiKhoanExcelArray[i].TENDANGNHAP ||
+        !dataTaiKhoanExcelArray[i].MAGV ||
+        !dataTaiKhoanExcelArray[i].TENBOMON
       ) {
         return {
-          EM: "bị trống thông tin",
+          EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(dataTaiKhoanExcelArray[i])}`,
           EC: 0,
           DT: [],
         }; // Tiếp tục thực hiện các lệnh khác
       }
 
       // Kiểm tra tài khoản đã tồn tại
-      let exists = await timTaiKhoan_TENDANGNHAP(
-        dataTaiKhoanExcelArray[i].tenDangNhap
-      );
+      let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcelArray[i].TENDANGNHAP);
       if (exists) {
         return {
-          EM: "tồn tại tk rồi",
+          EM: `Tài khoản: ${dataTaiKhoanExcelArray[i].TENDANGNHAP} đã tồn tại`,
           EC: 0,
           DT: [],
         };
       }
+
+      // Kiểm tra bộ môn
+      const kiemtraTENBOMON = await selectBomon_TENBOMON(dataTaiKhoanExcelArray[i].TENBOMON);
+      // console.log("<<<<<<<<<<", kiemtraTENBOMON, "  i= ", i);
+      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      if (!kiemtraTENBOMON.DT || !kiemtraTENBOMON.DT.MABOMON) {
+        return {
+          EM: `Dòng số ${i} Bộ môn <${dataTaiKhoanExcelArray[i].TENBOMON}> không tồn tại`,
+          EC: 0,
+          DT: [],
+        };
+      }
+
+      let kiemtraMAGV = await timGiangVien(dataTaiKhoanExcelArray[i].MAGV);
+      if (kiemtraMAGV.length > 0) {
+        return {
+          EM: `Dòng ${i} Giảng viên ${dataTaiKhoanExcelArray[i].MAGV} đã tồn tại`,
+          EC: 0,
+          DT: kiemtraMAGV,
+        };
+      }
     }
 
-    //Bắt đầu tạo tài khoản
+    // Bắt đầu tạo tài khoản
     for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
-      // Hash mật khẩu
-      // let hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
-      let [result1, fields1] = await pool.execute(
-        `INSERT INTO giangvien (MAGV) VALUES (?)`,
-        [dataTaiKhoanExcelArray[i].MAGV]
-      );
-      // Tạo tài khoản mới
-      let [result, fields] = await pool.execute(
-        `INSERT INTO taikhoan (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?,  ?, ?)`,
-        [
-          dataTaiKhoanExcelArray[i].tenDangNhap,
-          dataTaiKhoanExcelArray[i].MAGV,
+      // console.log(">>>>>>>>", dataTaiKhoanExcelArray[i])
 
-          dataTaiKhoanExcelArray[i].phanQuyen,
-          dataTaiKhoanExcelArray[i].trangThai,
+      // Hash mật khẩu
+      let hashpass = '';
+      if (dataTaiKhoanExcelArray[i].MATKHAU) {
+        hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
+      }
+
+      // Lấy mã bộ môn thông qua hàm selectBomon_TENBOMON
+      let timMABOMON = await selectBomon_TENBOMON(dataTaiKhoanExcelArray[i].TENBOMON);
+      // console.log("<<<<<<<<<<", timMABOMON, "  i= ", i);
+      // console.log("<<<<<<<<<<", timMABOMON.DT.MABOMON);
+      await pool.execute(
+        `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
+        [dataTaiKhoanExcelArray[i].MAGV, timMABOMON.DT.MABOMON]
+      );
+
+      // Tạo tài khoản mới
+      await pool.execute(
+        `INSERT INTO taikhoan (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?)`,
+        [
+          dataTaiKhoanExcelArray[i].TENDANGNHAP,
+          dataTaiKhoanExcelArray[i].MAGV,
+          dataTaiKhoanExcelArray[i].PHANQUYEN,
+          dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
         ]
       );
+
       results.push({
-        EM: "tạo tài khoản thành công",
+        EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
         EC: 0,
-        DT: {
-          result,
-          result1,
-        },
+        DT: [],
       });
     }
 
     return {
-      EM: "thêm thông tin thành công",
+      EM: "Tất cả tài khoản đã được tạo",
       EC: 1,
       DT: results,
     };
+
   } catch (error) {
-    console.log(error);
+    console.log("Lỗi services createTaiKhoanExcel", error);
     return {
-      EM: "Lỗi services createTaiKhoan",
+      EM: "Lỗi services createTaiKhoanExcel",
       EC: 1,
       DT: [],
     };
