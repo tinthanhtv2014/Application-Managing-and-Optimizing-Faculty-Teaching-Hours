@@ -9,13 +9,39 @@
     }
   
     &:hover {
-      .table-row-icon {
+      .table-row-icon {  
+       
         opacity: 1;
       }
     }
+    .table-row-icon-edit {
+      color: #236199;
+      opacity: 0;  
+      transition: opacity 0.1s ease-in-out; /* Thuộc tính sẽ thay đổi */
+    }
   
+    &:hover {
+      .table-row-icon-edit {
+    
+        opacity: 1;
+     
+      }
+    }
+    &.activeBM{
+      background-color: #6fa441; /* Màu nền khi hàng được click */
+      color: rgb(0, 0, 0);
+    }
     &.active {
-      background-color: black; /* Màu chữ khi hàng được click */
+      background-color: #6fa441; /* Màu nền khi hàng được click */
+      color: rgb(0, 0, 0); /* Màu chữ khi hàng được click */
+    } 
+    .table-row-icon-edit:hover{
+      transform: scale(1.4);
+      color:  #101010;
+    }
+    .table-row-icon:hover{
+      transform: scale(1.4);
+      color:  #101010;
     }
   }
-  
+ 

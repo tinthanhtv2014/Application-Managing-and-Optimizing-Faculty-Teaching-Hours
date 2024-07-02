@@ -73,6 +73,9 @@ const createBomon = async (makhoa, tenbomon) => {
 
 const updateBomon = async (mabomon, makhoa, tenbomon) => {
   try {
+    console.log(mabomon);
+    console.log(tenbomon);
+    console.log(makhoa);
     let [results1, fields1] = await pool.execute(
       `select * from bomon where MABOMON = ?`,
       [mabomon]
@@ -82,10 +85,14 @@ const updateBomon = async (mabomon, makhoa, tenbomon) => {
         `UPDATE bomon SET MAKHOA = ?,TENBOMON = ? WHERE MABOMON = ?`,
         [makhoa, tenbomon, mabomon]
       );
+      let [results2, fields1] = await pool.execute(
+        `select * from bomon where MAKHOA = ?`,
+        [makhoa]
+      );
       return {
         EM: "update thông tin bộ môn thành công",
         EC: 1,
-        DT: results,
+        DT: results2,
       };
     }
     return {
@@ -94,6 +101,7 @@ const updateBomon = async (mabomon, makhoa, tenbomon) => {
       DT: [],
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
       EC: 1,

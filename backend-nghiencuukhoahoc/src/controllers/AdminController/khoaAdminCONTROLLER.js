@@ -159,6 +159,7 @@ const createBOMON = async (req, res) => {
 const updateBOMON = async (req, res) => {
   try {
     const mabomon = req.params.mabomon;
+    console.log("check mabomon", mabomon);
     const makhoa = req.body.makhoa;
     const tenbomon = req.body.tenbomon;
     let results = await updateBomon(mabomon, makhoa, tenbomon);

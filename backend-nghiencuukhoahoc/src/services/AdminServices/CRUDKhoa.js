@@ -53,6 +53,8 @@ const createKhoa = async (tenkhoa) => {
 
 const updateKhoa = async (makhoa, tenkhoa) => {
   try {
+    console.log(makhoa);
+    console.log(tenkhoa);
     let [results1, fields1] = await pool.execute(
       `select * from khoa where MAKHOA = ?`,
       [makhoa]
@@ -74,6 +76,7 @@ const updateKhoa = async (makhoa, tenkhoa) => {
       DT: [],
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
       EC: 1,
