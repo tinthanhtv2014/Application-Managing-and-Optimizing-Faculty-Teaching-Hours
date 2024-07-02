@@ -38,7 +38,7 @@ const selectOnlyBomon = async (MAKHOA) => {
   }
 };
 
-const createBomon = async (mabomon, makhoa, tenbomon) => {
+const createBomon = async (makhoa, tenbomon) => {
   try {
     let [results1, fields1] = await pool.execute(
       `select * from bomon where TENBOMON = ?`,
@@ -53,8 +53,8 @@ const createBomon = async (mabomon, makhoa, tenbomon) => {
     }
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO bomon VALUES (?,?,?)`,
-      [mabomon, makhoa, tenbomon]
+      `INSERT INTO bomon (MAKHOA, TENBOMON) VALUES (?,?)`,
+      [makhoa, tenbomon]
     );
     return {
       EM: "thêm bộ môn mới mới thành công",
@@ -62,6 +62,7 @@ const createBomon = async (mabomon, makhoa, tenbomon) => {
       DT: results,
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "lỗi services createBomon",
       EC: -1,
@@ -104,9 +105,10 @@ const updateBomon = async (mabomon, makhoa, tenbomon) => {
 const deleteBomon = async (mabomon) => {
   try {
     let [results1, fields1] = await pool.execute(
-      `select * from khoa where MABOMON = ?`,
+      `select * from bomon where MABOMON = ?`,
       [mabomon]
     );
+    console.log(results1.length);
     if (results1.length > 0) {
       let [results, fields] = await pool.execute(
         `DELETE FROM bomon WHERE MABOMON = ?`,
@@ -124,6 +126,7 @@ const deleteBomon = async (mabomon) => {
       DT: [],
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
       EC: 1,

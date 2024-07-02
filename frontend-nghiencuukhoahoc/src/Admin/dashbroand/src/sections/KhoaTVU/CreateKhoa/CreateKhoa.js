@@ -8,14 +8,17 @@ import "./CreateKhoa.scss";
 
 const CreateKhoa = () => {
   const [tenKhoa, setTenKhoa] = useState("");
+  const [TenBoMon, setTenBoMon] = useState("");
+  const [MaKhoa, setMaKhoa] = useState();
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
 
   const navigate = useNavigate();
+  const [activeRow, setActiveRow] = useState(null); //biến đổi màu table KHOA
   const [dataListKhoa, setdataListKhoa] = useState();
   const [dataListBoMon, setdataListBoMon] = useState(null);
-  const [MaKhoaShow, setMaKhoaShow] = useState();
+
   const auth = Cookies.get("accessToken");
   const fetchData = async () => {
     const response = await CookiesAxios.get(
@@ -31,7 +34,7 @@ const CreateKhoa = () => {
     } else {
       navigate("/");
     }
-  }, [auth, MaKhoaShow]);
+  }, [auth]);
   useEffect(() => {
     const checkAuth = jwtDecode(auth);
     if (checkAuth.phanquyen === "Admin") {
@@ -54,6 +57,7 @@ const CreateKhoa = () => {
     // setTenKhoa("");
   };
   const handleDelete = async (maKhoa) => {
+    setActiveRow(maKhoa);
     // Handle form submission logic here
     const response = await CookiesAxios.delete(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xoa`,
@@ -65,6 +69,7 @@ const CreateKhoa = () => {
     console.log(response.data);
   };
   const handleChose = async (MaKhoa) => {
+    setMaKhoa(MaKhoa);
     if (MaKhoa) {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
@@ -75,6 +80,54 @@ const CreateKhoa = () => {
       //   console.log("CHECk BM=>", response.data.DT);
       setdataListBoMon(response.data.DT);
     }
+  };
+
+  const handleSumitAddBoMon = async (e) => {
+    e.preventDefault();
+
+    if (TenBoMon && MaKhoa) {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
+        { TENBOMON: TenBoMon, MAKHOA: MaKhoa }
+      );
+      console.log(response.data);
+      if (response.data.EC === 1) {
+        if (MaKhoa) {
+          const response = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
+            {
+              MAKHOA: MaKhoa,
+            }
+          );
+          //   console.log("CHECk BM=>", response.data.DT);
+          setdataListBoMon(response.data.DT);
+        }
+      }
+      fetchData();
+    }
+  };
+  const handleDeleteBoMon = async (MABOMON) => {
+    // Handle form submission logic here
+    const response = await CookiesAxios.delete(
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/xoa`,
+      {
+        params: { mabomon: MABOMON },
+      }
+    );
+    if (response.data.EC === 1) {
+      if (MaKhoa) {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
+          {
+            MAKHOA: MaKhoa,
+          }
+        );
+        //   console.log("CHECk BM=>", response.data.DT);
+        setdataListBoMon(response.data.DT);
+      }
+    }
+    fetchData();
+    console.log(response.data);
   };
   return (
     <Container className="mt-4">
@@ -119,7 +172,9 @@ const CreateKhoa = () => {
                 {dataListKhoa.map((khoa, index) => (
                   <tr
                     key={index}
-                    className="table-row"
+                    className={`table-row ${
+                      activeRow === index ? "active" : ""
+                    }`}
                     onClick={() => handleChose(khoa.MAKHOA)}
                   >
                     <td>{khoa.MAKHOA} </td>
@@ -140,14 +195,14 @@ const CreateKhoa = () => {
       </Row>
       <Row className="mt-4">
         <Col md={6}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSumitAddBoMon}>
             <Form.Group controlId="formDepartmentName" className="mb-3">
               <Form.Label>Tên Bộ Môn</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Hãy Nhập Tên Của Bộ Môn Mới "
-                value={tenKhoa}
-                onChange={(e) => setTenKhoa(e.target.value)}
+                value={TenBoMon}
+                onChange={(e) => setTenBoMon(e.target.value)}
                 required
               />
             </Form.Group>
@@ -158,7 +213,7 @@ const CreateKhoa = () => {
           </Form>
         </Col>
         <Col md={6}>
-          <h4 className="mt-4">Danh Sách Bộ Môn</h4>
+          <h4>Danh Sách Bộ Môn</h4>
           {dataListKhoa && (
             <Table striped bordered hover>
               <thead>
@@ -169,19 +224,24 @@ const CreateKhoa = () => {
                 </tr>
               </thead>
               <tbody>
-                {dataListBoMon.map((khoa, index) => (
-                  <tr key={index} className="table-row">
-                    <td>{khoa.MABOMON} </td>
-                    <td>{khoa.TENBOMON}</td>
-                    <td>
-                      {" "}
-                      <i
-                        class="fa-solid fa-trash table-row-icon"
-                        onClick={() => handleDelete(khoa.MAKHOA)}
-                      ></i>
-                    </td>
+                {dataListBoMon && dataListBoMon.length > 0 ? (
+                  dataListBoMon.map((khoa, index) => (
+                    <tr key={index} className="table-row">
+                      <td>{khoa.MABOMON}</td>
+                      <td>{khoa.TENBOMON}</td>
+                      <td>
+                        <i
+                          className="fa-solid fa-trash table-row-icon"
+                          onClick={() => handleDeleteBoMon(khoa.MABOMON)}
+                        ></i>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">Không có bộ môn nào</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           )}
