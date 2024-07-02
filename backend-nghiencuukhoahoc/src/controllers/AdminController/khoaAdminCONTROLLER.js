@@ -3,6 +3,7 @@ const {
   selectKhoa,
   updateKhoa,
   deleteKhoa,
+  selectOneKhoa,
 } = require("../../services/AdminServices/CRUDKhoa");
 
 const {
@@ -16,6 +17,26 @@ const {
 const getAllKHOA = async (req, res) => {
   try {
     let results = await selectKhoa();
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const getOneKHOA = async (req, res) => {
+  try {
+    const makhoa = req.body.MAKHOA;
+    let results = await selectOneKhoa(makhoa);
 
     return res.status(200).json({
       EM: results.EM,
@@ -201,6 +222,7 @@ const deleteBOMON = async (req, res) => {
 
 module.exports = {
   getAllKHOA,
+  getOneKHOA,
   createKHOA,
   updateKHOA,
   deleteKHOA,

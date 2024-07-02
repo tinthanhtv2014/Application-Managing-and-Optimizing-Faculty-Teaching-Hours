@@ -1,17 +1,37 @@
 const pool = require("../../config/database");
 
-const selectKhoa = async (makhoa, tenkhoa) => {
+const selectKhoa = async () => {
   try {
     let [results1, fields1] = await pool.execute(`select * from khoa`);
     return {
       EM: " xem thông tin khoa thành công",
-      EC: 0,
+      EC: 1,
       DT: results1,
     };
   } catch (error) {
     return {
       EM: "lỗi services createTaiKhoan",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const selectOneKhoa = async (makhoa) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `select * from khoa where MAKHOA = ?`,
+      [makhoa]
+    );
+    return {
+      EM: " xem thông tin một khoa thành công",
       EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    return {
+      EM: "lỗi services createTaiKhoan",
+      EC: -1,
       DT: [],
     };
   }
@@ -45,7 +65,7 @@ const createKhoa = async (tenkhoa) => {
     console.log(error);
     return {
       EM: "lỗi services createTaiKhoan",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
@@ -76,7 +96,7 @@ const updateKhoa = async (makhoa, tenkhoa) => {
   } catch (error) {
     return {
       EM: "lỗi services createTaiKhoan",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
@@ -107,7 +127,7 @@ const deleteKhoa = async (makhoa) => {
   } catch (error) {
     return {
       EM: "lỗi services createTaiKhoan",
-      EC: 1,
+      EC: -1,
       DT: [],
     };
   }
@@ -118,4 +138,5 @@ module.exports = {
   selectKhoa,
   updateKhoa,
   deleteKhoa,
+  selectOneKhoa,
 };

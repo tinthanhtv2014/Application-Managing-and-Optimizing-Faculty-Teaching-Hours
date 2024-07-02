@@ -173,7 +173,7 @@ const CreateKhoa = () => {
                   <tr
                     key={index}
                     className={`table-row ${
-                      activeRow === index ? "active" : ""
+                      activeRow === khoa.MAKHOA ? "active" : ""
                     }`}
                     onClick={() => handleChose(khoa.MAKHOA)}
                   >

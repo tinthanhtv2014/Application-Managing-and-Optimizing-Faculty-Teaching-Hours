@@ -14,6 +14,7 @@ const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
 const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter");
 const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter");
+
 //=================================================================================
 
 const corsOptions = {
@@ -24,11 +25,13 @@ const corsOptions = {
 //===============================sử dụng các dependency
 app.use(cors(corsOptions));
 // app.use(cors());
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 configViewEngine(app);
 //===============================
 
