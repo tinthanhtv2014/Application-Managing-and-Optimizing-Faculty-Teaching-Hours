@@ -1,30 +1,41 @@
-import axios from "axios";
+// CreateKhoa.js
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Row, Col, Table } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import CreateKhoaForm from "./components/CreateKhoaForm.js";
+import KhoaList from "./components/KhoaList.js";
+import CreateBoMonForm from "./components/CreateBoMonForm.js";
+import BoMonList from "./components/BoMonList.js";
 import "./CreateKhoa.scss";
 
 const CreateKhoa = () => {
+  //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenKhoa, setTenKhoa] = useState("");
   const [TenBoMon, setTenBoMon] = useState("");
   const [MaKhoa, setMaKhoa] = useState();
   const [MaBoMon, setMaBoMon] = useState();
+  //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
-
+  const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
+  //----------------------------ISOPEN--------------------------------------
   const [activeRow, setActiveRow] = useState(null); //biến đổi màu table KHOA
   const [disabledBM, setDisableBM] = useState(true);
   const [isOpenEditButton, setIsOpenEditButton] = useState(false);
   const [isOpenEditButtonBM, setIsOpenEditButtonBM] = useState(false);
   const [activeRowBM, setActiveRowBM] = useState(null);
+  // --------------------------ISOPEN---------------------------------------
+
+  //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
   const [dataListKhoa, setdataListKhoa] = useState();
   const [dataListBoMon, setdataListBoMon] = useState(null);
+  //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
 
-  const auth = Cookies.get("accessToken");
   const fetchData = async () => {
     const response = await CookiesAxios.get(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
@@ -32,339 +43,235 @@ const CreateKhoa = () => {
     console.log(response.data.DT);
     setdataListKhoa(response.data.DT);
   };
-  useEffect(() => {
-    const checkAuth = jwtDecode(auth);
-    if (checkAuth.phanquyen === "Admin") {
-      fetchData();
-    } else {
-      navigate("/");
-    }
-  }, [auth]);
-  useEffect(() => {
-    const checkAuth = jwtDecode(auth);
-    if (checkAuth.phanquyen === "Admin") {
-      fetchData();
-    } else {
-      navigate("/");
-    }
-  }, [auth]);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    if (tenKhoa) {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/tao`,
-        { tenkhoa: tenKhoa }
-      );
-      fetchData();
-      console.log(response.data);
-    }
 
-    // Reset form fields
-    // setTenKhoa("");
-  };
-  const handleDelete = async (maKhoa) => {
-    setActiveRow(maKhoa);
-    // Handle form submission logic here
-    const response = await CookiesAxios.delete(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xoa`,
-      {
-        params: { makhoa: maKhoa },
-      }
-    );
-    fetchData();
-    console.log(response.data);
-  };
-  const handleSumitEditKhoa = async () => {
-    console.log("CHECK=>", MaKhoa);
-    if (MaKhoa) {
-      const response = await CookiesAxios.put(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/sua/${MaKhoa}`,
-        { tenkhoa: tenKhoa }
-      );
-      fetchData();
-      console.log(response.data);
-    }
-  };
-  const handleChoseEditKhoa = (khoa) => {
-    setMaKhoa(khoa.MAKHOA);
-    setTenKhoa(khoa.TENKHOA);
-    setIsOpenEditButton(true);
-  };
-  const handleIsOpenEditButton = () => {
-    setIsOpenEditButton(false);
-  };
-  const handleChose = async (MaKhoa) => {
-    setActiveRow(MaKhoa);
-    setMaKhoa(MaKhoa);
-    setDisableBM(false);
-    console.log("check disable", disabledBM);
-    if (MaKhoa) {
+  const getBoMonByMaKhoa = async (MaKhoa) => {
+    try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
         {
           MAKHOA: MaKhoa,
         }
       );
-      //   console.log("CHECk BM=>", response.data.DT);
-
+      console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
       setdataListBoMon(response.data.DT);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
-  // -------------------BỘ MÔN-----------------------------------------
-  const handleChoseRowBM = (bomon) => {
-    setActiveRowBM(bomon.MABOMON);
-  };
-  const handleSumitEditBM = async () => {
-    console.log("CHECK=> BM", MaBoMon);
-    if (MaBoMon) {
-      const response = await CookiesAxios.put(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/sua/${MaBoMon}`,
-        { tenbomon: TenBoMon, makhoa: MaKhoa }
-      );
 
-      setdataListBoMon(response.data.DT);
+  useEffect(() => {
+    fetchData();
+    if (auth) {
+      const decodedToken = jwtDecode(auth);
+      const expirationTime = decodedToken.exp * 1000;
+      const currentTime = Date.now();
+      if (expirationTime < currentTime) {
+        Cookies.remove("accessToken");
+        navigate("/login");
+      }
+    } else {
+      navigate("/login");
     }
-  };
-  const handleChoseEditBM = (bomon) => {
-    setMaBoMon(bomon.MABOMON);
-    setTenBoMon(bomon.TENBOMON);
-    setIsOpenEditButtonBM(true);
-  };
-  const handleIsOpenEditButtonBM = () => {
-    setIsOpenEditButtonBM(false);
-  };
-  const handleSumitAddBoMon = async (e) => {
-    e.preventDefault();
+  }, [navigate]);
 
-    if (TenBoMon && MaKhoa) {
+  // KHOA
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
       const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
-        { TENBOMON: TenBoMon, MAKHOA: MaKhoa }
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/tao`,
+        {
+          tenkhoa: tenKhoa,
+        }
       );
       console.log(response.data);
-      if (response.data.EC === 1) {
-        if (MaKhoa) {
-          const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
-            {
-              MAKHOA: MaKhoa,
-            }
-          );
-          //   console.log("CHECk BM=>", response.data.DT);
-          setdataListBoMon(response.data.DT);
-        }
-      }
+      setTenKhoa("");
       fetchData();
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
     }
   };
-  const handleDeleteBoMon = async (MABOMON) => {
-    // Handle form submission logic here
-    const response = await CookiesAxios.delete(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/xoa`,
-      {
-        params: { mabomon: MABOMON },
-      }
-    );
-    if (response.data.EC === 1) {
-      if (MaKhoa) {
-        const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
+
+  const handleChose = (id) => {
+    console.log(id);
+    setActiveRow(id);
+    setDisableBM(false);
+    setMaKhoa(id);
+    getBoMonByMaKhoa(id);
+  };
+
+  const handleDelete = async (MaKhoa) => {
+    if (MaKhoa) {
+      try {
+        const response = await CookiesAxios.delete(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xoa`,
           {
-            MAKHOA: MaKhoa,
+            params: {
+              makhoa: MaKhoa,
+            },
           }
         );
-        //   console.log("CHECk BM=>", response.data.DT);
-        setdataListBoMon(response.data.DT);
+        console.log(response.data);
+        setActiveRow(null);
+        setDisableBM(true);
+        fetchData();
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }
     }
-    fetchData();
-    console.log(response.data);
   };
+
+  const handleChoseEditKhoa = (khoa) => {
+    setTenKhoa(khoa.TENKHOA);
+    setMaKhoa(khoa.MAKHOA);
+    setIsOpenEditButton(true);
+  };
+
+  const handleIsOpenEditButton = () => {
+    setIsOpenEditButton(false);
+    setTenKhoa("");
+    setMaKhoa(null);
+  };
+
+  const handleSumitEditKhoa = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await CookiesAxios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/sua/${MaKhoa}`,
+        {
+          tenkhoa: tenKhoa,
+        }
+      );
+      console.log(response.data);
+      setTenKhoa("");
+      setMaKhoa(null);
+      fetchData();
+      setIsOpenEditButton(false);
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+    }
+  };
+
+  // BỘ MÔN
+  const handleSumitAddBoMon = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
+        {
+          TENBOMON: TenBoMon,
+          MAKHOA: MaKhoa,
+        }
+      );
+      console.log(response.data);
+      setTenBoMon("");
+      getBoMonByMaKhoa(MaKhoa);
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+    }
+  };
+
+  const handleChoseRowBM = (bomon) => {
+    setActiveRowBM(bomon.MABOMON);
+    setTenBoMon(bomon.TENBOMON);
+  };
+
+  const handleDeleteBoMon = async (MaBoMon) => {
+    if (MaBoMon) {
+      try {
+        const response = await CookiesAxios.delete(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/xoa`,
+          {
+            params: {
+              mabomon: MaBoMon,
+            },
+          }
+        );
+        console.log(response.data);
+        getBoMonByMaKhoa(MaKhoa);
+        setActiveRowBM(null);
+        setTenBoMon("");
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      }
+    }
+  };
+
+  const handleChoseEditBM = (bomon) => {
+    setTenBoMon(bomon.TENBOMON);
+    setMaBoMon(bomon.MABOMON);
+    setIsOpenEditButtonBM(true);
+  };
+
+  const handleIsOpenEditButtonBM = () => {
+    setIsOpenEditButtonBM(false);
+    setTenBoMon("");
+    setMaBoMon(null);
+  };
+
+  const handleSumitEditBM = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await CookiesAxios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/sua/${MaBoMon}`,
+        {
+          tenbomon: TenBoMon,
+          makhoa: MaKhoa,
+        }
+      );
+      console.log(response.data);
+      setTenBoMon("");
+      setMaBoMon(null);
+      getBoMonByMaKhoa(MaKhoa);
+      setIsOpenEditButtonBM(false);
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+    }
+  };
+
   return (
-    <Container className="mt-4">
+    <Container>
       <Row>
         <Col md={6}>
-          <h2>Tạo Khoa Mới Cho TVU</h2>
-          <Form onSubmit={handleSubmit}>
-            <Form.Label>
-              {" "}
-              "Đây là chức năng tạo ra một khoa mới dành cho hệ thống, và phải
-              cân nhắc khi thêm vào hệ thống, chức năng này cần phải có sự cho
-              phép chỉ đạo của các chứ chức vụ cấp cao".
-            </Form.Label>
-            <Form.Group controlId="formDepartmentName" className="mb-3">
-              <Form.Label>Tên Khoa</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Hãy Nhập Tên Của Khoa Mới "
-                value={tenKhoa}
-                onChange={(e) => setTenKhoa(e.target.value)}
-                required
-              />
-            </Form.Group>
-
-            <Button variant="success" type="submit">
-              Tạo Khoa
-            </Button>
-
-            {isOpenEditButton ? (
-              <>
-                {" "}
-                <Button
-                  variant="primary"
-                  className="ml-4"
-                  onClick={handleSumitEditKhoa}
-                >
-                  Sửa Tên
-                </Button>
-                <Button
-                  variant="danger"
-                  type="submit"
-                  onClick={handleIsOpenEditButton}
-                >
-                  Tắt
-                </Button>
-              </>
-            ) : (
-              false
-            )}
-          </Form>
-        </Col>{" "}
+          <CreateKhoaForm
+            tenKhoa={tenKhoa}
+            setTenKhoa={setTenKhoa}
+            handleSubmit={handleSubmit}
+            isOpenEditButton={isOpenEditButton}
+            handleSumitEditKhoa={handleSumitEditKhoa}
+            handleIsOpenEditButton={handleIsOpenEditButton}
+          />
+        </Col>
         <Col md={6}>
-          <h4 className="mt-4">Danh Sách Các Khoa</h4>
-          {dataListKhoa && (
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Mã Khoa</th>
-                  <th>Tên Khoa</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataListKhoa.map((khoa, index) => (
-                  <tr
-                    key={index}
-                    className={`table-row ${
-                      activeRow === khoa.MAKHOA ? "active" : ""
-                    }`}
-                    onClick={() => handleChose(khoa.MAKHOA)}
-                  >
-                    <td>{khoa.MAKHOA} </td>
-                    <td>{khoa.TENKHOA}</td>
-                    <td>
-                      {" "}
-                      <i
-                        class="fa-solid fa-trash table-row-icon"
-                        onClick={() => handleDelete(khoa.MAKHOA)}
-                      ></i>
-                    </td>
-                    <td>
-                      {" "}
-                      <i
-                        class="fa-solid fa-pen-to-square table-row-icon-edit"
-                        onClick={() => handleChoseEditKhoa(khoa)}
-                      ></i>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
+          <KhoaList
+            dataListKhoa={dataListKhoa}
+            activeRow={activeRow}
+            handleChose={handleChose}
+            handleDelete={handleDelete}
+            handleChoseEditKhoa={handleChoseEditKhoa}
+          />
         </Col>
       </Row>
-      <Row className="mt-4">
+      <Row>
         <Col md={6}>
-          <Form onSubmit={handleSumitAddBoMon}>
-            <Form.Group controlId="formDepartmentName" className="mb-3">
-              <h4>Tạo Bộ Môn</h4>
-              <Form.Label>
-                "Bạn cần phải chọn khoa ở bảng Table rồi mới thêm được vào bộ
-                môn".
-              </Form.Label>
-
-              <Form.Control
-                disabled={disabledBM}
-                type="text"
-                placeholder="Hãy Nhập Tên Của Bộ Môn Mới "
-                value={TenBoMon}
-                onChange={(e) => setTenBoMon(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Button variant="success" type="submit">
-              Tạo Bộ Môn
-            </Button>{" "}
-            {isOpenEditButtonBM ? (
-              <>
-                {" "}
-                <Button
-                  variant="primary"
-                  className="ml-4"
-                  onClick={handleSumitEditBM}
-                >
-                  Sửa Tên
-                </Button>
-                <Button
-                  variant="danger"
-                  type="submit"
-                  onClick={handleIsOpenEditButtonBM}
-                >
-                  Tắt
-                </Button>
-              </>
-            ) : (
-              false
-            )}
-          </Form>
+          <CreateBoMonForm
+            TenBoMon={TenBoMon}
+            setTenBoMon={setTenBoMon}
+            disabledBM={disabledBM}
+            handleSumitAddBoMon={handleSumitAddBoMon}
+            isOpenEditButtonBM={isOpenEditButtonBM}
+            handleSumitEditBM={handleSumitEditBM}
+            handleIsOpenEditButtonBM={handleIsOpenEditButtonBM}
+          />
         </Col>
         <Col md={6}>
-          <h4>Danh Sách Bộ Môn</h4>
-          {dataListKhoa && (
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Mã Khoa</th>
-                  <th>Tên Khoa</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataListBoMon && dataListBoMon.length > 0 ? (
-                  dataListBoMon.map((bomon, index) => (
-                    <tr
-                      onClick={() => handleChoseRowBM(bomon)}
-                      key={index}
-                      className={`table-row ${
-                        activeRowBM === bomon.MABOMON ? "activeBM" : ""
-                      }`}
-                    >
-                      <td>{bomon.MABOMON}</td>
-                      <td>{bomon.TENBOMON}</td>
-                      <td>
-                        <i
-                          className="fa-solid fa-trash table-row-icon"
-                          onClick={() => handleDeleteBoMon(bomon.MABOMON)}
-                        ></i>
-                      </td>
-                      <td>
-                        {" "}
-                        <i
-                          class="fa-solid fa-pen-to-square table-row-icon-edit"
-                          onClick={() => handleChoseEditBM(bomon)}
-                        ></i>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="3">Không có bộ môn nào</td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
-          )}
+          <BoMonList
+            dataListBoMon={dataListBoMon}
+            activeRowBM={activeRowBM}
+            handleChoseRowBM={handleChoseRowBM}
+            handleDeleteBoMon={handleDeleteBoMon}
+            handleChoseEditBM={handleChoseEditBM}
+          />
         </Col>
       </Row>
     </Container>

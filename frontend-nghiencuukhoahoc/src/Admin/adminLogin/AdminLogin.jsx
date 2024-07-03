@@ -73,7 +73,8 @@ const AdminLogin = () => {
         <div>
           <button className="Button-gg" onClick={() => login()}>
             <img src={logoGG} alt="Logo" className="logo-gg" />{" "}
-            <p>Sign in with Google</p>
+
+            <div className="content-sign ">  <p>Sign in with Google</p></div>
           </button>
         </div>
       )}
