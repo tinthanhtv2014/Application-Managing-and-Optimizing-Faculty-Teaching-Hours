@@ -15,8 +15,8 @@ const CreateBoMonForm = ({
     <Form onSubmit={handleSumitAddBoMon}>
       <Form.Group controlId="formDepartmentName" className="mb-3">
         <h4>Tạo Bộ Môn</h4>
-        <Form.Label>
-          "Bạn cần phải chọn khoa ở bảng Table rồi mới thêm được vào bộ môn".
+        <Form.Label className="opacity-7">
+          Bạn cần phải chọn khoa ở bảng Table rồi mới thêm được vào bộ môn.
         </Form.Label>
         <Form.Control
           disabled={disabledBM}

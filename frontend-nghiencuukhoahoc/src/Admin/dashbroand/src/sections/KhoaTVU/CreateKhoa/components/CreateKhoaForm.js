@@ -13,10 +13,10 @@ const CreateKhoaForm = ({
   return (
     <Form onSubmit={handleSubmit}>
       <h2>Tạo Khoa Mới Cho Hệ Thống</h2>
-      <Form.Label>
-        "Đây là chức năng tạo ra một khoa mới dành cho hệ thống, và phải cân
-        nhắc khi thêm vào hệ thống, chức năng này cần phải có sự cho phép chỉ
-        đạo của các chứ chức vụ cấp cao".
+      <Form.Label className="opacity-7">
+        Đây là chức năng tạo ra một khoa mới dành cho hệ thống, và phải cân nhắc
+        khi thêm vào hệ thống, chức năng này cần phải có sự cho phép chỉ đạo của
+        các chứ chức vụ cấp cao.
       </Form.Label>
       <Form.Group controlId="formDepartmentName" className="mb-3">
         <Form.Label>Tên Khoa</Form.Label>

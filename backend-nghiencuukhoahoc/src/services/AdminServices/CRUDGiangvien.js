@@ -25,7 +25,27 @@ const selectGiangVien = async () => {
     };
   }
 };
-
+const selectOnlyGiangVien = async (MABOMON) => {
+  try {
+    console.log("check 2 =", MABOMON);
+    let [results1, fields1] = await pool.execute(
+      `select * from giangvien where MABOMON= ?`,
+      [MABOMON]
+    );
+    console.log("check 3 =", results1);
+    return {
+      EM: " xem thông tin giảng viên của bộ môn đó thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    return {
+      EM: "lỗi services selectGiangVien",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const createGiangVien = async (dataGiangVien) => {
   try {
     //dataGiangVien phải bao gồm MAGV, MABOMON, TENDANGNHAP, TENGV, EMAIL, DIENTHOAI, DIACHI
@@ -139,6 +159,6 @@ module.exports = {
   createGiangVien,
   updateGiangVien,
   deleteGiangVien,
-
+  selectOnlyGiangVien,
   timGiangVien,
 };

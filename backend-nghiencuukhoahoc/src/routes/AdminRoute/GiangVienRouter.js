@@ -7,6 +7,7 @@ const {
   createGiangVienControler,
   updateGiangVienController,
   deleteGiangVienController,
+  getOnlyGiangVienbyBoMon,
 } = require("../../controllers/AdminController/giangVienAdminController");
 const {
   getAllChucvu,
@@ -23,6 +24,7 @@ const {
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
   router.get("/xem", getAllGiangVien);
+  router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
   router.post("/tao", createGiangVienControler);
   router.put("/sua/:maGV", updateGiangVienController);
   router.delete("/xoa", deleteGiangVienController);
