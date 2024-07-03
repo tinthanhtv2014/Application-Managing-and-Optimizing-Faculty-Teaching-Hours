@@ -1,7 +1,5 @@
 require("dotenv").config();
 var jwt = require("jsonwebtoken");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 const nonSercurePaths = ["/", "/register", "/login", "/logout"];
 const createJWT = (payload) => {
