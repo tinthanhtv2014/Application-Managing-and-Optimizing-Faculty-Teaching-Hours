@@ -21,6 +21,7 @@ const CRUDTaiKhoan = (app) => {
   //chức năng CRUD tài khoản của admin
   router.post("/tao", createTaiKhoanController); //Tạo
   router.post("/login");
+
   //Tạo hàng loạt tài khoản bằng một mảng
   // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
   router.post("/tao/excel", createTaiKhoanExcelController);

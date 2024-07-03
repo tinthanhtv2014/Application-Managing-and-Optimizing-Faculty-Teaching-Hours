@@ -16,7 +16,9 @@ const selectBomon = async () => {
     };
   }
 };
-const selectOnlyBomon = async (MAKHOA) => {
+
+//Hàm tìm Bộ môn theo Mã khoa
+const selectBomon_MAKHOA = async (MAKHOA) => {
   try {
     let [results1, fields1] = await pool.execute(
       `SELECT * FROM bomon WHERE MAKHOA = ?`,
@@ -32,6 +34,36 @@ const selectOnlyBomon = async (MAKHOA) => {
       EM: "Lỗi services selectBomon",
       EC: -1,
       DT: [],
+    };
+  }
+};
+
+//Hàm tìm bộ môn theo TENBOMON
+const selectBomon_TENBOMON = async (TENBOMON) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM bomon WHERE TENBOMON = ?`,
+      [TENBOMON]
+    );
+
+    if (results1.length > 0) {
+      return {
+        EM: "Xem thông tin bộ môn thành công",
+        EC: 1,
+        DT: results1[0], // Chỉ lấy dòng đầu tiên của kết quả
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy bộ môn",
+        EC: 0,
+        DT: {},
+      };
+    }
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectBomon_TENBOMON",
+      EC: -1,
+      DT: {},
     };
   }
 };
@@ -146,5 +178,7 @@ module.exports = {
   createBomon,
   updateBomon,
   deleteBomon,
-  selectOnlyBomon,
+
+  selectBomon_MAKHOA,
+  selectBomon_TENBOMON,
 };

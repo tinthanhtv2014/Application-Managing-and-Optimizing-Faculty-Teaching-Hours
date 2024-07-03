@@ -139,4 +139,6 @@ module.exports = {
   createGiangVien,
   updateGiangVien,
   deleteGiangVien,
+
+  timGiangVien,
 };

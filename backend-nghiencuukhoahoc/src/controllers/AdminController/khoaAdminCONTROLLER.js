@@ -7,7 +7,7 @@ const {
 } = require("../../services/AdminServices/CRUDKhoa");
 
 const {
-  selectOnlyBomon,
+  selectBomon_MAKHOA,
   selectBomon,
   createBomon,
   updateBomon,
@@ -138,7 +138,7 @@ const getAllBOMON = async (req, res) => {
 const getOnlyBoMon = async (req, res) => {
   try {
     const MAKHOA = req.body.MAKHOA;
-    let results = await selectOnlyBomon(MAKHOA);
+    let results = await selectBomon_MAKHOA(MAKHOA);
 
     return res.status(200).json({
       EM: results.EM,

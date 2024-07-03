@@ -50,7 +50,6 @@ const createTaiKhoanExcelController = async (req, res) => {
   try {
     const dataTaiKhoanExcelArray = req.body;
 
-    console.log("check req: ", req.body);
     let results = await createTaiKhoanExcel(dataTaiKhoanExcelArray);
 
     return res.status(200).json({
