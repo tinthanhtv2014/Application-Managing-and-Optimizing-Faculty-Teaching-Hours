@@ -46,9 +46,12 @@ function isValidEmail(email) {
 
 // =============================================================================================================================
 //hàm chức năng
-const getAllTaiKhoan = async () => {
+const getAllTaiKhoan = async (MABOMON) => {
   try {
-    let [results, fields] = await pool.execute("select * from TAIKHOAN");
+    let [results, fields] = await pool.execute(
+      "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
+      [MABOMON]
+    );
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,
@@ -115,17 +118,22 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       if (
         !dataTaiKhoanExcelArray[i].TENDANGNHAP ||
         !dataTaiKhoanExcelArray[i].MAGV ||
-        !dataTaiKhoanExcelArray[i].TENBOMON
+        !dataTaiKhoanExcelArray[i].TENBOMON ||
+        !dataTaiKhoanExcelArray[i].MACHUCDANH
       ) {
         return {
-          EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(dataTaiKhoanExcelArray[i])}`,
+          EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
+            dataTaiKhoanExcelArray[i]
+          )}`,
           EC: 0,
           DT: [],
         }; // Tiếp tục thực hiện các lệnh khác
       }
 
       // Kiểm tra tài khoản đã tồn tại
-      let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanExcelArray[i].TENDANGNHAP);
+      let exists = await timTaiKhoan_TENDANGNHAP(
+        dataTaiKhoanExcelArray[i].TENDANGNHAP
+      );
       if (exists) {
         return {
           EM: `Tài khoản: ${dataTaiKhoanExcelArray[i].TENDANGNHAP} đã tồn tại`,
@@ -135,7 +143,9 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       }
 
       // Kiểm tra bộ môn
-      const kiemtraTENBOMON = await selectBomon_TENBOMON(dataTaiKhoanExcelArray[i].TENBOMON);
+      const kiemtraTENBOMON = await selectBomon_TENBOMON(
+        dataTaiKhoanExcelArray[i].TENBOMON
+      );
       // console.log("<<<<<<<<<<", kiemtraTENBOMON, "  i= ", i);
       // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
       if (!kiemtraTENBOMON.DT || !kiemtraTENBOMON.DT.MABOMON) {
@@ -161,13 +171,15 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       // console.log(">>>>>>>>", dataTaiKhoanExcelArray[i])
 
       // Hash mật khẩu
-      let hashpass = '';
+      let hashpass = "";
       if (dataTaiKhoanExcelArray[i].MATKHAU) {
         hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
       }
 
       // Lấy mã bộ môn thông qua hàm selectBomon_TENBOMON
-      let timMABOMON = await selectBomon_TENBOMON(dataTaiKhoanExcelArray[i].TENBOMON);
+      let timMABOMON = await selectBomon_TENBOMON(
+        dataTaiKhoanExcelArray[i].TENBOMON
+      );
       // console.log("<<<<<<<<<<", timMABOMON, "  i= ", i);
       // console.log("<<<<<<<<<<", timMABOMON.DT.MABOMON);
       await pool.execute(
@@ -185,6 +197,15 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
         ]
       );
+      await pool.execute(
+        `INSERT INTO co_chuc_danh (MACHUCDANH, MAGV,  TRANGTHAI) VALUES (?, ?,  ?)`,
+        [
+          dataTaiKhoanExcelArray[i].MACHUCDANH,
+          dataTaiKhoanExcelArray[i].MAGV,
+
+          dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
+        ]
+      );
 
       results.push({
         EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
@@ -198,7 +219,6 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       EC: 1,
       DT: results,
     };
-
   } catch (error) {
     console.log("Lỗi services createTaiKhoanExcel", error);
     return {

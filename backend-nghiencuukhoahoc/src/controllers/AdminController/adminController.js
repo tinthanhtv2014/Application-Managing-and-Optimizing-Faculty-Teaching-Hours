@@ -9,7 +9,8 @@ const {
 
 const getAllTaiKhoanController = async (req, res) => {
   try {
-    let results = await getAllTaiKhoan();
+    const MABOMON = req.params.MABOMON;
+    let results = await getAllTaiKhoan(MABOMON);
 
     return res.status(200).json({
       EM: results.EM,

@@ -26,7 +26,7 @@ const CRUDTaiKhoan = (app) => {
   // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
   router.post("/tao/excel", createTaiKhoanExcelController);
 
-  router.get("/xem", checkUserJWT, getAllTaiKhoanController); //xem
+  router.get("/xem/:MABOMON", getAllTaiKhoanController); //xem
 
   router.get("/protected", checkUserJWT, (req, res) => {
     res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
