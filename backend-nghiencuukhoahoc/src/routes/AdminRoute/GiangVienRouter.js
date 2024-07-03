@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const router = express.Router();
+
 const {
   getAllGiangVien,
   createGiangVienControler,
@@ -9,18 +10,21 @@ const {
   deleteGiangVienController,
   getOnlyGiangVienbyBoMon,
 } = require("../../controllers/AdminController/giangVienAdminController");
+
 const {
   getAllChucvu,
   createChucVuControler,
   updateChucVuController,
   deleteChucVuController,
 } = require("../../controllers/AdminController/chucvuAdminCONTROLLER");
+
 const {
   getAllChucdanh,
   createChucdanhControler,
   updateChucdanhController,
   deleteChucdanhController,
 } = require("../../controllers/AdminController/chucdanhAdminCONTROLLER");
+
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
   router.get("/xem", getAllGiangVien);

@@ -14,6 +14,7 @@ const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
 const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter");
 const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter");
+const CRUDMonHoc = require("./routes/AdminRoute/MonHocRouter");
 
 //=================================================================================
 
@@ -40,6 +41,7 @@ CRUDTaiKhoan(app); // route CRUD bảng taikhoan dành cho admin
 CRUDKhoa(app); //CRUD bảng khoa
 CRUDBoMon(app); // CRUD bộ môn
 CRUDGiangVien(app); // CRUD giảng viên
+CRUDMonHoc(app)//CRUD môn học
 //=====================================================================================================
 
 app.get("/", (req, res) => {
