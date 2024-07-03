@@ -1,7 +1,7 @@
 // components/BoMonList.js
 import React from "react";
 import { Table } from "react-bootstrap";
-
+import "../CreateKhoa.scss";
 const BoMonList = ({
   dataListBoMon,
   activeRowBM,
@@ -9,8 +9,9 @@ const BoMonList = ({
   handleDeleteBoMon,
   handleChoseEditBM,
 }) => {
+  console.log("check  activeRowBM=>", activeRowBM);
   return (
-    <Table striped bordered hover>
+    <table className="custom-table">
       <thead>
         <tr>
           <th>Mã Bộ Môn</th>
@@ -24,8 +25,8 @@ const BoMonList = ({
             <tr
               onClick={() => handleChoseRowBM(bomon)}
               key={index}
-              className={`table-row ${
-                activeRowBM === bomon.MABOMON ? "activeBM" : ""
+              className={`custom-table-row ${
+                activeRowBM === bomon.MABOMON ? "active" : ""
               }`}
             >
               <td>{bomon.MABOMON}</td>
@@ -50,7 +51,7 @@ const BoMonList = ({
           </tr>
         )}
       </tbody>
-    </Table>
+    </table>
   );
 };
 

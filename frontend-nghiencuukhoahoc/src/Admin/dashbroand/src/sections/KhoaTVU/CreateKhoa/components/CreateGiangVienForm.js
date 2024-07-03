@@ -1,7 +1,7 @@
 // components/CreateBoMonForm.js
 import React from "react";
 import { Form, Button } from "react-bootstrap";
-
+import "../CreateKhoa.scss";
 const CreateGiangVienForm = ({
   TenGV,
   setTenGV,
@@ -34,6 +34,7 @@ const CreateGiangVienForm = ({
           value={TenGV}
           onChange={(e) => setTenGV(e.target.value)}
           required
+          className="mt-2 mb-2"
         />
         <Form.Control
           disabled={disabledGV}

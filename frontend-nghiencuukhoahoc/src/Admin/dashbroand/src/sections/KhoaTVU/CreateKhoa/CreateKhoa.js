@@ -107,6 +107,7 @@ const CreateKhoa = () => {
   };
 
   const handleChose = (id) => {
+    console.log("check id create khoa =>", id);
     console.log(id);
     setActiveRow(id);
     setDisableBM(false);
@@ -387,17 +388,18 @@ const CreateKhoa = () => {
         {" "}
         <Col md={6}>
           {" "}
+          <h5 className="active">Thêm Tài Khoản Giảng Viên</h5>
           <p className="opacity-7">
             Bạn có thể thêm giảng viên bằng chức năng excel hoặc thủ công.
           </p>
           <Box sx={{ maxWidth: 300 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Excel</InputLabel>
+              <InputLabel id="demo-simple-select-label">Thêm</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={ValueExcel}
-                label="Excel"
+                label={ValueExcel}
                 onChange={handleChangeExcel}
               >
                 <MenuItem value="Excel">Excel</MenuItem>

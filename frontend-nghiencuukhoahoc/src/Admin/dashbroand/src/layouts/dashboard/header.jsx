@@ -74,6 +74,7 @@ export default function Header({ onOpenNav }) {
         {renderContent}
       </Toolbar>
     </AppBar>
+
   );
 }
 

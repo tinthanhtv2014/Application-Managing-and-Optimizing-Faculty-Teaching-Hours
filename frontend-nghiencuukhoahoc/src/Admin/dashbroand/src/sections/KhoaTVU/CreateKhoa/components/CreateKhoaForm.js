@@ -1,7 +1,7 @@
 // components/CreateKhoaForm.js
 import React from "react";
 import { Form, Button } from "react-bootstrap";
-
+import "../CreateKhoa.scss";
 const CreateKhoaForm = ({
   tenKhoa,
   setTenKhoa,
@@ -19,7 +19,7 @@ const CreateKhoaForm = ({
         các chứ chức vụ cấp cao.
       </Form.Label>
       <Form.Group controlId="formDepartmentName" className="mb-3">
-        <Form.Label>Tên Khoa</Form.Label>
+        {/* <Form.Label>Tên Khoa</Form.Label> */}
         <Form.Control
           type="text"
           placeholder="Hãy Nhập Tên Của Khoa Mới "

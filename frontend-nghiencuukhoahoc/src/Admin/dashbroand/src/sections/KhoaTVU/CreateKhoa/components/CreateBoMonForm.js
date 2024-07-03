@@ -1,7 +1,7 @@
 // components/CreateBoMonForm.js
 import React from "react";
 import { Form, Button } from "react-bootstrap";
-
+import "../CreateKhoa.scss";
 const CreateBoMonForm = ({
   TenBoMon,
   setTenBoMon,
@@ -14,7 +14,7 @@ const CreateBoMonForm = ({
   return (
     <Form onSubmit={handleSumitAddBoMon}>
       <Form.Group controlId="formDepartmentName" className="mb-3">
-        <h4>Tạo Bộ Môn</h4>
+        <h5>Tạo Bộ Môn</h5>
         <Form.Label className="opacity-7">
           Bạn cần phải chọn khoa ở bảng Table rồi mới thêm được vào bộ môn.
         </Form.Label>

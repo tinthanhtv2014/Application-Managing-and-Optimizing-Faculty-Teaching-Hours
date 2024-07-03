@@ -1,7 +1,7 @@
-// components/KhoaList.js
 import React from "react";
 import { Table } from "react-bootstrap";
-
+import "../CreateKhoa.scss";
+import "./KhoaList.scss";
 const KhoaList = ({
   dataListKhoa,
   activeRow,
@@ -9,8 +9,10 @@ const KhoaList = ({
   handleDelete,
   handleChoseEditKhoa,
 }) => {
+  console.log("check Atice Row", activeRow);
+
   return (
-    <Table striped bordered hover>
+    <table className="custom-table">
       <thead>
         <tr>
           <th>Mã Khoa</th>
@@ -23,22 +25,20 @@ const KhoaList = ({
           dataListKhoa.map((khoa, index) => (
             <tr
               key={index}
-              className={`table-row ${
+              className={`custom-table-row ${
                 activeRow === khoa.MAKHOA ? "active" : ""
               }`}
               onClick={() => handleChose(khoa.MAKHOA)}
             >
-              <td>{khoa.MAKHOA}</td>
+              <td className="mau">{khoa.MAKHOA}</td>
               <td>{khoa.TENKHOA}</td>
               <td>
                 <i
-                  className="fa-solid fa-trash table-row-icon"
+                  className="table-row-icon fa-solid fa-trash"
                   onClick={() => handleDelete(khoa.MAKHOA)}
                 ></i>
-              </td>
-              <td>
                 <i
-                  className="fa-solid fa-pen-to-square table-row-icon-edit"
+                  className="table-row-icon-edit fa-solid fa-pen-to-square"
                   onClick={() => handleChoseEditKhoa(khoa)}
                 ></i>
               </td>
@@ -50,7 +50,7 @@ const KhoaList = ({
           </tr>
         )}
       </tbody>
-    </Table>
+    </table>
   );
 };
 
