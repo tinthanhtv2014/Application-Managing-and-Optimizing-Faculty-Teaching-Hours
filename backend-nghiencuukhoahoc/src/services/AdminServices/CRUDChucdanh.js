@@ -17,6 +17,36 @@ const selectChucdanh = async () => {
   }
 };
 
+const selectChucdanh_TENCHUCDANH = async (TENCHUCDANH) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM chucdanh WHERE TENCHUCDANH = ?`,
+      [TENCHUCDANH]
+    );
+
+    if (results1.length > 0) {
+      console.log("check result: ", results1);
+      return {
+        EM: "Xem thông tin chức danh thành công",
+        EC: 1,
+        DT: results1[0], // Chỉ lấy dòng đầu tiên của kết quả
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy chức danh này",
+        EC: 0,
+        DT: {},
+      };
+    }
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectChucdanh_TENCHUCDANH",
+      EC: -1,
+      DT: {},
+    };
+  }
+};
+
 const createChucdanh = async (TENCHUCDANH) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -118,4 +148,5 @@ module.exports = {
   createChucdanh,
   updateChucdanh,
   xoaChucdanh,
+  selectChucdanh_TENCHUCDANH,
 };

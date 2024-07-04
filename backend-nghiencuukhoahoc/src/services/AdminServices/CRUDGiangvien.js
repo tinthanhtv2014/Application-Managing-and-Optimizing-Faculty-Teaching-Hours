@@ -162,7 +162,7 @@ const updateGiangVien = async (dataGiangVien) => {
 
 const deleteGiangVien = async (dataGiangVien) => {
   try {
-    if (!timGiangVien(dataGiangVien.maGV)) {
+    if (!timGiangVien(dataGiangVien.MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
         EC: 0,
@@ -171,6 +171,16 @@ const deleteGiangVien = async (dataGiangVien) => {
     }
 
     let [results, fields] = await pool.execute(
+      `DELETE FROM co_chuc_danh
+            WHERE MAGV = ?;`,
+      [dataGiangVien.MAGV]
+    );
+    let [results2, fields2] = await pool.execute(
+      `DELETE FROM taikhoan
+            WHERE MAGV = ?;`,
+      [dataGiangVien.MAGV]
+    );
+    let [results1, fields1] = await pool.execute(
       `DELETE FROM giangvien
             WHERE MAGV = ?;`,
       [dataGiangVien.MAGV]
@@ -178,7 +188,7 @@ const deleteGiangVien = async (dataGiangVien) => {
     return {
       EM: "xóa giảng viên thành công",
       EC: 1,
-      DT: results,
+      DT: [],
     };
   } catch (error) {
     console.log(error);

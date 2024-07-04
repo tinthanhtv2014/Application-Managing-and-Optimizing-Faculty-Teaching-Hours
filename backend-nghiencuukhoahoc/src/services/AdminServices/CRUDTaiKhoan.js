@@ -6,7 +6,7 @@ const { createJWT } = require("../../middlewares/JWTAction");
 
 const { selectBomon_TENBOMON } = require("./CRUDBomon");
 const { timGiangVien } = require("./CRUDGiangvien");
-
+const { selectChucdanh_TENCHUCDANH } = require("./CRUDChucdanh");
 //hàm hash mật khẩu
 const hashPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -109,7 +109,6 @@ const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
   // chỉ tạo tài khoản thôi chứ không thêm thông tin
   // dataTaiKhoan bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
 
-  const connection = await pool.getConnection();
   try {
     let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanOnly.TENDANGNHAP);
 
@@ -121,25 +120,12 @@ const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
       };
     }
 
-    // Bắt đầu transaction
-    await connection.beginTransaction();
-
-    let [results0, fields0] = await connection.execute(
+    let [results0, fields0] = await pool.execute(
       `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
       [dataTaiKhoanOnly.MAGV, dataTaiKhoanOnly.MABOMON]
     );
 
-    if (results0.affectedRows === 0) {
-      await connection.rollback(); // Rollback nếu câu lệnh đầu tiên không thành công
-      connection.release();
-      return {
-        EM: "Lỗi khi thêm giảng viên, không thể tạo tài khoản !",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    let [results, fields] = await connection.execute(
+    let [results, fields] = await pool.execute(
       `INSERT INTO taikhoan (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?)`,
       [
         dataTaiKhoanOnly.TENDANGNHAP,
@@ -149,19 +135,7 @@ const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
       ]
     );
 
-    if (results.affectedRows === 0) {
-      await connection.rollback(); // Rollback nếu câu lệnh thứ hai không thành công
-      connection.release();
-      return {
-        EM: "Lỗi khi tạo tài khoản !",
-        EC: 0,
-        DT: [],
-      };
-    }
-
     // Commit transaction nếu tất cả các câu lệnh thành công
-    await connection.commit();
-    connection.release();
     let [results3, fields3] = await pool.execute(
       "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
       [dataTaiKhoanOnly.MABOMON]
@@ -172,8 +146,6 @@ const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
       DT: results3,
     };
   } catch (error) {
-    await connection.rollback(); // Rollback nếu có lỗi xảy ra trong quá trình thực hiện
-    connection.release();
     console.log(error);
     return {
       EM: "Lỗi services createTaiKhoan",
@@ -196,7 +168,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
         !dataTaiKhoanExcelArray[i].TENDANGNHAP ||
         !dataTaiKhoanExcelArray[i].MAGV ||
         !dataTaiKhoanExcelArray[i].TENBOMON ||
-        !dataTaiKhoanExcelArray[i].MACHUCDANH
+        !dataTaiKhoanExcelArray[i].TENCHUCDANH
       ) {
         return {
           EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
@@ -241,23 +213,32 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           DT: kiemtraMAGV,
         };
       }
+
+      //kiểm tra chức danh
+      const kiemtraTENCHUCDANH = await selectChucdanh_TENCHUCDANH(
+        dataTaiKhoanExcelArray[i].TENCHUCDANH
+      );
+
+      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      if (!kiemtraTENCHUCDANH.DT || !kiemtraTENCHUCDANH.DT.MACHUCDANH) {
+        return {
+          EM: `Dòng số ${i} tên chức danh <${dataTaiKhoanExcelArray[i].TENCHUCDANH}> không tồn tại`,
+          EC: 0,
+          DT: [],
+        };
+      }
     }
 
     // Bắt đầu tạo tài khoản
     for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
-      // console.log(">>>>>>>>", dataTaiKhoanExcelArray[i])
-
-      // Hash mật khẩu
-      let hashpass = "";
-      if (dataTaiKhoanExcelArray[i].MATKHAU) {
-        hashpass = await hashPassword(dataTaiKhoanExcelArray[i].MATKHAU);
-      }
-
       // Lấy mã bộ môn thông qua hàm selectBomon_TENBOMON
       let timMABOMON = await selectBomon_TENBOMON(
         dataTaiKhoanExcelArray[i].TENBOMON
       );
-      // console.log("<<<<<<<<<<", timMABOMON, "  i= ", i);
+      let timMACHUCDANH = await selectChucdanh_TENCHUCDANH(
+        dataTaiKhoanExcelArray[i].TENCHUCDANH
+      );
+
       // console.log("<<<<<<<<<<", timMABOMON.DT.MABOMON);
       await pool.execute(
         `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
@@ -277,7 +258,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       await pool.execute(
         `INSERT INTO co_chuc_danh (MACHUCDANH, MAGV,  TRANGTHAI) VALUES (?, ?,  ?)`,
         [
-          dataTaiKhoanExcelArray[i].MACHUCDANH,
+          timMACHUCDANH.DT.MACHUCDANH,
           dataTaiKhoanExcelArray[i].MAGV,
 
           dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
