@@ -7,6 +7,8 @@ const { createJWT } = require("../../middlewares/JWTAction");
 const { selectBomon_TENBOMON } = require("./CRUDBomon");
 const { timGiangVien } = require("./CRUDGiangvien");
 const { selectChucdanh_TENCHUCDANH } = require("./CRUDChucdanh");
+const { selectChucvu_TENCHUCVU } = require("./CRUDChucVu");
+
 //hàm hash mật khẩu
 const hashPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -227,6 +229,20 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           DT: [],
         };
       }
+
+      //kiểm tra chức vụ
+      const kiemtraTENCHUCVU = await selectChucvu_TENCHUCVU(
+        dataTaiKhoanExcelArray[i].TENCHUCVU
+      );
+
+      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      if (!kiemtraTENCHUCVU.DT || !kiemtraTENCHUCVU.DT.MACHUCVU) {
+        return {
+          EM: `Dòng số ${i} tên chức dvụ <${dataTaiKhoanExcelArray[i].TENCHUCVU}> không tồn tại`,
+          EC: 0,
+          DT: [],
+        };
+      }
     }
 
     // Bắt đầu tạo tài khoản
@@ -238,7 +254,9 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       let timMACHUCDANH = await selectChucdanh_TENCHUCDANH(
         dataTaiKhoanExcelArray[i].TENCHUCDANH
       );
-
+      const timMACHUCVU = await selectChucvu_TENCHUCVU(
+        dataTaiKhoanExcelArray[i].TENCHUCVU
+      );
       // console.log("<<<<<<<<<<", timMABOMON.DT.MABOMON);
       await pool.execute(
         `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
@@ -264,7 +282,10 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
         ]
       );
-
+      await pool.execute(
+        `INSERT INTO giu_chuc_vu (MAGV,MACHUCVU ) VALUES (?, ?)`,
+        [dataTaiKhoanExcelArray[i].MAGV, timMACHUCVU.DT.MACHUCVU]
+      );
       results.push({
         EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
         EC: 0,

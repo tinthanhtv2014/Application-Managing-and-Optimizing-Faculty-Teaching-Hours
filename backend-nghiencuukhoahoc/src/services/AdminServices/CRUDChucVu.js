@@ -26,6 +26,35 @@ const selectChucVu = async () => {
   }
 };
 
+const selectChucvu_TENCHUCVU = async (TENCHUCVU) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM chucvu WHERE TENCHUCVU = ?`,
+      [TENCHUCVU]
+    );
+
+    if (results1.length > 0) {
+      return {
+        EM: "Xem thông tin chức vụ thành công",
+        EC: 1,
+        DT: results1[0], // Chỉ lấy dòng đầu tiên của kết quả
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy chức vụ này",
+        EC: 0,
+        DT: {},
+      };
+    }
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectChucdanh_TENCHUCDANH",
+      EC: -1,
+      DT: {},
+    };
+  }
+};
+
 const createChucVu = async (TENCHUCVU) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -127,4 +156,5 @@ module.exports = {
   createChucVu,
   updateChucVu,
   xoaChucVu,
+  selectChucvu_TENCHUCVU,
 };

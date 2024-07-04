@@ -171,6 +171,11 @@ const deleteGiangVien = async (dataGiangVien) => {
     }
 
     let [results, fields] = await pool.execute(
+      `DELETE FROM giu_chuc_vu
+            WHERE MAGV = ?;`,
+      [dataGiangVien.MAGV]
+    );
+    let [results3, fields3] = await pool.execute(
       `DELETE FROM co_chuc_danh
             WHERE MAGV = ?;`,
       [dataGiangVien.MAGV]

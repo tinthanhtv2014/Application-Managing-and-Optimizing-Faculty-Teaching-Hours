@@ -25,7 +25,6 @@ const selectChucdanh_TENCHUCDANH = async (TENCHUCDANH) => {
     );
 
     if (results1.length > 0) {
-      console.log("check result: ", results1);
       return {
         EM: "Xem thông tin chức danh thành công",
         EC: 1,
