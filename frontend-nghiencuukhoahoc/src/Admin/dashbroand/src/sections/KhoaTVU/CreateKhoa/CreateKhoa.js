@@ -18,6 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ComponentExcelGV from "./components/ComponentExcel.js";
+import { toast } from "react-toastify";
 const CreateKhoa = () => {
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenKhoa, setTenKhoa] = useState("");
@@ -26,6 +27,9 @@ const CreateKhoa = () => {
   const [MaBoMon, setMaBoMon] = useState();
   const [MaGV, setMaGV] = useState();
   const [TenGV, setTenGV] = useState();
+  const [TenDangNhapGV, setTenDangNhapGV] = useState();
+  const [QuyenGiangVien, setQuyenGiangVien] = useState();
+  const [TrangThaiGV, setTrangThaiGV] = useState();
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -251,29 +255,47 @@ const CreateKhoa = () => {
     console.log("check ma bo mon", MaBoMon);
     try {
       const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xem/${MaBoMon}`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${MaBoMon}`
       );
-      console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
+      console.log("Danh sách tài khoản:", response.data.DT);
       setdataListGiangVien(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
+  //tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
   const handleSumitAddGV = async (event) => {
     event.preventDefault();
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
-        {
-          TENBOMON: TenBoMon,
-          MAKHOA: MaKhoa,
+    if (
+      QuyenGiangVien === "Admin" ||
+      QuyenGiangVien === "Giảng viên" ||
+      QuyenGiangVien === "Trưởng Bộ Môn" ||
+      QuyenGiangVien === "Trưởng Khoa"
+    ) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/only/tao`,
+          {
+            TENDANGNHAP: TenDangNhapGV,
+            MAGV: MaGV,
+            PHANQUYEN: QuyenGiangVien,
+            TRANGTHAITAIKHOAN: TrangThaiGV,
+            MABOMON: MaBoMon,
+          }
+        );
+        console.log(response.data.EC);
+
+        if (response.data.EC == 1) {
+          setdataListGiangVien(response.data.DT);
+          toast.success("Thêm tài khoản giảng viên thành công !!");
+        } else {
+          toast.error(response.data.EM);
         }
-      );
-      console.log(response.data);
-      setTenBoMon("");
-      getBoMonByMaKhoa(MaKhoa);
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      }
+    } else {
+      toast.error("Phá web là không tốt !!");
     }
   };
 
@@ -384,11 +406,10 @@ const CreateKhoa = () => {
           />
         </Col>
       </Row>
-      <Row className="mt-4">
-        {" "}
+      <Row>
         <Col md={6}>
           {" "}
-          <h5 className="active">Thêm Tài Khoản Giảng Viên</h5>
+          <h5 className="active mt-4">Thêm Tài Khoản Giảng Viên</h5>
           <p className="opacity-7">
             Bạn có thể thêm giảng viên bằng chức năng excel hoặc thủ công.
           </p>
@@ -407,18 +428,10 @@ const CreateKhoa = () => {
               </Select>
             </FormControl>
           </Box>
-        </Col>{" "}
-        <Col md={6}>
-          <GiangVienList
-            dataListGiangVien={dataListGiangVien}
-            activeRowGV={activeRowGV}
-            handleChoseRowGV={handleChoseRowGV}
-            handleDeleteGiangVien={handleDeleteGiangVien}
-            handleChoseEditGiangVien={handleChoseEditGiangVien}
-          />
         </Col>
-      </Row>{" "}
-      <Row>
+      </Row>
+      <Row className="">
+        {" "}
         {ValueExcel &&
           (ValueExcel == "Excel" ? (
             <>
@@ -430,6 +443,11 @@ const CreateKhoa = () => {
           ) : (
             <Col md={6}>
               <CreateGiangVienForm
+                QuyenGiangVien={QuyenGiangVien}
+                TrangThaiGV={TrangThaiGV}
+                setTrangThaiGV={setTrangThaiGV}
+                setQuyenGiangVien={setQuyenGiangVien}
+                setTenDangNhapGV={setTenDangNhapGV}
                 TenGV={TenGV}
                 setMaGV={setMaGV}
                 setTenGV={setTenGV}
@@ -441,7 +459,16 @@ const CreateKhoa = () => {
               />
             </Col>
           ))}
-      </Row>
+        <Col md={6}>
+          <GiangVienList
+            dataListGiangVien={dataListGiangVien}
+            activeRowGV={activeRowGV}
+            handleChoseRowGV={handleChoseRowGV}
+            handleDeleteGiangVien={handleDeleteGiangVien}
+            handleChoseEditGiangVien={handleChoseEditGiangVien}
+          />
+        </Col>
+      </Row>{" "}
     </Container>
   );
 };

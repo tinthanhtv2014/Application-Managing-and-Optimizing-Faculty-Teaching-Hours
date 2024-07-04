@@ -5,6 +5,7 @@ const {
   updateTaiKhoan,
   LoginTaikhoan,
   LoginTaikhoanwithGOOGLE,
+  createOnlyTaiKhoan,
 } = require("../../services/AdminServices/CRUDTaiKhoan");
 
 const getAllTaiKhoanController = async (req, res) => {
@@ -66,7 +67,26 @@ const createTaiKhoanExcelController = async (req, res) => {
     });
   }
 };
+const createTaiKhoanOnlyController = async (req, res) => {
+  // tạo tài khoản thôi
+  try {
+    const dataTaiKhoan = req.body;
 
+    let results = await createOnlyTaiKhoan(dataTaiKhoan);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      EM: "Lỗi trong quá trình tạo tài khoản",
+      EC: 1,
+      DT: [],
+    });
+  }
+};
 const updateTaiKhoanController = async (req, res) => {
   try {
     const tendangnhap = req.params.tenDangNhap;
@@ -154,6 +174,7 @@ module.exports = {
   createTaiKhoanController,
   createTaiKhoanExcelController,
   updateTaiKhoanController,
+  createTaiKhoanOnlyController,
 
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,

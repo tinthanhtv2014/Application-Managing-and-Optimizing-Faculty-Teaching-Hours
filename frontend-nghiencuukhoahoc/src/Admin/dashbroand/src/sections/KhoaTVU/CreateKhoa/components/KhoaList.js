@@ -17,7 +17,7 @@ const KhoaList = ({
         <tr>
           <th>Mã Khoa</th>
           <th>Tên Khoa</th>
-          <th></th>
+          <th></th> <th></th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +36,10 @@ const KhoaList = ({
                 <i
                   className="table-row-icon fa-solid fa-trash"
                   onClick={() => handleDelete(khoa.MAKHOA)}
-                ></i>
+                ></i>{" "}
+              </td>
+              <td>
+                {" "}
                 <i
                   className="table-row-icon-edit fa-solid fa-pen-to-square"
                   onClick={() => handleChoseEditKhoa(khoa)}

@@ -7,6 +7,7 @@ const {
   createTaiKhoanController,
   createTaiKhoanExcelController,
   updateTaiKhoanController,
+  createTaiKhoanOnlyController,
   loginTaikhoanGOOGLEController,
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
@@ -25,6 +26,7 @@ const CRUDTaiKhoan = (app) => {
   //Tạo hàng loạt tài khoản bằng một mảng
   // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
   router.post("/tao/excel", createTaiKhoanExcelController);
+  router.post("/only/tao", createTaiKhoanOnlyController); // bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
 
   router.get("/xem/:MABOMON", getAllTaiKhoanController); //xem
 

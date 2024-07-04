@@ -15,7 +15,9 @@ const GiangVienList = ({
         <tr>
           <th>Mã GV</th>
           <th>Tên Giảng Viên</th>
-          <th>Email</th>
+          <th>Phân Quyền</th>
+          <th>Trạng Thái</th>
+          <th></th> <th></th>
         </tr>
       </thead>
       <tbody>
@@ -29,8 +31,9 @@ const GiangVienList = ({
               }`}
             >
               <td>{giangvien.MAGV}</td>
-              <td>{giangvien.TENGV}</td>
-              <td>{giangvien.EMAIL}</td>
+              <td>{giangvien.TENDANGNHAP}</td>
+              <td>{giangvien.PHANQUYEN}</td>
+              <td>{giangvien.TRANGTHAITAIKHOAN}</td>
               <td>
                 <i
                   className="fa-solid fa-trash table-row-icon"
@@ -47,8 +50,8 @@ const GiangVienList = ({
           ))
         ) : (
           <tr>
-            <td colSpan="3" className="opacity-7">
-              Không có bộ môn nào
+            <td colSpan="6" className="opacity-7">
+              Bộ môn chưa có giảng viên
             </td>
           </tr>
         )}

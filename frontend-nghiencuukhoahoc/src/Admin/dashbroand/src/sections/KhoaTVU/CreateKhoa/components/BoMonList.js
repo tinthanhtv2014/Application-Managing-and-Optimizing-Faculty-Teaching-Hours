@@ -16,7 +16,7 @@ const BoMonList = ({
         <tr>
           <th>Mã Bộ Môn</th>
           <th>Tên Bộ Môn</th>
-          <th></th>
+          <th></th> <th></th>
         </tr>
       </thead>
       <tbody>

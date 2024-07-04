@@ -105,6 +105,83 @@ const createTaiKhoan = async (dataTaiKhoan) => {
     };
   }
 };
+const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
+  // chỉ tạo tài khoản thôi chứ không thêm thông tin
+  // dataTaiKhoan bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
+
+  const connection = await pool.getConnection();
+  try {
+    let exists = await timTaiKhoan_TENDANGNHAP(dataTaiKhoanOnly.TENDANGNHAP);
+
+    if (exists) {
+      return {
+        EM: "Tài khoản đã tồn tại không thể tạo !",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    // Bắt đầu transaction
+    await connection.beginTransaction();
+
+    let [results0, fields0] = await connection.execute(
+      `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
+      [dataTaiKhoanOnly.MAGV, dataTaiKhoanOnly.MABOMON]
+    );
+
+    if (results0.affectedRows === 0) {
+      await connection.rollback(); // Rollback nếu câu lệnh đầu tiên không thành công
+      connection.release();
+      return {
+        EM: "Lỗi khi thêm giảng viên, không thể tạo tài khoản !",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let [results, fields] = await connection.execute(
+      `INSERT INTO taikhoan (TENDANGNHAP, MAGV, PHANQUYEN, TRANGTHAITAIKHOAN) VALUES (?, ?, ?, ?)`,
+      [
+        dataTaiKhoanOnly.TENDANGNHAP,
+        dataTaiKhoanOnly.MAGV,
+        dataTaiKhoanOnly.PHANQUYEN,
+        dataTaiKhoanOnly.TRANGTHAITAIKHOAN,
+      ]
+    );
+
+    if (results.affectedRows === 0) {
+      await connection.rollback(); // Rollback nếu câu lệnh thứ hai không thành công
+      connection.release();
+      return {
+        EM: "Lỗi khi tạo tài khoản !",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    // Commit transaction nếu tất cả các câu lệnh thành công
+    await connection.commit();
+    connection.release();
+    let [results3, fields3] = await pool.execute(
+      "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
+      [dataTaiKhoanOnly.MABOMON]
+    );
+    return {
+      EM: "Tạo tài khoản thành công",
+      EC: 1,
+      DT: results3,
+    };
+  } catch (error) {
+    await connection.rollback(); // Rollback nếu có lỗi xảy ra trong quá trình thực hiện
+    connection.release();
+    console.log(error);
+    return {
+      EM: "Lỗi services createTaiKhoan",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
 
 const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
   // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
@@ -381,4 +458,5 @@ module.exports = {
   updateTaiKhoan,
   LoginTaikhoan,
   LoginTaikhoanwithGOOGLE,
+  createOnlyTaiKhoan,
 };
