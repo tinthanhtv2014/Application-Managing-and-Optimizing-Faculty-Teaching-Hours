@@ -48,10 +48,10 @@ function isValidEmail(email) {
 
 // =============================================================================================================================
 //hàm chức năng
-const getAllTaiKhoan = async (MABOMON) => {
+const getAllTaiKhoan = async (MAKHOA, MABOMON) => {
   try {
     let [results, fields] = await pool.execute(
-      "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
+      "select k.TENKHOA,bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,cd.TENCHUCDANH,cv.TENCHUCVU,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm, chucvu as cv, chucdanh as cd,giu_chuc_vu as gcv, co_chuc_danh as ccd, khoa as k where k.MAKHOA = bm.MAKHOA and tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and gv.MAGV = gcv.MAGV and gcv.MACHUCVU = cv.MACHUCVU and ccd.MAGV = gv.MAGV and ccd.MACHUCDANH = cd.MACHUCDANH and bm.MABOMON = ?",
       [MABOMON]
     );
     return {
