@@ -6,12 +6,56 @@ const {
   LoginTaikhoan,
   LoginTaikhoanwithGOOGLE,
   createOnlyTaiKhoan,
+  getAllTaiKhoantheoPHANQUYEN,
+  getAllTaiKhoantheoTRANGTHAI,
 } = require("../../services/AdminServices/CRUDTaiKhoan");
 
 const getAllTaiKhoanController = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
     let results = await getAllTaiKhoan(MABOMON);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const getAllTaiKhoanPHANQUYENController = async (req, res) => {
+  try {
+    const MABOMON = req.params.MABOMON;
+    const PHANQUYEN = req.body.PHANQUYEN;
+    let results = await getAllTaiKhoantheoPHANQUYEN(PHANQUYEN, MABOMON);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const getAllTaiKhoanTRANGTHAIController = async (req, res) => {
+  try {
+    const MABOMON = req.params.MABOMON;
+    const TRANGTHAITAIKHOAN = req.body.TRANGTHAITAIKHOAN;
+    let results = await getAllTaiKhoantheoTRANGTHAI(TRANGTHAITAIKHOAN, MABOMON);
 
     return res.status(200).json({
       EM: results.EM,
@@ -179,4 +223,6 @@ module.exports = {
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
   loginTaikhoanGOOGLEController,
+  getAllTaiKhoanPHANQUYENController,
+  getAllTaiKhoanTRANGTHAIController,
 };

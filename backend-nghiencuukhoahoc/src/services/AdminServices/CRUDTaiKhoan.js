@@ -48,11 +48,51 @@ function isValidEmail(email) {
 
 // =============================================================================================================================
 //hàm chức năng
-const getAllTaiKhoan = async (MAKHOA, MABOMON) => {
+const getAllTaiKhoan = async (MABOMON) => {
   try {
     let [results, fields] = await pool.execute(
       "select k.TENKHOA,bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,cd.TENCHUCDANH,cv.TENCHUCVU,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm, chucvu as cv, chucdanh as cd,giu_chuc_vu as gcv, co_chuc_danh as ccd, khoa as k where k.MAKHOA = bm.MAKHOA and tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and gv.MAGV = gcv.MAGV and gcv.MACHUCVU = cv.MACHUCVU and ccd.MAGV = gv.MAGV and ccd.MACHUCDANH = cd.MACHUCDANH and bm.MABOMON = ?",
       [MABOMON]
+    );
+    return {
+      EM: "xem thoong tin thanh cong",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    return {
+      EM: "không thể xem thông tin",
+      EC: 0,
+      DT: [],
+    };
+  }
+};
+
+const getAllTaiKhoantheoPHANQUYEN = async (PHANQUYEN, MABOMON) => {
+  try {
+    let [results, fields] = await pool.execute(
+      "select k.TENKHOA,bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,cd.TENCHUCDANH,cv.TENCHUCVU,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm, chucvu as cv, chucdanh as cd,giu_chuc_vu as gcv, co_chuc_danh as ccd, khoa as k where k.MAKHOA = bm.MAKHOA and tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and gv.MAGV = gcv.MAGV and gcv.MACHUCVU = cv.MACHUCVU and ccd.MAGV = gv.MAGV and ccd.MACHUCDANH = cd.MACHUCDANH and bm.MABOMON = ? and tk.PHANQUYEN = ?",
+      [MABOMON, PHANQUYEN]
+    );
+    return {
+      EM: "xem thoong tin thanh cong",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    return {
+      EM: "không thể xem thông tin",
+      EC: 0,
+      DT: [],
+    };
+  }
+};
+
+const getAllTaiKhoantheoTRANGTHAI = async (TRANGTHAITAIKHOAN, MABOMON) => {
+  try {
+    let [results, fields] = await pool.execute(
+      "select k.TENKHOA,bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,cd.TENCHUCDANH,cv.TENCHUCVU,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm, chucvu as cv, chucdanh as cd,giu_chuc_vu as gcv, co_chuc_danh as ccd, khoa as k where k.MAKHOA = bm.MAKHOA and tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and gv.MAGV = gcv.MAGV and gcv.MACHUCVU = cv.MACHUCVU and ccd.MAGV = gv.MAGV and ccd.MACHUCDANH = cd.MACHUCDANH and bm.MABOMON = ? and tk.TRANGTHAITAIKHOAN = ?",
+      [MABOMON, TRANGTHAITAIKHOAN]
     );
     return {
       EM: "xem thoong tin thanh cong",
@@ -471,4 +511,6 @@ module.exports = {
   LoginTaikhoan,
   LoginTaikhoanwithGOOGLE,
   createOnlyTaiKhoan,
+  getAllTaiKhoantheoPHANQUYEN,
+  getAllTaiKhoantheoTRANGTHAI,
 };

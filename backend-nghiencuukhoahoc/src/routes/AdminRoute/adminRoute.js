@@ -11,6 +11,8 @@ const {
   loginTaikhoanGOOGLEController,
   loginTaikhoanAdminController,
   logoutTaikhoanAdminController,
+  getAllTaiKhoanPHANQUYENController,
+  getAllTaiKhoanTRANGTHAIController,
 } = require("../../controllers/AdminController/adminController.js");
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 
@@ -29,7 +31,8 @@ const CRUDTaiKhoan = (app) => {
   router.post("/only/tao", createTaiKhoanOnlyController); // bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
 
   router.get("/xem/:MABOMON", getAllTaiKhoanController); //xem
-
+  router.get("/xem/phanquyen/:MABOMON", getAllTaiKhoanPHANQUYENController);
+  router.get("/xem/trangthai", getAllTaiKhoanTRANGTHAIController);
   router.get("/protected", checkUserJWT, (req, res) => {
     res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
   });
