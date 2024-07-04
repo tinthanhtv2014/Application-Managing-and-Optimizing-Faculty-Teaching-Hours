@@ -32,7 +32,7 @@ const CRUDTaiKhoan = (app) => {
 
   router.get("/xem/:MABOMON", getAllTaiKhoanController); //xem
   router.get("/xem/phanquyen/:MABOMON", getAllTaiKhoanPHANQUYENController);
-  router.get("/xem/trangthai", getAllTaiKhoanTRANGTHAIController);
+  router.get("/xem/trangthai/:MABOMON", getAllTaiKhoanTRANGTHAIController);
   router.get("/protected", checkUserJWT, (req, res) => {
     res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
   });
