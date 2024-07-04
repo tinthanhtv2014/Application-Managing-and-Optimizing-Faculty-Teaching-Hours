@@ -11,6 +11,7 @@ const {
 const getAllTaiKhoanController = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
+
     let results = await getAllTaiKhoan(MABOMON);
 
     return res.status(200).json({
@@ -20,6 +21,7 @@ const getAllTaiKhoanController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const AdminLogin = () => {
   const [user, setUser] = useState(null);
   const [tokenGoogle, setTokenGoogle] = useState(null);
-  const [tokenadmin, setTokenAdmin] = useState(null);
+
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
@@ -61,11 +61,6 @@ const AdminLogin = () => {
       FectData();
     }
   }, [user]);
-  const handleLogout = () => {
-    setUser(null);
-    setTokenGoogle(null);
-  };
-
   return (
     <div className="admin-login">
 
