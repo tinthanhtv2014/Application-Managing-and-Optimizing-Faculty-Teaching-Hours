@@ -64,7 +64,7 @@ const CreateGiangVienForm = ({
           </FormControl>
         </Box>
 
-        <Col md={6} className="mt-4">
+        <Col md={6} className="mt-2">
           {" "}
           <Box sx={{ maxWidth: 300 }}>
             <FormControl fullWidth>
