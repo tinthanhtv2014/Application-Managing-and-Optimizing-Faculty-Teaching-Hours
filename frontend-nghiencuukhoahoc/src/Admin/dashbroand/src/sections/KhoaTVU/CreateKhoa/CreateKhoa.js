@@ -47,7 +47,7 @@ const CreateKhoa = () => {
   const [disabledGV, setDisableGV] = useState(true);
 
   // --------------------------ISOPEN---------------------------------------
-  const [ValueExcel, setValueExcel] = useState("Excel");
+  const [ValueExcel, setValueExcel] = useState("Thủ Công");
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
   const [dataListKhoa, setdataListKhoa] = useState();
   const [dataListBoMon, setdataListBoMon] = useState(null);

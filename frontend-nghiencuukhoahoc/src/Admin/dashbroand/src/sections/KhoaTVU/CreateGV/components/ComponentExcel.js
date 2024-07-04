@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import { Modal, Button, Table } from "react-bootstrap";
@@ -15,6 +15,7 @@ const ComponentExcelGV = () => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
+  const navigate = useNavigate();
 
   const handleAddUser = async () => {
     if (!data) {
@@ -86,7 +87,7 @@ const ComponentExcelGV = () => {
       <Modal
         show={showModal}
         onHide={handleCloseModal}
-        size="xl"
+        size="lg"
         className="modal-Component-excel custom-modal"
       >
         <Modal.Header closeButton>
