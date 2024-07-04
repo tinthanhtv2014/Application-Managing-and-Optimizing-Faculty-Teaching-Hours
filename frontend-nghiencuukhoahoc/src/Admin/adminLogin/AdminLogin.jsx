@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import logoGG from "../../../src/public/logo/google.png";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const AdminLogin = () => {
   const [user, setUser] = useState(null);
   const [tokenGoogle, setTokenGoogle] = useState(null);
@@ -53,6 +54,9 @@ const AdminLogin = () => {
           Cookies.set("accessToken", response.data.DT.access_token);
           navigate("/admin");
         }
+        else {
+          toast.error(response.data.EM)
+        }
       };
       FectData();
     }
@@ -64,20 +68,15 @@ const AdminLogin = () => {
 
   return (
     <div className="admin-login">
-      {user ? (
-        <div>
-          <h1>Welcome, {user.displayName}</h1>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <div>
-          <button className="Button-gg" onClick={() => login()}>
-            <img src={logoGG} alt="Logo" className="logo-gg" />{" "}
 
-            <div className="content-sign ">  <p>Sign in with Google</p></div>
-          </button>
-        </div>
-      )}
+      <div>
+        <button className="Button-gg" onClick={() => login()}>
+          <img src={logoGG} alt="Logo" className="logo-gg" />{" "}
+
+          <div className="content-sign ">  <p>Sign in with Google</p></div>
+        </button>
+      </div>
+
     </div>
   );
 };

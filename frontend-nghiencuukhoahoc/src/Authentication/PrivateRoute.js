@@ -36,7 +36,10 @@ const PrivateRoute = () => {
           );
 
           console.log("API response:", response.data.user.phanquyen); // Log phản hồi từ API
-
+          console.log(
+            "check token user update trang thai ",
+            response.data.user
+          );
           if (response.data.message === "Protected data") {
             if (response.data.user.phanquyen === "Admin") {
               setPhanquyenAdmin(true);

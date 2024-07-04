@@ -321,7 +321,16 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
       "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
     );
-
+    if (results[0].TRANGTHAITAIKHOAN === "Ngưng hoạt động") {
+      return {
+        EM: "Đăng nhập thất bại, tài khoản của bạn đã bị ngưng hoạt động",
+        EC: 0,
+        DT: {
+          access_token: null,
+          data: [],
+        },
+      };
+    }
     if (results.length > 0) {
       // const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
 
@@ -329,6 +338,7 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
         taikhoan: results[0].TENDANGNHAP,
         //  matkhau: results[0].MATKHAU, cái này không cần mật khẩu => phúc note
         phanquyen: results[0].PHANQUYEN,
+        trangthai: results[0].TRANGTHAITAIKHOAN,
       };
       let token = createJWT(payload);
       return {
