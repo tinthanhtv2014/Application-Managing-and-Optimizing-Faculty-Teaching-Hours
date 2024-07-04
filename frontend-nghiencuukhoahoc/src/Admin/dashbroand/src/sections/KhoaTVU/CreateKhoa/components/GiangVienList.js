@@ -1,7 +1,7 @@
 // components/BoMonList.js
 import React from "react";
 import { Table } from "react-bootstrap";
-
+import "./KhoaList.scss";
 const GiangVienList = ({
   dataListGiangVien,
   activeRowGV,
@@ -10,7 +10,7 @@ const GiangVienList = ({
   handleChoseEditGiangVien,
 }) => {
   return (
-    <Table striped bordered hover className="mt-4">
+    <table className="custom-table">
       <thead>
         <tr>
           <th>Mã GV</th>
@@ -26,14 +26,24 @@ const GiangVienList = ({
             <tr
               onClick={() => handleChoseRowGV(giangvien)}
               key={index}
-              className={`table-row ${
+              className={`custom-table-row ${
                 activeRowGV === giangvien.MABOMON ? "activeBM" : ""
               }`}
             >
               <td>{giangvien.MAGV}</td>
               <td>{giangvien.TENDANGNHAP}</td>
               <td>{giangvien.PHANQUYEN}</td>
-              <td>{giangvien.TRANGTHAITAIKHOAN}</td>
+              <td
+                className={
+                  giangvien.TRANGTHAITAIKHOAN == "Ngưng hoạt động"
+                    ? "inactive-status"
+                    : giangvien.TRANGTHAITAIKHOAN == "Đang hoạt động"
+                    ? "active-status"
+                    : ""
+                }
+              >
+                {giangvien.TRANGTHAITAIKHOAN}
+              </td>
               <td>
                 <i
                   className="fa-solid fa-trash table-row-icon"
@@ -56,7 +66,7 @@ const GiangVienList = ({
           </tr>
         )}
       </tbody>
-    </Table>
+    </table>
   );
 };
 

@@ -190,12 +190,20 @@ const CreateKhoa = () => {
     }
   };
 
-  const handleChoseRowBM = (bomon) => {
-    getAllGiangVienbyBM();
+  const handleChoseRowBM = async (bomon) => {
     setDisableGV(false);
     setMaBoMon(bomon.MABOMON);
     setActiveRowBM(bomon.MABOMON);
-    setTenBoMon(bomon.TENBOMON);
+    console.log("check ma bo mon", MaBoMon);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${bomon.MABOMON}`
+      );
+      console.log("Danh sách tài khoản:", response.data.DT);
+      setdataListGiangVien(response.data.DT);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+    }
   };
 
   const handleDeleteBoMon = async (MaBoMon) => {
@@ -299,36 +307,56 @@ const CreateKhoa = () => {
     }
   };
 
-  const handleChoseRowGV = (bomon) => {
-    setActiveRowBM(bomon.MABOMON);
-    setTenBoMon(bomon.TENBOMON);
+  const handleChoseRowGV = (giangvien) => {
+    setActiveRowGV(giangvien.MAGV);
+    setMaGV(giangvien.MAGV);
   };
 
-  const handleDeleteGiangVien = async (MaBoMon) => {
-    if (MaBoMon) {
+  const handleDeleteGiangVien = async () => {
+    console.log("check", MaGV);
+    if (MaGV) {
       try {
         const response = await CookiesAxios.delete(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/xoa`,
-          {
-            params: {
-              mabomon: MaBoMon,
-            },
-          }
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoa`,
+          { maGV: MaGV }
         );
-        console.log(response.data);
-        getBoMonByMaKhoa(MaKhoa);
-        setActiveRowBM(null);
-        setTenBoMon("");
+        console.log(response.data.DT);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }
+    } else {
+      toast.error("Chưa chọn tài khoản giảng viên");
     }
   };
 
-  const handleChoseEditGiangVien = (bomon) => {
-    setTenBoMon(bomon.TENBOMON);
-    setMaBoMon(bomon.MABOMON);
-    setIsOpenEditButtonBM(true);
+  const handleChoseEditGiangVien = async (giangvien) => {
+    console.log("check");
+    setMaGV(giangvien.MAGV);
+    let Trangthai;
+
+    if (giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động") {
+      Trangthai = "Ngưng hoạt động";
+    } else {
+      Trangthai = "Đang hoạt động";
+    }
+
+    await functionUpdateTrangThaiGV(giangvien.MAGV, Trangthai);
+  };
+
+  const functionUpdateTrangThaiGV = async (MaGV, TrangThai) => {
+    try {
+      const response = await CookiesAxios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
+        {
+          TRANGTHAITAIKHOAN: TrangThai,
+          MABOMON: MaBoMon,
+        }
+      );
+      console.log(response.data.DT);
+      setdataListGiangVien(response.data.DT);
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+    }
   };
 
   const handleIsOpenEditButtonGV = () => {
@@ -337,25 +365,7 @@ const CreateKhoa = () => {
     setMaBoMon(null);
   };
 
-  const handleSumitEditGV = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await CookiesAxios.put(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/sua/${MaBoMon}`,
-        {
-          tenbomon: TenBoMon,
-          makhoa: MaKhoa,
-        }
-      );
-      console.log(response.data);
-      setTenBoMon("");
-      setMaBoMon(null);
-      getBoMonByMaKhoa(MaKhoa);
-      setIsOpenEditButtonBM(false);
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-    }
-  };
+  const handleSumitEditGV = async (event) => {};
   // -----------------------IS OPEN EXCEL-----------------------------------
 
   const handleChangeExcel = (event) => {

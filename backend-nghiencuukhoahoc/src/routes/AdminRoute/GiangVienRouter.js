@@ -9,6 +9,7 @@ const {
   updateGiangVienController,
   deleteGiangVienController,
   getOnlyGiangVienbyBoMon,
+  updateTrangThaiTaiKhoanGiangVienController,
 } = require("../../controllers/AdminController/giangVienAdminController");
 
 const {
@@ -30,6 +31,10 @@ const CRUDGiangVien = (app) => {
   router.get("/xem", getAllGiangVien);
   router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
   router.post("/tao", createGiangVienControler);
+  router.put(
+    "/sua/trangthai/:MAGV",
+    updateTrangThaiTaiKhoanGiangVienController //phúc viết
+  );
   router.put("/sua/:maGV", updateGiangVienController);
   router.delete("/xoa", deleteGiangVienController);
   //Route cho chức vụ

@@ -84,6 +84,42 @@ const createGiangVien = async (dataGiangVien) => {
     };
   }
 };
+const updateTrangThaiTaiKhoanGiangVien = async (
+  MAGV,
+  TRANGTHAITAIKHOAN,
+  MABOMON
+) => {
+  try {
+    if (!(await timGiangVien(MAGV))) {
+      return {
+        EM: "Giảng viên này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let [results, fields] = await pool.execute(
+      `UPDATE taikhoan SET TRANGTHAITAIKHOAN = ? WHERE MAGV = ?;`,
+      [TRANGTHAITAIKHOAN, MAGV]
+    );
+    let [results0, fields0] = await pool.execute(
+      "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
+      [MABOMON]
+    );
+    return {
+      EM: "Cập nhật trạng thái tài khoản thành công",
+      EC: 1,
+      DT: results0,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "Lỗi services updateTrangThaiTaiKhoanGiangVien",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 
 const updateGiangVien = async (dataGiangVien) => {
   try {
@@ -161,4 +197,5 @@ module.exports = {
   deleteGiangVien,
   selectOnlyGiangVien,
   timGiangVien,
+  updateTrangThaiTaiKhoanGiangVien,
 };
