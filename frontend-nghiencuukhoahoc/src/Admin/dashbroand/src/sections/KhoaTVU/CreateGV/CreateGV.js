@@ -46,7 +46,7 @@ const ComponenCreateGiangVien = () => {
   const [isOpenEditButtonGV, setIsOpenEditButtonGV] = useState(false);
   const [activeRowGV, setActiveRowGV] = useState(null);
   const [disabledGV, setDisableGV] = useState(true);
-
+  const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(false);
   // --------------------------ISOPEN---------------------------------------
   const [ValueExcel, setValueExcel] = useState("Thủ Công");
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
@@ -77,7 +77,39 @@ const ComponenCreateGiangVien = () => {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
-
+  useEffect(() => {
+    if (isOpenGetAllApiGV) {
+      const fetchDataAllGV = async () => {
+        try {
+          const response = await CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xem`
+          );
+          console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
+          setdataListGiangVien(response.data.DT);
+        } catch (error) {
+          console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+        }
+      };
+      fetchDataAllGV();
+    } else {
+      if (MaBoMon) {
+        const fetchDataAllGV = async () => {
+          try {
+            const response = await CookiesAxios.get(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${MaBoMon}`
+            );
+            console.log("Danh sách tài khoản:", response.data);
+            setdataListGiangVien(response.data.DT);
+          } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+          }
+        };
+        fetchDataAllGV();
+      } else {
+        toast.error("Vui lòng chọn bộ môn mà bạn muốn xem");
+      }
+    }
+  }, [isOpenGetAllApiGV]);
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -269,6 +301,9 @@ const ComponenCreateGiangVien = () => {
     }
   };
 
+  const handleGetAllGiangVien = () => {
+    setisOpenGetAllApiGV(!isOpenGetAllApiGV);
+  };
   const handleIsOpenEditButtonGV = () => {
     setIsOpenEditButtonGV(false);
     setTenBoMon("");
@@ -308,6 +343,8 @@ const ComponenCreateGiangVien = () => {
       <Row>
         <Col md={12}>
           <GiangVienList
+            isOpenGetAllApiGV={isOpenGetAllApiGV}
+            handleGetAllGiangVien={handleGetAllGiangVien}
             dataListGiangVien={dataListGiangVien}
             activeRowGV={activeRowGV}
             handleChoseRowGV={handleChoseRowGV}

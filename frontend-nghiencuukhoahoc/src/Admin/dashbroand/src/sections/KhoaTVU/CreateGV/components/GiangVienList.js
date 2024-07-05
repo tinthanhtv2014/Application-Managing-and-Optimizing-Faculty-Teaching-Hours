@@ -4,6 +4,8 @@ import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
 
 const GiangVienList = ({
+  isOpenGetAllApiGV,
+  handleGetAllGiangVien,
   dataListGiangVien,
   activeRowGV,
   handleChoseRowGV,
@@ -11,16 +13,38 @@ const GiangVienList = ({
   handleChoseEditGiangVien,
 }) => {
   const [searchEmail, setSearchEmail] = useState("");
-
+  const [currentPage, setCurrentPage] = useState(0);
   const handleSearch = (e) => {
     setSearchEmail(e.target.value);
+    setCurrentPage(0);
+  };
+  const pageSize = 10;
+  const startIndex = currentPage * pageSize;
+  console.log("check data compoennt GV list =>", dataListGiangVien);
+  const filteredGiangVien = dataListGiangVien
+    ? searchEmail
+      ? dataListGiangVien
+          .filter((giangvien) => {
+            if (giangvien.TENDANGNHAP) {
+              return giangvien.TENDANGNHAP.toLowerCase().includes(
+                searchEmail.toLowerCase()
+              );
+            }
+            return false;
+          })
+          .slice(startIndex, startIndex + pageSize)
+      : dataListGiangVien.slice(startIndex, startIndex + pageSize)
+    : [];
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  const filteredGiangVien = dataListGiangVien
-    ? dataListGiangVien.filter((giangvien) =>
-        giangvien.TENDANGNHAP.toLowerCase().includes(searchEmail.toLowerCase())
-      )
-    : [];
+  const prevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  console.log(isOpenGetAllApiGV);
   return (
     <>
       <div className="mb-3  col-4">
@@ -32,9 +56,27 @@ const GiangVienList = ({
           onChange={handleSearch}
         />
       </div>
+      <button
+        type="text"
+        className={` ${
+          isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
+        }`}
+        placeholder="Nhập email đăng nhập"
+        value={isOpenGetAllApiGV}
+        onClick={handleGetAllGiangVien}
+        title={
+          isOpenGetAllApiGV === true
+            ? "Xem Tất Cả Giảng Viên Ở Bộ Môn"
+            : "Xem Tất Cả Giảng Viên"
+        }
+      >
+        {" "}
+        {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
+      </button>
       <table className="custom-table">
         <thead>
           <tr>
+            <th>Stt</th>
             <th>Mã GV</th>
             <th>Email Đăng Nhập</th>
             <th>Tên Giảng Viên</th>
@@ -59,6 +101,7 @@ const GiangVienList = ({
                   activeRowGV === giangvien.MABOMON ? "activeBM" : ""
                 }`}
               >
+                <td>{index + 1}</td>
                 <td>{giangvien.MAGV}</td>
                 <td>{giangvien.TENDANGNHAP}</td>
                 <td>{giangvien.TENGV}</td>
@@ -127,7 +170,29 @@ const GiangVienList = ({
             </tr>
           )}
         </tbody>
-      </table>
+      </table>{" "}
+      <div className="pagination-buttons mt-4">
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={currentPage === 0}
+          onClick={prevPage}
+        >
+          Trở Lại
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary ml-4"
+          disabled={
+            !dataListGiangVien ||
+            (filteredGiangVien.length === 0 && currentPage === 0) ||
+            filteredGiangVien.length < pageSize
+          }
+          onClick={nextPage}
+        >
+          Tiếp Tục
+        </button>
+      </div>
     </>
   );
 };
