@@ -28,11 +28,7 @@ const timTaiKhoan_TENDANGNHAP = async (tenDangnhap) => {
       [tenDangnhap]
     );
 
-    if (results.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return results.length > 0;
   } catch (error) {
     console.log("timTaiKhoan_TENDANGNHAP errr >>>", error);
     return false;
@@ -159,6 +155,7 @@ const createTaiKhoan = async (dataTaiKhoan) => {
     };
   }
 };
+
 const createOnlyTaiKhoan = async (dataTaiKhoanOnly) => {
   // chỉ tạo tài khoản thôi chứ không thêm thông tin
   // dataTaiKhoan bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
@@ -525,4 +522,6 @@ module.exports = {
   createOnlyTaiKhoan,
   getAllTaiKhoantheoPHANQUYEN,
   getAllTaiKhoantheoTRANGTHAI,
+
+  timTaiKhoan_TENDANGNHAP,
 };

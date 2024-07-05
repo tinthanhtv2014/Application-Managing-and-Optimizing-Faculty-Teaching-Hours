@@ -1,5 +1,8 @@
 const pool = require("../../config/database");
-const { selectBomon_MABOMON } = require('./CRUDBomon');
+const { selectBomon_MABOMON, selectBomon_TENBOMON } = require('./CRUDBomon');
+const { timChucVu_TENCHUCVU } = require("./CRUDChucVu")
+const { selectChucdanh_TENCHUCDANH } = require('./CRUDChucdanh')
+const { timTaiKhoan_TENDANGNHAP } = require('./CRUDTaiKhoan')
 
 const timGiangVien = async (MAGV) => {
   let [results1, fields1] = await pool.execute(
@@ -193,6 +196,98 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
   }
 };
 
+const update_ChucVu_ChucDanh_GiangVien = async (MAGV, dataGiangVien) => {
+  try {
+    // MAGV
+    // dataGiangVien gồm TENDANGNHAP, TENGV, TENCHUCVU, TENCHUCDANH, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN
+
+    // console.log("MAGV >>>>>", MAGV);
+    // console.log("dataGiangVien >>>>>", dataGiangVien);
+
+    let KiemTra_MAGV = await timGiangVien(MAGV)
+    //console.log("KiemTra_MAGV >>>>>", KiemTra_MAGV);
+    if (!KiemTra_MAGV.length > 0) {
+      return {
+        EM: "Giảng viên này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    // Bị lỗi  Circular Dependency (Phụ thuộc vòng lặp) <---------------------
+
+    // console.log("dataGiangVien.TENDANGNHAP >>>>>", dataGiangVien.TENDANGNHAP);
+    // let KiemTra_TENDANGNHAP = await timTaiKhoan_TENDANGNHAP(dataGiangVien.TENDANGNHAP)
+    // console.log("KiemTra_TENDANGNHAP >>>>>", KiemTra_TENDANGNHAP);
+    // if (!KiemTra_TENDANGNHAP) {
+    //   return {
+    //     EM: "Giảng viên này không tồn tại",
+    //     EC: 0,
+    //     DT: [],
+    //   };
+    // }
+
+    let KiemTra_TENCHUCVU = await timChucVu_TENCHUCVU(dataGiangVien.TENCHUCVU)
+    console.log("KiemTra_TENCHUCVU >>>>>", KiemTra_TENCHUCVU);
+    if (!KiemTra_TENCHUCVU) {
+      return {
+        EM: "Chức vụ này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let KiemTra_TENCHUCDANH = await selectChucdanh_TENCHUCDANH(dataGiangVien.TENCHUCDANH)
+    console.log("KiemTra_TENCHUCDANH >>>>>", KiemTra_TENCHUCDANH);
+    if (!KiemTra_TENCHUCDANH) {
+      return {
+        EM: "Chức danh này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let KiemTra_TENBOMON = await selectBomon_TENBOMON(dataGiangVien.TENBOMON)
+    console.log("KiemTra_TENBOMON >>>>>", KiemTra_TENBOMON);
+    if (!KiemTra_TENBOMON) {
+      return {
+        EM: "Bộ môn này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    //Mã SQL chưa được làm xong <---------------------------
+
+    // let [results, fields] = await pool.execute(
+    //   `UPDATE giangvien
+    //         SET MABOMON = ?, TENGV = ?, EMAIL = ?, DIENTHOAI = ?, DIACHI = ? 
+    //         WHERE MAGV = ?;`,
+    //   [
+    //     dataGiangVien.MABOMON,
+    //     dataGiangVien.TENGV,
+    //     dataGiangVien.EMAIL,
+    //     dataGiangVien.DIENTHOAI,
+    //     dataGiangVien.DIACHI,
+    //     MAGV,
+    //   ]
+    // );
+
+    return {
+      EM: "Sửa giảng viên thành công",
+      EC: 1,
+      DT: [],
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "Lỗi services updateGiangVien",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 const deleteGiangVien = async (MAGV, MABOMON) => {
   try {
     console.log("check MGV +>", MAGV);
@@ -243,10 +338,14 @@ const deleteGiangVien = async (MAGV, MABOMON) => {
 
 module.exports = {
   selectGiangVien,
-  createGiangVien,
-  updateGiangVien,
-  deleteGiangVien,
   selectOnlyGiangVien,
+
+  createGiangVien,
+
+  updateGiangVien,
+  update_ChucVu_ChucDanh_GiangVien,
+
+  deleteGiangVien,
   timGiangVien,
   updateTrangThaiTaiKhoanGiangVien,
 };

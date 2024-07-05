@@ -5,11 +5,15 @@ const router = express.Router();
 
 const {
   getAllGiangVien,
-  createGiangVienControler,
-  updateGiangVienController,
-  deleteGiangVienController,
   getOnlyGiangVienbyBoMon,
+
+  createGiangVienControler,
+
+  updateGiangVienController,
   updateTrangThaiTaiKhoanGiangVienController,
+  update_ChucVu_ChucDanh_GiangVien_Controller,
+
+  deleteGiangVienController,
 } = require("../../controllers/AdminController/giangVienAdminController");
 
 const {
@@ -30,9 +34,13 @@ const CRUDGiangVien = (app) => {
   //route cho giảng viên
   router.get("/xem", getAllGiangVien);
   router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
+
   router.post("/tao", createGiangVienControler);
+
   router.put("/sua/trangthai/:MAGV", updateTrangThaiTaiKhoanGiangVienController); //phúc viết
   router.put("/sua/:MAGV", updateGiangVienController);
+  router.put("/sua/thongtin/:MAGV", update_ChucVu_ChucDanh_GiangVien_Controller);
+
   router.delete("/xoa", deleteGiangVienController);
 
   //Route cho chức vụ
@@ -43,9 +51,13 @@ const CRUDGiangVien = (app) => {
 
   //route cho chức danh
   router.get("/xemchucdanh", getAllChucdanh);
+
   router.post("/taochucdanh", createChucdanhControler);
+
   router.put("/suachucdanh/:MACHUCDANH", updateChucdanhController);
+
   router.delete("/xoachucdanh", deleteChucdanhController);
+
   return app.use("/api/v1/admin/giangvien", router);
 };
 

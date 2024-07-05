@@ -6,7 +6,16 @@ const timChucVu_MaChucVu = async (MACHUCVU) => {
     [MACHUCVU]
   );
 
-  return results1;
+  return results1.length > 0;
+};
+
+const timChucVu_TENCHUCVU = async (TENCHUCVU) => {
+  let [results1, fields1] = await pool.execute(
+    `select * from chucvu where TENCHUCVU = ?`,
+    [TENCHUCVU]
+  );
+
+  return results1.length > 0;
 };
 
 const selectChucVu = async () => {
@@ -157,4 +166,7 @@ module.exports = {
   updateChucVu,
   xoaChucVu,
   selectChucvu_TENCHUCVU,
+
+  timChucVu_MaChucVu,
+  timChucVu_TENCHUCVU,
 };

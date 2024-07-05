@@ -147,5 +147,6 @@ module.exports = {
   createChucdanh,
   updateChucdanh,
   xoaChucdanh,
+
   selectChucdanh_TENCHUCDANH,
 };

@@ -1,10 +1,14 @@
 const {
   selectGiangVien,
-  createGiangVien,
-  updateGiangVien,
-  deleteGiangVien,
   selectOnlyGiangVien,
+
+  createGiangVien,
+
+  updateGiangVien,
   updateTrangThaiTaiKhoanGiangVien,
+  update_ChucVu_ChucDanh_GiangVien,
+
+  deleteGiangVien,
 } = require("../../services/AdminServices/CRUDGiangvien");
 
 const getAllGiangVien = async (req, res) => {
@@ -114,6 +118,27 @@ const updateGiangVienController = async (req, res) => {
   }
 };
 
+const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
+  try {
+    const MAGV = req.params.MAGV;
+    let dataGiangVien = req.body;
+    let results = await update_ChucVu_ChucDanh_GiangVien(MAGV, dataGiangVien);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
 const deleteGiangVienController = async (req, res) => {
   try {
     let MAGV = req.query.MAGV;
@@ -138,9 +163,13 @@ const deleteGiangVienController = async (req, res) => {
 
 module.exports = {
   getAllGiangVien,
-  createGiangVienControler,
-  updateGiangVienController,
-  deleteGiangVienController,
   getOnlyGiangVienbyBoMon,
+
+  createGiangVienControler,
+
+  updateGiangVienController,
   updateTrangThaiTaiKhoanGiangVienController,
+  update_ChucVu_ChucDanh_GiangVien_Controller,
+
+  deleteGiangVienController,
 };
