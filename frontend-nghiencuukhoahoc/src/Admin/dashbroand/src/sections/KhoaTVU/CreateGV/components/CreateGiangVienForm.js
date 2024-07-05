@@ -22,16 +22,14 @@ const CreateGiangVienForm = ({
   QuyenGiangVien,
 }) => {
   return (
-    <Form onSubmit={handleSumitAddGV} className="mt-4">
-      <Form.Group controlId="formDepartmentName" className="mb-3">
-        <h4>Thêm Giảng Viên</h4>
-        <Form.Label className="opacity-7">
-          Bạn cần phải chọn khoa ở bảng Table rồi mới thêm được vào bộ môn.
-        </Form.Label>
+    <Form onSubmit={handleSumitAddGV} className="mt-2">
+      <Form.Group controlId="formDepartmentName" className="mb-2">
         <Form.Control
+          className="width-input-50"
           disabled={disabledGV}
           type="text"
           placeholder="Mã Giảng Viên "
+          title="Mã giảng viên là duy nhất cho mỗi giảng viên"
           value={TenGV}
           onChange={(e) => setMaGV(e.target.value)}
           required
@@ -39,20 +37,23 @@ const CreateGiangVienForm = ({
         <Form.Control
           disabled={disabledGV}
           type="text"
-          placeholder="Nhập email giảng viên "
+          placeholder="Nhập email giảng viên"
+          title="Email này duy nhất và giảng viên có thể dùng để đăng nhập"
           value={TenGV}
           onChange={(e) => setTenDangNhapGV(e.target.value)}
           required
-          className="mt-2 mb-2"
+          className="mt-2 mb-2 width-input-50"
         />
-        <Box sx={{ maxWidth: 300 }}>
+        <Box sx={{ maxWidth: 200 }}>
           <FormControl fullWidth className="mt-2">
             <InputLabel id="demo-simple-select-label ">Phân Quyền</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              title="Bạn có thể cấp quyền tài khoản này"
               value={QuyenGiangVien}
-              label={QuyenGiangVien}
+              label="Phân Quyền"
+              className="height-selectGV"
               disabled={disabledGV}
               onChange={(e) => setQuyenGiangVien(e.target.value)}
             >
@@ -66,14 +67,16 @@ const CreateGiangVienForm = ({
 
         <Col md={6} className="mt-2">
           {" "}
-          <Box sx={{ maxWidth: 300 }}>
+          <Box sx={{ maxWidth: 200 }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Trạng Thái</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
+                title="Bạn có thể chọn trạng thái hoạt động của tài khoản này trước khi tạo"
                 id="demo-simple-select"
                 value={TrangThaiGV}
-                label={TrangThaiGV}
+                label="Trạng Thái"
+                className="height-selectGV"
                 disabled={disabledGV}
                 onChange={(e) => setTrangThaiGV(e.target.value)}
               >
@@ -84,7 +87,11 @@ const CreateGiangVienForm = ({
           </Box>
         </Col>
       </Form.Group>
-      <Button variant="success" type="submit">
+      <Button
+        variant="success"
+        type="submit"
+        title="Thêm giảng viên cho bộ môn"
+      >
         Thêm Giảng Viên
       </Button>
       {isOpenEditButtonGV && (

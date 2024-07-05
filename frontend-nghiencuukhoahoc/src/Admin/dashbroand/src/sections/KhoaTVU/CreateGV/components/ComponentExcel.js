@@ -65,7 +65,7 @@ const ComponentExcelGV = () => {
   const handleCloseModal = () => setShowModal(false);
 
   return (
-    <div className="mt-4">
+    <div className="mt-2">
       <input type="file" onChange={handleFileUpload} id="formFile" />
       <label htmlFor="formFile" className="btn btn-primary">
         Upload File

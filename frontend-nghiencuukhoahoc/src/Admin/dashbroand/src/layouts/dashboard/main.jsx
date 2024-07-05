@@ -32,7 +32,7 @@ export default function Main({ children, sx, ...other }) {
       {...other}
     >
       {children}
-   
+
     </Box>
   );
 }

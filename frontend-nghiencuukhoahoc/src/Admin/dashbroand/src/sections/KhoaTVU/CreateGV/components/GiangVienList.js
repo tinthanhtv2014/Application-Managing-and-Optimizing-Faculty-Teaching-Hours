@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
-
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const GiangVienList = ({
   isOpenGetAllApiGV,
   handleGetAllGiangVien,
@@ -13,27 +13,37 @@ const GiangVienList = ({
   handleChoseEditGiangVien,
 }) => {
   const [searchEmail, setSearchEmail] = useState("");
+  const [searchStatus, setSearchStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(0);
+
   const handleSearch = (e) => {
     setSearchEmail(e.target.value);
     setCurrentPage(0);
   };
+
+  const handleStatusChange = (e) => {
+    setSearchStatus(e.target.value);
+    setCurrentPage(0);
+  };
+
   const pageSize = 10;
   const startIndex = currentPage * pageSize;
-  console.log("check data compoennt GV list =>", dataListGiangVien);
+
   const filteredGiangVien = dataListGiangVien
-    ? searchEmail
-      ? dataListGiangVien
-          .filter((giangvien) => {
-            if (giangvien.TENDANGNHAP) {
-              return giangvien.TENDANGNHAP.toLowerCase().includes(
-                searchEmail.toLowerCase()
-              );
-            }
-            return false;
-          })
-          .slice(startIndex, startIndex + pageSize)
-      : dataListGiangVien.slice(startIndex, startIndex + pageSize)
+    ? dataListGiangVien
+        .filter((giangvien) => {
+          if (searchEmail && giangvien.TENDANGNHAP) {
+            return giangvien.TENDANGNHAP.toLowerCase().includes(
+              searchEmail.toLowerCase()
+            );
+          }
+          return true;
+        })
+        .filter((giangvien) => {
+          if (searchStatus === "All") return true;
+          return giangvien.TRANGTHAITAIKHOAN === searchStatus;
+        })
+        .slice(startIndex, startIndex + pageSize)
     : [];
 
   const nextPage = () => {
@@ -44,20 +54,48 @@ const GiangVienList = ({
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  console.log(isOpenGetAllApiGV);
   return (
     <>
-      <div className="mb-3  col-4">
+      <div className="mb-3 col-4 mt-2">
         <input
           type="text"
-          className="form-control "
+          className="form-control"
           placeholder="Nhập email đăng nhập"
           value={searchEmail}
           onChange={handleSearch}
         />
       </div>
+      <div className="mb-3 col-4 mt-2">
+        <Box sx={{ maxWidth: 300 }}>
+          <FormControl fullWidth className="mt-2">
+            <InputLabel id="select-label-trang-thai">Trạng thái</InputLabel>
+            <Select
+              labelId="select-label-trang-thai"
+              id="trang-thai-select"
+              className={`height-selectGV ${
+                searchStatus === "Đang hoạt động"
+                  ? "text-success"
+                  : searchStatus === "Ngưng hoạt động"
+                  ? "text-danger"
+                  : ""
+              }`}
+              value={searchStatus}
+              label="Trạng thái"
+              onChange={handleStatusChange}
+            >
+              <MenuItem value="All">Hiển thị tất cả</MenuItem>
+              <MenuItem value="Đang hoạt động" className="text-success">
+                Đang hoạt động
+              </MenuItem>
+              <MenuItem value="Ngưng hoạt động" className="text-danger">
+                Ngưng hoạt động
+              </MenuItem>
+            </Select>{" "}
+          </FormControl>
+        </Box>
+      </div>
       <button
-        type="text"
+        type="button"
         className={` ${
           isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
         }`}
@@ -70,7 +108,6 @@ const GiangVienList = ({
             : "Xem Tất Cả Giảng Viên"
         }
       >
-        {" "}
         {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
       </button>
       <table className="custom-table">
@@ -110,7 +147,6 @@ const GiangVienList = ({
                 <td>{giangvien.SODIENTHOAI}</td>
                 <td>{giangvien.DIACHI}</td>
                 <td>{giangvien.TENBOMON}</td>
-
                 <td
                   className={
                     giangvien.PHANQUYEN === "Admin"
@@ -170,7 +206,7 @@ const GiangVienList = ({
             </tr>
           )}
         </tbody>
-      </table>{" "}
+      </table>
       <div className="pagination-buttons mt-4">
         <button
           type="button"

@@ -5,6 +5,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
+import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
 import ProductsPageFake from "../pages/products"
 import AdminCreate from '../sections/Admincreate/AdminCreate';
 
@@ -169,11 +170,11 @@ export default function Router() {
     {
       path: '/create-gv', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
-        <DashboardLayout>
+        <DashboardLayoutNoTop>
           <Suspense fallback={<div>Loading...</div>}>
             <CreateGV />
           </Suspense>
-        </DashboardLayout>
+        </DashboardLayoutNoTop>
       )
     },
     {

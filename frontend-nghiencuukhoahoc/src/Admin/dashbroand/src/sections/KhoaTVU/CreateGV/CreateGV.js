@@ -1,6 +1,7 @@
 // CreateKhoa.js
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal, Form } from "react-bootstrap";
+
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +47,8 @@ const ComponenCreateGiangVien = () => {
   const [isOpenEditButtonGV, setIsOpenEditButtonGV] = useState(false);
   const [activeRowGV, setActiveRowGV] = useState(null);
   const [disabledGV, setDisableGV] = useState(true);
-  const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(false);
+  const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(true);
+
   // --------------------------ISOPEN---------------------------------------
   const [ValueExcel, setValueExcel] = useState("Thủ Công");
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
@@ -316,6 +318,7 @@ const ComponenCreateGiangVien = () => {
   const handleChangeExcel = (event) => {
     setValueExcel(event.target.value);
   };
+
   return (
     <Container>
       {" "}
@@ -339,19 +342,8 @@ const ComponenCreateGiangVien = () => {
             handleChoseEditBM={handleChoseEditBM}
           />
         </Col>
-      </Row>
-      <Row>
-        <Col md={12}>
-          <GiangVienList
-            isOpenGetAllApiGV={isOpenGetAllApiGV}
-            handleGetAllGiangVien={handleGetAllGiangVien}
-            dataListGiangVien={dataListGiangVien}
-            activeRowGV={activeRowGV}
-            handleChoseRowGV={handleChoseRowGV}
-            handleDeleteGiangVien={handleDeleteGiangVien}
-            handleChoseEditGiangVien={handleChoseEditGiangVien}
-          />
-        </Col>
+        <Col md={2}></Col>
+        <Col md={6}>asd</Col>
       </Row>
       <Row>
         <Col md={6}>
@@ -364,6 +356,7 @@ const ComponenCreateGiangVien = () => {
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Thêm</InputLabel>
               <Select
+                className="height-selectGV"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={ValueExcel}
@@ -376,6 +369,7 @@ const ComponenCreateGiangVien = () => {
             </FormControl>
           </Box>
         </Col>
+        <Col md={6}>asd</Col>
       </Row>
       <Row className="">
         {" "}
@@ -406,7 +400,21 @@ const ComponenCreateGiangVien = () => {
               />
             </Col>
           ))}
+        <Col md={6}>asd</Col>
       </Row>{" "}
+      <Row>
+        <Col md={12}>
+          <GiangVienList
+            isOpenGetAllApiGV={isOpenGetAllApiGV}
+            handleGetAllGiangVien={handleGetAllGiangVien}
+            dataListGiangVien={dataListGiangVien}
+            activeRowGV={activeRowGV}
+            handleChoseRowGV={handleChoseRowGV}
+            handleDeleteGiangVien={handleDeleteGiangVien}
+            handleChoseEditGiangVien={handleChoseEditGiangVien}
+          />
+        </Col>
+      </Row>
     </Container>
   );
 };

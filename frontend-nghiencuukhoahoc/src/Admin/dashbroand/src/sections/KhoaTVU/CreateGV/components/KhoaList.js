@@ -1,7 +1,8 @@
 import React from "react";
 import "../../CreateKhoa/CreateKhoa.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import "./KhoaList.scss";
 const KhoaList = ({
   dataListKhoa,
   activeRow,
@@ -12,25 +13,31 @@ const KhoaList = ({
   console.log("check Active Row", activeRow);
 
   return (
-    <div className="custom-select-container">
-      {dataListKhoa && dataListKhoa.length > 0 ? (
-        <div className="mb-3">
-          <select
-            className="form-select"
-            onChange={(e) => handleChose(e.target.value)}
+    <>
+      <Box sx={{ maxWidth: 300 }}>
+        <FormControl fullWidth>
+          <InputLabel id="khoa-select-label">Chọn Khoa</InputLabel>
+          <Select
+            labelId="khoa-select-label"
+            id="khoa-select"
+            className="height-selectGV"
             value={activeRow}
+            label="Chọn Khoa"
+            onChange={(e) => handleChose(e.target.value)}
           >
-            {dataListKhoa.map((khoa, index) => (
-              <option key={index} value={khoa.MAKHOA}>
-                {khoa.TENKHOA}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : (
-        <p>Không có khoa nào</p>
-      )}
-    </div>
+            {dataListKhoa && dataListKhoa.length > 0 ? (
+              dataListKhoa.map((khoa, index) => (
+                <MenuItem key={index} value={khoa.MAKHOA}>
+                  {khoa.TENKHOA}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem disabled>Không có khoa nào</MenuItem>
+            )}
+          </Select>
+        </FormControl>
+      </Box>
+    </>
   );
 };
 

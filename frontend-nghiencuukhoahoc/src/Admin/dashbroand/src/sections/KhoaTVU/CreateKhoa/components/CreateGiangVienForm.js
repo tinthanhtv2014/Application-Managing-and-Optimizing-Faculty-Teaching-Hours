@@ -84,7 +84,7 @@ const CreateGiangVienForm = ({
           </Box>
         </Col>
       </Form.Group>
-      <Button variant="success" type="submit">
+      <Button variant="success" type="submit" title="Thêm tài khoản giảng viên">
         Thêm Giảng Viên
       </Button>
       {isOpenEditButtonGV && (
