@@ -281,7 +281,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (MAGV, dataGiangVien) => {
   } catch (error) {
     console.log(error);
     return {
-      EM: "Lỗi services updateGiangVien",
+      EM: "Lỗi services update_ChucVu_ChucDanh_GiangVien",
       EC: -1,
       DT: [],
     };
