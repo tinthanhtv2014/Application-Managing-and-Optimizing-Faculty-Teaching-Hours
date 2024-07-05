@@ -33,7 +33,11 @@ const ComponentExcelGV = () => {
           },
         }
       );
-      console.log(response.data);
+      if (response.data.EC === 1) {
+        toast.success(response.data.EM);
+      } else {
+        toast.error(response.data.EM);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +91,7 @@ const ComponentExcelGV = () => {
       <Modal
         show={showModal}
         onHide={handleCloseModal}
-        size="lg"
+        size="xl"
         className="modal-Component-excel custom-modal"
       >
         <Modal.Header closeButton>

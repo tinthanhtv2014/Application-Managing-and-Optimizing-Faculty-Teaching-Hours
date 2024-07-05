@@ -161,9 +161,10 @@ const updateGiangVien = async (dataGiangVien) => {
   }
 };
 
-const deleteGiangVien = async (dataGiangVien) => {
+const deleteGiangVien = async (MAGV, MABOMON) => {
   try {
-    if (!timGiangVien(dataGiangVien.MAGV)) {
+    console.log("check MGV +>", MAGV);
+    if (!timGiangVien(MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
         EC: 0,
@@ -171,35 +172,37 @@ const deleteGiangVien = async (dataGiangVien) => {
       };
     }
 
+    // Thực hiện xóa từng bảng dữ liệu liên quan
+    await Promise.all([
+      pool.execute(`DELETE FROM giu_chuc_vu WHERE MAGV = ?;`, [MAGV]),
+      pool.execute(`DELETE FROM co_chuc_danh WHERE MAGV = ?;`, [MAGV]),
+      pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?;`, [MAGV]),
+      pool.execute(`DELETE FROM giangvien WHERE MAGV = ?;`, [MAGV]),
+    ]);
     let [results, fields] = await pool.execute(
-      `DELETE FROM giu_chuc_vu
-            WHERE MAGV = ?;`,
-      [dataGiangVien.MAGV]
+      `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+      FROM taikhoan AS tk
+      LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+      LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+      LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+      LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+      LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+      LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+      LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+      WHERE bm.MABOMON = ?`,
+
+      [MABOMON]
     );
-    let [results3, fields3] = await pool.execute(
-      `DELETE FROM co_chuc_danh
-            WHERE MAGV = ?;`,
-      [dataGiangVien.MAGV]
-    );
-    let [results2, fields2] = await pool.execute(
-      `DELETE FROM taikhoan
-            WHERE MAGV = ?;`,
-      [dataGiangVien.MAGV]
-    );
-    let [results1, fields1] = await pool.execute(
-      `DELETE FROM giangvien
-            WHERE MAGV = ?;`,
-      [dataGiangVien.MAGV]
-    );
+
     return {
-      EM: "xóa giảng viên thành công",
+      EM: "Xóa giảng viên thành công",
       EC: 1,
-      DT: [],
+      DT: results,
     };
   } catch (error) {
     console.log(error);
     return {
-      EM: "lỗi services deleteGiangVien",
+      EM: "Lỗi khi xóa giảng viên",
       EC: -1,
       DT: [],
     };

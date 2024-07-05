@@ -219,15 +219,18 @@ const ComponenCreateGiangVien = () => {
     setMaGV(giangvien.MAGV);
   };
 
-  const handleDeleteGiangVien = async () => {
-    console.log("check", MaGV);
-    if (MaGV) {
+  const handleDeleteGiangVien = async (MAGV) => {
+    console.log("CHECK MAGV = >", MAGV);
+    console.log("check Mabomon", MaBoMon);
+
+    if (MAGV) {
       try {
         const response = await CookiesAxios.delete(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoa`,
-          { maGV: MaGV }
+          { params: { MAGV: MAGV, MABOMON: MaBoMon } }
         );
         console.log(response.data.DT);
+        setdataListGiangVien(response.data.DT);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }

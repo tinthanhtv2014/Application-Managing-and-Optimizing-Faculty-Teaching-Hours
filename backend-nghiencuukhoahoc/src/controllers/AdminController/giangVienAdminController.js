@@ -113,8 +113,10 @@ const updateGiangVienController = async (req, res) => {
 
 const deleteGiangVienController = async (req, res) => {
   try {
-    let dataGiangVien = req.body;
-    let results = await deleteGiangVien(dataGiangVien);
+    let MAGV = req.query.MAGV;
+    let MABOMON = req.query.MABOMON;
+
+    let results = await deleteGiangVien(MAGV, MABOMON);
 
     return res.status(200).json({
       EM: results.EM,
