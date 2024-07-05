@@ -4,6 +4,7 @@ import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const GiangVienList = ({
+  currentPage,
   isOpenGetAllApiGV,
   handleGetAllGiangVien,
   dataListGiangVien,
@@ -11,21 +12,25 @@ const GiangVienList = ({
   handleChoseRowGV,
   handleDeleteGiangVien,
   handleChoseEditGiangVien,
+  searchEmail,
+  searchStatus,
+  setCurrentPage,
 }) => {
-  const [searchEmail, setSearchEmail] = useState("");
-  const [searchStatus, setSearchStatus] = useState("All");
-  const [currentPage, setCurrentPage] = useState(0);
+  // const [searchEmail, setSearchEmail] = useState("");
+  // const [searchStatus, setSearchStatus] = useState("All");
+  // const [currentPage, setCurrentPage] = useState(0);
 
-  const handleSearch = (e) => {
-    setSearchEmail(e.target.value);
-    setCurrentPage(0);
-  };
+  // const handleSearch = (e) => {
+  //   setSearchEmail(e.target.value);
+  //   setCurrentPage(0);
+  // };
 
-  const handleStatusChange = (e) => {
-    setSearchStatus(e.target.value);
-    setCurrentPage(0);
-  };
-
+  // const handleStatusChange = (e) => {
+  //   setSearchStatus(e.target.value);
+  //   setCurrentPage(0);
+  // };
+  console.log("searchStatus =>", searchStatus);
+  console.log("currentPage =>", currentPage);
   const pageSize = 10;
   const startIndex = currentPage * pageSize;
 
@@ -56,7 +61,7 @@ const GiangVienList = ({
 
   return (
     <>
-      <div className="mb-3 col-4 mt-2">
+      {/* <div className="mb-3 col-4 mt-2">
         <input
           type="text"
           className="form-control"
@@ -64,8 +69,8 @@ const GiangVienList = ({
           value={searchEmail}
           onChange={handleSearch}
         />
-      </div>
-      <div className="mb-3 col-4 mt-2">
+      </div> */}
+      {/* <div className="mb-3 col-4 mt-2">
         <Box sx={{ maxWidth: 300 }}>
           <FormControl fullWidth className="mt-2">
             <InputLabel id="select-label-trang-thai">Trạng thái</InputLabel>
@@ -93,8 +98,8 @@ const GiangVienList = ({
             </Select>{" "}
           </FormControl>
         </Box>
-      </div>
-      <button
+      </div> */}
+      {/* <button
         type="button"
         className={` ${
           isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
@@ -109,7 +114,7 @@ const GiangVienList = ({
         }
       >
         {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
-      </button>
+      </button> */}
       <table className="custom-table">
         <thead>
           <tr>
@@ -199,11 +204,13 @@ const GiangVienList = ({
               </tr>
             ))
           ) : (
-            <tr>
-              <td colSpan="10" className="opacity-7">
-                Bộ môn chưa có giảng viên
-              </td>
-            </tr>
+            <>
+              <tr>
+                <td colSpan="13" className="opacity-7">
+                  Bộ môn chưa có giảng viên
+                </td>
+              </tr>
+            </>
           )}
         </tbody>
       </table>

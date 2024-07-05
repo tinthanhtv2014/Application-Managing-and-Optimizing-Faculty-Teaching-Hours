@@ -20,6 +20,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ComponentExcelGV from "./components/ComponentExcel.js";
 import { toast } from "react-toastify";
+import { ButtonBase } from "@mui/material";
 
 const ComponenCreateGiangVien = () => {
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
@@ -314,11 +315,21 @@ const ComponenCreateGiangVien = () => {
 
   const handleSumitEditGV = async (event) => {};
   // -----------------------IS OPEN EXCEL-----------------------------------
+  const [searchEmail, setSearchEmail] = useState("");
+  const [searchStatus, setSearchStatus] = useState("All");
+  const [currentPage, setCurrentPage] = useState(0);
 
+  const handleSearch = (e) => {
+    setSearchEmail(e.target.value);
+  };
   const handleChangeExcel = (event) => {
     setValueExcel(event.target.value);
   };
-
+  const handleStatusChange = (e) => {
+    console.log("check=>", searchStatus);
+    setSearchStatus(e.target.value);
+    setCurrentPage(0);
+  };
   return (
     <Container>
       {" "}
@@ -341,9 +352,67 @@ const ComponenCreateGiangVien = () => {
             handleDeleteBoMon={handleDeleteBoMon}
             handleChoseEditBM={handleChoseEditBM}
           />
+        </Col>{" "}
+        <Col md={2}>
+          {" "}
+          <Box sx={{ maxWidth: 300 }}>
+            <FormControl fullWidth>
+              <InputLabel id="select-label-trang-thai">Trạng thái</InputLabel>
+              <Select
+                labelId="select-label-trang-thai"
+                id="trang-thai-select"
+                className={`height-selectGV ${
+                  searchStatus === "Đang hoạt động"
+                    ? "text-success"
+                    : searchStatus === "Ngưng hoạt động"
+                    ? "text-danger"
+                    : ""
+                }`}
+                value={searchStatus}
+                label="Trạng thái"
+                onChange={handleStatusChange}
+              >
+                <MenuItem value="All">Hiển thị tất cả</MenuItem>
+                <MenuItem value="Đang hoạt động" className="text-success">
+                  Đang hoạt động
+                </MenuItem>
+                <MenuItem value="Ngưng hoạt động" className="text-danger">
+                  Ngưng hoạt động
+                </MenuItem>
+              </Select>{" "}
+            </FormControl>
+          </Box>
         </Col>
-        <Col md={2}></Col>
-        <Col md={6}>asd</Col>
+        <Col md={4}>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control height-selectGV"
+              placeholder="Nhập email đăng nhập"
+              value={searchEmail}
+              onChange={handleSearch}
+            />
+          </div>
+        </Col>
+        <Col md={2}>
+          {" "}
+          <ButtonBase
+            type="button"
+            className={`height-selectGV ${
+              isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
+            }`}
+            placeholder="Nhập email đăng nhập"
+            value={isOpenGetAllApiGV}
+            onClick={handleGetAllGiangVien}
+            title={
+              isOpenGetAllApiGV === true
+                ? "Xem Tất Cả Giảng Viên Ở Bộ Môn"
+                : "Xem Tất Cả Giảng Viên"
+            }
+          >
+            {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
+          </ButtonBase>{" "}
+        </Col>
       </Row>
       <Row>
         <Col md={6}>
@@ -369,7 +438,7 @@ const ComponenCreateGiangVien = () => {
             </FormControl>
           </Box>
         </Col>
-        <Col md={6}>asd</Col>
+        <Col md={6}></Col>
       </Row>
       <Row className="">
         {" "}
@@ -400,11 +469,15 @@ const ComponenCreateGiangVien = () => {
               />
             </Col>
           ))}
-        <Col md={6}>asd</Col>
+        <Col md={6}></Col>
       </Row>{" "}
       <Row>
         <Col md={12}>
           <GiangVienList
+            searchStatus={searchStatus}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            searchEmail={searchEmail}
             isOpenGetAllApiGV={isOpenGetAllApiGV}
             handleGetAllGiangVien={handleGetAllGiangVien}
             dataListGiangVien={dataListGiangVien}
