@@ -51,15 +51,27 @@ function isValidEmail(email) {
 const getAllTaiKhoan = async (MABOMON) => {
   try {
     let [results, fields] = await pool.execute(
-      "select k.TENKHOA,bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,cd.TENCHUCDANH,cv.TENCHUCVU,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm, chucvu as cv, chucdanh as cd,giu_chuc_vu as gcv, co_chuc_danh as ccd, khoa as k where k.MAKHOA = bm.MAKHOA and tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and gv.MAGV = gcv.MAGV and gcv.MACHUCVU = cv.MACHUCVU and ccd.MAGV = gv.MAGV and ccd.MACHUCDANH = cd.MACHUCDANH and bm.MABOMON = ?",
+      `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+      FROM taikhoan AS tk
+      LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+      LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+      LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+      LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+      LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+      LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+      LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+      WHERE bm.MABOMON = ?`,
+
       [MABOMON]
     );
+    console.log("Query Results:", results);
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,
       DT: results,
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "không thể xem thông tin",
       EC: 0,
