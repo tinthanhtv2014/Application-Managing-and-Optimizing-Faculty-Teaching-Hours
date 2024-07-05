@@ -1,9 +1,10 @@
 const pool = require("../../config/database");
+const { selectBomon_MABOMON } = require('./CRUDBomon');
 
-const timGiangVien = async (maGV) => {
+const timGiangVien = async (MAGV) => {
   let [results1, fields1] = await pool.execute(
     `select * from giangvien where MAGV = ?`,
-    [maGV]
+    [MAGV]
   );
 
   return results1;
@@ -58,6 +59,7 @@ const selectOnlyGiangVien = async (MABOMON) => {
     };
   }
 };
+
 const createGiangVien = async (dataGiangVien) => {
   try {
     //dataGiangVien phải bao gồm MAGV, MABOMON, TENDANGNHAP, TENGV, EMAIL, DIENTHOAI, DIACHI
@@ -96,6 +98,7 @@ const createGiangVien = async (dataGiangVien) => {
     };
   }
 };
+
 const updateTrangThaiTaiKhoanGiangVien = async (
   MAGV,
   TRANGTHAITAIKHOAN,
@@ -133,9 +136,17 @@ const updateTrangThaiTaiKhoanGiangVien = async (
   }
 };
 
-const updateGiangVien = async (dataGiangVien) => {
+const updateGiangVien = async (MAGV, dataGiangVien) => {
   try {
-    if (!timGiangVien(dataGiangVien.maGV)) {
+    // MAGV
+    // dataGiangVien gồm MABOMON TENGV EMAIL DIENTHOAI DIACHI
+
+    //console.log("MAGV >>>>>", MAGV);
+    //console.log("dataGiangVien >>>>>", dataGiangVien);
+
+    let KiemTra_MAGV = await timGiangVien(MAGV)
+    //console.log("KiemTra_MAGV >>>>>", KiemTra_MAGV);
+    if (!KiemTra_MAGV.length > 0) {
       return {
         EM: "Giảng viên này không tồn tại",
         EC: 0,
@@ -143,29 +154,39 @@ const updateGiangVien = async (dataGiangVien) => {
       };
     }
 
+    let KiemTra_MABOMON = await selectBomon_MABOMON(dataGiangVien.MABOMON);
+    //console.log("KiemTra_MABOMON >>>>>", KiemTra_MABOMON);
+    if (!KiemTra_MABOMON) {
+      return {
+        EM: "Bộ môn này không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
     let [results, fields] = await pool.execute(
       `UPDATE giangvien
-            SET MABOMON = ?, TENDANGNHAP = ?, TENGV = ?, EMAIL = ?, DIENTHOAI = ?, DIACHI = ?, 
+            SET MABOMON = ?, TENGV = ?, EMAIL = ?, DIENTHOAI = ?, DIACHI = ? 
             WHERE MAGV = ?;`,
       [
         dataGiangVien.MABOMON,
-        dataGiangVien.TENDANGNHAP,
         dataGiangVien.TENGV,
         dataGiangVien.EMAIL,
         dataGiangVien.DIENTHOAI,
         dataGiangVien.DIACHI,
-        dataGiangVien.MAGV,
+        MAGV,
       ]
     );
+
     return {
-      EM: "sửa giảng viên thành công",
+      EM: "Sửa giảng viên thành công",
       EC: 1,
-      DT: results,
+      DT: [],
     };
   } catch (error) {
     console.log(error);
     return {
-      EM: "lỗi services updateGiangVien",
+      EM: "Lỗi services updateGiangVien",
       EC: -1,
       DT: [],
     };

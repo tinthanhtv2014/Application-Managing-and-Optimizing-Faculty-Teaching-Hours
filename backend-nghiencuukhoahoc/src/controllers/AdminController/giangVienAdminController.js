@@ -25,6 +25,7 @@ const getAllGiangVien = async (req, res) => {
     });
   }
 };
+
 const getOnlyGiangVienbyBoMon = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
@@ -65,6 +66,7 @@ const createGiangVienControler = async (req, res) => {
     });
   }
 };
+
 const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
   try {
     //api này dùng để đình chỉ hoạt động của 1 tài khoản
@@ -93,8 +95,9 @@ const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
 
 const updateGiangVienController = async (req, res) => {
   try {
+    const MAGV = req.params.MAGV;
     let dataGiangVien = req.body;
-    let results = await updateGiangVien(dataGiangVien);
+    let results = await updateGiangVien(MAGV, dataGiangVien);
 
     return res.status(200).json({
       EM: results.EM,

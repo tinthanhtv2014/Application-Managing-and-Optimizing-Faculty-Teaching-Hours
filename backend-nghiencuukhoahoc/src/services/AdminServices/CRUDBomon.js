@@ -68,6 +68,36 @@ const selectBomon_TENBOMON = async (TENBOMON) => {
   }
 };
 
+//Hàm tìm bộ môn theo MABOMON
+const selectBomon_MABOMON = async (MABOMON) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM bomon WHERE MABOMON = ?`,
+      [MABOMON]
+    );
+
+    if (results1.length > 0) {
+      return {
+        EM: "Xem thông tin bộ môn thành công",
+        EC: 1,
+        DT: results1[0], // Chỉ lấy dòng đầu tiên của kết quả
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy bộ môn",
+        EC: 0,
+        DT: {},
+      };
+    }
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectBomon_MABOMON",
+      EC: -1,
+      DT: {},
+    };
+  }
+};
+
 const createBomon = async (makhoa, tenbomon) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -181,4 +211,5 @@ module.exports = {
 
   selectBomon_MAKHOA,
   selectBomon_TENBOMON,
+  selectBomon_MABOMON,
 };
