@@ -1,17 +1,9 @@
 const pool = require("../../config/database");
-const { selectBomon_MABOMON, selectBomon_TENBOMON } = require('./CRUDBomon');
-const { timChucVu_TENCHUCVU } = require("./CRUDChucVu")
-const { selectChucdanh_TENCHUCDANH } = require('./CRUDChucdanh')
-const { timTaiKhoan_TENDANGNHAP } = require('./CRUDTaiKhoan')
+const { selectBomon_MABOMON } = require('./CRUDBomon');
 
-const timGiangVien = async (MAGV) => {
-  let [results1, fields1] = await pool.execute(
-    `select * from giangvien where MAGV = ?`,
-    [MAGV]
-  );
-
-  return results1;
-};
+const {
+  timGiangVien
+} = require('./helpers')
 
 const selectGiangVien = async () => {
   try {
@@ -196,98 +188,6 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
   }
 };
 
-const update_ChucVu_ChucDanh_GiangVien = async (MAGV, dataGiangVien) => {
-  try {
-    // MAGV
-    // dataGiangVien gồm TENDANGNHAP, TENGV, TENCHUCVU, TENCHUCDANH, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN
-
-    // console.log("MAGV >>>>>", MAGV);
-    // console.log("dataGiangVien >>>>>", dataGiangVien);
-
-    let KiemTra_MAGV = await timGiangVien(MAGV)
-    //console.log("KiemTra_MAGV >>>>>", KiemTra_MAGV);
-    if (!KiemTra_MAGV.length > 0) {
-      return {
-        EM: "Giảng viên này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    // Bị lỗi  Circular Dependency (Phụ thuộc vòng lặp) <---------------------
-
-    // console.log("dataGiangVien.TENDANGNHAP >>>>>", dataGiangVien.TENDANGNHAP);
-    // let KiemTra_TENDANGNHAP = await timTaiKhoan_TENDANGNHAP(dataGiangVien.TENDANGNHAP)
-    // console.log("KiemTra_TENDANGNHAP >>>>>", KiemTra_TENDANGNHAP);
-    // if (!KiemTra_TENDANGNHAP) {
-    //   return {
-    //     EM: "Giảng viên này không tồn tại",
-    //     EC: 0,
-    //     DT: [],
-    //   };
-    // }
-
-    let KiemTra_TENCHUCVU = await timChucVu_TENCHUCVU(dataGiangVien.TENCHUCVU)
-    console.log("KiemTra_TENCHUCVU >>>>>", KiemTra_TENCHUCVU);
-    if (!KiemTra_TENCHUCVU) {
-      return {
-        EM: "Chức vụ này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    let KiemTra_TENCHUCDANH = await selectChucdanh_TENCHUCDANH(dataGiangVien.TENCHUCDANH)
-    console.log("KiemTra_TENCHUCDANH >>>>>", KiemTra_TENCHUCDANH);
-    if (!KiemTra_TENCHUCDANH) {
-      return {
-        EM: "Chức danh này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    let KiemTra_TENBOMON = await selectBomon_TENBOMON(dataGiangVien.TENBOMON)
-    console.log("KiemTra_TENBOMON >>>>>", KiemTra_TENBOMON);
-    if (!KiemTra_TENBOMON) {
-      return {
-        EM: "Bộ môn này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    //Mã SQL chưa được làm xong <---------------------------
-
-    // let [results, fields] = await pool.execute(
-    //   `UPDATE giangvien
-    //         SET MABOMON = ?, TENGV = ?, EMAIL = ?, DIENTHOAI = ?, DIACHI = ? 
-    //         WHERE MAGV = ?;`,
-    //   [
-    //     dataGiangVien.MABOMON,
-    //     dataGiangVien.TENGV,
-    //     dataGiangVien.EMAIL,
-    //     dataGiangVien.DIENTHOAI,
-    //     dataGiangVien.DIACHI,
-    //     MAGV,
-    //   ]
-    // );
-
-    return {
-      EM: "Sửa giảng viên thành công",
-      EC: 1,
-      DT: [],
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      EM: "Lỗi services update_ChucVu_ChucDanh_GiangVien",
-      EC: -1,
-      DT: [],
-    };
-  }
-};
-
 const deleteGiangVien = async (MAGV, MABOMON) => {
   try {
     console.log("check MGV +>", MAGV);
@@ -302,9 +202,9 @@ const deleteGiangVien = async (MAGV, MABOMON) => {
     // Thực hiện xóa từng bảng dữ liệu liên quan
     await Promise.all([
       pool.execute(`DELETE FROM giu_chuc_vu WHERE MAGV = ?;`, [MAGV]),
-      pool.execute(`DELETE FROM co_chuc_danh WHERE MAGV = ?;`, [MAGV]),
-      pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?;`, [MAGV]),
-      pool.execute(`DELETE FROM giangvien WHERE MAGV = ?;`, [MAGV]),
+      pool.execute(`DELETE FROM co_chuc_danh WHERE MAGV = ?; `, [MAGV]),
+      pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?; `, [MAGV]),
+      pool.execute(`DELETE FROM giangvien WHERE MAGV = ?; `, [MAGV]),
     ]);
     let [results, fields] = await pool.execute(
       `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
@@ -316,7 +216,7 @@ const deleteGiangVien = async (MAGV, MABOMON) => {
       LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
       LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
       LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-      WHERE bm.MABOMON = ?`,
+      WHERE bm.MABOMON = ? `,
 
       [MABOMON]
     );
@@ -343,9 +243,7 @@ module.exports = {
   createGiangVien,
 
   updateGiangVien,
-  update_ChucVu_ChucDanh_GiangVien,
+  updateTrangThaiTaiKhoanGiangVien,
 
   deleteGiangVien,
-  timGiangVien,
-  updateTrangThaiTaiKhoanGiangVien,
 };

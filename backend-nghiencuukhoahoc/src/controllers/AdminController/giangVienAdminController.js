@@ -6,10 +6,12 @@ const {
 
   updateGiangVien,
   updateTrangThaiTaiKhoanGiangVien,
-  update_ChucVu_ChucDanh_GiangVien,
 
   deleteGiangVien,
 } = require("../../services/AdminServices/CRUDGiangvien");
+
+const { update_ChucVu_ChucDanh_GiangVien }
+  = require('../../services/AdminServices/AdminServiceGiangVien/GiangVienServices')
 
 const getAllGiangVien = async (req, res) => {
   try {
@@ -120,9 +122,8 @@ const updateGiangVienController = async (req, res) => {
 
 const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   try {
-    const MAGV = req.params.MAGV;
     let dataGiangVien = req.body;
-    let results = await update_ChucVu_ChucDanh_GiangVien(MAGV, dataGiangVien);
+    let results = await update_ChucVu_ChucDanh_GiangVien(dataGiangVien);
 
     return res.status(200).json({
       EM: results.EM,

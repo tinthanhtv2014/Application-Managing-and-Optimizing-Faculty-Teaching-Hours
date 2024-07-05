@@ -21,11 +21,11 @@ const checkPassword = (inputpassword, hashpass) => {
 };
 
 //hàm kiểm tra tài khoản
-const timTaiKhoan_TENDANGNHAP = async (tenDangnhap) => {
+const timTaiKhoan_TENDANGNHAP = async (TENDANGNHAP) => {
   try {
     const [results, fields] = await pool.execute(
       "SELECT * FROM taikhoan WHERE TENDANGNHAP = ?",
-      [tenDangnhap]
+      [TENDANGNHAP]
     );
 
     return results.length > 0;
