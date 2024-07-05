@@ -39,7 +39,7 @@ const CRUDGiangVien = (app) => {
 
   router.put("/sua/trangthai/:MAGV", updateTrangThaiTaiKhoanGiangVienController); //phúc viết
   router.put("/sua/:MAGV", updateGiangVienController);
-  router.put("/sua/thongtin/:MAGV", update_ChucVu_ChucDanh_GiangVien_Controller);
+  router.put("/sua/thongtin/:TENDANGNHAP", update_ChucVu_ChucDanh_GiangVien_Controller);
 
   router.delete("/xoa", deleteGiangVienController);
 
@@ -51,11 +51,8 @@ const CRUDGiangVien = (app) => {
 
   //route cho chức danh
   router.get("/xemchucdanh", getAllChucdanh);
-
   router.post("/taochucdanh", createChucdanhControler);
-
   router.put("/suachucdanh/:MACHUCDANH", updateChucdanhController);
-
   router.delete("/xoachucdanh", deleteChucdanhController);
 
   return app.use("/api/v1/admin/giangvien", router);

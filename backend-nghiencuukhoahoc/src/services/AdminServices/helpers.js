@@ -13,11 +13,11 @@ const timTaiKhoan_TENDANGNHAP = async (TENDANGNHAP) => {
     }
 };
 
-const timGiangVien = async (maGV) => {
+const timGiangVien_MAGV = async (MAGV) => {
     try {
         const [results, fields] = await pool.execute(
             "SELECT * FROM giangvien WHERE MAGV = ?",
-            [maGV]
+            [MAGV]
         );
         return results;
     } catch (error) {
@@ -93,12 +93,40 @@ const timCoChucDanh_MAGV = async (MAGV) => {
     }
 };
 
+const timChucVu_MACHUCVU = async (MACHUCVU) => {
+    try {
+        const [results1, fields] = await pool.execute(
+            "SELECT * FROM chucvu WHERE MACHUCVU = ?",
+            [MACHUCVU]
+        );
+        return results1;
+    } catch (error) {
+        console.log("timChucVu_MACHUCVU errr >>>", error);
+        return [];
+    }
+};
+
+const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
+    try {
+        const [results1, fields] = await pool.execute(
+            "SELECT * FROM chucdanh WHERE MACHUCDANH = ?",
+            [MACHUCDANH]
+        );
+        return results1;
+    } catch (error) {
+        console.log("timChucVu_MACHUCVU errr >>>", error);
+        return [];
+    }
+};
+
 module.exports = {
     timTaiKhoan_TENDANGNHAP,
-    timGiangVien,
+    timGiangVien_MAGV,
     selectBomon_TENBOMON,
     selectChucdanh_TENCHUCDANH,
     timChucVu_TENCHUCVU,
     timChucVu_MAGV,
     timCoChucDanh_MAGV,
+    timChucVu_MACHUCVU,
+    timChucDanh_MACHUCDANH,
 };

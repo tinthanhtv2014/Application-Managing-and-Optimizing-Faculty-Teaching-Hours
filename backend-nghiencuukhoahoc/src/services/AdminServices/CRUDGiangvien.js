@@ -2,7 +2,7 @@ const pool = require("../../config/database");
 const { selectBomon_MABOMON } = require('./CRUDBomon');
 
 const {
-  timGiangVien
+  timGiangVien_MAGV
 } = require('./helpers')
 
 const selectGiangVien = async () => {
@@ -59,7 +59,7 @@ const createGiangVien = async (dataGiangVien) => {
   try {
     //dataGiangVien phải bao gồm MAGV, MABOMON, TENDANGNHAP, TENGV, EMAIL, DIENTHOAI, DIACHI
 
-    if (timGiangVien(dataGiangVien.maGV)) {
+    if (timGiangVien_MAGV(dataGiangVien.maGV)) {
       return {
         EM: "Giảng viên này đã tồn tại",
         EC: 0,
@@ -100,7 +100,7 @@ const updateTrangThaiTaiKhoanGiangVien = async (
   MABOMON
 ) => {
   try {
-    if (!(await timGiangVien(MAGV))) {
+    if (!(await timGiangVien_MAGV(MAGV))) {
       return {
         EM: "Giảng viên này không tồn tại",
         EC: 0,
@@ -139,7 +139,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
     //console.log("MAGV >>>>>", MAGV);
     //console.log("dataGiangVien >>>>>", dataGiangVien);
 
-    let KiemTra_MAGV = await timGiangVien(MAGV)
+    let KiemTra_MAGV = await timGiangVien_MAGV(MAGV)
     //console.log("KiemTra_MAGV >>>>>", KiemTra_MAGV);
     if (!KiemTra_MAGV.length > 0) {
       return {
@@ -191,7 +191,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
 const deleteGiangVien = async (MAGV, MABOMON) => {
   try {
     console.log("check MGV +>", MAGV);
-    if (!timGiangVien(MAGV)) {
+    if (!timGiangVien_MAGV(MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
         EC: 0,
