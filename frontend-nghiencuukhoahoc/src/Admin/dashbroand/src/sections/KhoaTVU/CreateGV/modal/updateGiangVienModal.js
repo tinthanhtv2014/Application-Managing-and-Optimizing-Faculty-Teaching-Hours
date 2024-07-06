@@ -53,7 +53,7 @@ const UpdateGiangVienModal = ({
       //   ...lecturerData,
       TENGV: tenGV,
       DIACHI: diaChiGiangVien,
-      SODIENTHOAI: SodienthoaiGV,
+      DIENTHOAI: SodienthoaiGV,
       TENCHUCDANH: ChucDanhGiangVien,
       TENCHUCVU: chucVuGiangVien,
       PHANQUYEN: PhanQuyenGiangVien,

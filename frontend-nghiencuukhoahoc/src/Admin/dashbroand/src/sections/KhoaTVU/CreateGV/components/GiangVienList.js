@@ -151,7 +151,7 @@ const GiangVienList = ({
                 <td>{giangvien.TENGV}</td>
                 <td>{giangvien.TENCHUCVU}</td>
                 <td>{giangvien.TENCHUCDANH}</td>
-                <td>{giangvien.SODIENTHOAI}</td>
+                <td>{giangvien.DIENTHOAI}</td>
                 <td>{giangvien.DIACHI}</td>
                 <td>{giangvien.TENBOMON}</td>
                 <td

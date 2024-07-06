@@ -71,10 +71,10 @@ const PrivateRoute = () => {
     }
   }, [auth]);
 
-  console.log("Phân quyền admin:", phanQuyenAdmin);
-  console.log("Phân quyền giáo viên:", phanQuyenGV);
-  console.log("Phân quyền trưởng bộ môn:", phanQuyenTBM);
-  console.log("Phân quyền thủ kho:", phanQuyenTK);
+  // console.log("Phân quyền admin:", phanQuyenAdmin);
+  // console.log("Phân quyền giáo viên:", phanQuyenGV);
+  // console.log("Phân quyền trưởng bộ môn:", phanQuyenTBM);
+  // console.log("Phân quyền thủ kho:", phanQuyenTK);
 
   if (loading) {
     return <Loading />;
