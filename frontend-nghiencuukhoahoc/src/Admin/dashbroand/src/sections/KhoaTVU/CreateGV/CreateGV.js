@@ -21,8 +21,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ComponentExcelGV from "./components/ComponentExcel.js";
 import { toast } from "react-toastify";
 import { ButtonBase } from "@mui/material";
-
+import UpdateGiangVienModal from "./modal/updateGiangVienModal.js";
 const ComponenCreateGiangVien = () => {
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedLecturer, setSelectedLecturer] = useState({});
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenKhoa, setTenKhoa] = useState("");
   const [TenBoMon, setTenBoMon] = useState("");
@@ -51,7 +53,7 @@ const ComponenCreateGiangVien = () => {
   const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(true);
 
   // --------------------------ISOPEN---------------------------------------
-  const [ValueExcel, setValueExcel] = useState("Thủ Công");
+  const [ValueExcel, setValueExcel] = useState("Excel");
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
   const [dataListKhoa, setdataListKhoa] = useState();
   const [dataListBoMon, setdataListBoMon] = useState(null);
@@ -62,7 +64,7 @@ const ComponenCreateGiangVien = () => {
     const response = await CookiesAxios.get(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
     );
-    console.log(response.data.DT);
+    // console.log(response.data.DT);
     setdataListKhoa(response.data.DT);
   };
 
@@ -74,7 +76,7 @@ const ComponenCreateGiangVien = () => {
           MAKHOA: MaKhoa,
         }
       );
-      console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
+      //  console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
       setdataListBoMon(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -87,7 +89,7 @@ const ComponenCreateGiangVien = () => {
           const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xem`
           );
-          console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
+          //     console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
           setdataListGiangVien(response.data.DT);
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -101,7 +103,7 @@ const ComponenCreateGiangVien = () => {
             const response = await CookiesAxios.get(
               `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${MaBoMon}`
             );
-            console.log("Danh sách tài khoản:", response.data);
+            //     console.log("Danh sách tài khoản:", response.data);
             setdataListGiangVien(response.data.DT);
           } catch (error) {
             console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -131,8 +133,8 @@ const ComponenCreateGiangVien = () => {
   // KHOA
 
   const handleChose = (id) => {
-    console.log("check id create khoa =>", id);
-    console.log(id);
+    //console.log("check id create khoa =>", id);
+    //console.log(id);
     setActiveRow(id);
     setDisableBM(false);
     setMaKhoa(id);
@@ -150,7 +152,7 @@ const ComponenCreateGiangVien = () => {
             },
           }
         );
-        console.log(response.data);
+        //      console.log(response.data);
         setActiveRow(null);
         setDisableBM(true);
         fetchData();
@@ -177,7 +179,7 @@ const ComponenCreateGiangVien = () => {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${bomon}`
       );
-      console.log("Danh sách tài khoản:", response.data);
+      // console.log("Danh sách tài khoản:", response.data);
       setdataListGiangVien(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -195,7 +197,7 @@ const ComponenCreateGiangVien = () => {
             },
           }
         );
-        console.log(response.data);
+        //    console.log(response.data);
         getBoMonByMaKhoa(MaKhoa);
         setActiveRowBM(null);
         setTenBoMon("");
@@ -233,7 +235,7 @@ const ComponenCreateGiangVien = () => {
             MABOMON: MaBoMon,
           }
         );
-        console.log(response.data.EC);
+        //    console.log(response.data.EC);
 
         if (response.data.EC == 1) {
           setdataListGiangVien(response.data.DT);
@@ -255,8 +257,8 @@ const ComponenCreateGiangVien = () => {
   };
 
   const handleDeleteGiangVien = async (MAGV) => {
-    console.log("CHECK MAGV = >", MAGV);
-    console.log("check Mabomon", MaBoMon);
+    //  console.log("CHECK MAGV = >", MAGV);
+    //  console.log("check Mabomon", MaBoMon);
 
     if (MAGV) {
       try {
@@ -264,7 +266,7 @@ const ComponenCreateGiangVien = () => {
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoa`,
           { params: { MAGV: MAGV, MABOMON: MaBoMon } }
         );
-        console.log(response.data.DT);
+        //     console.log(response.data.DT);
         setdataListGiangVien(response.data.DT);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
@@ -275,7 +277,7 @@ const ComponenCreateGiangVien = () => {
   };
 
   const handleChoseEditGiangVien = async (giangvien) => {
-    console.log("check");
+    // console.log("check");
     setMaGV(giangvien.MAGV);
     let Trangthai;
 
@@ -297,7 +299,7 @@ const ComponenCreateGiangVien = () => {
           MABOMON: MaBoMon,
         }
       );
-      console.log(response.data.DT);
+      //   console.log(response.data.DT);
       setdataListGiangVien(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi gửi yêu cầu đến backend:", error);
@@ -326,10 +328,66 @@ const ComponenCreateGiangVien = () => {
     setValueExcel(event.target.value);
   };
   const handleStatusChange = (e) => {
-    console.log("check=>", searchStatus);
+    // console.log("check=>", searchStatus);
     setSearchStatus(e.target.value);
     setCurrentPage(0);
   };
+
+  const [dataListChucVuGiangVien, setdataListChucVuGiangVien] = useState();
+  const [dataListChucDanhGiangVien, setdataListChucDanhGiangVien] = useState();
+
+  const handleShowUpdateModal = async (lecturer) => {
+    setSelectedLecturer(lecturer);
+    setShowUpdateModal(true);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucvu`
+      );
+      // console.log(response.data);
+      setdataListChucVuGiangVien(response.data.DT);
+      toast.success("Lecturer information updated successfully");
+    } catch (error) {
+      console.error("Error updating lecturer information:", error);
+      toast.error("Failed to update lecturer information");
+    }
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucdanh`
+      );
+      //  console.log(response.data);
+      setdataListChucDanhGiangVien(response.data.DT);
+      toast.success("Lecturer information updated successfully");
+    } catch (error) {
+      console.error("Error updating lecturer information:", error);
+      toast.error("Failed to update lecturer information");
+    }
+  };
+
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+  };
+  const updateLecturer = async (updatedLecturer) => {
+    console.log("check tendangnhap", updatedLecturer.TENDANGNHAP);
+    if (updatedLecturer.TENDANGNHAP) {
+      try {
+        const response = await CookiesAxios.put(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/thongtin/${updatedLecturer.TENDANGNHAP}`,
+          updatedLecturer
+        );
+        console.log(response.data);
+        setdataListGiangVien(response.data.DT);
+        setisOpenGetAllApiGV(false);
+        toast.success("Lecturer information updated successfully");
+        handleCloseUpdateModal();
+      } catch (error) {
+        console.error("Error updating lecturer information:", error);
+        toast.error("Failed to update lecturer information");
+      }
+    } else {
+      toast.error("Email bị lỗi");
+    }
+  };
+
   return (
     <Container>
       {" "}
@@ -485,8 +543,17 @@ const ComponenCreateGiangVien = () => {
             handleChoseRowGV={handleChoseRowGV}
             handleDeleteGiangVien={handleDeleteGiangVien}
             handleChoseEditGiangVien={handleChoseEditGiangVien}
+            handleShowUpdateModal={handleShowUpdateModal}
           />
-        </Col>
+        </Col>{" "}
+        <UpdateGiangVienModal
+          dataListChucDanhGiangVien={dataListChucDanhGiangVien}
+          dataListChucVuGiangVien={dataListChucVuGiangVien}
+          show={showUpdateModal}
+          handleClose={handleCloseUpdateModal}
+          lecturerData={selectedLecturer}
+          updateLecturer={updateLecturer}
+        />
       </Row>
     </Container>
   );

@@ -10,8 +10,9 @@ const {
   deleteGiangVien,
 } = require("../../services/AdminServices/CRUDGiangvien");
 
-const { update_ChucVu_ChucDanh_GiangVien }
-  = require('../../services/AdminServices/AdminServiceGiangVien/GiangVienServices')
+const {
+  update_ChucVu_ChucDanh_GiangVien,
+} = require("../../services/AdminServices/AdminServiceGiangVien/GiangVienServices");
 
 const getAllGiangVien = async (req, res) => {
   try {
@@ -122,8 +123,9 @@ const updateGiangVienController = async (req, res) => {
 
 const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   try {
+    console.log(req.params.TENDANGNHAP);
     let aaa = req.params;
-    console.log("aaa >>>>>>>>", aaa)
+    console.log("aaa >>>>>>>>", aaa);
     let dataGiangVien = req.body;
     let results = await update_ChucVu_ChucDanh_GiangVien(dataGiangVien);
 

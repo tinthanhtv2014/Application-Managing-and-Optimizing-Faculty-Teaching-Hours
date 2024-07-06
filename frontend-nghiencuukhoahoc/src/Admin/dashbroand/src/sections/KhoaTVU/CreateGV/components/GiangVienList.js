@@ -15,6 +15,7 @@ const GiangVienList = ({
   searchEmail,
   searchStatus,
   setCurrentPage,
+  handleShowUpdateModal,
 }) => {
   // const [searchEmail, setSearchEmail] = useState("");
   // const [searchStatus, setSearchStatus] = useState("All");
@@ -131,6 +132,7 @@ const GiangVienList = ({
             <th>Trạng Thái</th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -198,6 +200,20 @@ const GiangVienList = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       handleChoseEditGiangVien(giangvien);
+                    }}
+                  ></i>
+                </td>{" "}
+                <td>
+                  <i
+                    title={
+                      giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                        ? "Ngưng hoạt động"
+                        : "Đang hoạt động"
+                    }
+                    className="fa-solid fa-pen-to-square table-row-icon-edit"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleShowUpdateModal(giangvien);
                     }}
                   ></i>
                 </td>

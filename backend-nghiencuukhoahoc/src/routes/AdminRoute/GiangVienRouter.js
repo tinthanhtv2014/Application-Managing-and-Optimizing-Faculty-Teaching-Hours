@@ -33,13 +33,20 @@ const {
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
   router.get("/xem", getAllGiangVien);
+
   router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
 
   router.post("/tao", createGiangVienControler);
 
-  router.put("/sua/trangthai/:MAGV", updateTrangThaiTaiKhoanGiangVienController); //phúc viết
+  router.put(
+    "/sua/trangthai/:MAGV",
+    updateTrangThaiTaiKhoanGiangVienController
+  ); //phúc viết
   router.put("/sua/:MAGV", updateGiangVienController);
-  router.put("/sua/thongtin/:TENDANGNHAP", update_ChucVu_ChucDanh_GiangVien_Controller);
+  router.put(
+    "/sua/thongtin/:TENDANGNHAP",
+    update_ChucVu_ChucDanh_GiangVien_Controller
+  ); //lam
 
   router.delete("/xoa", deleteGiangVienController);
 
