@@ -65,35 +65,35 @@ const selectChucvu_TENCHUCVU = async (TENCHUCVU) => {
 };
 
 const createChucVu = async (TENCHUCVU) => {
-  try {
-    let [results1, fields1] = await pool.execute(
-      `select * from chucvu where TENCHUCVU = ?`,
-      [TENCHUCVU]
-    );
-    if (results1.length > 0) {
-      return {
-        EM: "Chức vụ này đã tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
-    let [results, fields] = await pool.execute(
-      `INSERT INTO chucvu (TENCHUCVU) VALUES (?)`,
-      [TENCHUCVU]
-    );
+  // try {
+  let [results1, fields1] = await pool.execute(
+    `select * from chucvu where TENCHUCVU = ?`,
+    [TENCHUCVU]
+  );
+  if (results1.length > 0) {
     return {
-      EM: "thêm chức vụ mới mới thành công",
-      EC: 1,
-      DT: results,
-    };
-  } catch (error) {
-    return {
-      EM: "lỗi services createChucVu",
-      EC: -1,
+      EM: "Chức vụ này đã tồn tại",
+      EC: 0,
       DT: [],
     };
   }
+
+  let [results, fields] = await pool.execute(
+    `INSERT INTO chucvu (TENCHUCVU) VALUES (?)`,
+    [TENCHUCVU]
+  );
+  return {
+    EM: "thêm chức vụ mới mới thành công",
+    EC: 1,
+    DT: results,
+  };
+  // } catch (error) {
+  //   return {
+  //     EM: "lỗi services createChucVu",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
 };
 
 const updateChucVu = async (MACHUCVU, TENCHUCVU) => {

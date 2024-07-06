@@ -36,11 +36,11 @@ const createChucVuControler = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
-    });
+    // return res.status(404).json({
+    //   EM: results.EM,
+    //   EC: results.EC,
+    //   DT: results.DT,
+    // });
   }
 };
 
