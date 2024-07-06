@@ -1,9 +1,7 @@
 const pool = require("../../config/database");
-const { selectBomon_MABOMON } = require('./CRUDBomon');
+const { selectBomon_MABOMON } = require("./CRUDBomon");
 
-const {
-  timGiangVien_MAGV
-} = require('./helpers')
+const { timGiangVien_MAGV } = require("./helpers");
 
 const selectGiangVien = async () => {
   try {
@@ -97,7 +95,8 @@ const createGiangVien = async (dataGiangVien) => {
 const updateTrangThaiTaiKhoanGiangVien = async (
   MAGV,
   TRANGTHAITAIKHOAN,
-  MABOMON
+  MABOMON,
+  isOpenGetAllApiGV
 ) => {
   try {
     if (!(await timGiangVien_MAGV(MAGV))) {
@@ -112,15 +111,31 @@ const updateTrangThaiTaiKhoanGiangVien = async (
       `UPDATE taikhoan SET TRANGTHAITAIKHOAN = ? WHERE MAGV = ?;`,
       [TRANGTHAITAIKHOAN, MAGV]
     );
-    let [results0, fields0] = await pool.execute(
-      "select bm.MABOMON,bm.TENBOMON,tk.TENDANGNHAP,gv.TENGV,gv.EMAIL,tk.MAGV,gv.DIENTHOAI,gv.DIACHI,tk.PHANQUYEN,tk.TRANGTHAITAIKHOAN from taikhoan as tk,giangvien as gv,bomon as bm where tk.MAGV = gv.MAGV and bm.MABOMON = gv.MABOMON and bm.MABOMON = ?",
-      [MABOMON]
-    );
-    return {
-      EM: "Cập nhật trạng thái tài khoản thành công",
-      EC: 1,
-      DT: results0,
-    };
+
+    if (isOpenGetAllApiGV) {
+      let [results0, fields0] = await pool.execute(
+        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
+      );
+      return {
+        EM: "Cập nhật trạng thái tài khoản thành công",
+        EC: 1,
+        DT: results0,
+      };
+    } else {
+      let [results0, fields0] = await pool.execute(
+        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",
+        [MABOMON]
+      );
+      return {
+        EM: "Cập nhật trạng thái tài khoản thành công",
+        EC: 1,
+        DT: results0,
+      };
+    }
   } catch (error) {
     console.log(error);
     return {
@@ -139,7 +154,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
     //console.log("MAGV >>>>>", MAGV);
     //console.log("dataGiangVien >>>>>", dataGiangVien);
 
-    let KiemTra_MAGV = await timGiangVien_MAGV(MAGV)
+    let KiemTra_MAGV = await timGiangVien_MAGV(MAGV);
     //console.log("KiemTra_MAGV >>>>>", KiemTra_MAGV);
     if (!KiemTra_MAGV.length > 0) {
       return {

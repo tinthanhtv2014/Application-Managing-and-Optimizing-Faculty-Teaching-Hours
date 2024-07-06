@@ -172,6 +172,7 @@ const ComponenCreateGiangVien = () => {
 
   const handleChoseRowBM = async (bomon) => {
     setDisableGV(false);
+
     setMaBoMon(bomon);
     setActiveRowBM(bomon);
 
@@ -210,7 +211,7 @@ const ComponenCreateGiangVien = () => {
   const handleChoseEditBM = (bomon) => {
     setTenBoMon(bomon.TENBOMON);
     setMaBoMon(bomon.MABOMON);
-    setIsOpenEditButtonBM(true);
+    // setIsOpenEditButtonBM(true);
   };
 
   // GiangVien
@@ -278,7 +279,7 @@ const ComponenCreateGiangVien = () => {
 
   const handleChoseEditGiangVien = async (giangvien) => {
     // console.log("check");
-    setMaGV(giangvien.MAGV);
+    // setMaGV(giangvien.MAGV);
     let Trangthai;
 
     if (giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động") {
@@ -287,22 +288,46 @@ const ComponenCreateGiangVien = () => {
       Trangthai = "Đang hoạt động";
     }
 
-    await functionUpdateTrangThaiGV(giangvien.MAGV, Trangthai);
+    await functionUpdateTrangThaiGV(
+      giangvien.MAGV,
+      Trangthai,
+      giangvien.MABOMON
+    );
   };
 
-  const functionUpdateTrangThaiGV = async (MaGV, TrangThai) => {
-    try {
-      const response = await CookiesAxios.put(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
-        {
-          TRANGTHAITAIKHOAN: TrangThai,
-          MABOMON: MaBoMon,
-        }
-      );
-      //   console.log(response.data.DT);
-      setdataListGiangVien(response.data.DT);
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+  const functionUpdateTrangThaiGV = async (MaGV, TrangThai, MABOMON) => {
+    if (isOpenGetAllApiGV) {
+      try {
+        const response = await CookiesAxios.put(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
+          {
+            TRANGTHAITAIKHOAN: TrangThai,
+            MABOMON: MABOMON,
+            isOpenGetAllApiGV: isOpenGetAllApiGV,
+          }
+        );
+        console.log(response.data);
+
+        setdataListGiangVien(response.data.DT);
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      }
+    } else {
+      try {
+        const response = await CookiesAxios.put(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
+          {
+            TRANGTHAITAIKHOAN: TrangThai,
+            MABOMON: MABOMON,
+            isOpenGetAllApiGV: isOpenGetAllApiGV,
+          }
+        );
+        console.log(response.data);
+
+        setdataListGiangVien(response.data.DT);
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      }
     }
   };
 
@@ -376,7 +401,7 @@ const ComponenCreateGiangVien = () => {
         );
         console.log(response.data);
         setdataListGiangVien(response.data.DT);
-        setisOpenGetAllApiGV(false);
+
         toast.success("Lecturer information updated successfully");
         handleCloseUpdateModal();
       } catch (error) {
@@ -387,7 +412,7 @@ const ComponenCreateGiangVien = () => {
       toast.error("Email bị lỗi");
     }
   };
-
+  console.log("check API ALL +> ", isOpenGetAllApiGV);
   return (
     <Container>
       {" "}
@@ -546,14 +571,19 @@ const ComponenCreateGiangVien = () => {
             handleShowUpdateModal={handleShowUpdateModal}
           />
         </Col>{" "}
-        <UpdateGiangVienModal
-          dataListChucDanhGiangVien={dataListChucDanhGiangVien}
-          dataListChucVuGiangVien={dataListChucVuGiangVien}
-          show={showUpdateModal}
-          handleClose={handleCloseUpdateModal}
-          lecturerData={selectedLecturer}
-          updateLecturer={updateLecturer}
-        />
+        <Row>
+          <Col>
+            <UpdateGiangVienModal
+              dataListChucDanhGiangVien={dataListChucDanhGiangVien}
+              dataListChucVuGiangVien={dataListChucVuGiangVien}
+              show={showUpdateModal}
+              handleClose={handleCloseUpdateModal}
+              lecturerData={selectedLecturer}
+              updateLecturer={updateLecturer}
+              isOpenGetAllApiGV={isOpenGetAllApiGV}
+            />
+          </Col>
+        </Row>
       </Row>
     </Container>
   );

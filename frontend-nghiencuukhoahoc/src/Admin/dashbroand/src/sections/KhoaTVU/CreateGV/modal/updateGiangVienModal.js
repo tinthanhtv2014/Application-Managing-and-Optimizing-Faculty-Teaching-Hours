@@ -1,12 +1,20 @@
-// UpdateGiangVienModal.js
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  TextField,
+  Typography,
+  createTheme,
+} from "@mui/material";
 import { toast } from "react-toastify";
+import "../components/KhoaList.scss";
+import "./updateGiangVienModal.scss";
+
 const UpdateGiangVienModal = ({
   show,
   handleClose,
@@ -14,21 +22,21 @@ const UpdateGiangVienModal = ({
   updateLecturer,
   dataListChucVuGiangVien,
   dataListChucDanhGiangVien,
+  isOpenGetAllApiGV,
 }) => {
   const [tenGV, setTenGV] = useState();
   const [tenDangNhapGV, setTenDangNhapGV] = useState();
   const [SodienthoaiGV, setSodienthoaiGV] = useState();
-
   const [diaChiGiangVien, setdiaChiGiangVien] = useState();
   const [chucVuGiangVien, setchucVuGiangVien] = useState();
   const [ChucDanhGiangVien, setChucDanhGiangVien] = useState();
   const [PhanQuyenGiangVien, setPhanQuyenGiangVien] = useState();
   const [TenBoMon, setTenBoMon] = useState();
   const [TrangThaiDangNhap, setTrangThaiDangNhap] = useState();
+
   useEffect(() => {
     if (lecturerData) {
       setTenGV(lecturerData.TENGV);
-
       setTenDangNhapGV(lecturerData.TENDANGNHAP);
       setdiaChiGiangVien(lecturerData.DIACHI);
       setSodienthoaiGV(lecturerData.DIENTHOAI);
@@ -37,20 +45,15 @@ const UpdateGiangVienModal = ({
       setPhanQuyenGiangVien(lecturerData.PHANQUYEN);
       setTenBoMon(lecturerData.TENBOMON);
       setTrangThaiDangNhap(lecturerData.TRANGTHAITAIKHOAN);
-      //   console.log("check UseEffect");
-      toast.success("oke");
+      toast.success("Dữ liệu giảng viên đã được tải.");
     } else {
-      toast.error("bug");
+      toast.error("Không có dữ liệu giảng viên.");
     }
   }, [lecturerData]);
-  //  console.log("show", show);
-  //console.log("lecturerData", lecturerData);
-  // console.log("updateLecturer", updateLecturer);
-  // console.log("ChucdanhGV", ChucDanhGiangVien);
+
   const handleUpdate = (e) => {
     e.preventDefault();
     const updatedData = {
-      //   ...lecturerData,
       TENGV: tenGV,
       DIACHI: diaChiGiangVien,
       DIENTHOAI: SodienthoaiGV,
@@ -60,142 +63,138 @@ const UpdateGiangVienModal = ({
       TENDANGNHAP: tenDangNhapGV,
       TENBOMON: TenBoMon,
       TRANGTHAITAIKHOAN: TrangThaiDangNhap,
+      isOpenGetAllApiGV: isOpenGetAllApiGV,
     };
-    console.log("check ", updatedData);
     updateLecturer(updatedData);
   };
 
-  //console.log("tenGV:", tenGV);
-  //console.log("tenDangNhapGV:", tenDangNhapGV);
-  //console.log("SodienthoaiGV:", SodienthoaiGV);
-  //console.log("chucVuGiangVien:", chucVuGiangVien);
-  //console.log("ChucDanhGiangVien:", ChucDanhGiangVien);
-  // console.log("PhanQuyenGiangVien:", PhanQuyenGiangVien);
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Update Lecturer Information</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleUpdate}>
-          <Form.Group controlId="formTenDangNhap">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="text"
-              title="Email không thể thay đổi"
+    <Modal
+      open={show}
+      onClose={handleClose}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          boxShadow: 100,
+          p: 4,
+          borderRadius: 2,
+          width: {
+            xs: "90%", // Width for extra small screens
+            sm: "70%", // Width for small screens
+            md: "50%", // Width for medium and up screens
+          },
+        }}
+        className="modal-updateGV"
+      >
+        <Typography variant="h6" component="h2" gutterBottom>
+          Thay Đổi Thông Tin Giảng Viên
+        </Typography>
+        <form onSubmit={handleUpdate}>
+          <FormControl fullWidth margin="normal">
+            <TextField
+              label="Email"
               value={tenDangNhapGV}
               disabled
+              variant="outlined"
+              className="height-selectGV"
             />
-          </Form.Group>
-          <Form.Group controlId="formTenGV">
-            <Form.Label>Tên Giảng Viên</Form.Label>
-            <Form.Control
-              type="text"
-              title="Bạn có thể thay đổi tên Giảng Viên"
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <TextField
+              label="Tên Giảng Viên"
               value={tenGV}
               onChange={(e) => setTenGV(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
             />
-          </Form.Group>
-
-          <Box sx={{ maxWidth: 200 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Tên Chức Vụ</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                title="Bạn có thể thay đổi tên chức vụ giảng viên"
-                id="demo-simple-select"
-                value={chucVuGiangVien}
-                label="Trạng Thái"
-                className="height-selectGV"
-                onChange={(e) => setchucVuGiangVien(e.target.value)}
-              >
-                {dataListChucVuGiangVien &&
-                dataListChucVuGiangVien.length > 0 ? (
-                  dataListChucVuGiangVien.map((chucvu, index) => (
-                    <MenuItem key={index} value={chucvu.TENCHUCVU}>
-                      {chucvu.TENCHUCVU}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled>Chưc danh không có</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box sx={{ maxWidth: 200 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Tên Chức Danh
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                title="Bạn có thể thay đổi chức danh giảng viên"
-                id="demo-simple-select"
-                value={ChucDanhGiangVien}
-                label="Trạng Thái"
-                className="height-selectGV"
-                onChange={(e) => setChucDanhGiangVien(e.target.value)}
-              >
-                {dataListChucDanhGiangVien &&
-                dataListChucDanhGiangVien.length > 0 ? (
-                  dataListChucDanhGiangVien.map((chucdanh, index) => (
-                    <MenuItem key={index} value={chucdanh.TENCHUCDANH}>
-                      {chucdanh.TENCHUCDANH}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled>Chưc danh không có</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Form.Group controlId="formTrangThaiGV">
-            <Form.Label>Số Điện Thoại</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter status"
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="chuc-vu-label">Tên Chức Vụ</InputLabel>
+            <Select
+              labelId="chuc-vu-label"
+              value={chucVuGiangVien}
+              onChange={(e) => setchucVuGiangVien(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
+              label="Tên Chức Vụ"
+            >
+              {dataListChucVuGiangVien && dataListChucVuGiangVien.length > 0 ? (
+                dataListChucVuGiangVien.map((chucvu, index) => (
+                  <MenuItem key={index} value={chucvu.TENCHUCVU}>
+                    {chucvu.TENCHUCVU}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled>Chức vụ không có</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
+            <Select
+              labelId="chuc-danh-label"
+              value={ChucDanhGiangVien}
+              onChange={(e) => setChucDanhGiangVien(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
+              label="Tên Chức Danh"
+            >
+              {dataListChucDanhGiangVien &&
+              dataListChucDanhGiangVien.length > 0 ? (
+                dataListChucDanhGiangVien.map((chucdanh, index) => (
+                  <MenuItem key={index} value={chucdanh.TENCHUCDANH}>
+                    {chucdanh.TENCHUCDANH}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled>Chức danh không có</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <TextField
+              label="Số Điện Thoại"
               value={SodienthoaiGV}
-              title="Bạn có thể thay đổi số điện thoại giảng viên"
               onChange={(e) => setSodienthoaiGV(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
             />
-          </Form.Group>
-          <Form.Group controlId="formTrangThaiGV">
-            <Form.Label>Địa chỉ</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter status"
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <TextField
+              label="Địa chỉ"
               value={diaChiGiangVien}
-              title="Bạn có thể thay đổi địa chỉ giảng viên"
               onChange={(e) => setdiaChiGiangVien(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
             />
-          </Form.Group>
-          <Box sx={{ maxWidth: 200 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Phân Quyền</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                title="Thay đổi quyền hạn tài khoản giảng viên"
-                id="demo-simple-select"
-                value={PhanQuyenGiangVien}
-                label={PhanQuyenGiangVien}
-                className="height-selectGV"
-                onChange={(e) => setPhanQuyenGiangVien(e.target.value)}
-              >
-                <MenuItem value="Admin">Admin</MenuItem>
-                <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
-                <MenuItem value="Trưởng Bộ Môn">Trưởng Bộ Môn</MenuItem>
-                <MenuItem value="Giảng viên">Giảng viên</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Button variant="primary" type="submit">
-            Update
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="phan-quyen-label">Phân Quyền</InputLabel>
+            <Select
+              labelId="phan-quyen-label"
+              value={PhanQuyenGiangVien}
+              onChange={(e) => setPhanQuyenGiangVien(e.target.value)}
+              variant="outlined"
+              className="height-selectGV"
+              label="Phân Quyền"
+            >
+              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
+              <MenuItem value="Trưởng Bộ Môn">Trưởng Bộ Môn</MenuItem>
+              <MenuItem value="Giảng viên">Giảng viên</MenuItem>
+            </Select>
+          </FormControl>
+          <Button variant="contained" type="submit" className="mt-2">
+            Cập Nhật Thông Tin
           </Button>
-        </Form>
-      </Modal.Body>
+        </form>
+      </Box>
     </Modal>
   );
 };

@@ -77,13 +77,16 @@ const createGiangVienControler = async (req, res) => {
 const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
   try {
     //api này dùng để đình chỉ hoạt động của 1 tài khoản
-    const { TRANGTHAITAIKHOAN, MABOMON } = req.body;
+    const { TRANGTHAITAIKHOAN, MABOMON, isOpenGetAllApiGV } = req.body;
     const MAGV = req.params.MAGV;
-    console.log(req.body);
+    console.log(MAGV);
+    console.log(TRANGTHAITAIKHOAN);
+    console.log(MABOMON);
     let results = await updateTrangThaiTaiKhoanGiangVien(
       MAGV,
       TRANGTHAITAIKHOAN,
-      MABOMON
+      MABOMON,
+      isOpenGetAllApiGV
     );
 
     return res.status(200).json({
