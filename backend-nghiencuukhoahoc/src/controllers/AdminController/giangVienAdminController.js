@@ -127,6 +127,7 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
     let aaa = req.params;
     console.log("aaa >>>>>>>>", aaa);
     let dataGiangVien = req.body;
+    console.log("dataGiangVien controler >>>>>>>>>>>>>>>", dataGiangVien);
     let results = await update_ChucVu_ChucDanh_GiangVien(dataGiangVien);
 
     return res.status(200).json({
