@@ -5,7 +5,7 @@ const salt = bcrypt.genSaltSync(saltRounds);
 const { createJWT } = require("../../middlewares/JWTAction");
 
 const { selectBomon_TENBOMON } = require("./CRUDBomon");
-const { timGiangVien } = require("./CRUDGiangvien");
+
 const { selectChucdanh_TENCHUCDANH } = require("./CRUDChucdanh");
 const { selectChucvu_TENCHUCVU } = require("./CRUDChucVu");
 
@@ -219,7 +219,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
         !dataTaiKhoanExcelArray[i].TENDANGNHAP ||
         !dataTaiKhoanExcelArray[i].MAGV ||
         !dataTaiKhoanExcelArray[i].TENBOMON ||
-        !dataTaiKhoanExcelArray[i].TENCHUCDANH
+        !dataTaiKhoanExcelArray[i].TENGV
       ) {
         return {
           EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
@@ -246,8 +246,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       const kiemtraTENBOMON = await selectBomon_TENBOMON(
         dataTaiKhoanExcelArray[i].TENBOMON
       );
-      // console.log("<<<<<<<<<<", kiemtraTENBOMON, "  i= ", i);
-      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+
       if (!kiemtraTENBOMON.DT || !kiemtraTENBOMON.DT.MABOMON) {
         return {
           EM: `Dòng số ${i} Bộ môn <${dataTaiKhoanExcelArray[i].TENBOMON}> không tồn tại`,
@@ -256,7 +255,10 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
         };
       }
 
-      let kiemtraMAGV = await timGiangVien(dataTaiKhoanExcelArray[i].MAGV);
+      let [kiemtraMAGV, fields1] = await pool.execute(
+        `SELECT * FROM giangvien WHERE MAGV = ?`,
+        [dataTaiKhoanExcelArray[i].MAGV]
+      );
       if (kiemtraMAGV.length > 0) {
         return {
           EM: `Dòng ${i} Giảng viên ${dataTaiKhoanExcelArray[i].MAGV} đã tồn tại`,
@@ -266,32 +268,32 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       }
 
       //kiểm tra chức danh
-      const kiemtraTENCHUCDANH = await selectChucdanh_TENCHUCDANH(
-        dataTaiKhoanExcelArray[i].TENCHUCDANH
-      );
+      // const kiemtraTENCHUCDANH = await selectChucdanh_TENCHUCDANH(
+      //   dataTaiKhoanExcelArray[i].TENCHUCDANH
+      // );
 
-      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
-      if (!kiemtraTENCHUCDANH.DT || !kiemtraTENCHUCDANH.DT.MACHUCDANH) {
-        return {
-          EM: `Dòng số ${i} tên chức danh <${dataTaiKhoanExcelArray[i].TENCHUCDANH}> không tồn tại`,
-          EC: 0,
-          DT: [],
-        };
-      }
+      // // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      // if (!kiemtraTENCHUCDANH.DT || !kiemtraTENCHUCDANH.DT.MACHUCDANH) {
+      //   return {
+      //     EM: `Dòng số ${i} tên chức danh <${dataTaiKhoanExcelArray[i].TENCHUCDANH}> không tồn tại`,
+      //     EC: 0,
+      //     DT: [],
+      //   };
+      // }
 
       //kiểm tra chức vụ
-      const kiemtraTENCHUCVU = await selectChucvu_TENCHUCVU(
-        dataTaiKhoanExcelArray[i].TENCHUCVU
-      );
+      //   const kiemtraTENCHUCVU = await selectChucvu_TENCHUCVU(
+      //     dataTaiKhoanExcelArray[i].TENCHUCVU
+      //   );
 
-      // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
-      if (!kiemtraTENCHUCVU.DT || !kiemtraTENCHUCVU.DT.MACHUCVU) {
-        return {
-          EM: `Dòng số ${i} tên chức dvụ <${dataTaiKhoanExcelArray[i].TENCHUCVU}> không tồn tại`,
-          EC: 0,
-          DT: [],
-        };
-      }
+      //   // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      //   if (!kiemtraTENCHUCVU.DT || !kiemtraTENCHUCVU.DT.MACHUCVU) {
+      //     return {
+      //       EM: `Dòng số ${i} tên chức dvụ <${dataTaiKhoanExcelArray[i].TENCHUCVU}> không tồn tại`,
+      //       EC: 0,
+      //       DT: [],
+      //     };
+      //   }
     }
 
     // Bắt đầu tạo tài khoản
@@ -306,10 +308,14 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       const timMACHUCVU = await selectChucvu_TENCHUCVU(
         dataTaiKhoanExcelArray[i].TENCHUCVU
       );
-      // console.log("<<<<<<<<<<", timMABOMON.DT.MABOMON);
+
       await pool.execute(
-        `INSERT INTO giangvien (MAGV, MABOMON) VALUES (?, ?)`,
-        [dataTaiKhoanExcelArray[i].MAGV, timMABOMON.DT.MABOMON]
+        `INSERT INTO giangvien (MAGV, MABOMON,TENGV) VALUES (?, ?,?)`,
+        [
+          dataTaiKhoanExcelArray[i].MAGV,
+          timMABOMON.DT.MABOMON,
+          dataTaiKhoanExcelArray[i].TENGV,
+        ]
       );
 
       // Tạo tài khoản mới
@@ -322,19 +328,25 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
           dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
         ]
       );
-      await pool.execute(
-        `INSERT INTO co_chuc_danh (MACHUCDANH, MAGV,  TRANGTHAI) VALUES (?, ?,  ?)`,
-        [
-          timMACHUCDANH.DT.MACHUCDANH,
-          dataTaiKhoanExcelArray[i].MAGV,
+      // await pool.execute(
+      //   `INSERT INTO co_chuc_danh (MACHUCDANH, MAGV,  TRANGTHAI) VALUES (?, ?,  ?)`,
+      //   [
+      //     timMACHUCDANH.DT.MACHUCDANH,
+      //     dataTaiKhoanExcelArray[i].MAGV,
 
-          dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
-        ]
-      );
-      await pool.execute(
-        `INSERT INTO giu_chuc_vu (MAGV,MACHUCVU ) VALUES (?, ?)`,
-        [dataTaiKhoanExcelArray[i].MAGV, timMACHUCVU.DT.MACHUCVU]
-      );
+      //     dataTaiKhoanExcelArray[i].TRANGTHAITAIKHOAN,
+      //   ]
+      // );
+
+      if (dataTaiKhoanExcelArray[i].TENCHUCVU) {
+        await pool.execute(
+          `INSERT INTO giu_chuc_vu (MAGV,MACHUCVU ) VALUES (?, ?)`,
+          [dataTaiKhoanExcelArray[i].MAGV, timMACHUCVU.DT.MACHUCVU]
+        );
+      } else {
+        continue;
+      }
+
       results.push({
         EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
         EC: 0,
