@@ -193,10 +193,14 @@ const GiangVienList = ({
                   <i
                     title={
                       giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                        ? "Ngưng hoạt động"
-                        : "Đang hoạt động"
+                        ? "Đang hoạt động"
+                        : " Ngưng hoạt động"
                     }
-                    className="fa-solid fa-pen-to-square table-row-icon-edit"
+                    className={
+                      giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                        ? "fa-solid fa-check text-success"
+                        : "fa-solid fa-xmark text-danger"
+                    }
                     onClick={(e) => {
                       e.stopPropagation();
                       handleChoseEditGiangVien(giangvien);
