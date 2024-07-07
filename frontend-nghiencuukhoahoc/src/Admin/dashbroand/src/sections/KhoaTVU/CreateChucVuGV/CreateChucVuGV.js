@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Container, Row, Col, Table } from "react-bootstrap";
-
+import "./CreateChucVuGV.scss";
 const CreateChucvuChucdanh = () => {
   const [tenChucvu, setTenchucvu] = useState("");
   const [machucvu, setMachucvu] = useState("");
@@ -105,8 +105,8 @@ const CreateChucvuChucdanh = () => {
   };
 
   const handleOFFmodel = async () => {
-    setTenchucvu(null);
-    setTenchucdanh(null);
+    setTenchucvu("");
+    setTenchucdanh("");
   };
 
   //hàm userEffect
@@ -122,14 +122,14 @@ const CreateChucvuChucdanh = () => {
         <Col md={6}>
           <h2>Tạo Chức Vụ Cho Giảng Viên</h2>
           <Form onSubmit={handleSubmitchucvu}>
-            <Form.Label>
+            <Form.Label className="tieude">
               {" "}
               "Đây là chức năng thêm chức vụ mới dành cho hệ thống, và phải cân
               nhắc khi thêm vào hệ thống, chức năng này cần phải có sự cho phép
               chỉ đạo của các chức vụ cấp cao".
             </Form.Label>
             <Form.Group controlId="formDepartmentName" className="mb-3">
-              <Form.Label>Tên Chức vụ</Form.Label>
+              <Form.Label className="tenchucvuchucdanh">Tên Chức vụ</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Hãy Nhập Tên Của Chức vụ Mới "
@@ -144,7 +144,12 @@ const CreateChucvuChucdanh = () => {
             </Button>
             {tenChucvu && tenChucvu.length > 0 && (
               <>
-                <Button onClick={() => handleUPDATEChucvu()}>sửa</Button>
+                <Button
+                  className="btn-space mx-2"
+                  onClick={() => handleUPDATEChucvu()}
+                >
+                  sửa
+                </Button>
 
                 <Button onClick={() => handleOFFmodel()}>tắt</Button>
               </>
@@ -168,13 +173,13 @@ const CreateChucvuChucdanh = () => {
                     <td>{chucvu.TENCHUCVU}</td>
                     <td>
                       <i
-                        className="table-row-icon fa-solid fa-trash"
+                        className="table-row-icon fa-solid fa-trash delete-btn"
                         onClick={() => handleDeleteChucvu(chucvu.MACHUCVU)}
                       ></i>
                     </td>
                     <td>
                       <i
-                        className="table-row-icon-edit fa-solid fa-pen-to-square"
+                        className="table-row-icon-edit fa-solid fa-pen-to-square edit-btn"
                         onClick={() => handleUpdateChucvu(chucvu)}
                       ></i>
                     </td>
@@ -191,14 +196,16 @@ const CreateChucvuChucdanh = () => {
         <Col md={6}>
           <h2>Tạo chức Danh Cho Giảng Viên</h2>
           <Form onSubmit={handleSubmitchucdanh}>
-            <Form.Label>
+            <Form.Label className="tieude">
               {" "}
               "Đây là chức năng thêm chức danh mới dành cho hệ thống, và phải
               cân nhắc khi thêm vào hệ thống, chức năng này cần phải có sự cho
               phép chỉ đạo của các chức vụ cấp cao".
             </Form.Label>
             <Form.Group controlId="formDepartmentName" className="mb-3">
-              <Form.Label>Tên Chức Danh</Form.Label>
+              <Form.Label className="tenchucvuchucdanh">
+                Tên Chức Danh
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Hãy Nhập Tên Của Chức Danh Mới "
@@ -213,7 +220,12 @@ const CreateChucvuChucdanh = () => {
             </Button>
             {tenChucdanh && tenChucdanh.length > 0 && (
               <>
-                <Button onClick={() => handleUPDATEChucdanh()}>sửa</Button>
+                <Button
+                  className="btn-space mx-2"
+                  onClick={() => handleUPDATEChucdanh()}
+                >
+                  sửa
+                </Button>
 
                 <Button onClick={() => handleOFFmodel()}>tắt</Button>
               </>
@@ -221,13 +233,13 @@ const CreateChucvuChucdanh = () => {
           </Form>
         </Col>
         <Col md={6}>
-          <h2>Thông tin Chức vụ hiện tại</h2>
+          <h2>Thông tin Chức danh hiện tại</h2>
           {datachucdanh && datachucdanh.length > 0 ? (
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Mã Chức Vụ</th>
-                  <th>Tên Chức Vụ</th>
+                  <th>Mã Chức Danh</th>
+                  <th>Tên Chức Danh</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,7 +249,7 @@ const CreateChucvuChucdanh = () => {
                     <td>{chucdanh.TENCHUCDANH}</td>
                     <td>
                       <i
-                        className="table-row-icon fa-solid fa-trash"
+                        className="table-row-icon fa-solid fa-trash delete-btn"
                         onClick={() =>
                           handleDeleteChucdanh(chucdanh.MACHUCDANH)
                         }
@@ -245,7 +257,7 @@ const CreateChucvuChucdanh = () => {
                     </td>
                     <td>
                       <i
-                        className="table-row-icon-edit fa-solid fa-pen-to-square"
+                        className="table-row-icon-edit fa-solid fa-pen-to-square edit-btn"
                         onClick={() => handleUpdateChucdanh(chucdanh)}
                       ></i>
                     </td>
