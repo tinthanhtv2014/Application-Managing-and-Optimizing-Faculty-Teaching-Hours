@@ -314,6 +314,50 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
   }
 };
 
+const updateGIANGVIEN = async (datagiangvien) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      "select * from taikhoan where TENDANGNHAP = ?",
+      [tenDangnhap]
+    );
+    console.log(results1);
+    if (results1.length > 0) {
+      const isCorrectPass = await bcrypt.compare(
+        matKhaucu,
+        results1[0].MATKHAU
+      );
+      if (isCorrectPass) {
+        let hashpass = await hashPassword(matkhaumoi);
+        let [results, fields] = await pool.execute(
+          `UPDATE taikhoan SET MATKHAU = ?, PHANQUYEN = ?, TRANGTHAI = ? WHERE TENDANGNHAP = ?`,
+          [hashpass, phanQuyen, trangThai, tenDangnhap]
+        );
+        return {
+          EM: "update thành công",
+          EC: 0,
+          DT: [],
+        };
+      }
+      return {
+        EM: "mật khẩu cũ không khớp không thể update",
+        EC: 0,
+        DT: [],
+      };
+    }
+    return {
+      EM: "tài khoản không tồn tại",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    return {
+      EM: "lỗi services createTaiKhoan",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   selectGiangVien,
   selectOnlyGiangVien,
