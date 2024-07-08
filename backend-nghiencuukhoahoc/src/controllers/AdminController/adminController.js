@@ -113,6 +113,7 @@ const createTaiKhoanExcelController = async (req, res) => {
     });
   }
 };
+
 const createTaiKhoanOnlyController = async (req, res) => {
   // tạo tài khoản thôi
   try {
@@ -133,6 +134,7 @@ const createTaiKhoanOnlyController = async (req, res) => {
     });
   }
 };
+
 const updateTaiKhoanController = async (req, res) => {
   try {
     const tendangnhap = req.params.tenDangNhap;
@@ -154,6 +156,7 @@ const updateTaiKhoanController = async (req, res) => {
     console.log(error);
   }
 };
+
 //login với tài khoản và mật khẩu
 const loginTaikhoanAdminController = async (req, res) => {
   try {
@@ -175,6 +178,7 @@ const loginTaikhoanAdminController = async (req, res) => {
     console.log(error);
   }
 };
+
 //login với email từ google
 const loginTaikhoanGOOGLEController = async (req, res) => {
   console.log(req.body.tendangnhap);
