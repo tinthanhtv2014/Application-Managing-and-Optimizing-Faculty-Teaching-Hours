@@ -12,6 +12,7 @@ import AdminCreate from '../sections/Admincreate/AdminCreate';
 
 
 
+const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
 const CreateChucVuGV = lazy(() => import('../sections/KhoaTVU/CreateChucVuGV/CreateChucVuGV'));
 const CreateGV = lazy(() => import('../sections/KhoaTVU/CreateGV/CreateGV'));
 const CreateBM = lazy(() => import('../sections/KhoaTVU/CreateBM/CreateBM'));
@@ -192,6 +193,15 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <CreateKhoa />
+          </Suspense>
+        </DashboardLayout>
+      )
+    }, {
+      path: '/account-giangvien', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <AccountGV />
           </Suspense>
         </DashboardLayout>
       )

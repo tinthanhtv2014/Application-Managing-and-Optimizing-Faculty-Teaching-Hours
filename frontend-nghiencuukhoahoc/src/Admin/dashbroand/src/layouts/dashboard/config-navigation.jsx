@@ -49,6 +49,11 @@ const navConfig = [
     path: '/excel',
     icon: icon('ic_blog'),
   },
+  {
+    title: 'Account',
+    path: '/account-giangvien',
+    icon: icon('ic_blog'),
+  },
   // {
   //   title: 'login',
   //   path: '/login',
