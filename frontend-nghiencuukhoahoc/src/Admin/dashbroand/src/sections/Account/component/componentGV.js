@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Container, Button } from "react-bootstrap";
+import { Card, Row, Col, Container, Button, Toast } from "react-bootstrap";
 import {
   Avatar,
   Typography,
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../component/componentGV.scss";
+import { toast } from "react-toastify";
 
 const GiangVienProfile = ({ giangVien }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -26,16 +27,21 @@ const GiangVienProfile = ({ giangVien }) => {
     setIsEditing(false);
   };
   const handleSaveClick = async () => {
+    console.log("check ten dang nhap", editData.TENDANGNHAP);
+
     try {
-      const response = await axios.post(
-        "/api/v1/admin/giangvien/update",
+      const response = await axios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/sua/thongtin/${editData.TENDANGNHAP}`,
         editData
       );
+      console.log("Check", response.data.DT[0]);
       if (response.data.EC === 1) {
         setIsEditing(false);
+        toast.success("Chỉnh sửa thông tin thành công");
+        setEditData(response.data.DT[0]);
       } else {
         // handle error
-        alert(response.data.EM);
+        toast.error("Chỉnh sửa thông tin thất bại");
       }
     } catch (error) {
       console.error("Error updating giangVien data:", error);
