@@ -6,7 +6,7 @@ const router = express.Router();
 const {
   getAllGiangVien,
   getOnlyGiangVienbyBoMon,
-
+  getOnlyGiangVienbyTENDANGNHAP,
   createGiangVienControler,
 
   updateGiangVienController,
@@ -35,6 +35,7 @@ const CRUDGiangVien = (app) => {
   router.get("/xem", getAllGiangVien);
 
   router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
+  router.get("/only/xemprofile/:TENDANGNHAP", getOnlyGiangVienbyTENDANGNHAP);
 
   router.post("/tao", createGiangVienControler);
 

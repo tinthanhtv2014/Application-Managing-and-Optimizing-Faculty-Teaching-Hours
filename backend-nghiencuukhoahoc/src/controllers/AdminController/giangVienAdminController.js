@@ -1,7 +1,7 @@
 const {
   selectGiangVien,
   selectOnlyGiangVien,
-
+  selectOnlyGiangVienByTenDangNhap,
   createGiangVien,
 
   updateGiangVien,
@@ -17,6 +17,27 @@ const {
 const getAllGiangVien = async (req, res) => {
   try {
     let results = await selectGiangVien();
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
+  try {
+    const TENDANGNHAP = req.params.TENDANGNHAP;
+    console.log("CHECK", TENDANGNHAP);
+    let results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
 
     return res.status(200).json({
       EM: results.EM,
@@ -175,7 +196,7 @@ const deleteGiangVienController = async (req, res) => {
 module.exports = {
   getAllGiangVien,
   getOnlyGiangVienbyBoMon,
-
+  getOnlyGiangVienbyTENDANGNHAP,
   createGiangVienControler,
 
   updateGiangVienController,

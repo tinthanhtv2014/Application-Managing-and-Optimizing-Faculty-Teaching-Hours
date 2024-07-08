@@ -12,37 +12,54 @@ const GiangVienProfile = ({ giangVien }) => {
           <Card className="giang-vien-profile">
             <Card.Header className="d-flex align-items-center CardHeader-profile-avt">
               <Avatar className="profile-avatar" src={giangVien.avatar}>
-                {giangVien.ten.charAt(0)}
+                {/* {giangVien.TENGV.charAt(0)} */}
               </Avatar>
               <div className="ms-3 container-profile-avt-name">
                 {" "}
-                <Typography variant="h6">{giangVien.ten}</Typography>{" "}
-                <p className="profile-gv-avt-cv">Admin</p>{" "}
-                <p className="">bộ Môn Công Nghệ Thông Tin</p>
+                <Typography variant="h6">
+                  {" "}
+                  {giangVien.TENGV ? giangVien.TENGV : "Chưa cập nhật"}
+                </Typography>{" "}
+                <p className="profile-gv-avt-cv">
+                  {" "}
+                  {giangVien.PHANQUYEN ? giangVien.PHANQUYEN : "Chưa cập nhật"}
+                </p>{" "}
+                <p className="">
+                  {" "}
+                  {giangVien.TENBOMON ? giangVien.TENBOMON : "Chưa cập nhật"}
+                </p>
               </div>
             </Card.Header>
             <Card.Body className="profile-details">
               <Row className="mb-3">
                 <Col xs={12} sm={6}>
                   <Typography variant="body1">
-                    <strong>Email:</strong> {giangVien.email}
+                    <strong>Email:</strong>{" "}
+                    {giangVien.TENDANGNHAP
+                      ? giangVien.TENDANGNHAP
+                      : "Chưa cập nhật"}
                   </Typography>
                 </Col>
                 <Col xs={12} sm={6}>
                   <Typography variant="body1">
-                    <strong>Điện thoại:</strong> {giangVien.dienThoai}
+                    <strong>Điện thoại:</strong>{" "}
+                    {giangVien.DIENTHOAI
+                      ? giangVien.DIENTHOAI
+                      : "Chưa cập nhật"}
                   </Typography>
                 </Col>
               </Row>
               <Row className="mb-3">
                 <Col xs={12} sm={6}>
                   <Typography variant="body1">
-                    <strong>Địa chỉ:</strong> {giangVien.diaChi}
+                    <strong>Địa chỉ:</strong>{" "}
+                    {giangVien.DIACHI ? giangVien.DIACHI : "Chưa cập nhật"}
                   </Typography>
                 </Col>
                 <Col xs={12} sm={6}>
                   <Typography variant="body1">
-                    <strong>Bộ môn:</strong> {giangVien.boMon}
+                    <strong>Bộ môn:</strong>{" "}
+                    {giangVien.TENBOMON ? giangVien.TENBOMON : "Chưa cập nhật"}
                   </Typography>
                 </Col>
               </Row>
@@ -50,7 +67,9 @@ const GiangVienProfile = ({ giangVien }) => {
                 <Col xs={12}>
                   <Typography variant="body1">
                     <strong>Trạng thái tài khoản:</strong>{" "}
-                    {giangVien.trangThaiTaiKhoan}
+                    {giangVien.TRANGTHAITAIKHOAN
+                      ? giangVien.TRANGTHAITAIKHOAN
+                      : "Chưa cập nhật"}
                   </Typography>
                 </Col>
               </Row>

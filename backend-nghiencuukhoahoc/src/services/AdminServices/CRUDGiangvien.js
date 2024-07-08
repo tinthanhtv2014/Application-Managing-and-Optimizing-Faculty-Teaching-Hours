@@ -31,6 +31,65 @@ const selectGiangVien = async () => {
   }
 };
 
+const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
+  console.log("CHECK1", TENDANGNHAP);
+
+  if (!TENDANGNHAP) {
+    console.error("Tên đăng nhập không được truyền vào.");
+    return {
+      EM: "Tên đăng nhập không được truyền vào.",
+      EC: -1,
+      DT: [],
+    };
+  }
+
+  try {
+    let [results, fields] = await pool.execute(
+      `SELECT 
+        TK.TENDANGNHAP,
+        GV.TENGV, 
+        CV.TENCHUCVU, 
+        CD.TENCHUCDANH, 
+        GV.DIENTHOAI, 
+        GV.DIACHI, 
+        BM.TENBOMON, 
+        TK.PHANQUYEN, 
+        TK.TRANGTHAITAIKHOAN
+      FROM 
+        taikhoan AS TK
+      LEFT JOIN 
+        giangvien AS GV ON TK.MAGV = GV.MAGV
+      LEFT JOIN 
+        giu_chuc_vu AS GCV ON GV.MAGV = GCV.MAGV
+      LEFT JOIN 
+        chucvu AS CV ON GCV.MACHUCVU = CV.MACHUCVU
+      LEFT JOIN 
+        co_chuc_danh AS CCD ON GV.MAGV = CCD.MAGV
+      LEFT JOIN 
+        chucdanh AS CD ON CCD.MACHUCDANH = CD.MACHUCDANH
+      LEFT JOIN 
+        bomon AS BM ON GV.MABOMON = BM.MABOMON
+      WHERE 
+        TK.TENDANGNHAP = ?;`,
+      [TENDANGNHAP]
+    );
+
+    console.log(results[0]);
+    return {
+      EM: "Xem thông tin giảng viên thành công",
+      EC: 1,
+      DT: results[0],
+    };
+  } catch (error) {
+    console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+    return {
+      EM: "Lỗi services selectGiangVien",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 const selectOnlyGiangVien = async (MABOMON) => {
   try {
     console.log("check 2 =", MABOMON);
@@ -258,7 +317,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
 module.exports = {
   selectGiangVien,
   selectOnlyGiangVien,
-
+  selectOnlyGiangVienByTenDangNhap,
   createGiangVien,
 
   updateGiangVien,

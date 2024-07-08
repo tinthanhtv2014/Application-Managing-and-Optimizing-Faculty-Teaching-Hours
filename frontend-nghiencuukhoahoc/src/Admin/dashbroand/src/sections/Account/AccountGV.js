@@ -1,19 +1,50 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import GiangVienProfile from "./component/componentGV";
-
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 const AccountGV = () => {
-  const giangVien = {
-    avatar: "link-to-avatar.jpg", // Thay thế bằng link tới ảnh đại diện của giảng viên
-    ten: "Nguyen Van A",
-    email: "nguyenvana@example.com",
-    dienThoai: "0123456789",
-    diaChi: "123 ABC Street, Ho Chi Minh City",
-    boMon: "Khoa Công Nghệ Thông Tin",
-    trangThaiTaiKhoan: "Đang hoạt động",
+  const [giangVien, setGiangVien] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
+  const CookiesAxios = axios.create({
+    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
+  });
+
+  useEffect(() => {
+    const auth = Cookies.get("accessToken");
+    const decodeAuth = jwtDecode(auth);
+    console.log(decodeAuth);
+    setTenDangNhapGV(decodeAuth.taikhoan);
+    fetchDataGV(decodeAuth.taikhoan);
+  }, []);
+  const fetchDataGV = async (taikhoan) => {
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
+      );
+      console.log("Danh sách tài khoản:", response.data.DT);
+      if (response.data.EC === 1) {
+        setGiangVien(response.data.DT);
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+    }
   };
-  return (
-    <>
-      <GiangVienProfile giangVien={giangVien} />,
-    </>
-  );
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return <>{giangVien && <GiangVienProfile giangVien={giangVien} />}</>;
 };
+
 export default AccountGV;
