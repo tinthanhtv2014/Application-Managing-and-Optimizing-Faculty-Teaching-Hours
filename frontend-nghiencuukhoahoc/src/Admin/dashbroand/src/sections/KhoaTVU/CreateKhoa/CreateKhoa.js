@@ -320,7 +320,7 @@ const CreateKhoa = () => {
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoa`,
           { maGV: MaGV }
         );
-        console.log(response.data.DT);
+        console.log(response.data);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }

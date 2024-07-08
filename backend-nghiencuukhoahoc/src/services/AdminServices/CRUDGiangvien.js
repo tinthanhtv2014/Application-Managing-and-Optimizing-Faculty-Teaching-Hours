@@ -203,7 +203,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
   }
 };
 
-const deleteGiangVien = async (MAGV, MABOMON) => {
+const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
   try {
     console.log("check MGV +>", MAGV);
     if (!timGiangVien_MAGV(MAGV)) {
@@ -221,30 +221,34 @@ const deleteGiangVien = async (MAGV, MABOMON) => {
       pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?; `, [MAGV]),
       pool.execute(`DELETE FROM giangvien WHERE MAGV = ?; `, [MAGV]),
     ]);
-    let [results, fields] = await pool.execute(
-      `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
-      FROM taikhoan AS tk
-      LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
-      LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
-      LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
-      LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
-      LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
-      LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
-      LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-      WHERE bm.MABOMON = ? `,
-
-      [MABOMON]
-    );
-
-    return {
-      EM: "Xóa giảng viên thành công",
-      EC: 1,
-      DT: results,
-    };
+    if (isOpenGetAllApiGV) {
+      let [results0, fields0] = await pool.execute(
+        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
+      );
+      return {
+        EM: "Xóa Giảng Viên Thành Công",
+        EC: 1,
+        DT: results0,
+      };
+    } else {
+      let [results0, fields0] = await pool.execute(
+        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",
+        [MABOMON]
+      );
+      return {
+        EM: "Xóa Giảng Viên Thành Công",
+        EC: 1,
+        DT: results0,
+      };
+    }
   } catch (error) {
     console.log(error);
     return {
-      EM: "Lỗi khi xóa giảng viên",
+      EM: "Lỗi Không Thể Xóa Giảng Viên",
       EC: -1,
       DT: [],
     };

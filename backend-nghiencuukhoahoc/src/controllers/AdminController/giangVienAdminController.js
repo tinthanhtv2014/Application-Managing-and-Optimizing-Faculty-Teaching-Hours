@@ -152,8 +152,10 @@ const deleteGiangVienController = async (req, res) => {
   try {
     let MAGV = req.query.MAGV;
     let MABOMON = req.query.MABOMON;
-
-    let results = await deleteGiangVien(MAGV, MABOMON);
+    let isOpenGetAllApiGV = req.query.isOpenGetAllApiGV;
+    console.log(MAGV);
+    console.log(MABOMON);
+    let results = await deleteGiangVien(MAGV, MABOMON, isOpenGetAllApiGV);
 
     return res.status(200).json({
       EM: results.EM,

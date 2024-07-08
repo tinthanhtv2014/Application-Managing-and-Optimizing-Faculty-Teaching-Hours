@@ -185,7 +185,7 @@ const GiangVienList = ({
                     className="fa-solid fa-trash table-row-icon"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteGiangVien(giangvien.MAGV);
+                      handleDeleteGiangVien(giangvien);
                     }}
                   ></i>
                 </td>
