@@ -9,6 +9,7 @@ const AccountGV = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
+  const [dataChucDanh, setdataChucDanh] = useState(null);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -20,12 +21,15 @@ const AccountGV = () => {
     setTenDangNhapGV(decodeAuth.taikhoan);
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
+
   const fetchDataGV = async (taikhoan) => {
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
+
       console.log("Danh sách tài khoản:", response.data.DT);
+
       if (response.data.EC === 1) {
         setGiangVien(response.data.DT);
         setLoading(false);

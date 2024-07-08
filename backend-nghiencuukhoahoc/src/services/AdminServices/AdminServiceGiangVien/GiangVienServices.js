@@ -317,7 +317,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
     return {
       EM: "Lỗi services updateTrangThaiTaiKhoanGiangVien",
       EC: -1,
-      DT: [],
+      DT: null,
     };
   }
 };

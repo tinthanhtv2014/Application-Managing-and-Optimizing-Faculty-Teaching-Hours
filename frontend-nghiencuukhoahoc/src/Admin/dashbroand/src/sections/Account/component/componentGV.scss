@@ -1,13 +1,17 @@
 .giang-vien-profile {
     max-width: 1200px;
+    height: 95vh;
     margin: 0 auto;
     padding: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
     .CardHeader-profile-avt{
-        border-radius: 12px;
+        border-radius: 12px;background-color: #ffffff; 
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        border: 0.5px solid rgb(218, 214, 214); 
     }
+   
     .profile-header {
       display: flex;
       align-items: center;
@@ -28,13 +32,46 @@
         color: #333;
       }
     }
-  
+    .container-button-edit{
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin-top: 15px;
+      margin-right:15px;
+      border: 0.5px solid  #21409A;; 
+      padding: 5px 10px;
+      user-select: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: color 0.3s ease;
+      border-radius: 4px;
+    &:hover{
+  color: #21409A;
+  border: 0.5px solid  #000000;; 
+    }
+
+    }
+    .container-profile-button-Luu{
+      background-color: #21409A;
+    }
+    .container-profile-button-Huy{
+      background-color: #236199;
+    }
+  .container-profile-details{
+    border: 0.5px solid rgb(218, 214, 214); 
+     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    border-radius: 15px;
+    padding: 20px 5px;
+    position: relative;
+    background-color: #ffffff;
+  }
     .profile-details {
       p {
         margin-bottom: 16px;
         font-size: 16px;
         color: #555;
-  
+       
         strong {
           color: #000;
         }

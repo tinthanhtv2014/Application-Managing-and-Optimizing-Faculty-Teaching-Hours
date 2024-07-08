@@ -312,9 +312,6 @@ const ComponenCreateGiangVien = () => {
             isOpenGetAllApiGV: isOpenGetAllApiGV,
           }
         );
-        console.log(response.data);
-
-        setdataListGiangVien(response.data.DT);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }
@@ -406,9 +403,14 @@ const ComponenCreateGiangVien = () => {
           updatedLecturer
         );
         console.log(response.data);
-        setdataListGiangVien(response.data.DT);
 
-        toast.success("Lecturer information updated successfully");
+        if (response.data.EC === 1) {
+          toast.success("Lecturer information updated successfully");
+          setdataListGiangVien(response.data.DT);
+        } else {
+          toast.error("Failed to update lecturer information");
+        }
+
         handleCloseUpdateModal();
       } catch (error) {
         console.error("Error updating lecturer information:", error);
