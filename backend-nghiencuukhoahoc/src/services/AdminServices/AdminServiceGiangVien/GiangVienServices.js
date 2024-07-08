@@ -148,10 +148,17 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       }
 
       //Trường hợp giảng viên thay đổi chức vụ
-      let TENCHUCVU_Cu = await timChucVu_MACHUCVU(
-        ChucVu_cua_GiangVien[0].MACHUCVU
-      ); // tên chức vụ cũ
-      // console.log("TENCHUCVU_Cu >>>>>", TENCHUCVU_Cu[0].TENCHUCVU)
+      let TENCHUCVU_Cu;
+
+      if (ChucVu_cua_GiangVien.length > 0) {
+        TENCHUCVU_Cu = await timChucVu_MACHUCVU(ChucVu_cua_GiangVien[0].MACHUCVU); // tên chức vụ cũ
+        // console.log("TENCHUCVU_Cu >>>>>", TENCHUCVU_Cu[0]);
+      } else {
+        // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien);
+      }
+      // console.log("TENCHUCVU_Cu.TENCHUCVU >>>>>", TENCHUCVU_Cu[0].TENCHUCVU);
+
+
       if (
         ChucVu_cua_GiangVien.length > 0 &&
         TENCHUCVU_Cu[0].TENCHUCVU !== dataGiangVien.TENCHUCVU
@@ -228,10 +235,16 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       }
 
       //Trường hợp giảng viên thay đổi chức danh
-      let TENCHUCDANH_Cu = await timChucDanh_MACHUCDANH(
-        kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH
-      );
-      // console.log("TENCHUCDANH_Cu >>>>>>>>>", TENCHUCDANH_Cu[0].TENCHUCDANH)
+      let TENCHUCDANH_Cu
+
+      if (kiemTraCHUCDANH_CO_CHUC_DANH.length > 0) {
+
+        TENCHUCDANH_Cu = await timChucDanh_MACHUCDANH(
+          kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH
+        );
+      }
+
+
       if (
         kiemTraCHUCDANH_CO_CHUC_DANH.length > 0 &&
         TENCHUCDANH_Cu[0].TENCHUCDANH != dataGiangVien.TENCHUCDANH
@@ -303,6 +316,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
         LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
         LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
         LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+        ORDER BY gv.TENGV DESC;
        `
       );
 

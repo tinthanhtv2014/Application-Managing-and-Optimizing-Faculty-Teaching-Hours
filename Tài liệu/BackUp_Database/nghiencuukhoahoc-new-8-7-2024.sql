@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th7 08, 2024 lúc 05:18 PM
+-- Thời gian đã tạo: Th7 08, 2024 lúc 07:19 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -175,9 +175,12 @@ CREATE TABLE `co_chuc_danh` (
 
 INSERT INTO `co_chuc_danh` (`MACHUCDANH`, `MAGV`, `THOIGIANNHAN`, `TRANGTHAI`) VALUES
 (1, '00245', '2024-07-08', 'Đang giữ chức danh'),
-(1, '00250', NULL, NULL),
-(2, '00248', NULL, NULL),
-(3, '12705', NULL, NULL);
+(1, '00254', '2024-07-09', 'Đang giữ chức danh'),
+(1, '99999', '2024-07-09', 'Đang giữ chức danh'),
+(2, '00249', '2024-07-09', 'Đang giữ chức danh'),
+(2, '00250', '2024-07-08', 'Đang giữ chức danh'),
+(3, '12705', NULL, NULL),
+(5, '00248', '2024-07-08', 'Đang giữ chức danh');
 
 -- --------------------------------------------------------
 
@@ -229,17 +232,17 @@ INSERT INTO `giangvien` (`MAGV`, `MABOMON`, `TENGV`, `EMAIL`, `DIENTHOAI`, `DIAC
 ('00242', 16, 'Dương Ngọc Vân Khanh', NULL, NULL, NULL),
 ('00243', 16, 'Huỳnh Văn Thanh', NULL, NULL, NULL),
 ('00244', 16, 'Nguyễn Nhứt Lam', NULL, NULL, NULL),
-('00245', 16, 'ưeqweqweq', 'annb@tvu.edu.vn', '', ''),
+('00245', 16, 'ưeqweqweq', 'annb@tvu.edu.vn', '0369258147', 'Mỹ'),
 ('00246', 16, 'Nguyễn Ngọc Đan Thanh', NULL, NULL, NULL),
-('00248', 16, 'C', '', '', ''),
-('00249', 16, 'Hà Thị Thúy Vi', NULL, NULL, NULL),
-('00250', 16, '', '', '', ''),
+('00248', 16, 'Hồ Hoàng Phúc Fix', 'duongminh@tvu.edu.vn', '0258741369', 'Đáy biển Đen'),
+('00249', 16, 'Hà Thị Thúy Vi', 'Hattvi201084@tvu.edu.vn', '0123654987', 'Trà Vinh'),
+('00250', 16, '', 'vothanhc@tvu.edu.vn', '', ''),
 ('00251', 16, 'Trịnh Quốc Việt', NULL, NULL, NULL),
 ('00252', 16, 'Trầm Hoàng Nam', NULL, NULL, NULL),
 ('00253', 16, 'Đoàn Phước Miền', NULL, NULL, NULL),
-('00254', 16, 'Ngô Thanh Huy', NULL, NULL, NULL),
+('00254', 16, 'Ngô Thanh Huy', 'huyngocntt@tvu.edu.vn', '', ''),
 ('00255', 16, 'Phạm Thị Trúc Mai', NULL, NULL, NULL),
-('00257', 16, 'Nguyễn Mộng Hiền', NULL, NULL, NULL),
+('00257', 16, 'Nguyễn Mộng Hiền', 'hientvu@tvu.edu.vn', '0123456987', 'TV'),
 ('01027', 16, 'Nguyễn Khánh Duy ', NULL, NULL, NULL),
 ('01548', 16, 'Thạch Kọng SaOane', NULL, NULL, NULL),
 ('03539', 16, 'Lê Minh Tự', NULL, NULL, NULL),
@@ -250,7 +253,8 @@ INSERT INTO `giangvien` (`MAGV`, `MABOMON`, `TENGV`, `EMAIL`, `DIENTHOAI`, `DIAC
 ('12701', 16, 'Trần Văn Nam', NULL, NULL, NULL),
 ('12702', 16, 'Nguyễn Thừa Phát Tài', NULL, NULL, NULL),
 ('12705', 16, '', '', '', ''),
-('14204', 16, 'Nguyễn Bá Nhiệm', NULL, NULL, NULL);
+('14204', 16, 'Nguyễn Bá Nhiệm', NULL, NULL, NULL),
+('99999', 16, 'Nguyễn Lâm Quốc Bảo', 'baoquoczero@gmail.com', '0987654321', 'Sao Hỏa');
 
 -- --------------------------------------------------------
 
@@ -271,10 +275,15 @@ CREATE TABLE `giu_chuc_vu` (
 
 INSERT INTO `giu_chuc_vu` (`MAGV`, `MACHUCVU`, `SOQUYETDINH`, `TUNGAY`) VALUES
 ('00244', 9, NULL, NULL),
-('00245', 1, '99', '2024-07-08'),
+('00245', 2, '99', '2024-07-08'),
+('00248', 8, '99', '2024-07-08'),
+('00249', 1, '99', '2024-07-09'),
+('00254', 1, '99', '2024-07-09'),
+('00257', 1, '99', '2024-07-08'),
 ('01548', 8, NULL, NULL),
 ('12705', 8, NULL, NULL),
-('14204', 8, NULL, NULL);
+('14204', 8, NULL, NULL),
+('99999', 6, '99', '2024-07-09');
 
 -- --------------------------------------------------------
 
@@ -392,12 +401,12 @@ CREATE TABLE `taikhoan` (
 
 INSERT INTO `taikhoan` (`TENDANGNHAP`, `MAGV`, `MATKHAU`, `PHANQUYEN`, `TRANGTHAITAIKHOAN`) VALUES
 ('annb@tvu.edu.vn', '00245', NULL, 'Trưởng Khoa', 'Đang hoạt động'),
+('baoquoczero@gmail.com', '99999', NULL, 'Admin', 'Đang hoạt động'),
 ('diemhanh_tvu@tvu.edu.vn', '12705', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('duongminh@tvu.edu.vn', '00248', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('Hattvi201084@tvu.edu.vn', '00249', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('hientvu@tvu.edu.vn', '00257', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('hohoangphucjob@gmail.com', '11012', NULL, 'Admin', 'Đang hoạt động'),
-('huyngocntt@tvu.edu.vn', '00254', NULL, 'Giảng Viên', 'Đang hoạt động'),
+('duongminh@tvu.edu.vn', '00248', NULL, 'Trưởng Bộ Môn', 'Đang hoạt động'),
+('Hattvi201084@tvu.edu.vn', '00249', NULL, 'Trưởng Khoa', 'Đang hoạt động'),
+('hientvu@tvu.edu.vn', '00257', NULL, 'Admin', 'Đang hoạt động'),
+('huyngocntt@tvu.edu.vn', '00254', NULL, 'Admin', 'Đang hoạt động'),
 ('hvthanh@tvu.edu.vn', '00243', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('lamnn@tvu.edu.vn', '00244', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('lmtu@tvu.edu.vn', '03539', NULL, 'Giảng Viên', 'Đang hoạt động'),
@@ -413,7 +422,6 @@ INSERT INTO `taikhoan` (`TENDANGNHAP`, `MAGV`, `MATKHAU`, `PHANQUYEN`, `TRANGTHA
 ('ptpnam@tvu.edu.vn', '03546', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('pttmai@tvu.edu.vn', '00255', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('thiennhd@tvu.edu.vn', '00241', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('tinthanhtv2014@gmail.com', '00242', NULL, 'Admin', 'Đang hoạt động'),
 ('tqviettv@tvu.edu.vn', '00251', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('tramhoangnam@tvu.edu.vn', '00252', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('vankhanh@tvu.edu.vn', '00242', NULL, 'Giảng Viên', 'Đang hoạt động'),

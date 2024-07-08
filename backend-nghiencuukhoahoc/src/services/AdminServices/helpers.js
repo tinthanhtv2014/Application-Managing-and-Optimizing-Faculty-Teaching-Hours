@@ -99,6 +99,7 @@ const timChucVu_MACHUCVU = async (MACHUCVU) => {
             "SELECT * FROM chucvu WHERE MACHUCVU = ?",
             [MACHUCVU]
         );
+        // console.log("Check timChucVu_MACHUCVU:   ", results1)
         return results1;
     } catch (error) {
         console.log("timChucVu_MACHUCVU errr >>>", error);
