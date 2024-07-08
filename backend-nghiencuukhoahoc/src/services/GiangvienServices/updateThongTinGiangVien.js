@@ -78,8 +78,6 @@ const updateThongTinGiangVien = async (
       }
     }
 
-    //lát xài
-
     // ----------------PHÚC THÊM NÈ--------------------------------------------------
     let [resultsDatatofront, fieldsDatatofront] = await pool.execute(
       `SELECT 

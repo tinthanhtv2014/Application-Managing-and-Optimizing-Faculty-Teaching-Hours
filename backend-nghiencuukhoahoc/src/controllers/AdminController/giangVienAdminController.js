@@ -147,11 +147,31 @@ const updateGiangVienController = async (req, res) => {
 
 const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   try {
-    console.log(req.params.TENDANGNHAP);
-    let aaa = req.params;
-    console.log("aaa >>>>>>>>", aaa);
-    let dataGiangVien = req.body;
-    console.log("dataGiangVien controler >>>>>>>>>>>>>>>", dataGiangVien);
+    const a = req.params.TENDANGNHAP;
+
+    // Khởi tạo dataGiangVien với các trường cần thiết, mặc định là ''
+    let dataGiangVien = {
+      TENDANGNHAP: '',
+      TENGV: '',
+      TENCHUCVU: '',
+      TENCHUCDANH: '',
+      DIENTHOAI: '',
+      DIACHI: '',
+      TENBOMON: '',
+      PHANQUYEN: '',
+      TRANGTHAITAIKHOAN: ''
+    };
+
+    // Cập nhật giá trị từ req.body vào dataGiangVien
+    Object.keys(dataGiangVien).forEach(field => {
+      if (req.body[field]) {
+        dataGiangVien[field] = req.body[field];
+      }
+    });
+
+    console.log("TENDANGNHAP: ", a);
+    console.log("dataGiangVien controller: ", dataGiangVien);
+
     let results = await update_ChucVu_ChucDanh_GiangVien(dataGiangVien);
 
     return res.status(200).json({
