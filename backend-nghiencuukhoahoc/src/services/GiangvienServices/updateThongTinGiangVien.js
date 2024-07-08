@@ -92,7 +92,3 @@ const updateThongTinGiangVien = async (TENDANGNHAP, dataGiangVien) => {
 module.exports = {
   updateThongTinGiangVien,
 };
-
-module.exports = {
-  updateThongTinGiangVien,
-};
