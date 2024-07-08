@@ -12,7 +12,7 @@ const CreateBoMonForm = ({
   handleIsOpenEditButtonBM,
 }) => {
   return (
-    <Form onSubmit={handleSumitAddBoMon}>
+    <Form onSubmit={handleSumitAddBoMon} className="mt-2">
       <Form.Group controlId="formDepartmentName" className="mb-3">
         <h5>Tạo Bộ Môn</h5>
         <Form.Label className="opacity-7">
