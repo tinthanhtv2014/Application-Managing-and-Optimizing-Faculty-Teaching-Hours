@@ -96,6 +96,7 @@ const ComponenCreateGiangVien = () => {
         }
       };
       fetchDataAllGV();
+      console.log("check isOpenGetAllApiGV", isOpenGetAllApiGV);
     } else {
       if (MaBoMon) {
         const fetchDataAllGV = async () => {
@@ -302,6 +303,7 @@ const ComponenCreateGiangVien = () => {
   };
 
   const functionUpdateTrangThaiGV = async (MaGV, TrangThai, MABOMON) => {
+    console.log("check disable tai khoan =>", MaGV);
     if (isOpenGetAllApiGV) {
       try {
         const response = await CookiesAxios.put(
@@ -312,6 +314,7 @@ const ComponenCreateGiangVien = () => {
             isOpenGetAllApiGV: isOpenGetAllApiGV,
           }
         );
+        setdataListGiangVien(response.data.DT);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu đến backend:", error);
       }
@@ -367,27 +370,22 @@ const ComponenCreateGiangVien = () => {
   const handleShowUpdateModal = async (lecturer) => {
     setSelectedLecturer(lecturer);
     setShowUpdateModal(true);
+
     try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucvu`
-      );
-      // console.log(response.data);
-      setdataListChucVuGiangVien(response.data.DT);
-      toast.success("Lecturer information updated successfully");
+      const [chucVuResponse, chucDanhResponse] = await Promise.all([
+        CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucvu`
+        ),
+        CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucdanh`
+        ),
+      ]);
+
+      setdataListChucVuGiangVien(chucVuResponse.data.DT);
+      setdataListChucDanhGiangVien(chucDanhResponse.data.DT);
     } catch (error) {
       console.error("Error updating lecturer information:", error);
-      toast.error("Failed to update lecturer information");
-    }
-    try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucdanh`
-      );
-      //  console.log(response.data);
-      setdataListChucDanhGiangVien(response.data.DT);
-      toast.success("Lecturer information updated successfully");
-    } catch (error) {
-      console.error("Error updating lecturer information:", error);
-      toast.error("Failed to update lecturer information");
+      toast.error("Lỗi lấy dữ liệu ở phía server");
     }
   };
 

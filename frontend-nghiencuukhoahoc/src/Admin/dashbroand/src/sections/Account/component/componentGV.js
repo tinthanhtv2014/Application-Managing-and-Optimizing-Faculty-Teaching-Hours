@@ -153,17 +153,18 @@ const GiangVienProfile = ({ giangVien }) => {
                 <Row className="mb-3">
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <strong>Email:</strong>
+                    <strong className="profile-name-email">Email:</strong>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1">
                       {isEditing ? (
                         <TextField
-                          className="pml-1"
+                          className="pml-1 profile-email-input"
                           name="TENDANGNHAP"
                           variant="outlined"
+                          disabled={true}
                           value={editData.TENDANGNHAP}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                         />
                       ) : editData.TENDANGNHAP ? (
                         <>
@@ -183,7 +184,7 @@ const GiangVienProfile = ({ giangVien }) => {
                     <Typography variant="body1">
                       {isEditing ? (
                         <TextField
-                          className="pml-1"
+                          className="pml-1  profile-email-input"
                           name="DIENTHOAI"
                           variant="outlined"
                           value={editData.DIENTHOAI}
@@ -211,7 +212,7 @@ const GiangVienProfile = ({ giangVien }) => {
                         <>
                           {" "}
                           <TextField
-                            className="pml-1"
+                            className="pml-1  profile-email-input"
                             name="DIACHI"
                             variant="outlined"
                             value={editData.DIACHI}
@@ -240,7 +241,10 @@ const GiangVienProfile = ({ giangVien }) => {
                       {isEditing ? (
                         <>
                           <Box sx={{ maxWidth: 220 }}>
-                            <FormControl fullWidth>
+                            <FormControl
+                              fullWidth
+                              className=" profile-email-input"
+                            >
                               <InputLabel id="select-label-trang-thai">
                                 Chức danh
                               </InputLabel>

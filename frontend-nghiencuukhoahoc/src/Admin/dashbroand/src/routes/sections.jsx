@@ -45,13 +45,23 @@ export default function Router() {
           </Suspense>
         </DashboardLayout>
       )
+    }, {
+      path: 'quan-ly-khoa',
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            {/* <IndexPage /> */}
+            <CreateKhoa />
+          </Suspense>
+        </DashboardLayout>
+      )
     },
     {
       path: '/giangvien',
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <UserPage />
+            <CreateGV />
 
           </Suspense>
         </DashboardLayout>
@@ -63,8 +73,7 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
-            <ProductsPageFake />
-
+            <CreateChucVuGV />
           </Suspense>
         </DashboardLayout>
       )
@@ -75,7 +84,7 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
-            <ListOrdersPage />
+
 
           </Suspense>
         </DashboardLayout>
@@ -88,7 +97,7 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
-            <ListOrdersDaHuy />
+            {/* <ListOrdersDaHuy /> */}
 
           </Suspense>
         </DashboardLayout>
@@ -100,7 +109,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ListOrdersDaGiao />
+
           </Suspense>
         </DashboardLayout>
       )
@@ -110,7 +119,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ListOrdersChiTietHoaDon />
+
 
 
           </Suspense>
@@ -124,7 +133,7 @@ export default function Router() {
           <Suspense fallback={<div>Loading...</div>}>
 
 
-            <OnlyChiTietHoaDon />
+
           </Suspense>
         </DashboardLayout>
       )

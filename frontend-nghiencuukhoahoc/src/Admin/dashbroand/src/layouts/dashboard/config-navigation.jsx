@@ -8,8 +8,13 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: 'Khoa Và Bộ Môn',
+    title: 'Trang Chủ',
     path: '/',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Khoa Và Bộ Môn',
+    path: '/quan-ly-khoa',
     icon: icon('ic_analytics'),
   },
   {
@@ -27,11 +32,12 @@ const navConfig = [
     path: '/quan-ly-danh-muc-gio-chuan',
     icon: icon('ic_blog'),
   },
+  // {
+  //   title: 'Chức Danh Giảng Viên',
+  //   path: '/quan-ly-chuc-danh',
+  //   icon: icon('ic_blog'),
+  // }, 
   {
-    title: 'Chức Danh Giảng Viên',
-    path: '/quan-ly-chuc-danh',
-    icon: icon('ic_blog'),
-  }, {
     title: 'Quản Lý Lớp Học',
     path: '/nhap-lop-tu-file',
     icon: icon('ic_blog'),

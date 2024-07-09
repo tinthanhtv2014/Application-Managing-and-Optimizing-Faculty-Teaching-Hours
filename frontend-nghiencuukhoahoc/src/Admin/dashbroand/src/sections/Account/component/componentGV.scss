@@ -95,3 +95,15 @@ margin-bottom: 0;
   .pmleft-1{
     margin-left: 12px;
   }
+
+  @media (max-width: 768px) {
+    
+  }
+  
+  /* Media query cho điện thoại */
+  @media (max-width: 480px) {
+   
+   .profile-email-input{
+    margin-top: 10px;
+   }
+  }

@@ -148,31 +148,34 @@ const updateGiangVienController = async (req, res) => {
 const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   try {
     const a = req.params.TENDANGNHAP;
-
+    const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
     // Khởi tạo dataGiangVien với các trường cần thiết, mặc định là ''
     let dataGiangVien = {
-      TENDANGNHAP: '',
-      TENGV: '',
-      TENCHUCVU: '',
-      TENCHUCDANH: '',
-      DIENTHOAI: '',
-      DIACHI: '',
-      TENBOMON: '',
-      PHANQUYEN: '',
-      TRANGTHAITAIKHOAN: ''
+      TENDANGNHAP: "",
+      TENGV: "",
+      TENCHUCVU: "",
+      TENCHUCDANH: "",
+      DIENTHOAI: "",
+      DIACHI: "",
+      TENBOMON: "",
+      PHANQUYEN: "",
+      TRANGTHAITAIKHOAN: "",
     };
 
     // Cập nhật giá trị từ req.body vào dataGiangVien
-    Object.keys(dataGiangVien).forEach(field => {
+    Object.keys(dataGiangVien).forEach((field) => {
       if (req.body[field]) {
         dataGiangVien[field] = req.body[field];
       }
     });
 
-    console.log("TENDANGNHAP: ", a);
-    console.log("dataGiangVien controller: ", dataGiangVien);
+    // console.log("TENDANGNHAP: ", a);
+    // console.log("dataGiangVien controller: ", dataGiangVien);
 
-    let results = await update_ChucVu_ChucDanh_GiangVien(dataGiangVien);
+    let results = await update_ChucVu_ChucDanh_GiangVien(
+      dataGiangVien,
+      isOpenGetAllApiGV
+    );
 
     return res.status(200).json({
       EM: results.EM,

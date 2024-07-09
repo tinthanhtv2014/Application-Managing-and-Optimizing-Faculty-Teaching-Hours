@@ -12,16 +12,29 @@ const {
   timChucDanh_MACHUCDANH,
 } = require("../helpers");
 
-const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
+const update_ChucVu_ChucDanh_GiangVien = async (
+  dataGiangVien,
+  isOpenGetAllApiGV
+) => {
   try {
     // TENDANGNHAP là bắt buộc
     // dataGiangVien gồm TENDANGNHAP, TENGV, TENCHUCVU, TENCHUCDANH, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN
 
     // Thay thế các giá trị null hoặc undefined bằng chuỗi rỗng
-    const fields0 = ['TENDANGNHAP', 'TENGV', 'TENCHUCVU', 'TENCHUCDANH', 'DIENTHOAI', 'DIACHI', 'TENBOMON', 'PHANQUYEN', 'TRANGTHAITAIKHOAN'];
-    fields0.forEach(field => {
+    const fields0 = [
+      "TENDANGNHAP",
+      "TENGV",
+      "TENCHUCVU",
+      "TENCHUCDANH",
+      "DIENTHOAI",
+      "DIACHI",
+      "TENBOMON",
+      "PHANQUYEN",
+      "TRANGTHAITAIKHOAN",
+    ];
+    fields0.forEach((field) => {
       if (dataGiangVien[field] === undefined || dataGiangVien[field] === null) {
-        dataGiangVien[field] = '';
+        dataGiangVien[field] = "";
       }
     });
     console.log("dataGiangVien Service >>>>>", dataGiangVien);
@@ -41,7 +54,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
 
     let KiemTra_TENCHUCVU = await timChucVu_TENCHUCVU(dataGiangVien.TENCHUCVU);
     //console.log("KiemTra_TENCHUCVU >>>>>", KiemTra_TENCHUCVU[0].MACHUCVU);
-    if (!KiemTra_TENCHUCVU && dataGiangVien.TENCHUCVU !== '') {
+    if (!KiemTra_TENCHUCVU && dataGiangVien.TENCHUCVU !== "") {
       return {
         EM: "Chức vụ này không tồn tại",
         EC: 0,
@@ -53,7 +66,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       dataGiangVien.TENCHUCDANH
     );
     //console.log("KiemTra_TENCHUCDANH >>>>>", KiemTra_TENCHUCDANH[0].MACHUCDANH);
-    if (!KiemTra_TENCHUCDANH && dataGiangVien.TENCHUCDANH !== '') {
+    if (!KiemTra_TENCHUCDANH && dataGiangVien.TENCHUCDANH !== "") {
       return {
         EM: "Chức danh này không tồn tại",
         EC: 0,
@@ -71,13 +84,13 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       };
     }
 
-
-
     let MAGV = KiemTra_TENDANGNHAP[0].MAGV; // MAGV lấy từ bảng taikhoan
 
-    let MACHUCVU = KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : '';
-    let MACHUCDANH = KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : '';
-    console.log('MACHUCVU: ', MACHUCVU, " MACHUCDANH: ", MACHUCDANH)
+    let MACHUCVU =
+      KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
+    let MACHUCDANH =
+      KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
+    console.log("MACHUCVU: ", MACHUCVU, " MACHUCDANH: ", MACHUCDANH);
 
     let timGV_MAGV_theoTaikhoan = await timGiangVien_MAGV(MAGV);
     let MABOMON = KiemTra_TENBOMON[0].MABOMON; //MABOMON được nhập vào
@@ -133,7 +146,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
     // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien.length)
 
-    if (dataGiangVien.TENCHUCVU != '') {
+    if (dataGiangVien.TENCHUCVU != "") {
       //Trường hợp giảng viên không có chức vụ
       if (!ChucVu_cua_GiangVien[0]) {
         thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
@@ -151,13 +164,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       let TENCHUCVU_Cu;
 
       if (ChucVu_cua_GiangVien.length > 0) {
-        TENCHUCVU_Cu = await timChucVu_MACHUCVU(ChucVu_cua_GiangVien[0].MACHUCVU); // tên chức vụ cũ
+        TENCHUCVU_Cu = await timChucVu_MACHUCVU(
+          ChucVu_cua_GiangVien[0].MACHUCVU
+        ); // tên chức vụ cũ
         // console.log("TENCHUCVU_Cu >>>>>", TENCHUCVU_Cu[0]);
       } else {
         // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien);
       }
       // console.log("TENCHUCVU_Cu.TENCHUCVU >>>>>", TENCHUCVU_Cu[0].TENCHUCVU);
-
 
       if (
         ChucVu_cua_GiangVien.length > 0 &&
@@ -204,8 +218,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       }
     }
 
-
-
     let kiemTraUpdateChucVu_cua_GiangVien = `Update chức vụ của giảng viên không thành công, giảng viên có ${ChucVu_cua_GiangVien.length} chức vụ`;
     if (kiemTraSQL) {
       kiemTraUpdateChucVu_cua_GiangVien = `Update chức vụ của giảng viên thành công, giảng viên có ${ChucVu_cua_GiangVien.length} chức vụ`;
@@ -220,7 +232,8 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
 
     //Trường hợp giảng viên không có chức danh
 
-    if (dataGiangVien.TENCHUCDANH !== '') { //kiểm tra tên chức danh có phải '' không
+    if (dataGiangVien.TENCHUCDANH !== "") {
+      //kiểm tra tên chức danh có phải '' không
       if (!kiemTraCHUCDANH_CO_CHUC_DANH[0]) {
         thongBaoChucDanh = "Có sự thay đổi chức danh";
         kiemTraSQL = true;
@@ -235,15 +248,13 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       }
 
       //Trường hợp giảng viên thay đổi chức danh
-      let TENCHUCDANH_Cu
+      let TENCHUCDANH_Cu;
 
       if (kiemTraCHUCDANH_CO_CHUC_DANH.length > 0) {
-
         TENCHUCDANH_Cu = await timChucDanh_MACHUCDANH(
           kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH
         );
       }
-
 
       if (
         kiemTraCHUCDANH_CO_CHUC_DANH.length > 0 &&
@@ -291,7 +302,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
       }
     }
 
-
     let kiemTraUpdateChucDanh = "Update chức danh không thành công";
     if (kiemTraSQL) {
       kiemTraUpdateChucDanh = "Update chức danh thành công";
@@ -305,7 +315,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (dataGiangVien) => {
     }
     //==================================================================================================
 
-    if (dataGiangVien.isOpenGetAllApiGV) {
+    if (isOpenGetAllApiGV) {
       let [results0, fields] = await pool.execute(
         `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
         FROM taikhoan AS tk
