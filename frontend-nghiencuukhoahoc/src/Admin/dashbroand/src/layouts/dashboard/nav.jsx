@@ -34,10 +34,10 @@ export default function Nav({ openNav, onCloseNav }) {
   const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
   const auth = Cookies.get('accessToken');
   const upLg = useResponsive('up', 'lg');
-
+  console.log('check Open Nav =>', openNav)
   useEffect(() => {
     if (openNav) {
-      onCloseNav();
+      // onCloseNav();
     }
   }, [pathname, openNav, onCloseNav]);
 

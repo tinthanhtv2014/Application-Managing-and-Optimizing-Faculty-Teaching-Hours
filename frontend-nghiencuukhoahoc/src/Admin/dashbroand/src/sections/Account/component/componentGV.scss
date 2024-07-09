@@ -102,7 +102,10 @@ margin-bottom: 0;
   
   /* Media query cho điện thoại */
   @media (max-width: 480px) {
-   
+    .giang-vien-profile{
+      height: 100vh +35vh;
+    
+    }
    .profile-email-input{
     margin-top: 10px;
    }
