@@ -45,7 +45,7 @@ const UpdateGiangVienModal = ({
       setPhanQuyenGiangVien(lecturerData.PHANQUYEN);
       setTenBoMon(lecturerData.TENBOMON);
       setTrangThaiDangNhap(lecturerData.TRANGTHAITAIKHOAN);
-      toast.success("Dữ liệu giảng viên đã được tải.");
+      // toast.success("Dữ liệu giảng viên đã được tải.");
     } else {
       toast.error("Không có dữ liệu giảng viên.");
     }

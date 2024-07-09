@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -14,59 +14,83 @@ import { toast } from 'react-toastify';
 import avat from "../../../../public/assets/images/avatars/lufy2.jpg";
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'Trang Chủ',
     icon: 'eva:home-fill',
   },
   {
-    label: 'Profile',
+    label: 'Hồ Sơ',
     icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
   },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
+  const [loading, setLoading] = useState(true);
   const auth = Cookies.get("accessToken");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-  const handleClose = (event) => {
-    setOpen(!open)
+
+  const handleClose = (label) => {
+    setOpen(null);
+    if (label === "Hồ Sơ") {
+      navigate('/admin/account-giangvien');
+    } else if (label === "Trang Chủ") {
+      navigate('/admin/');
+    }
   };
+
+  useEffect(() => {
+    if (auth) {
+      const decoded = jwtDecode(auth);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
+            { withCredentials: true }
+          );
+
+          if (response.data.EC === 1) {
+            setdataProfileGiangvien(response.data.DT);
+          }
+          setLoading(false);
+        } catch (error) {
+          console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+          setLoading(false);
+        }
+      };
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [auth]);
+
   const handleLogout = async () => {
     const token = Cookies.get('accessToken');
-    console.log('check token =>', token)
+    if (!token) {
+      toast.error('Không có token');
+      return;
+    }
+
     try {
-
-
-      if (!token) {
-        toast.error('Không có token');
-        return;
-      }
-
-      console.log(process.env.REACT_APP_URL_SERVER)
-      const response = await CookiesAxios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
+      const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true,
       });
-      console.log(response.data)
-      console.log(response.data.EC);
+
       if (response.data.EC === 0) {
         Cookies.remove('accessToken');
         navigate('/login');
@@ -79,6 +103,10 @@ export default function AccountPopover() {
       toast.error('Đã xảy ra lỗi khi đăng xuất');
     }
   };
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <>
@@ -124,17 +152,17 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {dataProfileGiangvien.TENGV}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {dataProfileGiangvien.TENDANGNHAP}
           </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
+          <MenuItem key={option.label} onClick={() => handleClose(option.label)}>
             {option.label}
           </MenuItem>
         ))}
@@ -147,7 +175,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
-          Logout
+          Đăng Xuất
         </MenuItem>
       </Popover>
     </>

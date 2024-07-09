@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -16,27 +16,61 @@ import { RouterLink } from '../../routes/components';
 import { useResponsive } from '../../hooks/use-responsive';
 
 import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-import { account } from '../../_mock/account';
+
 
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';
-
+import axios from 'axios';
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
+import Cookies from "js-cookie";
+import { jwtDecode } from 'jwt-decode';
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
-
+  const [loading, setLoading] = useState(true);
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
+  const auth = Cookies.get('accessToken');
   const upLg = useResponsive('up', 'lg');
 
   useEffect(() => {
     if (openNav) {
       onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, openNav, onCloseNav]);
+
+  useEffect(() => {
+    if (auth) {
+      const decoded = jwtDecode(auth);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
+            { withCredentials: true }
+          );
+
+          if (response.data.EC === 1) {
+            setdataProfileGiangvien(response.data.DT);
+            setLoading(false);
+          } else {
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+          setLoading(false);
+        }
+      };
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [auth]);
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   const renderAccount = (
     <Box
@@ -54,10 +88,12 @@ export default function Nav({ openNav, onCloseNav }) {
       <Avatar src={avatarImage} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">
+          {dataProfileGiangvien.TENGV}
+        </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.role}
+          {dataProfileGiangvien.TENCHUCVU}
         </Typography>
       </Box>
     </Box>
@@ -70,35 +106,6 @@ export default function Nav({ openNav, onCloseNav }) {
       ))}
     </Stack>
   );
-
-  // const renderUpgrade = (
-  //   <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-  //     <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
-  //       <Box
-  //         component="img"
-  //         src="/assets/illustrations/illustration_avatar.png"
-  //         sx={{ width: 100, position: 'absolute', top: -50 }}
-  //       />
-
-  //       <Box sx={{ textAlign: 'center' }}>
-  //         <Typography variant="h6">Get more?</Typography>
-
-  //         <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-  //           From only $69
-  //         </Typography>
-  //       </Box>
-
-  //       <Button
-  //         href="https://material-ui.com/store/items/minimal-dashboard/"
-  //         target="_blank"
-  //         variant="contained"
-  //         color="inherit"
-  //       >
-  //         Upgrade to Pro
-  //       </Button>
-  //     </Stack>
-  //   </Box>
-  // );
 
   const renderContent = (
     <Scrollbar
@@ -118,8 +125,6 @@ export default function Nav({ openNav, onCloseNav }) {
       {renderMenu}
 
       <Box sx={{ flexGrow: 1 }} />
-
-      {/* {renderUpgrade} */}
     </Scrollbar>
   );
 
@@ -167,7 +172,6 @@ Nav.propTypes = {
 
 function NavItem({ item }) {
   const pathname = usePathname();
-
   const active = item.path === pathname;
 
   return (
@@ -195,11 +199,11 @@ function NavItem({ item }) {
         {item.icon}
       </Box>
 
-      <Box component="span">{item.title} </Box>
+      <Box component="span">{item.title}</Box>
     </ListItemButton>
   );
 }
 
 NavItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
 };

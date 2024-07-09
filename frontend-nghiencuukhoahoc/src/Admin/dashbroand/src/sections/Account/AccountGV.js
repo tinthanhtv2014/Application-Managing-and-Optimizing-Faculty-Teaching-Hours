@@ -9,7 +9,7 @@ const AccountGV = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
-  const [dataChucDanh, setdataChucDanh] = useState(null);
+
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
