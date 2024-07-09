@@ -120,6 +120,57 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
     }
 };
 
+//Trả dữ liệu FronEnd
+const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
+    try {
+        if (isOpenGetAllApiGV) {
+            let [results0, fields] = await pool.execute(
+                `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+              FROM taikhoan AS tk
+              LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+              LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+              LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+              LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+              LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+              LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+              LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+              ORDER BY tk.TENDANGNHAP ASC;
+             `
+            );
+
+            return {
+                EM: '',
+                EC: 1,
+                DT: results0,
+            };
+        } else {
+            let [results0, fields] = await pool.execute(
+                `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+              FROM taikhoan AS tk
+              LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+              LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+              LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+              LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+              LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+              LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+              LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+              WHERE bm.MABOMON = ?
+              ORDER BY tk.TENDANGNHAP ASC;
+              `,
+                [MABOMON]
+            );
+            return {
+                EM: '',
+                EC: 1,
+                DT: results0,
+            };
+        }
+    } catch (error) {
+        console.log("timChucVu_MACHUCVU errr >>>", error);
+        return [];
+    }
+};
+
 module.exports = {
     timTaiKhoan_TENDANGNHAP,
     timGiangVien_MAGV,
@@ -130,4 +181,6 @@ module.exports = {
     timCoChucDanh_MAGV,
     timChucVu_MACHUCVU,
     timChucDanh_MACHUCDANH,
+
+    dataFronEnd,
 };

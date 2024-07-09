@@ -100,9 +100,9 @@ const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
     //api này dùng để đình chỉ hoạt động của 1 tài khoản
     const { TRANGTHAITAIKHOAN, MABOMON, isOpenGetAllApiGV } = req.body;
     const MAGV = req.params.MAGV;
-    console.log(MAGV);
-    console.log(TRANGTHAITAIKHOAN);
-    console.log(MABOMON);
+    // console.log(MAGV);
+    console.log("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
+    // console.log(MABOMON);
     let results = await updateTrangThaiTaiKhoanGiangVien(
       MAGV,
       TRANGTHAITAIKHOAN,

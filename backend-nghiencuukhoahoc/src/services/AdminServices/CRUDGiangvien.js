@@ -1,11 +1,23 @@
 const pool = require("../../config/database");
 const { selectBomon_MABOMON } = require("./CRUDBomon");
 
-const { timGiangVien_MAGV } = require("./helpers");
+const {
+  timTaiKhoan_TENDANGNHAP,
+  timGiangVien_MAGV,
+  selectBomon_TENBOMON,
+  selectChucdanh_TENCHUCDANH,
+  timChucVu_TENCHUCVU,
+  timChucVu_MAGV,
+  timCoChucDanh_MAGV,
+  timChucVu_MACHUCVU,
+  timChucDanh_MACHUCDANH,
+
+  dataFronEnd,
+} = require("./helpers");
 
 const selectGiangVien = async () => {
   try {
-    let [results, fields] = await pool.execute(
+    let [results0, fields] = await pool.execute(
       `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
       FROM taikhoan AS tk
       LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
@@ -15,12 +27,13 @@ const selectGiangVien = async () => {
       LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
       LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
       LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+      ORDER BY tk.TENDANGNHAP ASC;
     `
     );
     return {
       EM: " xem thông tin giảng viên thành công",
       EC: 1,
-      DT: results,
+      DT: results0,
     };
   } catch (error) {
     return {
@@ -32,7 +45,7 @@ const selectGiangVien = async () => {
 };
 
 const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
-  console.log("CHECK1", TENDANGNHAP);
+  // console.log("CHECK1", TENDANGNHAP);
 
   if (!TENDANGNHAP) {
     console.error("Tên đăng nhập không được truyền vào.");
@@ -171,30 +184,40 @@ const updateTrangThaiTaiKhoanGiangVien = async (
       [TRANGTHAITAIKHOAN, MAGV]
     );
 
-    if (isOpenGetAllApiGV) {
-      let [results0, fields0] = await pool.execute(
-        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
-          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
-          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
-      );
-      return {
-        EM: "Cập nhật trạng thái tài khoản thành công",
-        EC: 1,
-        DT: results0,
-      };
-    } else {
-      let [results0, fields0] = await pool.execute(
-        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
-          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
-          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",
-        [MABOMON]
-      );
-      return {
-        EM: "Cập nhật trạng thái tài khoản thành công",
-        EC: 1,
-        DT: results0,
-      };
-    }
+
+    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
+
+    console.log("results0.DT:  ", results0.DT)
+    return {
+      EM: "Cập nhật trạng thái tài khoản thành công",
+      EC: 1,
+      DT: results0.DT,
+    };
+    // if (isOpenGetAllApiGV) {
+    //   let [results0, fields0] = await pool.execute(
+    //     "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+    //     "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+    //     "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
+    //   );
+    //   return {
+    //     EM: "Cập nhật trạng thái tài khoản thành công",
+    //     EC: 1,
+    //     DT: results0,
+    //   };
+    // } else {
+    //   let [results0, fields0] = await pool.execute(
+    //     "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
+    //     "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
+    //     "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",
+    //     [MABOMON]
+    //   );
+    //   return {
+    //     EM: "Cập nhật trạng thái tài khoản thành công",
+    //     EC: 1,
+    //     DT: results0,
+    //   };
+    // }
+
   } catch (error) {
     console.log(error);
     return {
@@ -304,30 +327,15 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
     // Cuối cùng, xóa trong bảng giangvien
     await pool.execute(`DELETE FROM giangvien WHERE MAGV = ?`, [MAGV]);
 
-    if (isOpenGetAllApiGV) {
-      const [results0] = await pool.execute(
-        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
-          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
-          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
-      );
-      return {
-        EM: "Xóa Giảng Viên Thành Công",
-        EC: 1,
-        DT: results0,
-      };
-    } else {
-      const [results0] = await pool.execute(
-        "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
-          "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
-          "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",
-        [MABOMON]
-      );
-      return {
-        EM: "Xóa Giảng Viên Thành Công",
-        EC: 1,
-        DT: results0,
-      };
-    }
+    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
+
+    console.log("results0.DT:  ", results0.DT)
+    return {
+      EM: "Xóa Giảng Viên Thành Công",
+      EC: 1,
+      DT: results0.DT,
+    };
+
   } catch (error) {
     console.log(error);
     return {

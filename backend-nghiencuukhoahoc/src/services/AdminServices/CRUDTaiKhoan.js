@@ -56,7 +56,9 @@ const getAllTaiKhoan = async (MABOMON) => {
       LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
       LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
       LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-      WHERE bm.MABOMON = ?`,
+      WHERE bm.MABOMON = ?
+      ORDER BY tk.TENDANGNHAP ASC;
+      `,
 
       [MABOMON]
     );
