@@ -30,11 +30,13 @@ const CreateKhoa = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
-    const response = await CookiesAxios.post(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/tao`,
-      { tenkhoa: tenKhoa }
-    );
-    console.log(response.data);
+    if (tenKhoa) {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/tao`,
+        { tenkhoa: tenKhoa }
+      );
+      // console.log(response.data);
+    }
 
     // Reset form fields
     // setTenKhoa("");

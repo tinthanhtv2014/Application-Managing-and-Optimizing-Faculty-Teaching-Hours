@@ -29,7 +29,7 @@ const AdminCreate = () => {
     navigate("/admin/create-bm");
   };
   const handleToCreateGV = () => {
-    navigate("/admin/create-gv");
+    navigate("/admin/giangvien");
   };
 
   const handleToCreateChucVuGV = () => {

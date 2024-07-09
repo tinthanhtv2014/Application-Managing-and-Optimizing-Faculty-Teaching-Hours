@@ -17,25 +17,26 @@ const ComponentExcelGV = () => {
   });
 
   const handleAddUser = async () => {
-    if (!data) {
+    if (data.length > 0) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/tao/excel`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${auth}`,
+            },
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
       toast.error("Chưa có dữ liệu excel");
       return;
     }
     //api truyền dữ liệu excel về backend
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/tao/excel`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${auth}`,
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handleFileUpload = (event) => {
