@@ -56,17 +56,17 @@ export default function Router() {
         </DashboardLayout>
       )
     },
-    {
-      path: '/giangvien',
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <CreateGV />
+    // {
+    //   path: '/giangvien',
+    //   element: (
+    //     <DashboardLayout>
+    //       <Suspense fallback={<div>Loading...</div>}>
+    //         <CreateGV />
 
-          </Suspense>
-        </DashboardLayout>
-      )
-    },
+    //       </Suspense>
+    //     </DashboardLayout>
+    //   )
+    // },
     {
       path: '/quan-ly-chuc-vu', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
@@ -178,7 +178,7 @@ export default function Router() {
       )
     },
     {
-      path: '/create-gv', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/giangvien', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayoutNoTop>
           <Suspense fallback={<div>Loading...</div>}>

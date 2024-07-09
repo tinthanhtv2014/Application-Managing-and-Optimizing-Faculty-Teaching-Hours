@@ -181,13 +181,20 @@ const GiangVienList = ({
                   {giangvien.TRANGTHAITAIKHOAN}
                 </td>
                 <td>
-                  <i
-                    className="fa-solid fa-trash table-row-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteGiangVien(giangvien);
-                    }}
-                  ></i>
+                  {giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động" ? (
+                    <>
+                      {" "}
+                      <i
+                        className="fa-solid fa-trash table-row-icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteGiangVien(giangvien);
+                        }}
+                      ></i>
+                    </>
+                  ) : (
+                    false
+                  )}{" "}
                 </td>
                 <td>
                   <i

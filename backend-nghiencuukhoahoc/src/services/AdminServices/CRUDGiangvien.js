@@ -264,7 +264,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
 
 const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
   try {
-    console.log("check MGV +>", MAGV);
+    console.log("check MGV1 +>", MAGV);
     if (!timGiangVien_MAGV(MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
@@ -272,16 +272,40 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
         DT: [],
       };
     }
+    console.log("check MGV2 +>", MAGV);
 
-    // Thực hiện xóa từng bảng dữ liệu liên quan
-    await Promise.all([
-      pool.execute(`DELETE FROM giu_chuc_vu WHERE MAGV = ?;`, [MAGV]),
-      pool.execute(`DELETE FROM co_chuc_danh WHERE MAGV = ?; `, [MAGV]),
-      pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?; `, [MAGV]),
-      pool.execute(`DELETE FROM giangvien WHERE MAGV = ?; `, [MAGV]),
-    ]);
+    // Kiểm tra và xóa trong bảng giu_chuc_vu
+    const [results1] = await pool.execute(
+      `SELECT * FROM giu_chuc_vu WHERE MAGV = ?`,
+      [MAGV]
+    );
+    if (results1.length > 0) {
+      await pool.execute(`DELETE FROM giu_chuc_vu WHERE MAGV = ?`, [MAGV]);
+    }
+
+    // Kiểm tra và xóa trong bảng co_chuc_danh
+    const [results2] = await pool.execute(
+      `SELECT * FROM co_chuc_danh WHERE MAGV = ?`,
+      [MAGV]
+    );
+    if (results2.length > 0) {
+      await pool.execute(`DELETE FROM co_chuc_danh WHERE MAGV = ?`, [MAGV]);
+    }
+
+    // Kiểm tra và xóa trong bảng taikhoan
+    const [results3] = await pool.execute(
+      `SELECT * FROM taikhoan WHERE MAGV = ?`,
+      [MAGV]
+    );
+    if (results3.length > 0) {
+      await pool.execute(`DELETE FROM taikhoan WHERE MAGV = ?`, [MAGV]);
+    }
+
+    // Cuối cùng, xóa trong bảng giangvien
+    await pool.execute(`DELETE FROM giangvien WHERE MAGV = ?`, [MAGV]);
+
     if (isOpenGetAllApiGV) {
-      let [results0, fields0] = await pool.execute(
+      const [results0] = await pool.execute(
         "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
           "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
           "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON"
@@ -292,7 +316,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
         DT: results0,
       };
     } else {
-      let [results0, fields0] = await pool.execute(
+      const [results0] = await pool.execute(
         "SELECT bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN " +
           "FROM taikhoan as tk, giangvien as gv, bomon as bm " +
           "WHERE tk.MAGV = gv.MAGV AND bm.MABOMON = gv.MABOMON AND bm.MABOMON = ?",

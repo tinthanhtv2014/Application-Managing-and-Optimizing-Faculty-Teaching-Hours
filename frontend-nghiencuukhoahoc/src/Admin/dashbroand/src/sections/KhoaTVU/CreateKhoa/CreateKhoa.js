@@ -174,19 +174,21 @@ const CreateKhoa = () => {
   // BỘ MÔN
   const handleSumitAddBoMon = async (event) => {
     event.preventDefault();
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
-        {
-          TENBOMON: TenBoMon,
-          MAKHOA: MaKhoa,
-        }
-      );
-      console.log(response.data);
-      setTenBoMon("");
-      getBoMonByMaKhoa(MaKhoa);
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+    if (TenBoMon && MaKhoa) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/tao`,
+          {
+            TENBOMON: TenBoMon,
+            MAKHOA: MaKhoa,
+          }
+        );
+        console.log(response.data);
+        setTenBoMon("");
+        getBoMonByMaKhoa(MaKhoa);
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
+      }
     }
   };
 
