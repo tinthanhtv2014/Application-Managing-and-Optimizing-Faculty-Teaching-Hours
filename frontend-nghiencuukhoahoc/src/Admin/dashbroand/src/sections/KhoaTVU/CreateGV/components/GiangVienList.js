@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
 const GiangVienList = ({
   currentPage,
   isOpenGetAllApiGV,
@@ -16,23 +17,13 @@ const GiangVienList = ({
   searchStatus,
   setCurrentPage,
   handleShowUpdateModal,
+  prevPage,
+  nextPage,
 }) => {
-  // const [searchEmail, setSearchEmail] = useState("");
-  // const [searchStatus, setSearchStatus] = useState("All");
-  // const [currentPage, setCurrentPage] = useState(0);
-
-  // const handleSearch = (e) => {
-  //   setSearchEmail(e.target.value);
-  //   setCurrentPage(0);
-  // };
-
-  // const handleStatusChange = (e) => {
-  //   setSearchStatus(e.target.value);
-  //   setCurrentPage(0);
-  // };
-  console.log("searchStatus =>", searchStatus);
-  console.log("currentPage =>", currentPage);
   const pageSize = 10;
+  const totalGiangVien = dataListGiangVien ? dataListGiangVien.length : 0;
+  const totalPages = Math.ceil(totalGiangVien / pageSize);
+
   const startIndex = currentPage * pageSize;
 
   const filteredGiangVien = dataListGiangVien
@@ -52,70 +43,31 @@ const GiangVienList = ({
         .slice(startIndex, startIndex + pageSize)
     : [];
 
-  const nextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
-  const prevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  const renderPageButtons = () => {
+    const buttons = [];
+    for (let i = 0; i < totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          type="button"
+          className={`btn ${
+            currentPage === i ? "btn-primary" : "btn-outline-primary"
+          } mx-1`}
+          onClick={() => goToPage(i)}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+    return buttons;
   };
 
   return (
     <>
-      {/* <div className="mb-3 col-4 mt-2">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Nhập email đăng nhập"
-          value={searchEmail}
-          onChange={handleSearch}
-        />
-      </div> */}
-      {/* <div className="mb-3 col-4 mt-2">
-        <Box sx={{ maxWidth: 300 }}>
-          <FormControl fullWidth className="mt-2">
-            <InputLabel id="select-label-trang-thai">Trạng thái</InputLabel>
-            <Select
-              labelId="select-label-trang-thai"
-              id="trang-thai-select"
-              className={`height-selectGV ${
-                searchStatus === "Đang hoạt động"
-                  ? "text-success"
-                  : searchStatus === "Ngưng hoạt động"
-                  ? "text-danger"
-                  : ""
-              }`}
-              value={searchStatus}
-              label="Trạng thái"
-              onChange={handleStatusChange}
-            >
-              <MenuItem value="All">Hiển thị tất cả</MenuItem>
-              <MenuItem value="Đang hoạt động" className="text-success">
-                Đang hoạt động
-              </MenuItem>
-              <MenuItem value="Ngưng hoạt động" className="text-danger">
-                Ngưng hoạt động
-              </MenuItem>
-            </Select>{" "}
-          </FormControl>
-        </Box>
-      </div> */}
-      {/* <button
-        type="button"
-        className={` ${
-          isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
-        }`}
-        placeholder="Nhập email đăng nhập"
-        value={isOpenGetAllApiGV}
-        onClick={handleGetAllGiangVien}
-        title={
-          isOpenGetAllApiGV === true
-            ? "Xem Tất Cả Giảng Viên Ở Bộ Môn"
-            : "Xem Tất Cả Giảng Viên"
-        }
-      >
-        {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
-      </button> */}
       <table className="custom-table">
         <thead>
           <tr>
@@ -130,9 +82,9 @@ const GiangVienList = ({
             <th>Tên Bộ Môn</th>
             <th>Phân Quyền</th>
             <th>Trạng Thái</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Xóa</th>
+            <th>Tạm Ngưng</th>
+            <th>Sửa</th>
           </tr>
         </thead>
         <tbody>
@@ -145,7 +97,7 @@ const GiangVienList = ({
                   activeRowGV === giangvien.MABOMON ? "activeBM" : ""
                 }`}
               >
-                <td>{index + 1}</td>
+                <td>{startIndex + index + 1}</td>
                 <td>{giangvien.MAGV}</td>
                 <td>{giangvien.TENDANGNHAP}</td>
                 <td>{giangvien.TENGV}</td>
@@ -218,8 +170,8 @@ const GiangVienList = ({
                   <i
                     title={
                       giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                        ? "Ngưng hoạt động"
-                        : "Đang hoạt động"
+                        ? "Chỉnh sửa thông tin giảng viên"
+                        : "Chỉnh sửa thông tin giảng viên"
                     }
                     className="fa-solid fa-pen-to-square table-row-icon-edit"
                     onClick={(e) => {
@@ -231,13 +183,11 @@ const GiangVienList = ({
               </tr>
             ))
           ) : (
-            <>
-              <tr>
-                <td colSpan="13" className="opacity-7">
-                  Bộ môn chưa có giảng viên
-                </td>
-              </tr>
-            </>
+            <tr>
+              <td colSpan="13" className="opacity-7">
+                Bộ môn chưa có giảng viên
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
@@ -246,21 +196,34 @@ const GiangVienList = ({
           type="button"
           className="btn btn-primary"
           disabled={currentPage === 0}
-          onClick={prevPage}
+          onClick={() => goToPage(0)}
         >
-          Trở Lại
+          Đầu
         </button>
         <button
           type="button"
           className="btn btn-primary ml-4"
-          disabled={
-            !dataListGiangVien ||
-            (filteredGiangVien.length === 0 && currentPage === 0) ||
-            filteredGiangVien.length < pageSize
-          }
+          disabled={currentPage === 0}
+          onClick={prevPage}
+        >
+          Trước
+        </button>
+        {renderPageButtons()}
+        <button
+          type="button"
+          className="btn btn-primary ml-4"
+          disabled={currentPage === totalPages - 1}
           onClick={nextPage}
         >
-          Tiếp Tục
+          Tiếp
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary ml-2"
+          disabled={currentPage === totalPages - 1}
+          onClick={() => goToPage(totalPages - 1)}
+        >
+          Cuối
         </button>
       </div>
     </>
