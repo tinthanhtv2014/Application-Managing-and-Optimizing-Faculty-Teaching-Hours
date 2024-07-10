@@ -308,11 +308,11 @@ const GiangVienProfile = ({ giangVien }) => {
                     </Typography>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
-                    <strong>Chức Vụ:</strong>
+                    <strong>Thời gian nhận chức vụ:</strong>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1" className="pmleft-1">
-                      {editData.TENCHUCVU ? editData.TENCHUCVU : "Không có"}
+                      Time nè
                     </Typography>
                   </Col>
                 </Row>
@@ -325,6 +325,14 @@ const GiangVienProfile = ({ giangVien }) => {
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1" className="pmleft-1">
                       {editData.TENBOMON ? editData.TENBOMON : "Chưa cập nhật"}
+                    </Typography>
+                  </Col>{" "}
+                  <Col xs={12} sm={6} lg={3}>
+                    <strong>Chức Vụ:</strong>
+                  </Col>
+                  <Col xs={12} sm={6} lg={3}>
+                    <Typography variant="body1" className="pmleft-1">
+                      {editData.TENCHUCVU ? editData.TENCHUCVU : "Không có"}
                     </Typography>
                   </Col>
                 </Row>
