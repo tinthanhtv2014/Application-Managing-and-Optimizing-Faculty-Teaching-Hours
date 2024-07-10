@@ -36,7 +36,7 @@ const getAllGiangVien = async (req, res) => {
 const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
   try {
     const TENDANGNHAP = req.params.TENDANGNHAP;
-    console.log("CHECK", TENDANGNHAP);
+    // console.log("CHECK", TENDANGNHAP);
     let results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
 
     return res.status(200).json({

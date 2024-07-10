@@ -39,7 +39,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         dataGiangVien[field] = "";
       }
     });
-    console.log("dataGiangVien Service >>>>>", dataGiangVien);
+    // console.log("dataGiangVien Service >>>>>", dataGiangVien);
 
     //console.log("dataGiangVien.TENDANGNHAP >>>>>", dataGiangVien.TENDANGNHAP);
     let KiemTra_TENDANGNHAP = await timTaiKhoan_TENDANGNHAP(

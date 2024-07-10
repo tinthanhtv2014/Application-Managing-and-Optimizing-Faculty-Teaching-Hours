@@ -105,12 +105,12 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
 
 const selectOnlyGiangVien = async (MABOMON) => {
   try {
-    console.log("check 2 =", MABOMON);
+    // console.log("check 2 =", MABOMON);
     let [results1, fields1] = await pool.execute(
       `select * from giangvien where MABOMON= ?`,
       [MABOMON]
     );
-    console.log("check 3 =", results1);
+    // console.log("check 3 =", results1);
     return {
       EM: " xem thông tin giảng viên của bộ môn đó thành công",
       EC: 1,
@@ -287,7 +287,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
 
 const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
   try {
-    console.log("check MGV1 +>", MAGV);
+    // console.log("check MGV1 +>", MAGV);
     if (!timGiangVien_MAGV(MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
@@ -295,7 +295,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
         DT: [],
       };
     }
-    console.log("check MGV2 +>", MAGV);
+    // console.log("check MGV2 +>", MAGV);
 
     // Kiểm tra và xóa trong bảng giu_chuc_vu
     const [results1] = await pool.execute(

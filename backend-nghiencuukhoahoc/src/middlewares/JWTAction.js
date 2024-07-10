@@ -9,7 +9,7 @@ const createJWT = (payload) => {
   try {
     token = jwt.sign(payload, key, { expiresIn: 300000 });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 
   return token;
@@ -22,7 +22,7 @@ const verifyToken = (token) => {
   try {
     decoded = jwt.verify(token, key);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 
   return decoded;
@@ -46,7 +46,7 @@ const checkUserJWT = (req, res, next) => {
     let token = cookie && cookie.jwt ? cookie.jwt : tokenFromHeader;
     let decoded = verifyToken(token);
     if (decoded) {
-      console.log("check decode: ", decoded);
+      // console.log("check decode: ", decoded);
       req.user = decoded;
       req.token = token;
       next();
