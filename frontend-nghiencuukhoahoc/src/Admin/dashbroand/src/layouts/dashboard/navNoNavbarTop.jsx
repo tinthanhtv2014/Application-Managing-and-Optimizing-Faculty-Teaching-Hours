@@ -26,6 +26,7 @@ import navConfig from './config-navigation';
 import Cookies from "js-cookie";
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import ComponentLoading from './ComponentLoading/CompnentLoading.tsx';
 // ----------------------------------------------------------------------
 
 export default function NavNoTop
@@ -74,7 +75,7 @@ export default function NavNoTop
   }, [auth]);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return <ComponentLoading />
   }
   const renderAccount = (
     <Box

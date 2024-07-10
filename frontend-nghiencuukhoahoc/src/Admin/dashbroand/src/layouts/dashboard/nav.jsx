@@ -25,6 +25,7 @@ import { NAV } from './config-layout';
 import navConfig from './config-navigation';
 import Cookies from "js-cookie";
 import { jwtDecode } from 'jwt-decode';
+import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,7 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [auth]);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return <ComponentLoading />;
   }
 
   const renderAccount = (
