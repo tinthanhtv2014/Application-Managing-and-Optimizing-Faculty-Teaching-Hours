@@ -19,7 +19,7 @@ const GiangVienProfile = ({ giangVien }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(giangVien);
   const [dataChucDanh, setdataChucDanh] = useState(null);
-  const [TimeChucDanh, setTimeChucDanh] = useState(null);
+  const [TimeChucDanh, setTimeChucDanh] = useState(editData.THOIGIANNHAN);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -79,6 +79,9 @@ const GiangVienProfile = ({ giangVien }) => {
       toast.error("Số điện thoại không hợp lệ");
     }
   };
+  // const getFormattedDate = (dateTimeString) => {
+  //   return dateTimeString.split("T")[0];
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +90,7 @@ const GiangVienProfile = ({ giangVien }) => {
       [name]: value,
     });
   };
-  console.log("check", TimeChucDanh);
+
   return (
     <Container>
       <Row>
@@ -318,7 +321,7 @@ const GiangVienProfile = ({ giangVien }) => {
                       className="pmleft-1 input-timechucvu"
                       value={editData.THOIGIANNHAN}
                       onChange={handleChange}
-                    ></input>
+                    />
                   </Col>
                 </Row>
                 <Row>

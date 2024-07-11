@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-
+import ComponentExcelCTDT from "./component/ComponentExcel";
 const CreateKhoa = () => {
   const [tenKhoa, setTenKhoa] = useState("");
   const CookiesAxios = axios.create({
@@ -67,6 +67,9 @@ const CreateKhoa = () => {
               Tạo Khoa
             </Button>
           </Form>
+        </Col>
+        <Col>
+          <ComponentExcelCTDT />
         </Col>
       </Row>
     </Container>
