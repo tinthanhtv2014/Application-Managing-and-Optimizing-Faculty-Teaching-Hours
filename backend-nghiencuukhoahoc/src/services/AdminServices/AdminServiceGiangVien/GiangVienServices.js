@@ -154,14 +154,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
     // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien)
 
-    if (ChucVu_cua_GiangVien.length > 0) {
-      TENCHUCVU_Cu = await timChucVu_MACHUCVU(
-        ChucVu_cua_GiangVien[0].MACHUCVU
-      ); // tên chức vụ cũ
-    }
-    // console.log("TENCHUCVU_Cu cá chức vụ đã từng nhận>>>>", TENCHUCVU_Cu[0].TENCHUCVU, " Thời gian: ", ChucVu_cua_GiangVien[0].TUNGAY)
-    // console.log("TENCHUCVU_Cu[0].TENCHUCVU >>>>", TENCHUCVU_Cu[0].TENCHUCVU)
-
     let chucvu_TUNGAY = formattedDate;
     if (dataGiangVien.TUNGAY !== '') {
       chucvu_TUNGAY = dataGiangVien.TUNGAY
