@@ -8,8 +8,6 @@ const {
   timChucVu_TENCHUCVU,
   timChucVu_MAGV,
   timCoChucDanh_MAGV,
-  timChucVu_MACHUCVU,
-  timChucDanh_MACHUCDANH,
 
   dataFronEnd,
 } = require("../helpers");
@@ -44,14 +42,11 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         dataGiangVien[field] = "";
       }
     });
-    // console.log("dataGiangVien Service >>>>>", dataGiangVien);
 
-    //console.log("dataGiangVien.TENDANGNHAP >>>>>", dataGiangVien.TENDANGNHAP);
-    let KiemTra_TENDANGNHAP = await timTaiKhoan_TENDANGNHAP(
-      dataGiangVien.TENDANGNHAP
-    );
-    //console.log("KiemTra_TENDANGNHAP >>>>>", KiemTra_TENDANGNHAP[0].MAGV);
-    if (!KiemTra_TENDANGNHAP) {
+    const { TENDANGNHAP, TENCHUCVU, TENCHUCDANH, TENBOMON, TUNGAY, THOIGIANNHAN, PHANQUYEN, TRANGTHAITAIKHOAN } = dataGiangVien;
+
+    let taikhoan = await timTaiKhoan_TENDANGNHAP(TENDANGNHAP);
+    if (!taikhoan) {
       return {
         EM: "Tên đăng nhập này không tồn tại",
         EC: 0,
@@ -59,9 +54,8 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       };
     }
 
-    let KiemTra_TENCHUCVU = await timChucVu_TENCHUCVU(dataGiangVien.TENCHUCVU);
-    //console.log("KiemTra_TENCHUCVU >>>>>", KiemTra_TENCHUCVU[0].MACHUCVU);
-    if (!KiemTra_TENCHUCVU && dataGiangVien.TENCHUCVU !== "") {
+    let KiemTra_TENCHUCVU = await timChucVu_TENCHUCVU(TENCHUCVU);
+    if (!KiemTra_TENCHUCVU && TENCHUCVU !== "") {
       return {
         EM: "Chức vụ này không tồn tại",
         EC: 0,
@@ -69,11 +63,8 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       };
     }
 
-    let KiemTra_TENCHUCDANH = await selectChucdanh_TENCHUCDANH(
-      dataGiangVien.TENCHUCDANH
-    );
-    //console.log("KiemTra_TENCHUCDANH >>>>>", KiemTra_TENCHUCDANH[0].MACHUCDANH);
-    if (!KiemTra_TENCHUCDANH && dataGiangVien.TENCHUCDANH !== "") {
+    let KiemTra_TENCHUCDANH = await selectChucdanh_TENCHUCDANH(TENCHUCDANH);
+    if (!KiemTra_TENCHUCDANH && TENCHUCDANH !== "") {
       return {
         EM: "Chức danh này không tồn tại",
         EC: 0,
@@ -81,9 +72,8 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       };
     }
 
-    let KiemTra_TENBOMON = await selectBomon_TENBOMON(dataGiangVien.TENBOMON);
-    //console.log("KiemTra_TENBOMON >>>>>", KiemTra_TENBOMON[0].MABOMON);
-    if (!KiemTra_TENBOMON) {
+    const bomon = await selectBomon_TENBOMON(TENBOMON);
+    if (!bomon) {
       return {
         EM: "Bộ môn này không tồn tại",
         EC: 0,
@@ -91,18 +81,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       };
     }
 
-    let MAGV = KiemTra_TENDANGNHAP[0].MAGV; // MAGV lấy từ bảng taikhoan
+    let MAGV = taikhoan[0].MAGV; // MAGV lấy từ bảng taikhoan
 
-    let MACHUCVU =
-      KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
-    let MACHUCDANH =
-      KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
-    // console.log("MACHUCVU: ", MACHUCVU, " MACHUCDANH: ", MACHUCDANH);
+    let MACHUCVU = KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
+    let MACHUCDANH = KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
 
     let timGV_MAGV_theoTaikhoan = await timGiangVien_MAGV(MAGV);
-    let MABOMON = KiemTra_TENBOMON[0].MABOMON; //MABOMON được nhập vào
+    let MABOMON = bomon[0].MABOMON; //MABOMON được nhập vào
     let MABOMON_cu = timGV_MAGV_theoTaikhoan[0].MABOMON; // MABOMON có sẵn trước khi update giảng viên
-    //console.log("timGV_MAGV_theoTaikhoan >>>>>>>>>>>>>>", timGV_MAGV_theoTaikhoan[0].MABOMON);
 
     //Lấy ngày giờ hiện tại
     const now = new Date();
@@ -111,15 +97,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     const day = now.getDate().toString().padStart(2, "0");
 
     const formattedDate = `${year}-${month}-${day}`; //Ngày giờ hiện tại
-    // console.log(formattedDate);
 
     // update bảng tài khoản
     let [resultsTAIKHOAN, fieldsTAIKHOAN] = await pool.execute(
       `UPDATE taikhoan SET PHANQUYEN = ?, TRANGTHAITAIKHOAN = ? WHERE TENDANGNHAP = ?`,
       [
-        dataGiangVien.PHANQUYEN,
-        dataGiangVien.TRANGTHAITAIKHOAN,
-        dataGiangVien.TENDANGNHAP,
+        PHANQUYEN,
+        TRANGTHAITAIKHOAN,
+        TENDANGNHAP,
       ]
     );
     let kiemTraUpdateTAIKHOANG = "Update tài khoảng không thành công";
@@ -134,10 +119,10 @@ const update_ChucVu_ChucDanh_GiangVien = async (
                 WHERE MAGV = ?;`,
       [
         MABOMON,
-        dataGiangVien.TENGV,
-        dataGiangVien.TENDANGNHAP,
-        dataGiangVien.DIENTHOAI,
-        dataGiangVien.DIACHI,
+        TENGV,
+        TENDANGNHAP,
+        DIENTHOAI,
+        DIACHI,
         MAGV,
       ]
     );
@@ -152,15 +137,13 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let thongBaoUpdateCHUCVU_GIU_CHUC_VU = `Không có sự thay đổi chức vụ`;
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
 
-    // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien)
-
     let chucvu_TUNGAY = formattedDate;
-    if (dataGiangVien.TUNGAY !== '') {
-      chucvu_TUNGAY = dataGiangVien.TUNGAY
+    if (TUNGAY !== '') {
+      chucvu_TUNGAY = TUNGAY
     }
 
 
-    if (dataGiangVien.TENCHUCVU != "") {
+    if (TENCHUCVU != "") {
 
       //Trường hợp giảng viên có sự thai đổi về chức vụ
 
@@ -176,7 +159,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       }
     }
 
-    if (dataGiangVien.TENCHUCVU) {
+    if (TENCHUCVU) {
       thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
       kiemTraSQL = true;
 
@@ -198,7 +181,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     //Các trường hợp cho bảng Chức danh ================================================================
     let thongBaoChucDanh = "Không có sự thay đổi chức danh";
     let kiemTraCHUCDANH_CO_CHUC_DANH = await timCoChucDanh_MAGV(MAGV);
-    // console.log("kiemTraCHUCDANH_CO_CHUC_DANH >>>>>>>", kiemTraCHUCDANH_CO_CHUC_DANH)
 
     let chucdanh_THOIGIANNHAN = formattedDate;
     if (dataGiangVien.THOIGIANNHAN !== '') {
@@ -248,7 +230,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
 
-    // console.log("results0.DT:  ", results0.DT)
     return {
       EM: `Trạng thái sửa: ${kiemTraUpdateTAIKHOANG}, ${kiemTraUpdateGIANGVIEN}, ${thongBaoUpdateCHUCVU_GIU_CHUC_VU} > ${kiemTraUpdateChucVu_cua_GiangVien}, ${thongBaoChucDanh} > ${kiemTraUpdateChucDanh}, ${thongBaoBoMon}`,
       EC: 1,
