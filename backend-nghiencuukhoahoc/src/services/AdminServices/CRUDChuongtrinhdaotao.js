@@ -148,10 +148,46 @@ const xoaChuongtrinh = async (MACHUONGTRINH) => {
   }
 };
 
+const createChuongtrinhdaotaoExcel = async (
+  dataChuongtrinhdaotaoExcelArray
+) => {
+  // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
+  // không được để trống TENDANGNHAP và MAGV
+  try {
+    let results = [];
+
+    // Kiểm tra trước khi tạo tài khoản
+    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {}
+
+    // Bắt đầu tạo tài khoản
+    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
+      results.push({
+        EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
+        EC: 0,
+        DT: [],
+      });
+    }
+
+    return {
+      EM: "Tất cả tài khoản đã được tạo",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    console.log("Lỗi services createTaiKhoanExcel", error);
+    return {
+      EM: "Lỗi services createTaiKhoanExcel",
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   selectChuongtrinhdaotao,
   selectChuongtrinhdaotao_TENCHUONGTRINH,
   createChuongtrinhdaotao,
   updateChuongtrinhdaotao,
   xoaChuongtrinh,
+  createChuongtrinhdaotaoExcel,
 };
