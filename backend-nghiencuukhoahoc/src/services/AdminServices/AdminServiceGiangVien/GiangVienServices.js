@@ -18,8 +18,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 ) => {
   try {
     // TENDANGNHAP là bắt buộc
-    // dataGiangVien gồm TENDANGNHAP, TENGV, TENCHUCVU, TENCHUCDANH, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN
-
+    // dataGiangVien gồm TENDANGNHAP, TENGV, TENCHUCVU, TUNGAY, TENCHUCDANH, THOIGIANNHAN, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN
     // Thay thế các giá trị null hoặc undefined bằng chuỗi rỗng
     const fields0 = [
       "TENDANGNHAP",
