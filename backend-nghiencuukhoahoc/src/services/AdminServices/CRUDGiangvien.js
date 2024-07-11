@@ -45,8 +45,6 @@ const selectGiangVien = async () => {
 };
 
 const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
-  // console.log("CHECK1", TENDANGNHAP);
-
   if (!TENDANGNHAP) {
     console.error("Tên đăng nhập không được truyền vào.");
     return {
@@ -89,6 +87,11 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
         TK.TENDANGNHAP = ?;`,
       [TENDANGNHAP]
     );
+
+    if (results[0] && results[0].THOIGIANNHAN) {
+      const date = new Date(results[0].THOIGIANNHAN);
+      results[0].THOIGIANNHAN = date.toLocaleDateString('vi-VN');
+    }
 
     console.log("selectOnlyGiangVienByTenDangNhap: ", results[0]);
     return {
