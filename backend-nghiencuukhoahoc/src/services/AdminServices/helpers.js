@@ -139,7 +139,7 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
     try {
         const query = isOpenGetAllApiGV
-            ? `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gcv.THOIGIANNHAN, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+            ? `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gcv.TUNGAY, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
                 FROM taikhoan AS tk
                 LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
                 LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
@@ -149,7 +149,7 @@ const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
                 LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
                 LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
                 ORDER BY tk.TENDANGNHAP ASC`
-            : `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gcv.THOIGIANNHAN, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+            : `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gcv.TUNGAY, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
                 FROM taikhoan AS tk
                 LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
                 LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
