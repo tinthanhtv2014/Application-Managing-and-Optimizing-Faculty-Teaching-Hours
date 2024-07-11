@@ -102,8 +102,9 @@ const ComponenCreateGiangVien = () => {
       if (MaBoMon) {
         const fetchDataAllGV = async () => {
           try {
-            const response = await CookiesAxios.get(
-              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${MaBoMon}`
+            const response = await CookiesAxios.post(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xem`,
+              { isOpenGetAllApiGV: isOpenGetAllApiGV, MABOMON: MaBoMon }
             );
             //     console.log("Danh sách tài khoản:", response.data);
             setdataListGiangVien(response.data.DT);
