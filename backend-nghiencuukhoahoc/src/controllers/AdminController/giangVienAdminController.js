@@ -14,9 +14,26 @@ const {
   update_ChucVu_ChucDanh_GiangVien,
 } = require("../../services/AdminServices/AdminServiceGiangVien/GiangVienServices");
 
+const {
+  timTaiKhoan_TENDANGNHAP,
+  timGiangVien_MAGV,
+  selectBomon_TENBOMON,
+  selectChucdanh_TENCHUCDANH,
+  timChucVu_TENCHUCVU,
+  timChucVu_MAGV,
+  timCoChucDanh_MAGV,
+  timChucVu_MACHUCVU,
+  timChucDanh_MACHUCDANH,
+
+  dataFronEnd,
+} = require("../../services/AdminServices/helpers");
+
 const getAllGiangVien = async (req, res) => {
   try {
-    let results = await selectGiangVien();
+    const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
+    const MABOMON = req.body.MABOMON;
+
+    let results = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
     return res.status(200).json({
       EM: results.EM,
@@ -36,7 +53,9 @@ const getAllGiangVien = async (req, res) => {
 const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
   try {
     const TENDANGNHAP = req.params.TENDANGNHAP;
-    let results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
+
+    let results
+    results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
 
     return res.status(200).json({
       EM: results.EM,
