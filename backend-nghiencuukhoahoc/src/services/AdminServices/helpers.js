@@ -69,7 +69,12 @@ const timChucVu_TENCHUCVU = async (TENCHUCVU) => {
 const timChucVu_MAGV = async (MAGV) => {
     try {
         const [results, fields] = await pool.execute(
-            "SELECT * FROM giu_chuc_vu WHERE MAGV = ?",
+            `SELECT giu_chuc_vu.*
+            FROM giu_chuc_vu
+            WHERE giu_chuc_vu.MAGV = ?
+            ORDER BY giu_chuc_vu.TUNGAY DESC
+            LIMIT 1
+            `,
             [MAGV]
         );
         return results;

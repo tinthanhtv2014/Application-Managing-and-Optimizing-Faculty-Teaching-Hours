@@ -151,80 +151,51 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let kiemTraSQL = false;
     let thongBaoUpdateCHUCVU_GIU_CHUC_VU = `Không có sự thay đổi chức vụ`;
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
-    console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien)
 
-    //Trường hợp giảng viên không có chức vụ
+    console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien[0].MACHUCVU)
+
+    let TENCHUCVU_Cu;
+
+    if (ChucVu_cua_GiangVien.length > 0) {
+      TENCHUCVU_Cu = await timChucVu_MACHUCVU(
+        ChucVu_cua_GiangVien[0].MACHUCVU
+      ); // tên chức vụ cũ
+    }
+    console.log("TENCHUCVU_Cu cá chức vụ đã từng nhận>>>>", TENCHUCVU_Cu[0].TENCHUCVU, " Thời gian: ", ChucVu_cua_GiangVien[0].TUNGAY)
+    // console.log("TENCHUCVU_Cu[0].TENCHUCVU >>>>", TENCHUCVU_Cu[0].TENCHUCVU)
+
+    let chucvu_TUNGAY = formattedDate;
+    if (dataGiangVien.TUNGAY !== '') {
+      chucvu_TUNGAY = dataGiangVien.TUNGAY
+    }
+
+
     if (dataGiangVien.TENCHUCVU != "") {
 
-      let chucvu_TUNGAY = formattedDate;
-      if (dataGiangVien.TUNGAY !== '') {
-        chucvu_TUNGAY = dataGiangVien.TUNGAY
-      }
+      //Trường hợp giảng viên có sự thai đổi về chức vụ
 
-      if (!ChucVu_cua_GiangVien[0]) {
-        thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
-        kiemTraSQL = true;
-
-        //update bảng giảng viên
-        let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
-          `INSERT INTO giu_chuc_vu (MAGV, MACHUCVU, SOQUYETDINH, TUNGAY) 
-            VALUES (?, ?, ?, ?)`,
-          [MAGV, MACHUCVU, 99, chucvu_TUNGAY]
-        );
-      }
-
-      //Trường hợp giảng viên thay đổi chức vụ
-      let TENCHUCVU_Cu;
-
+      //Xóa tất cả dữ liệu của bảng giu_chuc_vu      
       if (ChucVu_cua_GiangVien.length > 0) {
-        TENCHUCVU_Cu = await timChucVu_MACHUCVU(
-          ChucVu_cua_GiangVien[0].MACHUCVU
-        ); // tên chức vụ cũ
-      }
-
-      if (
-        ChucVu_cua_GiangVien.length > 0 &&
-        TENCHUCVU_Cu[0].TENCHUCVU !== dataGiangVien.TENCHUCVU
-      ) {
-        thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
-        kiemTraSQL = true;
-
-        //update bảng giảng viên
         let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
           `
-            UPDATE giu_chuc_vu 
-            SET MAGV = ?, MACHUCVU = ?, SOQUYETDINH = ?, TUNGAY = ? 
-            WHERE giu_chuc_vu.MAGV = ? AND giu_chuc_vu.MACHUCVU = ?;
-            `,
-          [
-            MAGV,
-            MACHUCVU,
-            99,
-            formattedDate,
-
-            ChucVu_cua_GiangVien[0].MAGV,
-            ChucVu_cua_GiangVien[0].MACHUCVU,
-          ]
+            DELETE FROM giu_chuc_vu
+            WHERE giu_chuc_vu.MAGV = ?;
+          `,
+          [MAGV]
         );
       }
+    }
 
-      //Trường hợp giảng viên bị xóa chức vụ
-      if (
-        ChucVu_cua_GiangVien.length > 0 &&
-        dataGiangVien.TENCHUCVU === "DELETE"
-      ) {
-        thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
-        kiemTraSQL = true;
+    if (TENCHUCVU_Cu[0].TENCHUCVU !== dataGiangVien.TENCHUCVU) {
+      thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
+      kiemTraSQL = true;
 
-        //update bảng giảng viên
-        let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
-          `
-            DELETE FROM giu_chuc_vu 
-            WHERE giu_chuc_vu.MAGV = ? AND giu_chuc_vu.MACHUCVU = ?
-            `,
-          [ChucVu_cua_GiangVien[0].MAGV, ChucVu_cua_GiangVien[0].MACHUCVU]
-        );
-      }
+      //INSERT INTO chức vụ cho giảng viên
+      let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
+        `INSERT INTO giu_chuc_vu (MAGV, MACHUCVU, SOQUYETDINH, TUNGAY) 
+            VALUES (?, ?, ?, ?)`,
+        [MAGV, MACHUCVU, 99, chucvu_TUNGAY]
+      );
     }
 
     let kiemTraUpdateChucVu_cua_GiangVien = `Update chức vụ của giảng viên không thành công, giảng viên có ${ChucVu_cua_GiangVien.length} chức vụ`;
@@ -243,6 +214,23 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
     if (dataGiangVien.TENCHUCDANH !== "") {
       //kiểm tra tên chức danh có phải '' không
+
+      //Trường hợp giảng viên bị xóa chức danh
+      if (
+        kiemTraCHUCDANH_CO_CHUC_DANH.length > 0
+      ) {
+        thongBaoChucDanh = "Có sự thay đổi chức danh";
+        kiemTraSQL = true;
+
+        let [resultsCO_CHUC_DANH, fieldsCO_CHUC_DANH] = await pool.execute(
+          `
+                  DELETE FROM co_chuc_danh 
+                  WHERE co_chuc_danh.MAGV = ?
+                  `,
+          [MAGV]
+        );
+      }
+
       if (!kiemTraCHUCDANH_CO_CHUC_DANH[0]) {
         thongBaoChucDanh = "Có sự thay đổi chức danh";
         kiemTraSQL = true;
@@ -253,60 +241,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (
                   VALUES (?, ?, ?, ?);
                   `,
           [MACHUCDANH, MAGV, formattedDate, "Đang giữ chức danh"]
-        );
-      }
-
-      //Trường hợp giảng viên thay đổi chức danh
-      let TENCHUCDANH_Cu;
-
-      if (kiemTraCHUCDANH_CO_CHUC_DANH.length > 0) {
-        TENCHUCDANH_Cu = await timChucDanh_MACHUCDANH(
-          kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH
-        );
-      }
-
-      if (
-        kiemTraCHUCDANH_CO_CHUC_DANH.length > 0 &&
-        TENCHUCDANH_Cu[0].TENCHUCDANH != dataGiangVien.TENCHUCDANH
-      ) {
-        thongBaoChucDanh = "Có sự thay đổi chức danh";
-        kiemTraSQL = true;
-
-        let [resultsCO_CHUC_DANH, fieldsCO_CHUC_DANH] = await pool.execute(
-          `
-                  UPDATE co_chuc_danh 
-                  SET MACHUCDANH = ?, MAGV = ?, THOIGIANNHAN = ?, TRANGTHAI = ? 
-                  WHERE co_chuc_danh.MACHUCDANH = ? AND co_chuc_danh.MAGV = ?
-                  `,
-          [
-            MACHUCDANH,
-            MAGV,
-            formattedDate,
-            "Đang giữ chức danh",
-
-            kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH,
-            kiemTraCHUCDANH_CO_CHUC_DANH[0].MAGV,
-          ]
-        );
-      }
-
-      //Trường hợp giảng viên bị xóa chức danh
-      if (
-        kiemTraCHUCDANH_CO_CHUC_DANH.length > 0 &&
-        dataGiangVien.TENCHUCDANH === "DELETE"
-      ) {
-        thongBaoChucDanh = "Có sự thay đổi chức danh";
-        kiemTraSQL = true;
-
-        let [resultsCO_CHUC_DANH, fieldsCO_CHUC_DANH] = await pool.execute(
-          `
-                  DELETE FROM co_chuc_danh 
-                  WHERE co_chuc_danh.MACHUCDANH = ? AND co_chuc_danh.MAGV = ?
-                  `,
-          [
-            kiemTraCHUCDANH_CO_CHUC_DANH[0].MACHUCDANH,
-            kiemTraCHUCDANH_CO_CHUC_DANH[0].MAGV,
-          ]
         );
       }
     }

@@ -155,10 +155,10 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
       TENGV: "",
 
       TENCHUCVU: "",
-      TUNGAY: "",
+      TUNGAY: "", //Từ ngày
 
       TENCHUCDANH: "",
-      THOIGIANNHAN: "",
+      THOIGIANNHAN: "", // Thời gian nhận
 
       DIENTHOAI: "",
       DIACHI: "",
