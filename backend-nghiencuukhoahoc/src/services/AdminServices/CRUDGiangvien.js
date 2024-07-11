@@ -88,7 +88,7 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
       [TENDANGNHAP]
     );
 
-    console.log(results[0]);
+    console.log("selectOnlyGiangVienByTenDangNhap: ", results[0]);
     return {
       EM: "Xem thông tin giảng viên thành công",
       EC: 1,
