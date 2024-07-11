@@ -62,8 +62,10 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
         TK.TENDANGNHAP,
         GV.TENGV, 
         CV.TENCHUCVU, 
-        GCV.TUNGAY,
+        
         CD.TENCHUCDANH, 
+        CCD.THOIGIANNHAN,
+
         GV.DIENTHOAI, 
         GV.DIACHI, 
         BM.TENBOMON, 
