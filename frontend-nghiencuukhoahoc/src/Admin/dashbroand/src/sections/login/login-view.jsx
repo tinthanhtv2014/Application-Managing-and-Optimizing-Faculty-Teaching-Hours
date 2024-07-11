@@ -174,7 +174,7 @@ export default function LoginView() {
             <Typography variant="h4" ><p className='sign-in-toAdmin'>Sign in</p></Typography>
 
             <Typography className='text-login' variant="body2" sx={{ mt: 2, mb: 5 }}>
-              Welcome to <span className='text-login-color'>Khoa Kĩ Thuật Công Nghệ TVU</span>
+              Welcome to <span className='text-login-color'>Khoa Kỹ thuật & Công nghệ TVU</span>
 
             </Typography>
             <div className="center-content">

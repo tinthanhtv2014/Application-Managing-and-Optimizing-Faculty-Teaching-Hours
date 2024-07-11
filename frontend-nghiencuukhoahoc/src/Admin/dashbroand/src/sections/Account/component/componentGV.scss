@@ -110,3 +110,24 @@ margin-bottom: 0;
     margin-top: 10px;
    }
   }
+
+
+  input[type="date"] {
+ 
+    background-color: #ffffff;
+    border: 1px solid #bdb3b3;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px;
+    color: #333;
+    width: 85%;
+    box-sizing: border-box;
+  
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+  
+ 
+  }

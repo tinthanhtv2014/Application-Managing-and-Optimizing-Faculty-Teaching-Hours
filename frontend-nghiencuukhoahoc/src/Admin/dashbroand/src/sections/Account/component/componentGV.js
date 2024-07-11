@@ -19,6 +19,7 @@ const GiangVienProfile = ({ giangVien }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(giangVien);
   const [dataChucDanh, setdataChucDanh] = useState(null);
+  const [TimeChucDanh, setTimeChucDanh] = useState(null);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -59,7 +60,7 @@ const GiangVienProfile = ({ giangVien }) => {
     if (isValidPhoneNumber(editData.DIENTHOAI)) {
       try {
         const response = await axios.put(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/sua/thongtin/${editData.TENDANGNHAP}`,
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/thongtin/${editData.TENDANGNHAP}`,
           editData
         );
         console.log("Check", response.data.DT[0]);
@@ -86,7 +87,7 @@ const GiangVienProfile = ({ giangVien }) => {
       [name]: value,
     });
   };
-  console.log("check", dataChucDanh);
+  console.log("check", TimeChucDanh);
   return (
     <Container>
       <Row>
@@ -308,12 +309,16 @@ const GiangVienProfile = ({ giangVien }) => {
                     </Typography>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
-                    <strong>Thời gian nhận chức vụ:</strong>
+                    <strong>Thời gian nhận chức danh:</strong>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
-                    <Typography variant="body1" className="pmleft-1">
-                      Time nè
-                    </Typography>
+                    <input
+                      name="THOIGIANNHAN"
+                      type="date"
+                      className="pmleft-1 input-timechucvu"
+                      value={editData.THOIGIANNHAN}
+                      onChange={handleChange}
+                    ></input>
                   </Col>
                 </Row>
                 <Row>
