@@ -32,7 +32,7 @@ const {
 
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
-  router.get("/xem", getAllGiangVien);
+  router.post("/xem", getAllGiangVien);
 
   router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
   router.get("/only/xemprofile/:TENDANGNHAP", getOnlyGiangVienbyTENDANGNHAP);

@@ -33,8 +33,10 @@ const UpdateGiangVienModal = ({
   const [PhanQuyenGiangVien, setPhanQuyenGiangVien] = useState();
   const [TenBoMon, setTenBoMon] = useState();
   const [TrangThaiDangNhap, setTrangThaiDangNhap] = useState();
-
+  const [TimeChucDanh, setTimeChucDanh] = useState();
+  const [TimeChucVu, setTimeChucVu] = useState();
   useEffect(() => {
+    console.log("Check lecturerData =>", lecturerData);
     if (lecturerData) {
       setTenGV(lecturerData.TENGV);
       setTenDangNhapGV(lecturerData.TENDANGNHAP);
@@ -45,6 +47,15 @@ const UpdateGiangVienModal = ({
       setPhanQuyenGiangVien(lecturerData.PHANQUYEN);
       setTenBoMon(lecturerData.TENBOMON);
       setTrangThaiDangNhap(lecturerData.TRANGTHAITAIKHOAN);
+
+      if (lecturerData.THOIGIANNHAN) {
+        setTimeChucDanh(lecturerData.THOIGIANNHAN.split("T")[0]);
+      }
+
+      if (lecturerData.TUNGAY) {
+        setTimeChucVu(lecturerData.TUNGAY.split("T")[0]);
+      }
+
       // toast.success("Dữ liệu giảng viên đã được tải.");
     } else {
       toast.error("Không có dữ liệu giảng viên.");
@@ -64,6 +75,8 @@ const UpdateGiangVienModal = ({
       TENBOMON: TenBoMon,
       TRANGTHAITAIKHOAN: TrangThaiDangNhap,
       isOpenGetAllApiGV: isOpenGetAllApiGV,
+      THOIGIANNHAN: TimeChucDanh,
+      TUNGAY: TimeChucVu,
     };
     updateLecturer(updatedData);
   };
@@ -136,6 +149,16 @@ const UpdateGiangVienModal = ({
           </FormControl>
           <FormControl fullWidth margin="normal">
             <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
+            <input
+              name="THOIGIANNHAN"
+              type="date"
+              className="pmleft-1 input-timechucvu"
+              value={TimeChucVu}
+              onChange={(e) => setTimeChucVu(e.target.value)}
+            />
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
             <Select
               labelId="chuc-danh-label"
               value={ChucDanhGiangVien}
@@ -155,6 +178,16 @@ const UpdateGiangVienModal = ({
                 <MenuItem disabled>Chức danh không có</MenuItem>
               )}
             </Select>
+          </FormControl>{" "}
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
+            <input
+              name="THOIGIANNHAN"
+              type="date"
+              className="pmleft-1 input-timechucvu"
+              value={TimeChucDanh}
+              onChange={(e) => setTimeChucDanh(e.target.value)}
+            />
           </FormControl>
           <FormControl fullWidth margin="normal">
             <TextField
