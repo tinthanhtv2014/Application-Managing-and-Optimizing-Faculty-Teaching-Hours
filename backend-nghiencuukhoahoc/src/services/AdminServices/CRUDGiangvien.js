@@ -90,7 +90,10 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
 
     if (results[0] && results[0].THOIGIANNHAN) {
       const date = new Date(results[0].THOIGIANNHAN);
-      results[0].THOIGIANNHAN = date.toLocaleDateString('vi-VN');
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      results[0].THOIGIANNHAN = `${year}-${month}-${day}`;
     }
 
     console.log("selectOnlyGiangVienByTenDangNhap: ", results[0]);
