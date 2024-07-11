@@ -187,7 +187,7 @@ const updateTrangThaiTaiKhoanGiangVien = async (
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
 
-    console.log("results0.DT:  ", results0.DT)
+    // console.log("results0.DT:  ", results0.DT)
     return {
       EM: "Cập nhật trạng thái tài khoản thành công",
       EC: 1,
@@ -329,7 +329,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
 
-    console.log("results0.DT:  ", results0.DT)
+    // console.log("results0.DT:  ", results0.DT)
     return {
       EM: "Xóa Giảng Viên Thành Công",
       EC: 1,

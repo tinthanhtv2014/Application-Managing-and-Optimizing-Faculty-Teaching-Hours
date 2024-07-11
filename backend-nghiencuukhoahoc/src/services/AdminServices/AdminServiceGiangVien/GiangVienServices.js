@@ -26,8 +26,13 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     const fields0 = [
       "TENDANGNHAP",
       "TENGV",
+
       "TENCHUCVU",
+      "TUNGAY",
+
       "TENCHUCDANH",
+      "THOIGIANNHAN",
+
       "DIENTHOAI",
       "DIACHI",
       "TENBOMON",
@@ -146,10 +151,16 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let kiemTraSQL = false;
     let thongBaoUpdateCHUCVU_GIU_CHUC_VU = `Không có sự thay đổi chức vụ`;
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
-    // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien.length)
+    console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien)
 
+    //Trường hợp giảng viên không có chức vụ
     if (dataGiangVien.TENCHUCVU != "") {
-      //Trường hợp giảng viên không có chức vụ
+
+      let chucvu_TUNGAY = formattedDate;
+      if (dataGiangVien.TUNGAY !== '') {
+        chucvu_TUNGAY = dataGiangVien.TUNGAY
+      }
+
       if (!ChucVu_cua_GiangVien[0]) {
         thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
         kiemTraSQL = true;
@@ -158,7 +169,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
           `INSERT INTO giu_chuc_vu (MAGV, MACHUCVU, SOQUYETDINH, TUNGAY) 
             VALUES (?, ?, ?, ?)`,
-          [MAGV, MACHUCVU, 99, formattedDate]
+          [MAGV, MACHUCVU, 99, chucvu_TUNGAY]
         );
       }
 
@@ -169,11 +180,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         TENCHUCVU_Cu = await timChucVu_MACHUCVU(
           ChucVu_cua_GiangVien[0].MACHUCVU
         ); // tên chức vụ cũ
-        // console.log("TENCHUCVU_Cu >>>>>", TENCHUCVU_Cu[0]);
-      } else {
-        // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien);
       }
-      // console.log("TENCHUCVU_Cu.TENCHUCVU >>>>>", TENCHUCVU_Cu[0].TENCHUCVU);
 
       if (
         ChucVu_cua_GiangVien.length > 0 &&
@@ -319,7 +326,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
 
-    console.log("results0.DT:  ", results0.DT)
+    // console.log("results0.DT:  ", results0.DT)
     return {
       EM: `Trạng thái sửa: ${kiemTraUpdateTAIKHOANG}, ${kiemTraUpdateGIANGVIEN}, ${thongBaoUpdateCHUCVU_GIU_CHUC_VU} > ${kiemTraUpdateChucVu_cua_GiangVien}, ${thongBaoChucDanh} > ${kiemTraUpdateChucDanh}, ${thongBaoBoMon}`,
       EC: 1,
