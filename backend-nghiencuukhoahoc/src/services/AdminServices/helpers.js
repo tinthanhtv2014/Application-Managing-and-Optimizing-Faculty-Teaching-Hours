@@ -1,5 +1,15 @@
 const pool = require("../../config/database");
 
+const executeQuery = async (query, params) => {
+    try {
+        const [results, fields] = await pool.execute(query, params);
+        return results;
+    } catch (error) {
+        console.log("Database query error >>>", error);
+        return null;
+    }
+};
+
 const timTaiKhoan_TENDANGNHAP = async (TENDANGNHAP) => {
     try {
         const [results, fields] = await pool.execute(
@@ -128,51 +138,42 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
 //Trả dữ liệu FronEnd
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
     try {
-        if (isOpenGetAllApiGV) {
-            let [results0, fields] = await pool.execute(
-                `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
-              FROM taikhoan AS tk
-              LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
-              LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
-              LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
-              LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
-              LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
-              LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
-              LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-              ORDER BY tk.TENDANGNHAP ASC;
-             `
-            );
+        const query = isOpenGetAllApiGV
+            ? `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+                FROM taikhoan AS tk
+                LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+                LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+                LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+                LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+                LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+                LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+                LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+                ORDER BY tk.TENDANGNHAP ASC`
+            : `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+                FROM taikhoan AS tk
+                LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+                LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+                LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+                LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+                LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+                LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+                LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+                WHERE bm.MABOMON = ?
+                ORDER BY tk.TENDANGNHAP ASC`;
 
-            return {
-                EM: '',
-                EC: 1,
-                DT: results0,
-            };
-        } else {
-            let [results0, fields] = await pool.execute(
-                `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
-              FROM taikhoan AS tk
-              LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
-              LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
-              LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
-              LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
-              LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
-              LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
-              LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-              WHERE bm.MABOMON = ?
-              ORDER BY tk.TENDANGNHAP ASC;
-              `,
-                [MABOMON]
-            );
-            return {
-                EM: '',
-                EC: 1,
-                DT: results0,
-            };
-        }
+        const results = await executeQuery(query, isOpenGetAllApiGV ? [] : [MABOMON]);
+        return {
+            EM: '',
+            EC: 1,
+            DT: results,
+        };
     } catch (error) {
-        console.log("timChucVu_MACHUCVU errr >>>", error);
-        return [];
+        console.log("dataFronEnd error >>>", error);
+        return {
+            EM: "Lỗi truy vấn cơ sở dữ liệu",
+            EC: -1,
+            DT: [],
+        };
     }
 };
 
