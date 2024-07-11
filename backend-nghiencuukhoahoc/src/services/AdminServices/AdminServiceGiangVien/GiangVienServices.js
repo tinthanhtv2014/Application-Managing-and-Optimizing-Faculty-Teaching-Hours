@@ -43,7 +43,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       }
     });
 
-    const { TENDANGNHAP, TENCHUCVU, TENCHUCDANH, TENBOMON, TUNGAY, THOIGIANNHAN, PHANQUYEN, TRANGTHAITAIKHOAN } = dataGiangVien;
+    const { TENDANGNHAP, TENGV, TENCHUCVU, TUNGAY, TENCHUCDANH, THOIGIANNHAN, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN } = dataGiangVien;
 
     let taikhoan = await timTaiKhoan_TENDANGNHAP(TENDANGNHAP);
     if (!taikhoan) {
@@ -86,9 +86,11 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let MACHUCVU = KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
     let MACHUCDANH = KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
 
-    let timGV_MAGV_theoTaikhoan = await timGiangVien_MAGV(MAGV);
+
     let MABOMON = bomon[0].MABOMON; //MABOMON được nhập vào
-    let MABOMON_cu = timGV_MAGV_theoTaikhoan[0].MABOMON; // MABOMON có sẵn trước khi update giảng viên
+
+    let giangvien = await timGiangVien_MAGV(taikhoan[0].MAGV)
+    let MABOMON_cu = giangvien[0].MABOMON; // MABOMON có sẵn trước khi update giảng viên
 
     //Lấy ngày giờ hiện tại
     const now = new Date();
@@ -183,11 +185,11 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let kiemTraCHUCDANH_CO_CHUC_DANH = await timCoChucDanh_MAGV(MAGV);
 
     let chucdanh_THOIGIANNHAN = formattedDate;
-    if (dataGiangVien.THOIGIANNHAN !== '') {
-      chucdanh_THOIGIANNHAN = dataGiangVien.THOIGIANNHAN
+    if (THOIGIANNHAN !== '') {
+      chucdanh_THOIGIANNHAN = THOIGIANNHAN
     }
 
-    if (dataGiangVien.TENCHUCDANH !== "") {
+    if (TENCHUCDANH !== "") {
       //kiểm tra tên chức danh có phải '' không
 
       //Trường hợp giảng viên bị xóa chức danh
@@ -201,7 +203,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         );
       }
 
-      if (dataGiangVien.TENCHUCDANH) {
+      if (TENCHUCDANH) {
         thongBaoChucDanh = "Có sự thay đổi chức danh";
         kiemTraSQL = true;
 
