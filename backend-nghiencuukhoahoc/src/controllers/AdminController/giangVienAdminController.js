@@ -175,7 +175,7 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
     });
 
     // console.log("TENDANGNHAP: ", a);
-    console.log("dataGiangVien controller: ", dataGiangVien);
+    // console.log("dataGiangVien controller: ", dataGiangVien);
 
     let results = await update_ChucVu_ChucDanh_GiangVien(
       dataGiangVien,

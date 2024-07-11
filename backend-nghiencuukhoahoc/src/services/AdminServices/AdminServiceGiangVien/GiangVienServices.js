@@ -97,7 +97,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
     let MACHUCDANH =
       KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
-    console.log("MACHUCVU: ", MACHUCVU, " MACHUCDANH: ", MACHUCDANH);
+    // console.log("MACHUCVU: ", MACHUCVU, " MACHUCDANH: ", MACHUCDANH);
 
     let timGV_MAGV_theoTaikhoan = await timGiangVien_MAGV(MAGV);
     let MABOMON = KiemTra_TENBOMON[0].MABOMON; //MABOMON được nhập vào
@@ -111,7 +111,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     const day = now.getDate().toString().padStart(2, "0");
 
     const formattedDate = `${year}-${month}-${day}`; //Ngày giờ hiện tại
-    console.log(formattedDate);
+    // console.log(formattedDate);
 
     // update bảng tài khoản
     let [resultsTAIKHOAN, fieldsTAIKHOAN] = await pool.execute(
@@ -152,16 +152,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let thongBaoUpdateCHUCVU_GIU_CHUC_VU = `Không có sự thay đổi chức vụ`;
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
 
-    console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien[0].MACHUCVU)
-
-    let TENCHUCVU_Cu;
+    // console.log("ChucVu_cua_GiangVien >>>>>", ChucVu_cua_GiangVien)
 
     if (ChucVu_cua_GiangVien.length > 0) {
       TENCHUCVU_Cu = await timChucVu_MACHUCVU(
         ChucVu_cua_GiangVien[0].MACHUCVU
       ); // tên chức vụ cũ
     }
-    console.log("TENCHUCVU_Cu cá chức vụ đã từng nhận>>>>", TENCHUCVU_Cu[0].TENCHUCVU, " Thời gian: ", ChucVu_cua_GiangVien[0].TUNGAY)
+    // console.log("TENCHUCVU_Cu cá chức vụ đã từng nhận>>>>", TENCHUCVU_Cu[0].TENCHUCVU, " Thời gian: ", ChucVu_cua_GiangVien[0].TUNGAY)
     // console.log("TENCHUCVU_Cu[0].TENCHUCVU >>>>", TENCHUCVU_Cu[0].TENCHUCVU)
 
     let chucvu_TUNGAY = formattedDate;
@@ -186,7 +184,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       }
     }
 
-    if (TENCHUCVU_Cu[0].TENCHUCVU !== dataGiangVien.TENCHUCVU) {
+    if (dataGiangVien.TENCHUCVU) {
       thongBaoUpdateCHUCVU_GIU_CHUC_VU = "Có sự thay đổi chức vụ";
       kiemTraSQL = true;
 
@@ -210,18 +208,16 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let kiemTraCHUCDANH_CO_CHUC_DANH = await timCoChucDanh_MAGV(MAGV);
     // console.log("kiemTraCHUCDANH_CO_CHUC_DANH >>>>>>>", kiemTraCHUCDANH_CO_CHUC_DANH)
 
-    //Trường hợp giảng viên không có chức danh
+    let chucdanh_THOIGIANNHAN = formattedDate;
+    if (dataGiangVien.THOIGIANNHAN !== '') {
+      chucdanh_THOIGIANNHAN = dataGiangVien.THOIGIANNHAN
+    }
 
     if (dataGiangVien.TENCHUCDANH !== "") {
       //kiểm tra tên chức danh có phải '' không
 
       //Trường hợp giảng viên bị xóa chức danh
-      if (
-        kiemTraCHUCDANH_CO_CHUC_DANH.length > 0
-      ) {
-        thongBaoChucDanh = "Có sự thay đổi chức danh";
-        kiemTraSQL = true;
-
+      if (kiemTraCHUCDANH_CO_CHUC_DANH.length > 0) {
         let [resultsCO_CHUC_DANH, fieldsCO_CHUC_DANH] = await pool.execute(
           `
                   DELETE FROM co_chuc_danh 
@@ -231,7 +227,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
         );
       }
 
-      if (!kiemTraCHUCDANH_CO_CHUC_DANH[0]) {
+      if (dataGiangVien.TENCHUCDANH) {
         thongBaoChucDanh = "Có sự thay đổi chức danh";
         kiemTraSQL = true;
 
@@ -240,7 +236,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
                   INSERT INTO co_chuc_danh (MACHUCDANH, MAGV, THOIGIANNHAN, TRANGTHAI) 
                   VALUES (?, ?, ?, ?);
                   `,
-          [MACHUCDANH, MAGV, formattedDate, "Đang giữ chức danh"]
+          [MACHUCDANH, MAGV, chucdanh_THOIGIANNHAN, "Đang giữ chức danh"]
         );
       }
     }
