@@ -29,7 +29,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
       "TENCHUCDANH",
       "THOIGIANNHAN",
-
+      "SOQUYETDINH",
       "DIENTHOAI",
       "DIACHI",
       "TENBOMON",
@@ -42,7 +42,20 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       }
     });
 
-    const { TENDANGNHAP, TENGV, TENCHUCVU, TUNGAY, TENCHUCDANH, THOIGIANNHAN, DIENTHOAI, DIACHI, TENBOMON, PHANQUYEN, TRANGTHAITAIKHOAN } = dataGiangVien;
+    const {
+      TENDANGNHAP,
+      TENGV,
+      TENCHUCVU,
+      TUNGAY,
+      TENCHUCDANH,
+      THOIGIANNHAN,
+      SOQUYETDINH,
+      DIENTHOAI,
+      DIACHI,
+      TENBOMON,
+      PHANQUYEN,
+      TRANGTHAITAIKHOAN,
+    } = dataGiangVien;
 
     let taikhoan = await timTaiKhoan_TENDANGNHAP(TENDANGNHAP);
     if (!taikhoan) {
@@ -82,13 +95,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (
 
     let MAGV = taikhoan[0].MAGV; // MAGV lấy từ bảng taikhoan
 
-    let MACHUCVU = KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
-    let MACHUCDANH = KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
-
+    let MACHUCVU =
+      KiemTra_TENCHUCVU.length > 0 ? KiemTra_TENCHUCVU[0].MACHUCVU : "";
+    let MACHUCDANH =
+      KiemTra_TENCHUCDANH.length > 0 ? KiemTra_TENCHUCDANH[0].MACHUCDANH : "";
 
     let MABOMON = bomon[0].MABOMON; //MABOMON được nhập vào
 
-    let giangvien = await timGiangVien_MAGV(taikhoan[0].MAGV)
+    let giangvien = await timGiangVien_MAGV(taikhoan[0].MAGV);
     let MABOMON_cu = giangvien[0].MABOMON; // MABOMON có sẵn trước khi update giảng viên
 
     //Lấy ngày giờ hiện tại
@@ -102,11 +116,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     // update bảng tài khoản
     let [resultsTAIKHOAN, fieldsTAIKHOAN] = await pool.execute(
       `UPDATE taikhoan SET PHANQUYEN = ?, TRANGTHAITAIKHOAN = ? WHERE TENDANGNHAP = ?`,
-      [
-        PHANQUYEN,
-        TRANGTHAITAIKHOAN,
-        TENDANGNHAP,
-      ]
+      [PHANQUYEN, TRANGTHAITAIKHOAN, TENDANGNHAP]
     );
     let kiemTraUpdateTAIKHOANG = "Update tài khoảng không thành công";
     if (resultsTAIKHOAN) {
@@ -118,14 +128,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       `UPDATE giangvien
                 SET MABOMON = ?, TENGV = ?, EMAIL = ?, DIENTHOAI = ?, DIACHI = ? 
                 WHERE MAGV = ?;`,
-      [
-        MABOMON,
-        TENGV,
-        TENDANGNHAP,
-        DIENTHOAI,
-        DIACHI,
-        MAGV,
-      ]
+      [MABOMON, TENGV, TENDANGNHAP, DIENTHOAI, DIACHI, MAGV]
     );
     let kiemTraUpdateGIANGVIEN = "Update giảng viên không thành công";
     if (resultsGIANGVIEN) {
@@ -139,16 +142,14 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let ChucVu_cua_GiangVien = await timChucVu_MAGV(MAGV); //Danh sách các chức vụ của MAGV này
 
     let chucvu_TUNGAY = formattedDate;
-    if (TUNGAY !== '') {
-      chucvu_TUNGAY = TUNGAY
+    if (TUNGAY !== "") {
+      chucvu_TUNGAY = TUNGAY;
     }
 
-
     if (TENCHUCVU != "") {
-
       //Trường hợp giảng viên có sự thai đổi về chức vụ
 
-      //Xóa tất cả dữ liệu của bảng giu_chuc_vu      
+      //Xóa tất cả dữ liệu của bảng giu_chuc_vu
       if (ChucVu_cua_GiangVien.length > 0) {
         let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
           `
@@ -168,7 +169,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
       let [resultsGIU_CHUC_VU, fieldsGIU_CHUC_VU] = await pool.execute(
         `INSERT INTO giu_chuc_vu (MAGV, MACHUCVU, SOQUYETDINH, TUNGAY) 
             VALUES (?, ?, ?, ?)`,
-        [MAGV, MACHUCVU, 99, chucvu_TUNGAY]
+        [MAGV, MACHUCVU, SOQUYETDINH, chucvu_TUNGAY]
       );
     }
 
@@ -184,8 +185,8 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let kiemTraCHUCDANH_CO_CHUC_DANH = await timCoChucDanh_MAGV(MAGV);
 
     let chucdanh_THOIGIANNHAN = formattedDate;
-    if (THOIGIANNHAN !== '') {
-      chucdanh_THOIGIANNHAN = THOIGIANNHAN
+    if (THOIGIANNHAN !== "") {
+      chucdanh_THOIGIANNHAN = THOIGIANNHAN;
     }
 
     if (TENCHUCDANH !== "") {
@@ -229,14 +230,13 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     }
     //==================================================================================================
 
-    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
+    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
     return {
       EM: `Trạng thái sửa: ${kiemTraUpdateTAIKHOANG}, ${kiemTraUpdateGIANGVIEN}, ${thongBaoUpdateCHUCVU_GIU_CHUC_VU} > ${kiemTraUpdateChucVu_cua_GiangVien}, ${thongBaoChucDanh} > ${kiemTraUpdateChucDanh}, ${thongBaoBoMon}`,
       EC: 1,
       DT: results0.DT,
     };
-
   } catch (error) {
     console.log(error);
     return {

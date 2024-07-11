@@ -54,7 +54,7 @@ const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
   try {
     const TENDANGNHAP = req.params.TENDANGNHAP;
 
-    let results
+    let results;
     results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
 
     return res.status(200).json({
@@ -179,7 +179,7 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
 
       TENCHUCDANH: "",
       THOIGIANNHAN: "", // Thời gian nhận
-
+      SOQUYETDINH: "",
       DIENTHOAI: "",
       DIACHI: "",
       TENBOMON: "",
