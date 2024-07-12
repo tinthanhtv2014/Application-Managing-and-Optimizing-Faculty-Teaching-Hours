@@ -35,6 +35,7 @@ const UpdateGiangVienModal = ({
   const [TrangThaiDangNhap, setTrangThaiDangNhap] = useState();
   const [TimeChucDanh, setTimeChucDanh] = useState();
   const [TimeChucVu, setTimeChucVu] = useState();
+  const [SoQuyetDinh, setSoQuyetDinh] = useState();
   useEffect(() => {
     console.log("Check lecturerData =>", lecturerData);
     if (lecturerData) {
@@ -47,7 +48,7 @@ const UpdateGiangVienModal = ({
       setPhanQuyenGiangVien(lecturerData.PHANQUYEN);
       setTenBoMon(lecturerData.TENBOMON);
       setTrangThaiDangNhap(lecturerData.TRANGTHAITAIKHOAN);
-
+      setSoQuyetDinh(lecturerData.SOQUYETDINH);
       if (lecturerData.THOIGIANNHAN) {
         setTimeChucDanh(lecturerData.THOIGIANNHAN.split("T")[0]);
       }
@@ -61,24 +62,108 @@ const UpdateGiangVienModal = ({
       toast.error("Không có dữ liệu giảng viên.");
     }
   }, [lecturerData]);
-
   const handleUpdate = (e) => {
     e.preventDefault();
-    const updatedData = {
-      TENGV: tenGV,
-      DIACHI: diaChiGiangVien,
-      DIENTHOAI: SodienthoaiGV,
-      TENCHUCDANH: ChucDanhGiangVien,
-      TENCHUCVU: chucVuGiangVien,
-      PHANQUYEN: PhanQuyenGiangVien,
-      TENDANGNHAP: tenDangNhapGV,
-      TENBOMON: TenBoMon,
-      TRANGTHAITAIKHOAN: TrangThaiDangNhap,
-      isOpenGetAllApiGV: isOpenGetAllApiGV,
-      THOIGIANNHAN: TimeChucDanh,
-      TUNGAY: TimeChucVu,
-    };
-    updateLecturer(updatedData);
+
+    // Kiểm tra số điện thoại (đảm bảo chỉ chứa số và có độ dài hợp lệ)
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!phoneRegex.test(SodienthoaiGV)) {
+      alert("Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại hợp lệ.");
+      return;
+    }
+
+    // Kiểm tra ngày tháng (đảm bảo không phải ngày trong tương lai)
+    const today = new Date();
+    const timeChucVuDate = new Date(TimeChucVu);
+    const timeChucDanhDate = new Date(TimeChucDanh);
+
+    if (timeChucVuDate > today) {
+      alert("Ngày nhận chức vụ phải là ngày trong quá khứ.");
+      return;
+    }
+
+    if (timeChucDanhDate > today) {
+      alert("Thời gian nhận chức danh phải là ngày trong quá khứ.");
+      return;
+    }
+
+    // Kiểm tra sự thay đổi của thời gian nhận chức danh và tên chức danh
+    if (
+      TimeChucDanh !== lecturerData.THOIGIANNHAN.split("T")[0] &&
+      ChucDanhGiangVien !== lecturerData.TENCHUCDANH
+    ) {
+      // Nếu có thay đổi, cho phép cập nhật
+      const updatedData = {
+        TENGV: tenGV,
+        DIACHI: diaChiGiangVien,
+        DIENTHOAI: SodienthoaiGV,
+        TENCHUCDANH: ChucDanhGiangVien,
+        TENCHUCVU: chucVuGiangVien,
+        PHANQUYEN: PhanQuyenGiangVien,
+        TENDANGNHAP: tenDangNhapGV,
+        TENBOMON: TenBoMon,
+        TRANGTHAITAIKHOAN: TrangThaiDangNhap,
+        isOpenGetAllApiGV: isOpenGetAllApiGV,
+        THOIGIANNHAN: TimeChucDanh,
+        TUNGAY: TimeChucVu,
+        SOQUYETDINH: SoQuyetDinh,
+      };
+      updateLecturer(updatedData);
+    } else if (
+      TimeChucDanh !== lecturerData.THOIGIANNHAN.split("T")[0] ||
+      ChucDanhGiangVien !== lecturerData.TENCHUCDANH
+    ) {
+      toast.error("Muốn update thời gian thì phải update tên chức danh");
+      return;
+    } else if (
+      TimeChucVu !== lecturerData.TUNGAY.split("T")[0] &&
+      chucVuGiangVien !== lecturerData.TENCHUCVU &&
+      SoQuyetDinh !== lecturerData.SOQUYETDINH
+    ) {
+      // Nếu có thay đổi, cho phép cập nhật
+      const updatedData = {
+        TENGV: tenGV,
+        DIACHI: diaChiGiangVien,
+        DIENTHOAI: SodienthoaiGV,
+        TENCHUCDANH: ChucDanhGiangVien,
+        TENCHUCVU: chucVuGiangVien,
+        PHANQUYEN: PhanQuyenGiangVien,
+        TENDANGNHAP: tenDangNhapGV,
+        TENBOMON: TenBoMon,
+        TRANGTHAITAIKHOAN: TrangThaiDangNhap,
+        isOpenGetAllApiGV: isOpenGetAllApiGV,
+        THOIGIANNHAN: TimeChucDanh,
+        TUNGAY: TimeChucVu,
+        SOQUYETDINH: SoQuyetDinh,
+      };
+      updateLecturer(updatedData);
+    } else if (
+      TimeChucVu !== lecturerData.TUNGAY.split("T")[0] ||
+      chucVuGiangVien !== lecturerData.TENCHUCVU ||
+      SoQuyetDinh !== lecturerData.SOQUYETDINH
+    ) {
+      toast.error(
+        "Muốn update thì phải cập nhật cả thời gian, tên chức vụ và số quyết định"
+      );
+      return;
+    } else {
+      const updatedData = {
+        TENGV: tenGV,
+        DIACHI: diaChiGiangVien,
+        DIENTHOAI: SodienthoaiGV,
+        TENCHUCDANH: ChucDanhGiangVien,
+        TENCHUCVU: chucVuGiangVien,
+        PHANQUYEN: PhanQuyenGiangVien,
+        TENDANGNHAP: tenDangNhapGV,
+        TENBOMON: TenBoMon,
+        TRANGTHAITAIKHOAN: TrangThaiDangNhap,
+        isOpenGetAllApiGV: isOpenGetAllApiGV,
+        THOIGIANNHAN: TimeChucDanh,
+        TUNGAY: TimeChucVu,
+        SOQUYETDINH: SoQuyetDinh,
+      };
+      updateLecturer(updatedData);
+    }
   };
 
   return (
@@ -93,7 +178,7 @@ const UpdateGiangVienModal = ({
     >
       <Box
         sx={{
-          boxShadow: 100,
+          boxShadow: 24,
           p: 4,
           borderRadius: 2,
           width: {
@@ -101,6 +186,8 @@ const UpdateGiangVienModal = ({
             sm: "70%", // Width for small screens
             md: "50%", // Width for medium and up screens
           },
+          maxHeight: "95vh", // Maximum height of the modal
+          overflow: "auto", // Enable scrolling if content overflows
         }}
         className="modal-updateGV"
       >
@@ -147,16 +234,41 @@ const UpdateGiangVienModal = ({
               )}
             </Select>
           </FormControl>
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
-            <input
-              name="THOIGIANNHAN"
-              type="date"
-              className="pmleft-1 input-timechucvu"
-              value={TimeChucVu}
-              onChange={(e) => setTimeChucVu(e.target.value)}
-            />
-          </FormControl>
+          {chucVuGiangVien !== lecturerData.TENCHUCVU ? (
+            <>
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Số Quyết Định"
+                  value={SoQuyetDinh}
+                  onChange={(e) => setSoQuyetDinh(e.target.value)}
+                  variant="outlined"
+                  className="height-selectGV"
+                />
+              </FormControl>{" "}
+            </>
+          ) : (
+            false
+          )}
+          {chucVuGiangVien !== lecturerData.TENCHUCVU ? (
+            <>
+              {" "}
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Thời gian nhận chức vụ"
+                  type="date"
+                  value={TimeChucVu}
+                  onChange={(e) => setTimeChucVu(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                />
+              </FormControl>
+            </>
+          ) : (
+            false
+          )}
+
           <FormControl fullWidth margin="normal">
             <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
             <Select
@@ -178,17 +290,28 @@ const UpdateGiangVienModal = ({
                 <MenuItem disabled>Chức danh không có</MenuItem>
               )}
             </Select>
-          </FormControl>{" "}
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="chuc-danh-label">Tên Chức Danh</InputLabel>
-            <input
-              name="THOIGIANNHAN"
-              type="date"
-              className="pmleft-1 input-timechucvu"
-              value={TimeChucDanh}
-              onChange={(e) => setTimeChucDanh(e.target.value)}
-            />
           </FormControl>
+          {ChucDanhGiangVien !== lecturerData.TENCHUCDANH ? (
+            <>
+              {" "}
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Thời gian nhận chức danh"
+                  type="date"
+                  value={TimeChucDanh}
+                  onChange={(e) => setTimeChucDanh(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                  className="input-time"
+                />
+              </FormControl>
+            </>
+          ) : (
+            false
+          )}
+
           <FormControl fullWidth margin="normal">
             <TextField
               label="Số Điện Thoại"
@@ -208,14 +331,14 @@ const UpdateGiangVienModal = ({
             />
           </FormControl>
           <FormControl fullWidth margin="normal">
-            <InputLabel id="phan-quyen-label">Phân Quyền</InputLabel>
+            <InputLabel id="phan-quyen-label">{PhanQuyenGiangVien}</InputLabel>
             <Select
               labelId="phan-quyen-label"
               value={PhanQuyenGiangVien}
               onChange={(e) => setPhanQuyenGiangVien(e.target.value)}
               variant="outlined"
               className="height-selectGV"
-              label="Phân Quyền"
+              label={PhanQuyenGiangVien}
             >
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
