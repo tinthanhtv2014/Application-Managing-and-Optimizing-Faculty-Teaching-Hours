@@ -90,7 +90,15 @@ const GiangVienProfile = ({ giangVien }) => {
       [name]: value,
     });
   };
-
+  const formatDate = (dateString) => {
+    const chuyenTime = dateString.split("T")[0];
+    const dateParts = chuyenTime.split("-");
+    if (dateParts.length === 3) {
+      const [year, month, day] = dateParts;
+      return `${day}-${month}-${year}`;
+    }
+    return dateString; // Trả về nguyên dạng nếu không phải định dạng mong muốn
+  };
   return (
     <Container>
       <Row>
@@ -311,18 +319,34 @@ const GiangVienProfile = ({ giangVien }) => {
                         : "Chưa cập nhật"}
                     </Typography>
                   </Col>
-                  <Col xs={12} sm={6} lg={3}>
-                    <strong>Thời gian nhận chức danh:</strong>
-                  </Col>
-                  <Col xs={12} sm={6} lg={3}>
-                    <input
-                      name="THOIGIANNHAN"
-                      type="date"
-                      className="pmleft-1 input-timechucvu"
-                      value={editData.THOIGIANNHAN}
-                      onChange={handleChange}
-                    />
-                  </Col>
+                  {isEditing ? (
+                    <>
+                      {" "}
+                      <Col xs={12} sm={6} lg={3}>
+                        <strong>Thời gian nhận chức danh:</strong>
+                      </Col>
+                      <Col xs={12} sm={6} lg={3}>
+                        <input
+                          name="THOIGIANNHAN"
+                          type="date"
+                          className="pmleft-1 input-timechucdanh"
+                          value={editData.THOIGIANNHAN}
+                          onChange={handleChange}
+                        />
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col xs={12} sm={6} lg={3}>
+                        <strong>Thời gian nhận chức danh:</strong>
+                      </Col>
+                      <Col xs={12} sm={6} lg={3}>
+                        <p className="pmleft-1">
+                          {formatDate(editData.THOIGIANNHAN)}
+                        </p>
+                      </Col>
+                    </>
+                  )}
                 </Row>
                 <Row>
                   {" "}
