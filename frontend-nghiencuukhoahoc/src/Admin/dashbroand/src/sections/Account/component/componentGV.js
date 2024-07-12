@@ -15,7 +15,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../component/componentGV.scss";
 import { toast } from "react-toastify";
 
-const GiangVienProfile = ({ giangVien }) => {
+const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(giangVien);
   const [dataChucDanh, setdataChucDanh] = useState(null);
@@ -67,7 +67,8 @@ const GiangVienProfile = ({ giangVien }) => {
         if (response.data.EC === 1) {
           setIsEditing(false);
           toast.success("Chỉnh sửa thông tin thành công");
-          setEditData(response.data.DT[0]);
+          CallbackAPiProfileGV();
+          // setEditData(response.data.DT[0]);
         } else {
           // handle error
           toast.error("Chỉnh sửa thông tin thất bại");

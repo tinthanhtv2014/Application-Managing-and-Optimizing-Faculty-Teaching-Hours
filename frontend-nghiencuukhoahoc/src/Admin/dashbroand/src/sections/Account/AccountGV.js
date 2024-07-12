@@ -21,7 +21,9 @@ const AccountGV = () => {
     setTenDangNhapGV(decodeAuth.taikhoan);
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
-
+  const CallbackAPiProfileGV = () => {
+    fetchDataGV(TenDangNhapGV);
+  };
   const fetchDataGV = async (taikhoan) => {
     try {
       const response = await CookiesAxios.get(
@@ -48,7 +50,16 @@ const AccountGV = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  return <>{giangVien && <GiangVienProfile giangVien={giangVien} />}</>;
+  return (
+    <>
+      {giangVien && (
+        <GiangVienProfile
+          CallbackAPiProfileGV={CallbackAPiProfileGV}
+          giangVien={giangVien}
+        />
+      )}
+    </>
+  );
 };
 
 export default AccountGV;

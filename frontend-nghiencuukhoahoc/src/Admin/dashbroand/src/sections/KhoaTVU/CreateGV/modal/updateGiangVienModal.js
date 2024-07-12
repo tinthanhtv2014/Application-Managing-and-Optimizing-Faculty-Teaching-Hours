@@ -165,7 +165,10 @@ const UpdateGiangVienModal = ({
       updateLecturer(updatedData);
     }
   };
+  console.log("checkChucDanhGiangVien => ", ChucDanhGiangVien);
 
+  console.log("chucVuGiangVien => ", chucVuGiangVien);
+  console.log("tenGV => ", tenGV);
   return (
     <Modal
       open={show}
@@ -213,15 +216,18 @@ const UpdateGiangVienModal = ({
               className="height-selectGV"
             />
           </FormControl>
+
           <FormControl fullWidth margin="normal">
             <InputLabel id="chuc-vu-label">Tên Chức Vụ</InputLabel>
             <Select
+              displayEmpty
               labelId="chuc-vu-label"
               value={chucVuGiangVien}
+              defaultValue={lecturerData.TENCHUCVU}
               onChange={(e) => setchucVuGiangVien(e.target.value)}
               variant="outlined"
               className="height-selectGV"
-              label="Tên Chức Vụ"
+              label={chucVuGiangVien}
             >
               {dataListChucVuGiangVien && dataListChucVuGiangVien.length > 0 ? (
                 dataListChucVuGiangVien.map((chucvu, index) => (
@@ -276,6 +282,7 @@ const UpdateGiangVienModal = ({
               value={ChucDanhGiangVien}
               onChange={(e) => setChucDanhGiangVien(e.target.value)}
               variant="outlined"
+              defaultValue={lecturerData.TENCHUCDANH}
               className="height-selectGV"
               label="Tên Chức Danh"
             >
@@ -331,14 +338,15 @@ const UpdateGiangVienModal = ({
             />
           </FormControl>
           <FormControl fullWidth margin="normal">
-            <InputLabel id="phan-quyen-label">{PhanQuyenGiangVien}</InputLabel>
+            <InputLabel id="phan-quyen-label">Phân Quyền</InputLabel>
             <Select
               labelId="phan-quyen-label"
               value={PhanQuyenGiangVien}
+              defaultValue={lecturerData.PHANQUYEN}
               onChange={(e) => setPhanQuyenGiangVien(e.target.value)}
               variant="outlined"
               className="height-selectGV"
-              label={PhanQuyenGiangVien}
+              label="Phân Quyền"
             >
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
