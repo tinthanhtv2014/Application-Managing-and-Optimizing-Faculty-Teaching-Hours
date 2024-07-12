@@ -52,11 +52,13 @@ const AccountGV = () => {
 
   return (
     <>
-      {giangVien && (
+      {giangVien ? (
         <GiangVienProfile
           CallbackAPiProfileGV={CallbackAPiProfileGV}
           giangVien={giangVien}
         />
+      ) : (
+        <div>Loading...</div>
       )}
     </>
   );
