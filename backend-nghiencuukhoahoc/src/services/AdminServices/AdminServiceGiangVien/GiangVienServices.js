@@ -105,13 +105,37 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     let giangvien = await timGiangVien_MAGV(taikhoan[0].MAGV);
     let MABOMON_cu = giangvien[0].MABOMON; // MABOMON có sẵn trước khi update giảng viên
 
-    //Lấy ngày giờ hiện tại
+    // Lấy ngày giờ hiện tại
     const now = new Date();
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, "0");
     const day = now.getDate().toString().padStart(2, "0");
 
-    const formattedDate = `${year}-${month}-${day}`; //Ngày giờ hiện tại
+    const formattedDate = `${year}-${month}-${day}`; // Ngày giờ hiện tại
+
+    // Hàm kiểm tra định dạng ngày hợp lệ
+    function isValidDate(dateString) {
+      const regex = /^\d{4}-\d{2}-\d{2}$/;
+      return regex.test(dateString);
+    }
+
+    // Kiểm tra giá trị TUNGAY
+    if (TUNGAY && isValidDate(TUNGAY) && TUNGAY > formattedDate) {
+      return {
+        EM: "Không thể nhận thời gian ở tương lai",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    // Kiểm tra giá trị THOIGIANNHAN
+    if (THOIGIANNHAN && isValidDate(THOIGIANNHAN) && THOIGIANNHAN > formattedDate) {
+      return {
+        EM: "Không thể nhận thời gian ở tương lai",
+        EC: 0,
+        DT: [],
+      };
+    }
 
     // update bảng tài khoản
     let [resultsTAIKHOAN, fieldsTAIKHOAN] = await pool.execute(
