@@ -97,7 +97,7 @@ const ComponenCreateGiangVien = () => {
         }
       };
       fetchDataAllGV();
-      console.log("check isOpenGetAllApiGV", isOpenGetAllApiGV);
+      // console.log("check isOpenGetAllApiGV", isOpenGetAllApiGV);
     } else {
       if (MaBoMon) {
         const fetchDataAllGV = async () => {
@@ -261,8 +261,8 @@ const ComponenCreateGiangVien = () => {
   };
 
   const handleDeleteGiangVien = async (giangvien) => {
-    console.log("CHECK MAGV = >", giangvien.MAGV);
-    console.log("check Mabomon", giangvien.MABOMON);
+    // console.log("CHECK MAGV = >", giangvien.MAGV);
+    // console.log("check Mabomon", giangvien.MABOMON);
 
     if (giangvien.MAGV) {
       try {
@@ -305,7 +305,7 @@ const ComponenCreateGiangVien = () => {
   };
 
   const functionUpdateTrangThaiGV = async (MaGV, TrangThai, MABOMON) => {
-    console.log("check disable tai khoan =>", MaGV);
+    // console.log("check disable tai khoan =>", MaGV);
     if (isOpenGetAllApiGV) {
       try {
         const response = await CookiesAxios.put(
@@ -395,7 +395,7 @@ const ComponenCreateGiangVien = () => {
     setShowUpdateModal(false);
   };
   const updateLecturer = async (updatedLecturer) => {
-    console.log("check tendangnhap", updatedLecturer.TENDANGNHAP);
+    // console.log("check tendangnhap", updatedLecturer.TENDANGNHAP);
     if (updatedLecturer.TENDANGNHAP) {
       try {
         const response = await CookiesAxios.put(
@@ -420,7 +420,7 @@ const ComponenCreateGiangVien = () => {
       toast.error("Email bị lỗi");
     }
   };
-  console.log("check API ALL +> ", isOpenGetAllApiGV);
+  // console.log("check API ALL +> ", isOpenGetAllApiGV);
   return (
     <Container>
       {" "}

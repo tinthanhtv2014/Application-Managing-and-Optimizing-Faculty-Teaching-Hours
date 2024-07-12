@@ -46,7 +46,12 @@ const GiangVienList = ({
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  const goToNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const goToBackPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
   const renderPageButtons = () => {
     const buttons = [];
     for (let i = 0; i < totalPages; i++) {
@@ -204,7 +209,7 @@ const GiangVienList = ({
           type="button"
           className="btn btn-primary ml-4"
           disabled={currentPage === 0}
-          onClick={prevPage}
+          onClick={goToBackPage}
         >
           Trước
         </button>
@@ -213,7 +218,7 @@ const GiangVienList = ({
           type="button"
           className="btn btn-primary ml-4"
           disabled={currentPage === totalPages - 1}
-          onClick={nextPage}
+          onClick={goToNextPage}
         >
           Tiếp
         </button>
