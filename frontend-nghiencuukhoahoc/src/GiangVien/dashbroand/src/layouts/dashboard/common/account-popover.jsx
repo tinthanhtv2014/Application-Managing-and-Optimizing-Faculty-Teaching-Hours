@@ -41,7 +41,7 @@ export default function AccountPopover() {
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-
+  console.log('test')
   const handleClose = (label) => {
     setOpen(null);
     if (label === "Hồ Sơ") {
