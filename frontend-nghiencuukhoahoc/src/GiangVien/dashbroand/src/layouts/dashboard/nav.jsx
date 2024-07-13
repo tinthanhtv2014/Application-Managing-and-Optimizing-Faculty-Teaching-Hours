@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -16,19 +16,25 @@ import { RouterLink } from '../../routes/components';
 import { useResponsive } from '../../hooks/use-responsive';
 
 import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-import { account } from '../../_mock/account';
+
 
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';
 
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
+import Cookies from "js-cookie";
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx';
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
-
+  const [loading, setLoading] = useState(true);
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
+  const auth = Cookies.get('accessToken');
   const upLg = useResponsive('up', 'lg');
 
   useEffect(() => {
@@ -37,7 +43,35 @@ export default function Nav({ openNav, onCloseNav }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+  useEffect(() => {
+    if (auth) {
+      const decoded = jwtDecode(auth);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
+            { withCredentials: true }
+          );
 
+          if (response.data.EC === 1) {
+            setdataProfileGiangvien(response.data.DT);
+            setLoading(false);
+          } else {
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+          setLoading(false);
+        }
+      };
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [auth]);
+  if (loading) {
+    return <ComponentLoading />;
+  }
   const renderAccount = (
     <Box
       sx={{
@@ -54,10 +88,12 @@ export default function Nav({ openNav, onCloseNav }) {
       <Avatar src={avatarImage} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">
+          {dataProfileGiangvien.TENGV}
+        </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.role}
+          {dataProfileGiangvien.TENCHUCVU}
         </Typography>
       </Box>
     </Box>

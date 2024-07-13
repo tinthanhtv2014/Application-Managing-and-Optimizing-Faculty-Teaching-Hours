@@ -40,6 +40,7 @@ const PrivateRoute = () => {
             "check token user update trang thai ",
             response.data.user
           );
+          console.log("response.data.message", response.data.message);
           if (response.data.message === "Protected data") {
             if (response.data.user.phanquyen === "Admin") {
               setPhanquyenAdmin(true);
@@ -47,7 +48,7 @@ const PrivateRoute = () => {
               setPhanquyenTK(true);
             } else if (response.data.user.phanquyen === "Trưởng Bộ Môn") {
               setPhanquyenTBM(true);
-            } else if (response.data.user.phanquyen === "Giảng Viên") {
+            } else if (response.data.user.phanquyen === "Giảng viên") {
               setPhanquyenGV(true);
             }
             setRedirect(false);
@@ -97,7 +98,7 @@ const PrivateRoute = () => {
   if (phanQuyenTK) {
     return <DashboardTruongKhoa />;
   }
-  return null; // or some default component if needed
+  return <p>ag auisfgu8asdfu8</p>; // or some default component if needed
 };
 
 export default PrivateRoute;

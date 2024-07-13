@@ -41,8 +41,8 @@ export default function LoginView() {
   const [PasswordAdminLogin, setPasswordAdminLogin] = useState("");
   // const { login } = useContext(AuthContext);
   const handleLogin = (event) => {
-    console.log('ok')
-    console.log('Server URL:', process.env.REACT_APP_URL_SERVER);
+    // console.log('ok')
+    // console.log('Server URL:', process.env.REACT_APP_URL_SERVER);
     event.preventDefault();
     if (!UsernameAdminLogin || !PasswordAdminLogin) {
       toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
@@ -53,7 +53,7 @@ export default function LoginView() {
           matkhau: PasswordAdminLogin,
         })
         .then((response) => {
-          console.log('check', response.data);
+          // console.log('check', response.data);
           console.log(response.data.DT.access_token);
 
 
@@ -69,7 +69,7 @@ export default function LoginView() {
               if (decoded.phanquyen == "Admin") {
                 navigate("/admin")
               }
-              if (decoded.phanquyen == "Giảng Viên") {
+              if (decoded.phanquyen == "Giảng viên") {
                 navigate("/giang-vien")
               }
               if (decoded.phanquyen == "Trưởng Khoa") {

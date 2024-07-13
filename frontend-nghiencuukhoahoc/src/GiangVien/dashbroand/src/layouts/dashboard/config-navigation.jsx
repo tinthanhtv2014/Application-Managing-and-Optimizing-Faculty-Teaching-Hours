@@ -7,6 +7,7 @@ const icon = (name) => (
 );
 
 const navConfig = [
+
   {
     title: 'Thông tin cá nhân',
     path: '/',

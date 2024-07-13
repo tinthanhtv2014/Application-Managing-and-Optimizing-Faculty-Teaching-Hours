@@ -7,13 +7,10 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from '../layouts/dashboard';
 import ProductsPageFake from "../pages/products"
 
+const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
+const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
-const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
-const ChatAdmin = lazy(() => import('../sections/ChatAdmin/ChatAdmin'));
-const OnlyChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTietHoaDon/OnlyChiTietHoaDon'));
-const ListOrdersChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTietHoaDon/ListOrdersChiTietHoaDon'));
-const ListOrdersDaHuy = lazy(() => import('../sections/ListOrders/ListOrdersDaHuy/ListOrdersDaHuy'));
-const ListOrdersDaGiao = lazy(() => import('../sections/ListOrders/ListOrdersDaGiao/ListOrdersDaGiao'));
+
 const ListOrdersPage = lazy(() => import('../pages/ListOrders'));
 const IndexPage = lazy(() => import('../pages/app'));
 const BlogPage = lazy(() => import('../pages/blog'));
@@ -28,7 +25,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <IndexPage />
+            <AccountGV />
           </Suspense>
         </DashboardLayout>
       )
@@ -38,7 +35,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <UserPage />
+            <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
       )
