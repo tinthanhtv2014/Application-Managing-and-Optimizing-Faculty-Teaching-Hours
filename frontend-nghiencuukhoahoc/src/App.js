@@ -20,7 +20,7 @@ function App() {
           <Route path="/login" element={<LoginAdmin />} />
           {/* <Route path="/admin/*" element={<DashBroandAdmin />} /> */}
           <Route path="/admin/*" element={<PrivateRoute />} />
-          <Route path="/giang-vien/*" element={<DashboardGiangVien />} />
+          <Route path="/giang-vien/*" element={<PrivateRoute />} />
           <Route path="/truong-bm/*" element={<DashboardTruongBoMon />} />
           <Route path="/truongkhoa/*" element={<DashboardTruongKhoa />} />
           {/* <Route path="/" element={<TruongKhoaLogin />} /> */}
