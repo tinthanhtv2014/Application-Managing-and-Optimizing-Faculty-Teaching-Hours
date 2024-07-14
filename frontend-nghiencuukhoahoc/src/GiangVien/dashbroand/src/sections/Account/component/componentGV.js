@@ -104,7 +104,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
     <Container>
       <Row>
         <Col md={12}>
-          <Card className="giang-vien-profile">
+          <Card className="giang-vien-profile mt-4">
             <Card.Header className="d-flex align-items-center CardHeader-profile-avt">
               <Avatar className="profile-avatar" src={editData.avatar}>
                 {/* {editData.TENGV.charAt(0)} */}
@@ -113,13 +113,14 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                 {isEditing ? (
                   <>
                     <TextField
+                      className="input-editdataGV"
                       name="TENGV"
                       label="Tên giảng viên"
                       variant="outlined"
                       value={editData.TENGV}
                       onChange={handleChange}
                     />{" "}
-                    <p className="profile-gv-avt-cv mt-2">
+                    <p className="profile-gv-avt-cv mt-2 ">
                       {editData.PHANQUYEN
                         ? editData.PHANQUYEN
                         : "Chưa cập nhật"}
@@ -166,13 +167,13 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                 <Row className="mb-3">
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <strong className="profile-name-email">Email:</strong>
+                    <span className="profile-name-email">Email:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1">
                       {isEditing ? (
                         <TextField
-                          className="pml-1 profile-email-input"
+                          className="pml-1 profile-email-input input-editdataGV"
                           name="TENDANGNHAP"
                           variant="outlined"
                           disabled={true}
@@ -191,13 +192,13 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <strong>Điện thoại:</strong>
+                    <span>Điện thoại:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1">
                       {isEditing ? (
                         <TextField
-                          className="pml-1  profile-email-input"
+                          className="pml-1  profile-email-input input-editdataGV"
                           name="DIENTHOAI"
                           variant="outlined"
                           value={editData.DIENTHOAI}
@@ -225,7 +226,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                         <>
                           {" "}
                           <TextField
-                            className="pml-1  profile-email-input"
+                            className="pml-1  profile-email-input input-editdataGV"
                             name="DIACHI"
                             variant="outlined"
                             value={editData.DIACHI}
@@ -247,7 +248,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                   </Col>{" "}
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <strong>Chức Danh:</strong>
+                    <span>Chức Danh:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1" className="pmleft-1">
@@ -258,7 +259,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                               fullWidth
                               className=" profile-email-input"
                             >
-                              <InputLabel id="select-label-trang-thai">
+                              <InputLabel id="select-label-trang-thai ">
                                 Chức danh
                               </InputLabel>
                               <Select
@@ -304,7 +305,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                 <Row>
                   {" "}
                   <Col xs={12} sm={6} lg={3}>
-                    <strong>Trạng thái tài khoản:</strong>
+                    <span>Trạng thái tài khoản:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography
@@ -324,7 +325,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                     <>
                       {" "}
                       <Col xs={12} sm={6} lg={3}>
-                        <strong>Thời gian nhận chức danh:</strong>
+                        <span>Thời gian nhận chức danh:</span>
                       </Col>
                       <Col xs={12} sm={6} lg={3}>
                         <input
@@ -339,7 +340,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                   ) : (
                     <>
                       <Col xs={12} sm={6} lg={3}>
-                        <strong>Thời gian nhận chức danh:</strong>
+                        <span>Thời gian nhận chức danh:</span>
                       </Col>
                       <Col xs={12} sm={6} lg={3}>
                         <p className="pmleft-1">
@@ -353,7 +354,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                   {" "}
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <strong>Bộ môn:</strong>
+                    <span>Bộ môn:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1" className="pmleft-1">
@@ -361,7 +362,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                     </Typography>
                   </Col>{" "}
                   <Col xs={12} sm={6} lg={3}>
-                    <strong>Chức Vụ:</strong>
+                    <span>Chức Vụ:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1" className="pmleft-1">

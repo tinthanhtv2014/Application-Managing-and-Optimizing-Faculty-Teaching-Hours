@@ -1,7 +1,12 @@
 .giang-vien-profile {
     max-width: 1200px;
     height: 95vh;
-    margin: 0 auto;
+    margin: 0 auto;  
+
+
+   
+
+   
     padding: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
@@ -11,7 +16,9 @@
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         border: 0.5px solid rgb(218, 214, 214); 
     }
-   
+    span{
+      font-weight: 600;
+    }
     .profile-header {
       display: flex;
       align-items: center;
@@ -89,7 +96,7 @@ margin-bottom: 0;
     margin-top: -10px;
   }
   .pmt-1{
-    font-weight: 700;
+    // font-weight: 700;
     // color: red;
   }
   .pmleft-1{
@@ -111,7 +118,24 @@ margin-bottom: 0;
    }
   }
 
+/* App.css */
+.input-editdataGV .MuiOutlinedInput-root {
+  // border-color: #007bff;
+}
 
+.input-editdataGV .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+.input-editdataGV .MuiSelect-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+.MuiSelect-select:focus{
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
   input[type="date"] {
  
     background-color: #ffffff;
