@@ -8,6 +8,9 @@ const {
   timChucVu_TENCHUCVU,
   timChucVu_MAGV,
   timCoChucDanh_MAGV,
+  timChucVu_MACHUCVU,
+  timChucDanh_MACHUCDANH,
+  timNamHoc_MANAMHOC,
 
   dataFronEnd,
 } = require("../helpers");
@@ -271,6 +274,9 @@ const update_ChucVu_ChucDanh_GiangVien = async (
   }
 };
 
+const xem_Khung_Gio_Chuan_Theo_Chuc_Danh = async (MAGV) => { }
+
 module.exports = {
   update_ChucVu_ChucDanh_GiangVien,
+  xem_Khung_Gio_Chuan_Theo_Chuc_Danh,
 };
