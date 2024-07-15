@@ -135,6 +135,22 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
   }
 };
 
+const timNamHoc_MANAMHOC = async (MANAMHOC) => {
+  try {
+    // Truy vấn cơ sở dữ liệu để tìm năm học theo mã
+    const [results] = await pool.execute(`SELECT * FROM namhoc WHERE MANAMHOC = ?`, [MANAMHOC]);
+
+    return results;
+  } catch (error) {
+    return {
+      EM: "Lỗi services timNamHoc_MANAMHOC",
+      EC: -1,
+      DT: [],
+    };
+  }
+}
+
+
 //Trả dữ liệu FronEnd
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
   try {
@@ -192,6 +208,7 @@ module.exports = {
   timCoChucDanh_MAGV,
   timChucVu_MACHUCVU,
   timChucDanh_MACHUCDANH,
+  timNamHoc_MANAMHOC,
 
   dataFronEnd,
 };
