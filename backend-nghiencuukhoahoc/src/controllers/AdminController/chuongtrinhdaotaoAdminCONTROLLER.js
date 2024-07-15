@@ -4,6 +4,7 @@ const {
   createChuongtrinhdaotao,
   updateChuongtrinhdaotao,
   xoaChuongtrinh,
+  createChuongtrinhdaotaoExcel,
 } = require("../../services/AdminServices/CRUDChuongtrinhdaotao");
 
 const getAllChuongtrinhdaotao = async (req, res) => {
@@ -92,9 +93,28 @@ const deleteChuongtrinhdaotaoController = async (req, res) => {
   }
 };
 
+const createCHUONGTRINHDAOTAOExcelController = async (req, res) => {
+  try {
+    const dataChuongtrinhdaotaoExcelArray = req.body;
+
+    let results = await createChuongtrinhdaotaoExcel(
+      dataChuongtrinhdaotaoExcelArray
+    );
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getAllChuongtrinhdaotao,
   createChuongtrinhdaotaoControler,
   updateChuongtrinhdaotaoController,
   deleteChuongtrinhdaotaoController,
+  createCHUONGTRINHDAOTAOExcelController,
 };

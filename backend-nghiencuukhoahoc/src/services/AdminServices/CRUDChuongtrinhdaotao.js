@@ -1,4 +1,17 @@
 const pool = require("../../config/database");
+const {
+  timTaiKhoan_TENDANGNHAP,
+  timGiangVien_MAGV,
+  selectBomon_TENBOMON,
+  selectChucdanh_TENCHUCDANH,
+  timChucVu_TENCHUCVU,
+  timChucVu_MAGV,
+  timCoChucDanh_MAGV,
+
+  dataFronEnd,
+  timchuongtrinh_TENCHUONGTRINH,
+  timmonhoc_TENMONHOC,
+} = require("./helpers");
 
 const selectChuongtrinhdaotao = async () => {
   try {
@@ -151,36 +164,105 @@ const xoaChuongtrinh = async (MACHUONGTRINH) => {
 const createChuongtrinhdaotaoExcel = async (
   dataChuongtrinhdaotaoExcelArray
 ) => {
-  // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
-  // không được để trống TENDANGNHAP và MAGV
-  try {
-    let results = [];
+  // dataCHUONGTRINHDAOTAOExcelArray  gồm MACHUONGTRINH, MABOMON, TENCHUONGTRINH,MAMONHOC, TENMONHOC, SOTINCHILYTHUYET và SOTINCHITHUCHANH, SOTHUTUHOCKI
 
-    // Kiểm tra trước khi tạo tài khoản
-    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {}
+  // try {
+  let results = [];
 
-    // Bắt đầu tạo tài khoản
-    for (var i = 0; i < dataTaiKhoanExcelArray.length; i++) {
-      results.push({
-        EM: `Tạo tài khoản ${dataTaiKhoanExcelArray[i].TENDANGNHAP} thành công`,
+  // Kiểm tra thông tin trong file excel
+  for (var i = 0; i < dataChuongtrinhdaotaoExcelArray.length; i++) {
+    if (
+      !dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH ||
+      !dataChuongtrinhdaotaoExcelArray[i].TENBOMON ||
+      !dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
+    ) {
+      return {
+        EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
+          dataTaiKhoanExcelArray[i]
+        )}`,
         EC: 0,
         DT: [],
-      });
+      }; // Tiếp tục thực hiện các lệnh khác
+    }
+    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+    );
+    if (kiemtra_tenchuongtrinh.length < 0) {
+      return {
+        EM: `chương trình đào tạo không tồn tại`,
+        EC: 0,
+        DT: [],
+      }; // Tiếp tục thực hiện các lệnh khác
+    }
+    let kiemtra_tenbomon = selectBomon_TENBOMON(
+      dataChuongtrinhdaotaoExcelArray[i].TENBOMON
+    );
+    if (kiemtra_tenbomon.length < 0) {
+      return {
+        EM: `bộ môn không tồn tại`,
+        EC: 0,
+        DT: [],
+      }; // Tiếp tục thực hiện các lệnh khác
     }
 
-    return {
-      EM: "Tất cả tài khoản đã được tạo",
-      EC: 1,
-      DT: results,
-    };
-  } catch (error) {
-    console.log("Lỗi services createTaiKhoanExcel", error);
-    return {
-      EM: "Lỗi services createTaiKhoanExcel",
-      EC: 1,
-      DT: [],
-    };
+    let kiemtra_tenmonhoc = timmonhoc_TENMONHOC(
+      dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
+    );
+    if (kiemtra_tenmonhoc.length > 0) {
+      return {
+        EM: `ten mon hoc da ton tai`,
+        EC: 0,
+        DT: [],
+      }; // Tiếp tục thực hiện các lệnh khác
+    }
   }
+
+  // Bắt đầu tạo tài khoản
+  for (var i = 0; i < dataChuongtrinhdaotaoExcelArray.length; i++) {
+    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+    );
+    console.log("check 2", kiemtra_tenchuongtrinh);
+    await pool.execute(
+      `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH) VALUES (?, ?,?)`,
+      [
+        dataChuongtrinhdaotaoExcelArray[i].TENMONHOC,
+        dataChuongtrinhdaotaoExcelArray[i].SOTINCHILYTHUYET,
+        dataChuongtrinhdaotaoExcelArray[i].SOTINCHITHUCHANH,
+      ]
+    );
+    let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
+      dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
+    );
+    console.log("check 1", kiemtra_tenmonhoc);
+    await pool.execute(
+      `INSERT INTO thuoc (MACHUONGTRINH,MAMONHOC,SOTHUTUHOCKI) VALUES (?, ?,?)`,
+      [
+        kiemtra_tenchuongtrinh.MACHUONGTRINH,
+        kiemtra_tenmonhoc.MAMONHOC,
+        dataChuongtrinhdaotaoExcelArray[i].SOTHUTUHOCKI,
+      ]
+    );
+    results.push({
+      EM: `Tạo tài khoản ${dataChuongtrinhdaotaoExcelArray[i].TENDANGNHAP} thành công`,
+      EC: 0,
+      DT: [],
+    });
+  }
+
+  return {
+    EM: "Tất cả tài khoản đã được tạo",
+    EC: 1,
+    DT: results,
+  };
+  // } catch (error) {
+  //   console.log("Lỗi services createTaiKhoanExcel", error);
+  //   return {
+  //     EM: "Lỗi services createTaiKhoanExcel",
+  //     EC: 1,
+  //     DT: [],
+  //   };
+  // }
 };
 
 module.exports = {

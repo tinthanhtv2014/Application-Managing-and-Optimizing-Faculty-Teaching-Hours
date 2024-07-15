@@ -135,22 +135,6 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
   }
 };
 
-const timNamHoc_MANAMHOC = async (MANAMHOC) => {
-  try {
-    // Truy vấn cơ sở dữ liệu để tìm năm học theo mã
-    const [results] = await pool.execute(`SELECT * FROM namhoc WHERE MANAMHOC = ?`, [MANAMHOC]);
-
-    return results;
-  } catch (error) {
-    return {
-      EM: "Lỗi services timNamHoc_MANAMHOC",
-      EC: -1,
-      DT: [],
-    };
-  }
-}
-
-
 //Trả dữ liệu FronEnd
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
   try {
@@ -182,7 +166,7 @@ const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
       query,
       isOpenGetAllApiGV ? [] : [MABOMON]
     );
-    console.log("dataFronEnd:   ", results);
+    console.log(results);
     return {
       EM: "",
       EC: 1,
@@ -198,6 +182,34 @@ const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
   }
 };
 
+const timchuongtrinh_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
+  try {
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM chuongtrinhdaotao WHERE TENCHUONGTRINH = ?",
+      [TENCHUONGTRINH]
+    );
+    console.log("Check timChucVu_MACHUCVU:   ", results1);
+    return results1[0];
+  } catch (error) {
+    console.log("timchuongtrinh_TENCHUONGTRINH errr >>>", error);
+    return [];
+  }
+};
+
+const timmonhoc_TENMONHOC = async (TENMONHOC) => {
+  try {
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM monhoc WHERE TENMONHOC = ?",
+      [TENMONHOC]
+    );
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    return results1[0];
+  } catch (error) {
+    console.log("timmonhoc_TENMONHOC errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -208,7 +220,8 @@ module.exports = {
   timCoChucDanh_MAGV,
   timChucVu_MACHUCVU,
   timChucDanh_MACHUCDANH,
-  timNamHoc_MANAMHOC,
 
   dataFronEnd,
+  timchuongtrinh_TENCHUONGTRINH,
+  timmonhoc_TENMONHOC,
 };
