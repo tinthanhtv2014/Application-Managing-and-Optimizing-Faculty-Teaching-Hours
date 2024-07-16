@@ -25,7 +25,7 @@ const CRUDMonHoc = (app) => {
   router.delete("/xoa", deleteMONHOC);
 
   //router cho chuong trinh dao tao
-  router.get("/xem", getAllMONHOC);
+  router.get("/chuongtrinh/xem", getAllChuongtrinhdaotao);
   router.post("/chuongtrinh/tao", createCHUONGTRINHDAOTAOExcelController);
   router.put("/sua/:MAMONHOC", updateMONHOC);
   router.delete("/xoa", deleteMONHOC);

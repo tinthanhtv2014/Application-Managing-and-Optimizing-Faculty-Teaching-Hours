@@ -16,7 +16,7 @@ const {
 const selectChuongtrinhdaotao = async () => {
   try {
     let [results1, fields1] = await pool.execute(
-      `select * from chuongtrinhdaotao`
+      `select ctdt.*,mh.* from chuongtrinhdaotao as ctdt, thuoc as t, monhoc as mh where ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC`
     );
     return {
       EM: " xem thông tin chương trình đào tạo thành công",
