@@ -92,6 +92,10 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
     });
   };
   const formatDate = (dateString) => {
+    if (!dateString) {
+      return "Invalid date"; // Hoặc một giá trị mặc định nào đó
+    }
+
     const chuyenTime = dateString.split("T")[0];
     const dateParts = chuyenTime.split("-");
     if (dateParts.length === 3) {
@@ -100,6 +104,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
     }
     return dateString; // Trả về nguyên dạng nếu không phải định dạng mong muốn
   };
+
   return (
     <Container>
       <Row>

@@ -43,7 +43,7 @@ const DangKyGioChuan = () => {
 
       if (response.data.EC === 1) {
         setGiangVien(response.data.DT);
-        setChucDanhGiangVien(response.data.TENCHUCDANH);
+        setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         if (response.data.DT.TENCHUCDANH == "Giảng viên (Hạng III)") {
           setIsGVHangIII(true);
           setLoading(false);
@@ -79,7 +79,7 @@ const DangKyGioChuan = () => {
   }
 
   if (isGVCaoCapHangI) {
-    return <GV_CaoCap_Hang_I />;
+    return <GV_CaoCap_Hang_I ChucDanhGiangVien={ChucDanhGiangVien} />;
   }
   if (isGVChinhHangII) {
     return <GV_Chinh_Hang_II />;
@@ -88,7 +88,7 @@ const DangKyGioChuan = () => {
     return <GV_TapSu />;
   }
 
-  return <p> null</p>;
+  return <p> nullasd</p>;
 };
 
 export default DangKyGioChuan;
