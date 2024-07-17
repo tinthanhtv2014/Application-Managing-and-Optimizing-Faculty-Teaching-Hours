@@ -7,6 +7,7 @@ const {
 
 const {
   getKhungGioChuan_TENCHUCDANH,
+  getAllTenKhung_TENCHUCDANH,
 } = require("../../controllers/AdminController/khunggiochuanController");
 
 const {
@@ -20,11 +21,12 @@ const QuyenGiangVienRouter = (app) => {
   // route cho giảng viên
   router.put("/sua/thongtin/:TENDANGNHAP", updateThongTinGiangVienController);
   router.get("/xem/khunggiochuan/:TENCHUCDANH", getKhungGioChuan_TENCHUCDANH); // Sử dụng phương thức GET thay vì PUT
-
+  router.get("/xem/all/tenkhung/:TENCHUCDANH", getAllTenKhung_TENCHUCDANH);
   //route chọn khung cho giảng viên
   router.get("/xem/canhan/khunggiochuan", select_CHONKHUNG); // xem thông tin khung chuẩn của 1 giảng viên
   router.post("/tao/khunggiochuan", create_CHONKHUNG); // tạo khung chuẩn cho 1 giảng viên chưa có
-  router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG);
+  router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
+
   return app.use("/api/v1/quyengiangvien/giangvien", router);
 };
 

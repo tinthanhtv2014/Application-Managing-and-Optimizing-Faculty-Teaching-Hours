@@ -14,6 +14,38 @@ const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
   }
 };
 
+const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
+  try {
+    let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
+    console.log("TENCHUCDANH:  ", TENCHUCDANH);
+    console.log("chucdanh:  ", chucdanh);
+    console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
+    if (!chucdanh) {
+      return {
+        EM: "Không có chức danh này",
+        EC: 0,
+        DT: [],
+      };
+    }
+    const [results1, fields] = await pool.execute(
+      "SELECT TENKHUNGCHUAN FROM khunggiochuan WHERE khunggiochuan.MACHUCDANH = ?",
+      [chucdanh.MACHUCDANH]
+    );
+    console.log(results1);
+    return {
+      EM: "Xem thông tin tất cả tên khung giờ chuẩn theo tên chức danh thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "lỗi services timKhungGioChuan_TENCHUCDANH",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
@@ -115,4 +147,5 @@ module.exports = {
   tao_CHONKHUNG,
   xem_CHONKHUNG_cho_GIANGVIEN,
   sua_CHONKHUNG_cho_GIANGVIEN,
+  timAllTenKhung_TENCHUCDANH,
 };
