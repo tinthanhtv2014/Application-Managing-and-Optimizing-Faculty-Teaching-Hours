@@ -163,8 +163,14 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   }
 };
 
-const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC, MAKHUNG) => {
+const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC, MAKHUNG) => {
   try {
+    const [results_MANAMHOC, fields__MANAMHOC] = await pool.execute(
+      "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC =? ",
+      [TENNAMHOC]
+    );
+
+    const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results1, fields] = await pool.execute(
       "UPDATE chon_khung SET MAKHUNG = ? WHERE MAGV = ? and MANAMHOC = ?",
       [MAKHUNG, MAGV, MANAMHOC]

@@ -50,12 +50,12 @@ const create_CHONKHUNG = async (req, res) => {
 const update_CHONKHUNG = async (req, res) => {
   try {
     const MAGV = req.params.MAGV;
-    const MANAMHOC = req.body.MANAMHOC;
+    const TENNAMHOC = req.body.TENNAMHOC;
     const MAKHUNG = req.body.MAKHUNG;
     console.log("check 1: ", MAGV);
     console.log("check 2: ", MANAMHOC);
     console.log("check 3: ", MAKHUNG);
-    let results = await sua_CHONKHUNG_cho_GIANGVIEN(MAGV, MANAMHOC, MAKHUNG);
+    let results = await sua_CHONKHUNG_cho_GIANGVIEN(MAGV, TENNAMHOC, MAKHUNG);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
