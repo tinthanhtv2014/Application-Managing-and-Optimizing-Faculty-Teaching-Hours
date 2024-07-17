@@ -1,5 +1,22 @@
 const pool = require("../../config/database");
 
+const {
+  timTaiKhoan_TENDANGNHAP,
+  timGiangVien_MAGV,
+  selectBomon_TENBOMON,
+  selectChucdanh_TENCHUCDANH,
+  timChucVu_TENCHUCVU,
+  timChucVu_MAGV,
+  timCoChucDanh_MAGV,
+  timChucVu_MACHUCVU,
+  timChucDanh_MACHUCDANH,
+
+  dataFronEnd,
+  timchuongtrinh_TENCHUONGTRINH,
+  timmonhoc_TENMONHOC,
+  timnamhoc_MANAMHOC,
+} = require('../AdminServices/helpers')
+
 const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     const [results1, fields] = await pool.execute(
@@ -31,7 +48,7 @@ const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
       "SELECT TENKHUNGCHUAN FROM khunggiochuan WHERE khunggiochuan.MACHUCDANH = ?",
       [chucdanh.MACHUCDANH]
     );
-    console.log(results1);
+    // console.log(results1);
     return {
       EM: "Xem thông tin tất cả tên khung giờ chuẩn theo tên chức danh thành công",
       EC: 1,
@@ -46,6 +63,7 @@ const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
     };
   }
 };
+
 const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
@@ -80,19 +98,31 @@ const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
 
 const tao_CHONKHUNG = async (MAGV, MANAMHOC, MAKHUNG) => {
   try {
-    const [results1, fields] = await pool.execute(
-      "insert into chon_khung values (?,?,?)",
+    const [results0, fields0] = await pool.execute(
+      "SELECT * FROM chon_khung WHERE MAGV = ? AND MANAMHOC = ? AND MAKHUNG = ?",
       [MAGV, MANAMHOC, MAKHUNG]
     );
+
+    if (results0.length > 0) {
+      const [results1, fields1] = await pool.execute(
+        "UPDATE chon_khung SET MAKHUNG = ? WHERE MAGV = ? AND MANAMHOC = ?",
+        [MAKHUNG, MAGV, MANAMHOC]
+      );
+    } else {
+      const [results1, fields1] = await pool.execute(
+        "INSERT INTO chon_khung (MAGV, MANAMHOC, MAKHUNG) VALUES (?,?,?)",
+        [MAGV, MANAMHOC, MAKHUNG]
+      );
+    }
     return {
-      EM: "thêm khung cho giảng viên mới thành công",
+      EM: "Thêm khung cho giảng viên mới thành công",
       EC: 1,
-      DT: results1,
+      DT: [],
     };
   } catch (error) {
     console.log(error);
     return {
-      EM: "lỗi services tao_CHONKHUNG",
+      EM: "Lỗi services tao_CHONKHUNG",
       EC: -1,
       DT: [],
     };
