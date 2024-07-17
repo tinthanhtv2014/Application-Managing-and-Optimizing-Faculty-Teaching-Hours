@@ -18,7 +18,7 @@ const DangKyGioChuan = () => {
   const [isGVHangIII, setIsGVHangIII] = useState(false);
   const [isTroGiang, setIsTroGiang] = useState(false);
   const [isGVTapSu, setIsGVTapSu] = useState(false);
-
+  const [MaGV, setMaGV] = useState(null);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -44,6 +44,7 @@ const DangKyGioChuan = () => {
       if (response.data.EC === 1) {
         setGiangVien(response.data.DT);
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
+        setMaGV(response.data.DT.MAGV);
         if (response.data.DT.TENCHUCDANH == "Giảng viên (Hạng III)") {
           setIsGVHangIII(true);
           setLoading(false);
@@ -79,7 +80,9 @@ const DangKyGioChuan = () => {
   }
 
   if (isGVCaoCapHangI) {
-    return <GV_CaoCap_Hang_I ChucDanhGiangVien={ChucDanhGiangVien} />;
+    return (
+      <GV_CaoCap_Hang_I ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />
+    );
   }
   if (isGVChinhHangII) {
     return <GV_Chinh_Hang_II />;

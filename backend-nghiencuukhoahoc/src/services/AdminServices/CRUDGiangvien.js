@@ -58,7 +58,8 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
     let [results, fields] = await pool.execute(
       `SELECT 
         TK.TENDANGNHAP,
-        GV.TENGV, 
+        GV.TENGV,
+        GV.MAGV,
         CV.TENCHUCVU, 
         
         CD.TENCHUCDANH, 
@@ -91,8 +92,8 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
     if (results[0] && results[0].THOIGIANNHAN) {
       const date = new Date(results[0].THOIGIANNHAN);
       const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
       results[0].THOIGIANNHAN = `${year}-${month}-${day}`;
     }
 
@@ -193,8 +194,7 @@ const updateTrangThaiTaiKhoanGiangVien = async (
       [TRANGTHAITAIKHOAN, MAGV]
     );
 
-
-    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
+    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
     // console.log("results0.DT:  ", results0.DT)
     return {
@@ -226,7 +226,6 @@ const updateTrangThaiTaiKhoanGiangVien = async (
     //     DT: results0,
     //   };
     // }
-
   } catch (error) {
     console.log(error);
     return {
@@ -336,7 +335,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
     // Cuối cùng, xóa trong bảng giangvien
     await pool.execute(`DELETE FROM giangvien WHERE MAGV = ?`, [MAGV]);
 
-    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON)
+    let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
     // console.log("results0.DT:  ", results0.DT)
     return {
@@ -344,7 +343,6 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
       EC: 1,
       DT: results0.DT,
     };
-
   } catch (error) {
     console.log(error);
     return {

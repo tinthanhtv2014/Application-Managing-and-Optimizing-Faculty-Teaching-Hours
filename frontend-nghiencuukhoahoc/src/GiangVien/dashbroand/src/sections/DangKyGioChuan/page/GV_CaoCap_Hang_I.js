@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 
-const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien }) => {
+const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -17,6 +17,7 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien }) => {
   const [ListKhungGioChuan, setListKhungGioChuan] = useState(null);
   const [ListTenKhung_TENCHUCDANH, setListTenKhung_TENCHUCDANH] =
     useState(null);
+  const [ListNamHoc, setListNamHoc] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,18 +37,22 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien }) => {
 
   const fetchDataGV = async () => {
     try {
-      const [response, response1] = await Promise.all([
+      const [response, response1, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/khunggiochuan/${ChucDanhGiangVien}`
         ),
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/all/tenkhung/${ChucDanhGiangVien}`
         ),
+        CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+        ),
       ]);
 
       if (response.data.EC === 1) {
         setListTenKhung_TENCHUCDANH(response1.data.DT);
         setListKhungGioChuan(response.data.DT);
+        setListNamHoc(responseListNamHoc.data.DT);
       } else {
         toast.error("Không thể lấy dữ liệu khung giờ chuẩn");
       }
@@ -72,6 +77,8 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien }) => {
       <RenderData
         dataKhungChuan={ListKhungGioChuan}
         dataTenKhungChuan={ListTenKhung_TENCHUCDANH}
+        dataListNamHoc={ListNamHoc}
+        MaGV={MaGV}
       />
     </>
   );
