@@ -60,7 +60,49 @@ const tao_CHONKHUNG = async (MAGV, MANAMHOC, MAKHUNG) => {
   } catch (error) {
     console.log(error);
     return {
-      EM: "lỗi services timKhungGioChuan_TENCHUCDANH",
+      EM: "lỗi services tao_CHONKHUNG",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC) => {
+  try {
+    const [results1, fields] = await pool.execute(
+      "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
+      [MAGV, MANAMHOC]
+    );
+    return {
+      EM: "xem thông tin khung hiện tại thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "lỗi services xem_CHONKHUNG_cho_GIANGVIEN",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC, MAKHUNG) => {
+  try {
+    const [results1, fields] = await pool.execute(
+      "insert into chon_khung values (?,?,?)",
+      [MAGV, MANAMHOC, MAKHUNG]
+    );
+    return {
+      EM: "thêm khung cho giảng viên mới thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "lỗi services sua_CHONKHUNG_cho_GIANGVIEN",
       EC: -1,
       DT: [],
     };
@@ -71,4 +113,5 @@ module.exports = {
   timChucDanh_TENCHUCDANH,
   timKhungGioChuan_TENCHUCDANH,
   tao_CHONKHUNG,
+  xem_CHONKHUNG_cho_GIANGVIEN,
 };
