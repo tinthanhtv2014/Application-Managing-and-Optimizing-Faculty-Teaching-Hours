@@ -135,8 +135,15 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
   }
 };
 
-const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC) => {
+const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
+    const [results_MANAMHOC, fields__MANAMHOC] = await pool.execute(
+      "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC =? ",
+      [TENNAMHOC]
+    );
+
+    const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
+    console.log(MANAMHOC);
     const [results1, fields] = await pool.execute(
       "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]

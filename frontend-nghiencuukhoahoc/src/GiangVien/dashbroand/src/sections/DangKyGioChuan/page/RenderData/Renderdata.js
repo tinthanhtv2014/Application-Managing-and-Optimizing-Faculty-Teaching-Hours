@@ -29,22 +29,35 @@ const RenderData = ({
   const [isOpenOption, setIsOpenOption] = useState("Chọn Khung Giờ");
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
+  const [dataRenderKhungChuan, setDataRenderKhungChuan] = useState(null);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
   useEffect(() => {
     if (dataKhungChuan) {
       setLoading(false);
+      setDataRenderKhungChuan(dataKhungChuan);
       setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
     }
   }, [dataKhungChuan]);
   useEffect(() => {
-    if (isOpenOption === "Xem Khung Giờ") {
-      const response = CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
-        { MAGV: MaGV }
-      );
-    }
+    const DataXemKhungGio = async () => {
+      try {
+        if (isOpenOption === "Xem Khung Giờ") {
+          const response = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
+            { MAGV: MaGV, TENNAMHOC: selectNamHoc }
+          );
+          console.log(response.data.DT);
+          setDataRenderKhungChuan(response.data.DT);
+        } else if (isOpenOption === "Chọn Khung Giờ") {
+          setDataRenderKhungChuan(dataKhungChuan);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    DataXemKhungGio();
   }, [isOpenOption]);
   const handleRowClick = (index, khungChuan) => {
     setSelectedRow(index);
@@ -183,7 +196,7 @@ const RenderData = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataKhungChuan.map((khungChuan, index) => (
+                {dataRenderKhungChuan.map((khungChuan, index) => (
                   <TableRow
                     className={`table-row ${
                       selectedRow === index ? "selected" : ""

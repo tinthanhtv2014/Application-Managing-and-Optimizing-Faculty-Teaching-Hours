@@ -8,9 +8,9 @@ const {
 const select_CHONKHUNG = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
-    const MANAMHOC = req.body.MANAMHOC;
-
-    let results = await xem_CHONKHUNG_cho_GIANGVIEN(MAGV, MANAMHOC);
+    const TENNAMHOC = req.body.TENNAMHOC;
+    console.log(TENNAMHOC);
+    let results = await xem_CHONKHUNG_cho_GIANGVIEN(MAGV, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
