@@ -91,11 +91,11 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC) => {
 const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, MANAMHOC, MAKHUNG) => {
   try {
     const [results1, fields] = await pool.execute(
-      "insert into chon_khung values (?,?,?)",
-      [MAGV, MANAMHOC, MAKHUNG]
+      "UPDATE chon_khung SET MAKHUNG = ? WHERE MAGV = ? and MANAMHOC = ?",
+      [MAKHUNG, MAGV, MANAMHOC]
     );
     return {
-      EM: "thêm khung cho giảng viên mới thành công",
+      EM: "sửa khung cho giảng viên mới thành công",
       EC: 1,
       DT: results1,
     };
@@ -114,4 +114,5 @@ module.exports = {
   timKhungGioChuan_TENCHUCDANH,
   tao_CHONKHUNG,
   xem_CHONKHUNG_cho_GIANGVIEN,
+  sua_CHONKHUNG_cho_GIANGVIEN,
 };
