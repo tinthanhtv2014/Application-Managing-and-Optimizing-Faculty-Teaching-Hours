@@ -15,7 +15,7 @@ const {
   timchuongtrinh_TENCHUONGTRINH,
   timmonhoc_TENMONHOC,
   timnamhoc_MANAMHOC,
-} = require('../AdminServices/helpers')
+} = require("../AdminServices/helpers");
 
 const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
@@ -96,8 +96,14 @@ const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
   }
 };
 
-const tao_CHONKHUNG = async (MAGV, MANAMHOC, MAKHUNG) => {
+const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
   try {
+    const [results_MANAMHOC, fields__MANAMHOC] = await pool.execute(
+      "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC =? ",
+      [TENNAMHOC]
+    );
+
+    const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results0, fields0] = await pool.execute(
       "SELECT * FROM chon_khung WHERE MAGV = ? AND MANAMHOC = ? AND MAKHUNG = ?",
       [MAGV, MANAMHOC, MAKHUNG]

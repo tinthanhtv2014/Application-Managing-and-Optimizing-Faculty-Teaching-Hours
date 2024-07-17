@@ -25,8 +25,8 @@ const RenderData = ({
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
-  const [selectNamHoc, setSelectNamhoc] = useState(null);
-  const [isOpenOption, setIsOpenOption] = useState("Xem Khung Giờ");
+  const [selectNamHoc, setSelectNamhoc] = useState();
+  const [isOpenOption, setIsOpenOption] = useState("Chọn Khung Giờ");
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
   const CookiesAxios = axios.create({
@@ -38,7 +38,14 @@ const RenderData = ({
       setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
     }
   }, [dataKhungChuan]);
-
+  useEffect(() => {
+    if (isOpenOption === "Xem Khung Giờ") {
+      const response = CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
+        { MAGV: MaGV }
+      );
+    }
+  }, [isOpenOption]);
   const handleRowClick = (index, khungChuan) => {
     setSelectedRow(index);
     setSelectKhungGioChuan(khungChuan);
@@ -50,7 +57,7 @@ const RenderData = ({
   };
   const handleSelectKhungGioChuan = async () => {
     const response = await CookiesAxios.post(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`,
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/khunggiochuan`,
       {
         MAGV: MaGV,
         MAKHUNG: SelectKhungGioChuan.MAKHUNG,
@@ -86,26 +93,7 @@ const RenderData = ({
                 </Select>
               </FormControl>
             </Box>
-          </Col>
-          {SelectKhungGioChuan && (
-            <>
-              {" "}
-              <Col>
-                <Button variant="text">Bạn đang chọn</Button>
-                <Button
-                  variant="outlined"
-                  onClick={handleCancelSelectKhungGioChuan}
-                >
-                  {SelectKhungGioChuan.TENKHUNGCHUAN}
-                </Button>
-
-                <Button variant="contained" onClick={handleSelectKhungGioChuan}>
-                  Xác Nhận
-                </Button>
-              </Col>
-            </>
-          )}
-
+          </Col>{" "}
           <Col>
             <Box sx={{ maxWidth: 220 }}>
               <FormControl fullWidth className="profile-email-input">
@@ -115,9 +103,9 @@ const RenderData = ({
                   id="trang-thai-select"
                   name="TENCHUCDANH"
                   label="Chức danh"
-                  value={TenKhung}
+                  value={selectNamHoc}
                   defaultValue={selectNamHoc}
-                  onChange={(e) => setTenKhung(e.target.value)}
+                  onChange={(e) => setSelectNamhoc(e.target.value)}
                   variant="outlined"
                 >
                   {dataListNamHoc && dataListNamHoc.length > 0 ? (
@@ -135,6 +123,37 @@ const RenderData = ({
               </FormControl>
             </Box>
           </Col>
+          {SelectKhungGioChuan ? (
+            <>
+              <Col>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleCancelSelectKhungGioChuan}
+                >
+                  Bạn đang chọn {SelectKhungGioChuan.TENKHUNGCHUAN}
+                </Button>
+              </Col>
+              <Col>
+                <Button variant="contained" onClick={handleSelectKhungGioChuan}>
+                  Xác Nhận
+                </Button>
+              </Col>
+            </>
+          ) : (
+            <>
+              <Col>
+                <Button variant="outlined" color="secondary" disabled>
+                  Bạn chưa chọn khung giờ chuẩn
+                </Button>
+              </Col>
+              <Col>
+                <Button variant="contained" disabled>
+                  Xác Nhận
+                </Button>
+              </Col>
+            </>
+          )}
         </Row>
         <Row>
           <TableContainer
@@ -183,19 +202,19 @@ const RenderData = ({
                     <TableCell align="center">
                       {khungChuan.GIOGIANGDAY_HANHCHINH ?? ""}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" className="text-info">
                       {khungChuan.GIOGIANGDAY_CHUAN ?? ""}
                     </TableCell>
                     <TableCell align="center">
                       {khungChuan.GIONGHIENCUUKHOAHOC_HANHCHINH ?? ""}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" className="text-info">
                       {khungChuan.GIONGHIENCUUKHOAHOC_CHUAN ?? ""}
                     </TableCell>
                     <TableCell align="center">
                       {khungChuan.GIOPHUCVUCONGDONG_HANHCHINH ?? ""}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" className="text-info">
                       {khungChuan.GIOPHUCVUCONGDONG_CHUAN ?? ""}
                     </TableCell>
                     <TableCell align="center">

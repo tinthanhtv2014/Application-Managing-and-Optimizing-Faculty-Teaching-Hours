@@ -29,9 +29,9 @@ const select_CHONKHUNG = async (req, res) => {
 const create_CHONKHUNG = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
-    const MANAMHOC = req.body.MANAMHOC;
+    const TENNAMHOC = req.body.TENNAMHOC;
     const MAKHUNG = req.body.MAKHUNG;
-    let results = await tao_CHONKHUNG(MAGV, MANAMHOC, MAKHUNG);
+    let results = await tao_CHONKHUNG(MAGV, TENNAMHOC, MAKHUNG);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
