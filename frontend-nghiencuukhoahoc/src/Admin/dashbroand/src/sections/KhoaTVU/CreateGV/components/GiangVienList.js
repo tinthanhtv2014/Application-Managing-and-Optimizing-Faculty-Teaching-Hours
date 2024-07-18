@@ -2,7 +2,25 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Button,
+  Box,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faCheck,
+  faTimes,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 const GiangVienList = ({
   currentPage,
@@ -73,164 +91,178 @@ const GiangVienList = ({
 
   return (
     <>
-      <table className="custom-table">
-        <thead>
-          <tr>
-            <th>Stt</th>
-            <th>Mã GV</th>
-            <th>Email Đăng Nhập</th>
-            <th>Tên Giảng Viên</th>
-            <th>Tên Chức Vụ</th>
-            <th>Tên Chức Danh</th>
-            <th>Số Điện Thoại</th>
-            <th>Địa Chỉ</th>
-            <th>Tên Bộ Môn</th>
-            <th>Phân Quyền</th>
-            <th>Trạng Thái</th>
-            <th>Xóa</th>
-            <th>Tạm Ngưng</th>
-            <th>Sửa</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredGiangVien && filteredGiangVien.length > 0 ? (
-            filteredGiangVien.map((giangvien, index) => (
-              <tr
-                onClick={() => handleChoseRowGV(giangvien)}
-                key={index}
-                className={`custom-table-row ${
-                  activeRowGV === giangvien.MABOMON ? "activeBM" : ""
-                }`}
-              >
-                <td>{startIndex + index + 1}</td>
-                <td>{giangvien.MAGV}</td>
-                <td>{giangvien.TENDANGNHAP}</td>
-                <td>{giangvien.TENGV}</td>
-                <td>{giangvien.TENCHUCVU}</td>
-                <td>{giangvien.TENCHUCDANH}</td>
-                <td>{giangvien.DIENTHOAI}</td>
-                <td>{giangvien.DIACHI}</td>
-                <td>{giangvien.TENBOMON}</td>
-                <td
-                  className={
-                    giangvien.PHANQUYEN === "Admin"
-                      ? "inactive-status"
-                      : giangvien.PHANQUYEN === "Giảng Viên"
-                      ? "text-dark"
-                      : giangvien.PHANQUYEN === "Trưởng Bộ Môn"
-                      ? "text-primary"
-                      : giangvien.PHANQUYEN === "Trưởng Khoa"
-                      ? "text-primary"
-                      : ""
-                  }
+      <TableContainer component={Paper}>
+        <Table className="custom-table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Stt</TableCell>
+              <TableCell>Mã GV</TableCell>
+              <TableCell>Email Đăng Nhập</TableCell>
+              <TableCell>Tên Giảng Viên</TableCell>
+              <TableCell>Tên Chức Vụ</TableCell>
+              <TableCell>Tên Chức Danh</TableCell>
+              <TableCell>Số Điện Thoại</TableCell>
+              <TableCell>Địa Chỉ</TableCell>
+              <TableCell>Tên Bộ Môn</TableCell>
+              <TableCell>Phân Quyền</TableCell>
+              <TableCell>Trạng Thái</TableCell>
+              <TableCell>Xóa</TableCell>
+              <TableCell>Tạm Ngưng</TableCell>
+              <TableCell>Sửa</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredGiangVien && filteredGiangVien.length > 0 ? (
+              filteredGiangVien.map((giangvien, index) => (
+                <TableRow
+                  onClick={() => handleChoseRowGV(giangvien)}
+                  key={index}
+                  className={`custom-table-row ${
+                    activeRowGV === giangvien.MABOMON ? "activeBM" : ""
+                  }`}
                 >
-                  {giangvien.PHANQUYEN}
-                </td>
-                <td
-                  className={
-                    giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động"
-                      ? "inactive-status"
-                      : giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                      ? "active-status"
-                      : ""
-                  }
-                >
-                  {giangvien.TRANGTHAITAIKHOAN}
-                </td>
-                <td>
-                  {giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động" ? (
-                    <>
-                      {" "}
-                      <i
-                        className="fa-solid fa-trash table-row-icon"
+                  <TableCell>{startIndex + index + 1}</TableCell>
+                  <TableCell>{giangvien.MAGV}</TableCell>
+                  <TableCell>{giangvien.TENDANGNHAP}</TableCell>
+                  <TableCell>{giangvien.TENGV}</TableCell>
+                  <TableCell>{giangvien.TENCHUCVU}</TableCell>
+                  <TableCell>{giangvien.TENCHUCDANH}</TableCell>
+                  <TableCell>{giangvien.DIENTHOAI}</TableCell>
+                  <TableCell>{giangvien.DIACHI}</TableCell>
+                  <TableCell>{giangvien.TENBOMON}</TableCell>
+                  <TableCell
+                    className={
+                      giangvien.PHANQUYEN === "Admin"
+                        ? "inactive-status"
+                        : giangvien.PHANQUYEN === "Giảng Viên"
+                        ? "text-dark"
+                        : giangvien.PHANQUYEN === "Trưởng Bộ Môn"
+                        ? "text-primary"
+                        : giangvien.PHANQUYEN === "Trưởng Khoa"
+                        ? "text-primary"
+                        : ""
+                    }
+                  >
+                    {giangvien.PHANQUYEN}
+                  </TableCell>
+                  <TableCell
+                    className={
+                      giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động"
+                        ? "inactive-status"
+                        : giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                        ? "active-status"
+                        : ""
+                    }
+                  >
+                    {giangvien.TRANGTHAITAIKHOAN}
+                  </TableCell>
+                  <TableCell>
+                    {giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động" ? (
+                      <IconButton
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDeleteGiangVien(giangvien);
                         }}
-                      ></i>
-                    </>
-                  ) : (
-                    false
-                  )}{" "}
-                </td>
-                <td>
-                  <i
-                    title={
-                      giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                        ? "Đang hoạt động"
-                        : " Ngưng hoạt động"
-                    }
-                    className={
-                      giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                        ? "fa-solid fa-check text-success"
-                        : "fa-solid fa-xmark text-danger"
-                    }
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleChoseEditGiangVien(giangvien);
-                    }}
-                  ></i>
-                </td>{" "}
-                <td>
-                  <i
-                    title={
-                      giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
-                        ? "Chỉnh sửa thông tin giảng viên"
-                        : "Chỉnh sửa thông tin giảng viên"
-                    }
-                    className="fa-solid fa-pen-to-square table-row-icon-edit"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleShowUpdateModal(giangvien);
-                    }}
-                  ></i>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="13" className="opacity-7">
-                Bộ môn chưa có giảng viên
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <div className="pagination-buttons mt-4">
-        <button
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </IconButton>
+                    ) : null}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      title={
+                        giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                          ? "Đang hoạt động"
+                          : "Ngưng hoạt động"
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleChoseEditGiangVien(giangvien);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={
+                          giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                            ? faCheck
+                            : faTimes
+                        }
+                        className={
+                          giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động"
+                            ? "text-success"
+                            : "text-danger"
+                        }
+                      />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      title="Chỉnh sửa thông tin giảng viên"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShowUpdateModal(giangvien);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan="14" className="opacity-7">
+                  Bộ môn chưa có giảng viên
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box
+        className="pagination-buttons mt-4"
+        display="flex"
+        justifyContent="center"
+      >
+        <Button
           type="button"
-          className="btn btn-primary"
+          variant="contained"
+          color="primary"
           disabled={currentPage === 0}
           onClick={() => goToPage(0)}
         >
           Đầu
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="btn btn-primary ml-4"
+          variant="contained"
+          color="primary"
           disabled={currentPage === 0}
           onClick={goToBackPage}
+          sx={{ ml: 1 }}
         >
           Trước
-        </button>
+        </Button>
         {renderPageButtons()}
-        <button
+        <Button
           type="button"
-          className="btn btn-primary ml-4"
+          variant="contained"
+          color="primary"
           disabled={currentPage === totalPages - 1}
           onClick={goToNextPage}
+          sx={{ ml: 1 }}
         >
           Tiếp
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="btn btn-primary ml-2"
+          variant="contained"
+          color="primary"
           disabled={currentPage === totalPages - 1}
           onClick={() => goToPage(totalPages - 1)}
+          sx={{ ml: 1 }}
         >
           Cuối
-        </button>
-      </div>
+        </Button>
+      </Box>
     </>
   );
 };
