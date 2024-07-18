@@ -15,6 +15,7 @@ const {
   select_CHONKHUNG,
   update_CHONKHUNG,
   create_THOIGIAN_XACNHAN,
+  update_THOIGIAN_XACNHAN,
 } = require("../../controllers/GiangvienController/ChonkhungGiangvienCONTROLLER");
 
 const QuyenGiangVienRouter = (app) => {
@@ -27,6 +28,7 @@ const QuyenGiangVienRouter = (app) => {
   router.post("/xem/canhan/khunggiochuan", select_CHONKHUNG); // xem thông tin khung chuẩn của 1 giảng viên
   router.post("/tao/khunggiochuan", create_CHONKHUNG); // tạo khung chuẩn cho 1 giảng viên chưa có
   router.post("/tao/thoigianxacnhan", create_THOIGIAN_XACNHAN);
+  router.put("/sua/thoigianxacnhan/:SONGAYKETTHUC", update_THOIGIAN_XACNHAN);
   // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
 
   return app.use("/api/v1/quyengiangvien/giangvien", router);

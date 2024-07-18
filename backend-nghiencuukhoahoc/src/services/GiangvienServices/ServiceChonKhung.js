@@ -225,11 +225,41 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, SONGAYKETTHUC) => {
     );
 
     const [results_thoigian, fields_thoigian] = await pool.execute(
-      "select * from thoigian_xacnhan",
-      [THOIGIANBATDAU, THOIGIANKETTHUC]
+      "select * from thoigian_xacnhan"
     );
     return {
       EM: "thêm thời gian chọn khung thành công",
+      EC: 1,
+      DT: results_thoigian,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "lỗi services sua_CHONKHUNG_cho_GIANGVIEN",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
+  try {
+    const [results, fields] = await pool.execute(
+      "select * from thoigian_xacnhan"
+    );
+    const THOIGIANKETTHUC = moment(results[0].THOIGIANBATDAU)
+      .add(SONGAYKETTHUC, "days")
+      .format("YYYY-MM-DD HH:mm:ss");
+    const [results1, fields1] = await pool.execute(
+      "UPDATE thoigian_xacnhan SET THOIGIANKETTHUC = ?",
+      [THOIGIANKETTHUC]
+    );
+
+    const [results_thoigian, fields_thoigian] = await pool.execute(
+      "select * from thoigian_xacnhan"
+    );
+    return {
+      EM: "sửa thời gian kết thúc chọn khung thành công",
       EC: 1,
       DT: results_thoigian,
     };
@@ -251,4 +281,5 @@ module.exports = {
   sua_CHONKHUNG_cho_GIANGVIEN,
   timAllTenKhung_TENCHUCDANH,
   tao_THOIGIAN_CHONKHUNG,
+  sua_THOIGIAN_CHONKHUNG,
 };

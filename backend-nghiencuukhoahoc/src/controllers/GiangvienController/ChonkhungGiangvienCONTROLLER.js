@@ -4,6 +4,7 @@ const {
   xem_CHONKHUNG_cho_GIANGVIEN,
   sua_CHONKHUNG_cho_GIANGVIEN,
   tao_THOIGIAN_CHONKHUNG,
+  sua_THOIGIAN_CHONKHUNG,
 } = require("../../services/GiangvienServices/ServiceChonKhung");
 
 const select_CHONKHUNG = async (req, res) => {
@@ -94,9 +95,30 @@ const create_THOIGIAN_XACNHAN = async (req, res) => {
   }
 };
 
+const update_THOIGIAN_XACNHAN = async (req, res) => {
+  try {
+    const SONGAYKETTHUC = req.params.SONGAYKETTHUC;
+
+    let results = await sua_THOIGIAN_CHONKHUNG(SONGAYKETTHUC);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Đã xảy ra lỗi máy chủ",
+      EC: 500,
+      DT: null,
+    });
+  }
+};
+
 module.exports = {
   create_CHONKHUNG,
   select_CHONKHUNG,
   update_CHONKHUNG,
   create_THOIGIAN_XACNHAN,
+  update_THOIGIAN_XACNHAN,
 };
