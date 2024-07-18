@@ -119,7 +119,11 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                       value={editData.TENGV}
                       onChange={handleChange}
                     />{" "}
-                    <p className="profile-gv-avt-cv mt-2">
+                    <p
+                      className={`profile-gv-avt-cv mt-2 ${
+                        editData.PHANQUYEN === "Admin" ? "text-danger" : ""
+                      }`}
+                    >
                       {editData.PHANQUYEN
                         ? editData.PHANQUYEN
                         : "Chưa cập nhật"}
@@ -133,7 +137,11 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                     <Typography variant="h6">
                       {editData.TENGV ? editData.TENGV : "Chưa cập nhật"}
                     </Typography>
-                    <p className="profile-gv-avt-cv">
+                    <p
+                      className={`profile-gv-avt-cv ${
+                        editData.PHANQUYEN === "Admin" ? "text-danger" : ""
+                      }`}
+                    >
                       {editData.PHANQUYEN
                         ? editData.PHANQUYEN
                         : "Chưa cập nhật"}

@@ -223,7 +223,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                 <Row className="mb-3">
                   <Col xs={12} sm={6} lg={3}>
                     {" "}
-                    <span className="pmt-1">Địa chỉ:</span>
+                    <span>Địa chỉ:</span>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
                     <Typography variant="body1">

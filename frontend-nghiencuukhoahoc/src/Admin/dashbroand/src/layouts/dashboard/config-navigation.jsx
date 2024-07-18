@@ -51,8 +51,8 @@ const navConfig = [
     icon: icon('ic_blog'),
   },
   {
-    title: 'Excel',
-    path: '/excel',
+    title: 'Đăng Ký Khung Giờ Chuẩn',
+    path: '/dang-ky-khung-gio-chuan',
     icon: icon('ic_blog'),
   },
   {

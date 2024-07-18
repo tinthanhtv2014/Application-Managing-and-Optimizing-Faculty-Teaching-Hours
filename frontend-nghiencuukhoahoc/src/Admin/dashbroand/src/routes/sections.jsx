@@ -6,26 +6,20 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
-import ProductsPageFake from "../pages/products"
-import AdminCreate from '../sections/Admincreate/AdminCreate';
 
 
 
 
+
+const AdminCreate = lazy(() => import('../sections/Admincreate/AdminCreate'));
+const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
 const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
 const CreateChucVuGV = lazy(() => import('../sections/KhoaTVU/CreateChucVuGV/CreateChucVuGV'));
 const CreateGV = lazy(() => import('../sections/KhoaTVU/CreateGV/CreateGV'));
 const CreateBM = lazy(() => import('../sections/KhoaTVU/CreateBM/CreateBM'));
 const CreateCTDT = lazy(() => import('../sections/KhoaTVU/CreateCTDT/CreateCTDT'));
 const CreateKhoa = lazy(() => import('../sections/KhoaTVU/CreateKhoa/CreateKhoa'));
-const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
-const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
-const ChatAdmin = lazy(() => import('../sections/ChatAdmin/ChatAdmin'));
-const OnlyChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTietHoaDon/OnlyChiTietHoaDon'));
-const ListOrdersChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTietHoaDon/ListOrdersChiTietHoaDon'));
-const ListOrdersDaHuy = lazy(() => import('../sections/ListOrders/ListOrdersDaHuy/ListOrdersDaHuy'));
-const ListOrdersDaGiao = lazy(() => import('../sections/ListOrders/ListOrdersDaGiao/ListOrdersDaGiao'));
-const ListOrdersPage = lazy(() => import('../pages/ListOrders'));
+
 const IndexPage = lazy(() => import('../pages/app'));
 const BlogPage = lazy(() => import('../pages/blog'));
 const UserPage = lazy(() => import('../pages/user'));
@@ -139,11 +133,11 @@ export default function Router() {
       )
     }
     , {
-      path: '/excel', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/dang-ky-khung-gio-chuan', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <FileExcel />
+            <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
       )
