@@ -16,6 +16,10 @@ const navConfig = [
     title: 'Danh sách bộ môn',
     path: '/bo-mon',
     icon: icon('ic_user'),
+  }, {
+    title: 'Đăng ký khung giờ chuẩn',
+    path: '/dang-ky-khung-gio-chuan',
+    icon: icon('ic_user'),
   },
 
 ];

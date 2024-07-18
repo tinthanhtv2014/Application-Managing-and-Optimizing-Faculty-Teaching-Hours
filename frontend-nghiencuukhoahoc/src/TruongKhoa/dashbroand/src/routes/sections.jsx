@@ -6,6 +6,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import ProductsPageFake from "../pages/products"
+import DangKyGioChuan from '../sections/DangKyGioChuan/IndexDangKyGioChuan';
 
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
 const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
@@ -40,6 +41,15 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <UserPage />
+          </Suspense>
+        </DashboardLayout>
+      )
+    }, {
+      path: '/dang-ky-khung-gio-chuan', //: Danh sách các bộ môn.
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
       )
