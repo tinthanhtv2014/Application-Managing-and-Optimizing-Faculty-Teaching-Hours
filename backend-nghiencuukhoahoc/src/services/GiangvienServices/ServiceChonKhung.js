@@ -1,5 +1,5 @@
 const pool = require("../../config/database");
-
+const moment = require("moment");
 const {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -108,7 +108,11 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
     );
     let giangvien = await timGiangVien_MAGV(MAGV);
 
-    if (!results_MANAMHOC.length || !giangvien.length || !results_MAKHUNG.length) {
+    if (
+      !results_MANAMHOC.length ||
+      !giangvien.length ||
+      !results_MAKHUNG.length
+    ) {
       return {
         EM: "Dữ liệu truyền vào không đúng",
         EC: 0,
@@ -154,7 +158,6 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
     };
   }
 };
-
 
 const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
@@ -211,6 +214,35 @@ const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC, MAKHUNG) => {
   }
 };
 
+const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, SONGAYKETTHUC) => {
+  try {
+    const THOIGIANKETTHUC = moment(THOIGIANBATDAU)
+      .add(SONGAYKETTHUC, "days")
+      .format("YYYY-MM-DD HH:mm:ss");
+    const [results1, fields1] = await pool.execute(
+      "INSERT INTO thoigian_xacnhan  VALUES (?,?)",
+      [THOIGIANBATDAU, THOIGIANKETTHUC]
+    );
+
+    const [results_thoigian, fields_thoigian] = await pool.execute(
+      "select * from thoigian_xacnhan",
+      [THOIGIANBATDAU, THOIGIANKETTHUC]
+    );
+    return {
+      EM: "thêm thời gian chọn khung thành công",
+      EC: 1,
+      DT: results_thoigian,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "lỗi services sua_CHONKHUNG_cho_GIANGVIEN",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   timChucDanh_TENCHUCDANH,
   timKhungGioChuan_TENCHUCDANH,
@@ -218,4 +250,5 @@ module.exports = {
   xem_CHONKHUNG_cho_GIANGVIEN,
   sua_CHONKHUNG_cho_GIANGVIEN,
   timAllTenKhung_TENCHUCDANH,
+  tao_THOIGIAN_CHONKHUNG,
 };

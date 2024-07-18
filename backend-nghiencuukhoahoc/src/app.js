@@ -8,14 +8,14 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const connection = require("./config/database");
 const configViewEngine = require("./config/ViewEngine");
-
+const moment = require("moment");
 // Router =========================================================================
 const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
 const CRUDBoMon = require("./routes/AdminRoute/BoMonRouter");
 const CRUDGiangVien = require("./routes/AdminRoute/GiangVienRouter");
 const CRUDMonHoc = require("./routes/AdminRoute/MonHocRouter");
-const CRUDNamHoc = require("./routes/AdminRoute/NamHocRouter")
+const CRUDNamHoc = require("./routes/AdminRoute/NamHocRouter");
 
 const QuyenGiangVienRouter = require("./routes/GiangvienRoute/QuyenGiangVienRouter");
 
@@ -45,7 +45,7 @@ CRUDKhoa(app); //CRUD bảng khoa
 CRUDBoMon(app); // CRUD bộ môn
 CRUDGiangVien(app); // CRUD giảng viên
 CRUDMonHoc(app); //CRUD môn học
-CRUDNamHoc(app)// CRUD năm học
+CRUDNamHoc(app); // CRUD năm học
 
 QuyenGiangVienRouter(app); // Api cho quyền giảng viên
 //=====================================================================================================
