@@ -15,8 +15,9 @@ import {
   Button,
 } from "@mui/material";
 import "./Renderdata.scss";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Toast } from "react-bootstrap";
 import axios from "axios";
+import { toast } from "react-toastify";
 const RenderData = ({
   dataKhungChuan,
   dataTenKhungChuan,
@@ -30,6 +31,8 @@ const RenderData = ({
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
   const [dataRenderKhungChuan, setDataRenderKhungChuan] = useState(null);
+  const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
+  const [isOpenButtonSelectKhung, setisOpenButtonSelectKhung] = useState(true);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -44,6 +47,8 @@ const RenderData = ({
     const DataXemKhungGio = async () => {
       try {
         if (isOpenOption === "Xem Khung Giờ") {
+          setisOpenButtonSelectKhung(false);
+          setIsDisableNamHoc(false);
           const response = await CookiesAxios.post(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
             { MAGV: MaGV, TENNAMHOC: selectNamHoc }
@@ -52,13 +57,16 @@ const RenderData = ({
           setDataRenderKhungChuan(response.data.DT);
         } else if (isOpenOption === "Chọn Khung Giờ") {
           setDataRenderKhungChuan(dataKhungChuan);
+          setIsDisableNamHoc(true);
+          setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
+          setisOpenButtonSelectKhung(true);
         }
       } catch (error) {
         console.log(error);
       }
     };
     DataXemKhungGio();
-  }, [isOpenOption]);
+  }, [isOpenOption, selectNamHoc]);
   const handleRowClick = (index, khungChuan) => {
     setSelectedRow(index);
     setSelectKhungGioChuan(khungChuan);
@@ -77,6 +85,11 @@ const RenderData = ({
         TENNAMHOC: selectNamHoc,
       }
     );
+    if (response.data.EC === 1) {
+      toast.success(response.data.EM);
+    } else {
+      toast.error(response.data.EM);
+    }
   };
   if (loading) {
     return <p>loading</p>;
@@ -118,6 +131,7 @@ const RenderData = ({
                   label="Chức danh"
                   value={selectNamHoc}
                   defaultValue={selectNamHoc}
+                  disabled={isDisableNamHoc}
                   onChange={(e) => setSelectNamhoc(e.target.value)}
                   variant="outlined"
                 >
@@ -136,39 +150,55 @@ const RenderData = ({
               </FormControl>
             </Box>
           </Col>
-          {SelectKhungGioChuan ? (
+          {isOpenButtonSelectKhung ? (
             <>
-              <Col>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleCancelSelectKhungGioChuan}
-                >
-                  Bạn đang chọn {SelectKhungGioChuan.TENKHUNGCHUAN}
-                </Button>
-              </Col>
-              <Col>
-                <Button variant="contained" onClick={handleSelectKhungGioChuan}>
-                  Xác Nhận
-                </Button>
-              </Col>
+              {" "}
+              {SelectKhungGioChuan ? (
+                <>
+                  <Col>
+                    <Button
+                      variant="outlined"
+                      className="button-selectKhung"
+                      color="secondary"
+                      onClick={handleCancelSelectKhungGioChuan}
+                    >
+                      Bạn đang chọn {SelectKhungGioChuan.TENKHUNGCHUAN}{" "}
+                      <i className="fas fa-times"></i>
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      variant="contained"
+                      onClick={handleSelectKhungGioChuan}
+                    >
+                      Xác Nhận
+                    </Button>
+                  </Col>
+                </>
+              ) : (
+                <>
+                  <Col>
+                    <Button variant="outlined" color="secondary" disabled>
+                      Bạn chưa chọn khung giờ chuẩn
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button variant="contained" disabled>
+                      Xác Nhận
+                    </Button>
+                  </Col>
+                </>
+              )}
             </>
           ) : (
             <>
-              <Col>
-                <Button variant="outlined" color="secondary" disabled>
-                  Bạn chưa chọn khung giờ chuẩn
-                </Button>
-              </Col>
-              <Col>
-                <Button variant="contained" disabled>
-                  Xác Nhận
-                </Button>
-              </Col>
+              {" "}
+              <Col></Col>
+              <Col></Col>
             </>
           )}
         </Row>
-        <Row>
+        <Row className="mt-4">
           <TableContainer
             component={Paper}
             sx={{ width: "100%" }}
@@ -209,7 +239,7 @@ const RenderData = ({
                       },
                     }}
                   >
-                    <TableCell align="center">
+                    <TableCell align="center" className="text-info">
                       {khungChuan.TENKHUNGCHUAN ?? ""}
                     </TableCell>
                     <TableCell align="center">
