@@ -37,6 +37,7 @@ const RenderData = ({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
   useEffect(() => {
+    console.log("dataKhungChuan", dataKhungChuan);
     if (dataKhungChuan) {
       setLoading(false);
       setDataRenderKhungChuan(dataKhungChuan);

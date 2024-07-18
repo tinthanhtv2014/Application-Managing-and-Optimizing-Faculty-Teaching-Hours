@@ -73,10 +73,10 @@ const DangKyGioChuan = () => {
     }
   };
   if (isGVHangIII) {
-    return <GV_Hang_III />;
+    return <GV_Hang_III ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
   if (isTroGiang) {
-    return <TroGiang />;
+    return <TroGiang ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
 
   if (isGVCaoCapHangI) {
@@ -85,10 +85,12 @@ const DangKyGioChuan = () => {
     );
   }
   if (isGVChinhHangII) {
-    return <GV_Chinh_Hang_II />;
+    return (
+      <GV_Chinh_Hang_II ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />
+    );
   }
   if (isGVTapSu) {
-    return <GV_TapSu />;
+    return <GV_TapSu ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
 
   return <p> nullasd</p>;
