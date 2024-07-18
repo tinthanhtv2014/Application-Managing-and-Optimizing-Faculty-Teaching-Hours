@@ -1,6 +1,6 @@
 // CreateKhoa.js
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Modal, Form } from "react-bootstrap";
+import { Container, Row, Col, Modal, Form } from "react-bootstrap";
 
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -13,14 +13,19 @@ import BoMonList from "./components/BoMonList.js";
 import GiangVienList from "./components/GiangVienList.js";
 import CreateGiangVienForm from "./components/CreateGiangVienForm.js";
 import "../CreateKhoa/CreateKhoa.scss";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+
 import ComponentExcelGV from "./components/ComponentExcel.js";
 import { toast } from "react-toastify";
-import { ButtonBase } from "@mui/material";
+import {
+  ButtonBase,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  InputLabel,
+  Box,
+  FormControl,
+  Button,
+} from "@mui/material";
 import UpdateGiangVienModal from "./modal/updateGiangVienModal.js";
 const ComponenCreateGiangVien = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -487,10 +492,11 @@ const ComponenCreateGiangVien = () => {
         </Col>
         <Col md={2}>
           {" "}
-          <ButtonBase
+          <button
+            variant="contained"
             type="button"
             className={`height-selectGV ${
-              isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-success"
+              isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-primary"
             }`}
             placeholder="Nhập email đăng nhập"
             value={isOpenGetAllApiGV}
@@ -502,7 +508,7 @@ const ComponenCreateGiangVien = () => {
             }
           >
             {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
-          </ButtonBase>{" "}
+          </button>{" "}
         </Col>
       </Row>
       <Row>
