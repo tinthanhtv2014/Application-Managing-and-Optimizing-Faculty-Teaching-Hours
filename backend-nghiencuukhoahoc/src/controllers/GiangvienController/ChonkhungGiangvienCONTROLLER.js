@@ -28,6 +28,7 @@ const select_CHONKHUNG = async (req, res) => {
 
 const create_CHONKHUNG = async (req, res) => {
   try {
+    // console.log("check Khung: ", req.body)
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
     const MAKHUNG = req.body.MAKHUNG;

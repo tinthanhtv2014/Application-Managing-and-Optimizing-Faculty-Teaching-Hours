@@ -25,7 +25,7 @@ const QuyenGiangVienRouter = (app) => {
   //route chọn khung cho giảng viên
   router.post("/xem/canhan/khunggiochuan", select_CHONKHUNG); // xem thông tin khung chuẩn của 1 giảng viên
   router.post("/tao/khunggiochuan", create_CHONKHUNG); // tạo khung chuẩn cho 1 giảng viên chưa có
-  router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
+  // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
 
   return app.use("/api/v1/quyengiangvien/giangvien", router);
 };

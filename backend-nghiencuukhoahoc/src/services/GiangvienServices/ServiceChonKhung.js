@@ -102,11 +102,24 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
       "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC =? ",
       [TENNAMHOC]
     );
+    const [results_MAKHUNG, fields_MAKHUNG] = await pool.execute(
+      "SELECT * FROM khunggiochuan WHERE MAKHUNG = ? ",
+      [MAKHUNG]
+    );
+    let giangvien = await timGiangVien_MAGV(MAGV);
+
+    if (!results_MANAMHOC.length || !giangvien.length || !results_MAKHUNG.length) {
+      return {
+        EM: "Dữ liệu truyền vào không đúng",
+        EC: 0,
+        DT: [],
+      };
+    }
 
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results0, fields0] = await pool.execute(
-      "SELECT * FROM chon_khung WHERE MAGV = ? AND MANAMHOC = ? AND MAKHUNG = ?",
-      [MAGV, MANAMHOC, MAKHUNG]
+      "SELECT * FROM chon_khung WHERE MANAMHOC = ? AND MAGV = ?",
+      [MANAMHOC, MAGV]
     );
 
     if (results0.length > 0) {
@@ -114,17 +127,24 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
         "UPDATE chon_khung SET MAKHUNG = ? WHERE MAGV = ? AND MANAMHOC = ?",
         [MAKHUNG, MAGV, MANAMHOC]
       );
+
+      return {
+        EM: "Sửa khung cho giảng viên mới thành công",
+        EC: 1,
+        DT: [],
+      };
     } else {
       const [results1, fields1] = await pool.execute(
         "INSERT INTO chon_khung (MAGV, MANAMHOC, MAKHUNG) VALUES (?,?,?)",
         [MAGV, MANAMHOC, MAKHUNG]
       );
+
+      return {
+        EM: "Thêm khung cho giảng viên mới thành công",
+        EC: 1,
+        DT: [],
+      };
     }
-    return {
-      EM: "Thêm khung cho giảng viên mới thành công",
-      EC: 1,
-      DT: [],
-    };
   } catch (error) {
     console.log(error);
     return {
@@ -135,6 +155,7 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
   }
 };
 
+
 const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
     const [results_MANAMHOC, fields__MANAMHOC] = await pool.execute(
@@ -143,7 +164,7 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     );
 
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
-    console.log(MANAMHOC);
+    // console.log(MANAMHOC);
     const [results1, fields] = await pool.execute(
       "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
