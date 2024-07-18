@@ -405,16 +405,16 @@ const ComponenCreateGiangVien = () => {
         console.log(response.data);
 
         if (response.data.EC === 1) {
-          toast.success("Lecturer information updated successfully");
+          toast.success("Cập nhật thành công");
           setdataListGiangVien(response.data.DT);
         } else {
-          toast.error("Failed to update lecturer information");
+          toast.error("Đã xảy ra lỗi !");
         }
 
         handleCloseUpdateModal();
       } catch (error) {
-        console.error("Error updating lecturer information:", error);
-        toast.error("Failed to update lecturer information");
+        console.error("Đã xảy ra lỗi !", error);
+        toast.error("Đã xảy ra lỗi !");
       }
     } else {
       toast.error("Email bị lỗi");

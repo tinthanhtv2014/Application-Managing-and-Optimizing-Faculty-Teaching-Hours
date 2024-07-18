@@ -159,6 +159,7 @@ const GiangVienList = ({
                   <TableCell>
                     {giangvien.TRANGTHAITAIKHOAN === "Ngưng hoạt động" ? (
                       <IconButton
+                        title="Xóa giảng viên"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDeleteGiangVien(giangvien);

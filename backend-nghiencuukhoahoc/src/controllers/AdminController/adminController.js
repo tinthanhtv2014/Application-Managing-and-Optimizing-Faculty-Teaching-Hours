@@ -206,7 +206,7 @@ const logoutTaikhoanAdminController = async (req, res) => {
   try {
     res.clearCookie("jwt");
     return res.status(200).json({
-      EM: "Logout Thành Công !!!",
+      EM: "Đăng Xuất Thành Công !!!",
       EC: 0,
       DT: " ",
     });
