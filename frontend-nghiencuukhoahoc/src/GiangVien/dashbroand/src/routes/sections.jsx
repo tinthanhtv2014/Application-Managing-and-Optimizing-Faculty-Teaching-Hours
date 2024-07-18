@@ -5,7 +5,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
-import ProductsPageFake from "../pages/products"
+
 
 const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
 const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
@@ -46,7 +46,7 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
-            <ProductsPageFake />
+
 
           </Suspense>
         </DashboardLayout>
@@ -58,7 +58,7 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
-            <ListOrdersPage />
+
 
           </Suspense>
         </DashboardLayout>

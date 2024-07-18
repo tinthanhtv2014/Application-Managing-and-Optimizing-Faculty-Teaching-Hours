@@ -16,7 +16,7 @@ import { RouterLink } from '../../routes/components';
 import { useResponsive } from '../../hooks/use-responsive';
 
 import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-// import { account } from '../../_mock/account';
+
 
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';

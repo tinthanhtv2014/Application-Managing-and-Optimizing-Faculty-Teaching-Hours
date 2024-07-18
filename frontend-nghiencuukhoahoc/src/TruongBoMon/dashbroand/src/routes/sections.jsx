@@ -6,7 +6,9 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import ProductsPageFake from "../pages/products"
+import AccountGV from '../sections/Account/AccountGV';
 
+const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
 const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
 const ChatAdmin = lazy(() => import('../sections/ChatAdmin/ChatAdmin'));
@@ -40,6 +42,19 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <UserPage />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+    {
+      path: '/dang-ky-khung-gio-chuan', // Quản lý phân công giảng dạy.
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+
+            <DangKyGioChuan />
+
           </Suspense>
         </DashboardLayout>
       )
@@ -79,6 +94,34 @@ export default function Router() {
           <Suspense fallback={<div>Loading...</div>}>
 
             <ListOrdersDaHuy />
+
+          </Suspense>
+        </DashboardLayout>
+      )
+    }
+
+    , {
+      path: '/goi-y-phan-cong-giang-vien', // Gợi ý phân công giảng viên.
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+
+            <ListOrdersDaHuy />
+
+          </Suspense>
+        </DashboardLayout>
+      )
+    }
+
+    , {
+      path: '/thong-tin', // Gợi ý phân công giảng viên.
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+
+            <AccountGV />
 
           </Suspense>
         </DashboardLayout>
