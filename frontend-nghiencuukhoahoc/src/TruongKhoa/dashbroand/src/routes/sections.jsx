@@ -65,16 +65,6 @@ export default function Router() {
         </DashboardLayout>
       )
     },
-    // {
-    //   path: '/blog',
-    //   element: (
-    //     <DashboardLayout>
-    //       <Suspense fallback={<div>Loading...</div>}>
-    //         <BlogPage />
-    //       </Suspense>
-    //     </DashboardLayout>
-    //   )
-    // },
     {
       path: '/login',
       element: <LoginPage />
