@@ -37,15 +37,51 @@ const RenderData = ({
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenButtonSelectKhung, setisOpenButtonSelectKhung] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal
+  const [TimeDangKyKhungGioChuan, setTimeDangKyKhungGioChuan] = useState("");
+  const [StartTime, setStartTime] = useState("");
+  const [EndTime, setEndTime] = useState("");
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
   useEffect(() => {
-    console.log("dataKhungChuan", dataKhungChuan);
     if (dataKhungChuan) {
-      setLoading(false);
-      setDataRenderKhungChuan(dataKhungChuan);
-      setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
+      const TimeKhungGioChuan = async () => {
+        try {
+          const response = await CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
+          );
+          console.log(response.data);
+
+          if (response.data.EC === 1) {
+            if (response.data.DT && response.data.DT.length > 0) {
+              // Kiểm tra dữ liệu có tồn tại không
+              setStartTime(response.data.DT[0].THOIGIANBATDAU);
+              setEndTime(response.data.DT[0].THOIGIANKETTHUC);
+              setTimeDangKyKhungGioChuan(
+                ` ${formatDate(EndTime)} đến ${formatDate(EndTime)}`
+              );
+            } else {
+              // Xử lý trường hợp không có dữ liệu
+              toast.warn("Không có dữ liệu thời gian khung giờ chuẩn.");
+              setStartTime("");
+              setEndTime("");
+            }
+          } else {
+            toast.error(
+              "Đã xảy ra lỗi khi lấy dữ liệu thời gian khung giờ chuẩn."
+            );
+          }
+        } catch (error) {
+          console.error("Lỗi khi gọi API:", error);
+          toast.error("Lỗi khi gọi API để lấy dữ liệu.");
+        } finally {
+          setLoading(false);
+          setDataRenderKhungChuan(dataKhungChuan);
+          setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
+        }
+      };
+
+      TimeKhungGioChuan();
     }
   }, [dataKhungChuan]);
   useEffect(() => {
@@ -81,7 +117,14 @@ const RenderData = ({
     setSelectKhungGioChuan(null);
     setSelectedRow(null);
   };
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
+    const parts = dateString.split("T");
+    if (parts.length !== 2) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
+
+    return parts[0] + "T" + (parts[1] ? parts[1].slice(0, 5) : "00:00"); // Lấy phần ngày và giờ từ chuỗi định dạng ISO 8601
+  };
   const handleSelectKhungGioChuan = async () => {
     const response = await CookiesAxios.post(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/khunggiochuan`,
@@ -99,6 +142,7 @@ const RenderData = ({
   };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+  console.log("check p1 ", StartTime);
   if (loading) {
     return <p>loading</p>;
   }
@@ -113,8 +157,11 @@ const RenderData = ({
               {" "}
               Mở Cổng Đăng Ký
             </Button>
+            <Typography>
+              Thời gian mở cổng từ :{TimeDangKyKhungGioChuan}
+            </Typography>
           </Col>
-          <Col></Col>
+          <Col> </Col>
           <Col></Col>
         </Row>
         <Row>
@@ -288,7 +335,16 @@ const RenderData = ({
           </TableContainer>
         </Row>
       </Container>{" "}
-      <ModalMoCongDangKy isOpen={isModalOpen} onClose={handleCloseModal} />
+      <ModalMoCongDangKy
+        StartTime={StartTime}
+        EndTime={EndTime}
+        setEndTime={setEndTime}
+        setStartTime={setStartTime}
+        setTimeDangKyKhungGioChuan={setTimeDangKyKhungGioChuan}
+        TimeDangKyKhungGioChuan={TimeDangKyKhungGioChuan}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </>
   );
 };
