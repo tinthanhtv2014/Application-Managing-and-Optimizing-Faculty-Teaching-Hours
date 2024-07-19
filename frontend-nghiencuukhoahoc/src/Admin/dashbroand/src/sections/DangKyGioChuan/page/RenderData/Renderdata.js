@@ -19,6 +19,7 @@ import {
 import "./Renderdata.scss";
 import { Col, Container, Row, Toast } from "react-bootstrap";
 import axios from "axios";
+import moment from "moment";
 import { toast } from "react-toastify";
 import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
 const RenderData = ({
@@ -58,7 +59,9 @@ const RenderData = ({
               setStartTime(response.data.DT[0].THOIGIANBATDAU);
               setEndTime(response.data.DT[0].THOIGIANKETTHUC);
               setTimeDangKyKhungGioChuan(
-                ` ${formatDate(EndTime)} đến ${formatDate(EndTime)}`
+                ` ${formatDate(
+                  response.data.DT[0].THOIGIANBATDAU
+                )} đến ${formatDate(response.data.DT[0].THOIGIANKETTHUC)}`
               );
             } else {
               // Xử lý trường hợp không có dữ liệu
@@ -120,10 +123,10 @@ const RenderData = ({
   const formatDate = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
-    const parts = dateString.split("T");
-    if (parts.length !== 2) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
+    const date = moment(dateString);
+    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
 
-    return parts[0] + "T" + (parts[1] ? parts[1].slice(0, 5) : "00:00"); // Lấy phần ngày và giờ từ chuỗi định dạng ISO 8601
+    return date.format("HH:mm - DD/MM/YYYY"); // Định dạng ngày theo yêu cầu
   };
   const handleSelectKhungGioChuan = async () => {
     const response = await CookiesAxios.post(

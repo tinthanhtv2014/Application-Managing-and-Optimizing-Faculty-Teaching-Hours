@@ -51,7 +51,14 @@ const ModalMoCongDangKy = ({
       }
     }
   }, [SoNgay, StartTime]);
+  const formatDateShow = (dateString) => {
+    if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
+    const date = moment(dateString);
+    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
+
+    return date.format("HH:mm - DD/MM/YYYY"); // Định dạng ngày theo yêu cầu
+  };
   const formatDate = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
@@ -73,7 +80,7 @@ const ModalMoCongDangKy = ({
 
     if (response.data.EC === 1) {
       setTimeDangKyKhungGioChuan(
-        ` ${formatDate(EndTime)} đến ${formatDate(EndTime)}`
+        ` ${formatDateShow(EndTime)} đến ${formatDateShow(EndTime)}`
       );
       toast.success("Mở Khung Giờ Chuẩn Thành Công");
       setStartTime(response.data.DT.THOIGIANBATDAU);
