@@ -30,27 +30,21 @@ const ModalMoCongDangKy = ({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   if (StartTime && EndTime) {
-  //     setLoading(false);
-  //   }
-  // }, [StartTime, EndTime]);
-
   useEffect(() => {
     if (StartTime && SoNgay) {
       const startTimeMoment = moment(StartTime);
-      if (startTimeMoment.isBefore(moment(), "day")) {
-        setError("Thời gian bắt đầu không được ở quá khứ");
-        setStartTime(moment().format("YYYY-MM-DDTHH:mm"));
+      const endTimeMoment = startTimeMoment.add(Number(SoNgay), "days");
+
+      if (endTimeMoment.isBefore(moment())) {
+        setError("Thời gian kết thúc phải ở tương lai");
+        setEndTime(moment().add(1, "days").format("YYYY-MM-DDTHH:mm"));
       } else {
         setError("");
-        const THOIGIANKETTHUC = startTimeMoment
-          .add(Number(SoNgay), "days")
-          .format("YYYY-MM-DDTHH:mm");
-        setEndTime(THOIGIANKETTHUC);
+        setEndTime(endTimeMoment.format("YYYY-MM-DDTHH:mm"));
       }
     }
   }, [SoNgay, StartTime]);
+
   const formatDateShow = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
@@ -59,47 +53,53 @@ const ModalMoCongDangKy = ({
 
     return date.format("HH:mm - DD/MM/YYYY"); // Định dạng ngày theo yêu cầu
   };
+
   const formatDate = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
-    const parts = dateString.split("T");
-    if (parts.length !== 2) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
+    const date = moment(dateString); // Sử dụng moment để phân tích chuỗi
+    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
 
-    return parts[0] + "T" + (parts[1] ? parts[1].slice(0, 5) : "00:00"); // Lấy phần ngày và giờ từ chuỗi định dạng ISO 8601
+    // Định dạng ngày theo yêu cầu, sử dụng múi giờ địa phương
+    return date.local().format("YYYY-MM-DDTHH:mm"); // Chuyển đổi sang định dạng ngày giờ địa phương
   };
 
   const handleOpenModangKy = async () => {
+    console.log("StartTime + EndTime", StartTime + EndTime);
     if (error) return;
-    const response = await CookiesAxios.post(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/thoigianxacnhan`,
-      {
-        THOIGIANBATDAU: StartTime,
-        THOIGIANKETTHUC: EndTime,
-      }
-    );
 
-    if (response.data.EC === 1) {
-      setTimeDangKyKhungGioChuan(
-        ` ${formatDateShow(EndTime)} đến ${formatDateShow(EndTime)}`
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/thoigianxacnhan`,
+        {
+          THOIGIANBATDAU: StartTime,
+          THOIGIANKETTHUC: EndTime,
+        }
       );
-      toast.success("Mở Khung Giờ Chuẩn Thành Công");
-      setStartTime(response.data.DT.THOIGIANBATDAU);
-      setEndTime(response.data.DT.THOIGIANKETTHUC);
-    } else {
-      toast.error(response.data.EM);
+
+      console.log("response.data.DT", response.data.DT);
+
+      if (response.data.EC === 1) {
+        setTimeDangKyKhungGioChuan(
+          `${formatDateShow(
+            response.data.DT.THOIGIANBATDAU
+          )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
+        );
+        toast.success("Mở Khung Giờ Chuẩn Thành Công");
+        setStartTime(response.data.DT.THOIGIANBATDAU);
+        setEndTime(response.data.DT.THOIGIANKETTHUC);
+      } else {
+        toast.error(response.data.EM);
+      }
+    } catch (error) {
+      console.error("Lỗi khi mở khung giờ chuẩn:", error);
+      toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
     }
-    // Handle response and any necessary state updates
   };
 
   const handleStartTimeChange = (e) => {
     const value = e.target.value;
-    if (moment(value).isBefore(moment(), "day")) {
-      setError("Thời gian bắt đầu không được ở quá khứ");
-      setStartTime(moment().format("YYYY-MM-DDTHH:mm"));
-    } else {
-      setError("");
-      setStartTime(value);
-    }
+    setStartTime(value);
   };
 
   console.log("CHECK THOIGIANBATDAU", StartTime);
@@ -168,6 +168,7 @@ const ModalMoCongDangKy = ({
               marginBottom: 2,
             }}
           >
+            <Typography variant="subtitle1">Thời Gian Kết Thúc</Typography>
             <input
               type="datetime-local"
               value={formatDate(EndTime) || ""}

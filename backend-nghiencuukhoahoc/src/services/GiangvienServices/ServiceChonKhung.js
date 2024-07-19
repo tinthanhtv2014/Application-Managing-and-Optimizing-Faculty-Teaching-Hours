@@ -167,11 +167,13 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     );
 
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
-    // console.log(MANAMHOC);
+    console.log(MAGV);
+    console.log("MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
       "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
+    console.log(results1);
     return {
       EM: "xem thông tin khung hiện tại thành công",
       EC: 1,
@@ -215,6 +217,8 @@ const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC, MAKHUNG) => {
 };
 
 const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
+  console.log("THOIGIANBATDAU", THOIGIANBATDAU);
+  console.log("THOIGIANKETTHUC", THOIGIANKETTHUC);
   try {
     // Định dạng lại ngày tháng để đảm bảo đúng định dạng YYYY-MM-DD HH:mm:ss
     const formattedStartTime = moment(THOIGIANBATDAU).format(
@@ -241,22 +245,19 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
       EC: 1,
       DT: results[0],
     };
-
   } catch (error) {
     console.log(error);
     return {
       EM: "Lỗi khi thực hiện thêm hoặc cập nhật thời gian chọn khung",
       EC: -1,
-      DT: [],
+      DT: results[0],
     };
   }
 };
 
 const delete_THOIGIAN_CHONKHUNG = async () => {
   try {
-    await pool.execute(
-      "TRUNCATE TABLE thoigian_xacnhan"
-    );
+    await pool.execute("TRUNCATE TABLE thoigian_xacnhan");
     return {
       EM: "Xóa thời gian chọn khung thành công",
       EC: 1,
@@ -269,8 +270,7 @@ const delete_THOIGIAN_CHONKHUNG = async () => {
       DT: error.message,
     };
   }
-}
-
+};
 
 const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
   try {

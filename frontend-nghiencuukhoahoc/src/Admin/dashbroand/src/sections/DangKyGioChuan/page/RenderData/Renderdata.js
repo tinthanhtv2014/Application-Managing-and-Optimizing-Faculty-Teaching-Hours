@@ -27,11 +27,12 @@ const RenderData = ({
   dataTenKhungChuan,
   dataListNamHoc,
   MaGV,
+  OpenChucNangtheokhungthoigian,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
   const [selectNamHoc, setSelectNamhoc] = useState();
-  const [isOpenOption, setIsOpenOption] = useState("Chọn Khung Giờ");
+  const [isOpenOption, setIsOpenOption] = useState("Xem Khung Giờ");
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
   const [dataRenderKhungChuan, setDataRenderKhungChuan] = useState(null);
@@ -51,7 +52,6 @@ const RenderData = ({
           const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
           );
-          console.log(response.data);
 
           if (response.data.EC === 1) {
             if (response.data.DT && response.data.DT.length > 0) {
@@ -97,7 +97,7 @@ const RenderData = ({
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
             { MAGV: MaGV, TENNAMHOC: selectNamHoc }
           );
-          console.log(response.data.DT);
+          console.log("response.data.DT", response.data.DT);
           setDataRenderKhungChuan(response.data.DT);
         } else if (isOpenOption === "Chọn Khung Giờ") {
           setDataRenderKhungChuan(dataKhungChuan);
@@ -145,17 +145,16 @@ const RenderData = ({
   };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  console.log("check p1 ", StartTime);
+  console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
   if (loading) {
     return <p>loading</p>;
   }
-
   return (
     <>
       <Container>
         <Row className="mb-4">
           {" "}
-          <Col>
+          <Col md={12}>
             <Button variant="outlined" onClick={handleOpenModal}>
               {" "}
               Mở Cổng Đăng Ký
@@ -164,8 +163,6 @@ const RenderData = ({
               Thời gian mở cổng từ :{TimeDangKyKhungGioChuan}
             </Typography>
           </Col>
-          <Col> </Col>
-          <Col></Col>
         </Row>
         <Row>
           <Col>
@@ -182,8 +179,13 @@ const RenderData = ({
                   onChange={(e) => setIsOpenOption(e.target.value)}
                   variant="outlined"
                 >
-                  <MenuItem value="Xem Khung Giờ">Xem Khung Giờ</MenuItem>
-                  <MenuItem value="Chọn Khung Giờ">Chọn Khung Giờ</MenuItem>
+                  {Object.entries(OpenChucNangtheokhungthoigian).map(
+                    ([key, value]) => (
+                      <MenuItem key={key} value={value}>
+                        {value}
+                      </MenuItem>
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Box>

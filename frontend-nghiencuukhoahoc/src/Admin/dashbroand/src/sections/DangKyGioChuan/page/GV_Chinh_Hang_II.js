@@ -5,7 +5,11 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 
-const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
+const GV_CaoCap_Hang_II = ({
+  ChucDanhGiangVien,
+  MaGV,
+  OpenChucNangtheokhungthoigian,
+}) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -80,6 +84,7 @@ const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
         dataKhungChuan={ListKhungGioChuan}
         dataListNamHoc={ListNamHoc}
         MaGV={MaGV}
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
       />
     </>
   );
