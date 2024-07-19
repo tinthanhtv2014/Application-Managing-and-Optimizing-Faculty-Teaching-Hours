@@ -225,7 +225,7 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
     );
 
     // Kiểm tra xem thời gian đã tồn tại trong bảng chưa
-    delete_THOIGIAN_CHONKHUNG();
+    await delete_THOIGIAN_CHONKHUNG();
 
     // Nếu bản ghi không tồn tại, thực hiện thêm mới
     await pool.execute(
