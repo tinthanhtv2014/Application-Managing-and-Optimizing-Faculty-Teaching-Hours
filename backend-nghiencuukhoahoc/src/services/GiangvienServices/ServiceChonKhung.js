@@ -224,46 +224,24 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
       "YYYY-MM-DD HH:mm:ss"
     );
 
-    console.log("THOIGIANBATDAU", formattedStartTime);
-    console.log("THOIGIANKETTHUC", formattedEndTime);
-
     // Kiểm tra xem thời gian đã tồn tại trong bảng chưa
-    const [results_check] = await pool.execute(
+    delete_THOIGIAN_CHONKHUNG();
+
+    // Nếu bản ghi không tồn tại, thực hiện thêm mới
+    await pool.execute(
+      "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC) VALUES (?, ?)",
+      [formattedStartTime, formattedEndTime]
+    );
+    const [results] = await pool.execute(
       "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
       [formattedStartTime]
     );
+    return {
+      EM: "Thêm thời gian chọn khung thành công",
+      EC: 1,
+      DT: results[0],
+    };
 
-    if (results_check.length > 0) {
-      // Nếu bản ghi tồn tại, thực hiện cập nhật
-      await pool.execute(
-        "UPDATE thoigian_xacnhan SET THOIGIANKETTHUC = ? WHERE THOIGIANBATDAU = ?",
-        [formattedEndTime, formattedStartTime]
-      );
-      const [results] = await pool.execute(
-        "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
-        [formattedStartTime]
-      );
-      return {
-        EM: "Cập nhật thời gian chọn khung thành công",
-        EC: 1,
-        DT: results[0],
-      };
-    } else {
-      // Nếu bản ghi không tồn tại, thực hiện thêm mới
-      await pool.execute(
-        "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC) VALUES (?, ?)",
-        [formattedStartTime, formattedEndTime]
-      );
-      const [results] = await pool.execute(
-        "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
-        [formattedStartTime]
-      );
-      return {
-        EM: "Thêm thời gian chọn khung thành công",
-        EC: 1,
-        DT: results[0],
-      };
-    }
   } catch (error) {
     console.log(error);
     return {
@@ -273,6 +251,26 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
     };
   }
 };
+
+const delete_THOIGIAN_CHONKHUNG = async () => {
+  try {
+    await pool.execute(
+      "TRUNCATE TABLE thoigian_xacnhan"
+    );
+    return {
+      EM: "Xóa thời gian chọn khung thành công",
+      EC: 1,
+      DT: null,
+    };
+  } catch (error) {
+    return {
+      EM: "Có lỗi xảy ra khi xóa thời gian chọn khung: delete_THOIGIAN_CHONKHUNG",
+      EC: -1,
+      DT: error.message,
+    };
+  }
+}
+
 
 const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
   try {
@@ -304,6 +302,7 @@ const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
     };
   }
 };
+
 const tim_THOIGIAN_CHONKHUNG = async () => {
   const [results, fields] = await pool.execute(
     "select * from thoigian_xacnhan"
@@ -314,6 +313,7 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
     DT: results,
   };
 };
+
 module.exports = {
   timChucDanh_TENCHUCDANH,
   timKhungGioChuan_TENCHUCDANH,
@@ -324,4 +324,5 @@ module.exports = {
   tao_THOIGIAN_CHONKHUNG,
   sua_THOIGIAN_CHONKHUNG,
   tim_THOIGIAN_CHONKHUNG,
+  delete_THOIGIAN_CHONKHUNG,
 };
