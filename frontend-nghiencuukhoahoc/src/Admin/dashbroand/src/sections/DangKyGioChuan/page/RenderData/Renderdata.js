@@ -13,11 +13,14 @@ import {
   InputLabel,
   Select,
   Button,
+  Modal,
+  Typography,
 } from "@mui/material";
 import "./Renderdata.scss";
 import { Col, Container, Row, Toast } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
 const RenderData = ({
   dataKhungChuan,
   dataTenKhungChuan,
@@ -33,6 +36,7 @@ const RenderData = ({
   const [dataRenderKhungChuan, setDataRenderKhungChuan] = useState(null);
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenButtonSelectKhung, setisOpenButtonSelectKhung] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -77,6 +81,7 @@ const RenderData = ({
     setSelectKhungGioChuan(null);
     setSelectedRow(null);
   };
+
   const handleSelectKhungGioChuan = async () => {
     const response = await CookiesAxios.post(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/khunggiochuan`,
@@ -92,18 +97,22 @@ const RenderData = ({
       toast.error(response.data.EM);
     }
   };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
   if (loading) {
     return <p>loading</p>;
   }
-  console.log("selectNamHoc", selectNamHoc);
-  console.log(selectedRow);
+
   return (
     <>
       <Container>
         <Row className="mb-4">
           {" "}
           <Col>
-            <Button variant="outlined">Mở Cổng Đăng Ký</Button>
+            <Button variant="outlined" onClick={handleOpenModal}>
+              {" "}
+              Mở Cổng Đăng Ký
+            </Button>
           </Col>
           <Col></Col>
           <Col></Col>
@@ -278,7 +287,8 @@ const RenderData = ({
             </Table>
           </TableContainer>
         </Row>
-      </Container>
+      </Container>{" "}
+      <ModalMoCongDangKy isOpen={isModalOpen} onClose={handleCloseModal} />
     </>
   );
 };
