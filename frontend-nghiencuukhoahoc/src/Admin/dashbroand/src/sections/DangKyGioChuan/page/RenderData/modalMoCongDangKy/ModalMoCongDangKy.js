@@ -70,6 +70,7 @@ const ModalMoCongDangKy = ({
 
   const handleOpenModangKy = async () => {
     if (error) return;
+
     const response = await CookiesAxios.post(
       `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/thoigianxacnhan`,
       {

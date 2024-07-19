@@ -27,11 +27,12 @@ const RenderData = ({
   dataTenKhungChuan,
   dataListNamHoc,
   MaGV,
+  OpenChucNangtheokhungthoigian,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
   const [selectNamHoc, setSelectNamhoc] = useState();
-  const [isOpenOption, setIsOpenOption] = useState("Chọn Khung Giờ");
+  const [isOpenOption, setIsOpenOption] = useState("Xem Khung Giờ");
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
   const [dataRenderKhungChuan, setDataRenderKhungChuan] = useState(null);
@@ -145,17 +146,16 @@ const RenderData = ({
   };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  console.log("check p1 ", StartTime);
+  console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
   if (loading) {
     return <p>loading</p>;
   }
-
   return (
     <>
       <Container>
         <Row className="mb-4">
           {" "}
-          <Col>
+          <Col md={12}>
             <Button variant="outlined" onClick={handleOpenModal}>
               {" "}
               Mở Cổng Đăng Ký
@@ -164,8 +164,6 @@ const RenderData = ({
               Thời gian mở cổng từ :{TimeDangKyKhungGioChuan}
             </Typography>
           </Col>
-          <Col> </Col>
-          <Col></Col>
         </Row>
         <Row>
           <Col>
@@ -182,8 +180,13 @@ const RenderData = ({
                   onChange={(e) => setIsOpenOption(e.target.value)}
                   variant="outlined"
                 >
-                  <MenuItem value="Xem Khung Giờ">Xem Khung Giờ</MenuItem>
-                  <MenuItem value="Chọn Khung Giờ">Chọn Khung Giờ</MenuItem>
+                  {Object.entries(OpenChucNangtheokhungthoigian).map(
+                    ([key, value]) => (
+                      <MenuItem key={key} value={value}>
+                        {value}
+                      </MenuItem>
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Box>
