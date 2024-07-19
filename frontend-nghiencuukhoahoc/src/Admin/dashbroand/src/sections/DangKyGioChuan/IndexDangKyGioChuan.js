@@ -7,6 +7,8 @@ import TroGiang from "./page/TroGiang";
 import GV_CaoCap_Hang_I from "./page/GV_CaoCap_Hang_I";
 import GV_Chinh_Hang_II from "./page/GV_Chinh_Hang_II";
 import GV_TapSu from "./page/GV_TapSu";
+import { Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const DangKyGioChuan = () => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +24,7 @@ const DangKyGioChuan = () => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
-
+  const navigate = useNavigate();
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
@@ -72,6 +74,9 @@ const DangKyGioChuan = () => {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
+  const handleMoveProfileGV = () => {
+    navigate("/admin/account-giangvien");
+  };
   if (isGVHangIII) {
     return <GV_Hang_III ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
@@ -93,7 +98,14 @@ const DangKyGioChuan = () => {
     return <GV_TapSu ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
 
-  return <p> nullasd</p>;
+  return (
+    <Typography>
+      Hãy Cập Nhật Chức Danh Để Đăng Ký Khung Giờ Chuẩn{" "}
+      <Button variant="outlined" onClick={handleMoveProfileGV}>
+        Cập Nhật Chức Danh <i class="fa-solid fa-right-long ml-4"></i>
+      </Button>{" "}
+    </Typography>
+  );
 };
 
 export default DangKyGioChuan;

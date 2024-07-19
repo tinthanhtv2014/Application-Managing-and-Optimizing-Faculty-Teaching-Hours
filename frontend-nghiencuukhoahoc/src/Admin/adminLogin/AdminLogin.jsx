@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./adminLogin.scss";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Import jwtDecode trực tiếp thay vì từ jwt-decode
 import logoGG from "../../../src/public/logo/google.png";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const AdminLogin = () => {
   const [user, setUser] = useState(null);
   const [tokenGoogle, setTokenGoogle] = useState(null);
-
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
@@ -45,48 +45,58 @@ const AdminLogin = () => {
     if (user) {
       console.log("check user =>", user.email);
       const FectData = async () => {
-        const response = await axios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhapgoogle`,
-          { tendangnhap: user.email }
-        );
+        try {
+          const response = await axios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhapgoogle`,
+            { tendangnhap: user.email }
+          );
+          console.log('check token =>', response.data);
 
-        const decoded = jwtDecode(response.data.DT.access_token)
-        console.log('cai nay a`', decoded.phanquyen)
+          if (response.data.EC === 1) {
+            const accessToken = response.data.DT.access_token;
 
-        if (response.data.EC === 1) {
-          if (decoded.phanquyen === "Giảng viên") {
-            Cookies.set("accessToken", response.data.DT.access_token);
-            navigate('/giang-vien')
-          } else if (decoded.phanquyen === "Admin") {
-            Cookies.set("accessToken", response.data.DT.access_token);
-            navigate("/admin");
-          } else if (decoded.phanquyen === "Trưởng Khoa") {
-            Cookies.set("accessToken", response.data.DT.access_token);
-            navigate("/truongkhoa");
-          } else if (decoded.phanquyen === "Trưởng Bộ Môn") {
-            Cookies.set("accessToken", response.data.DT.access_token);
-            navigate("/truong-bm");
+            // Kiểm tra nếu accessToken là chuỗi hợp lệ
+            if (typeof accessToken === "string") {
+              const decoded = jwtDecode(accessToken);
+
+              if (decoded.phanquyen === "Giảng viên") {
+                Cookies.set("accessToken", accessToken);
+                navigate('/giang-vien');
+              } else if (decoded.phanquyen === "Admin") {
+                Cookies.set("accessToken", accessToken);
+                navigate("/admin");
+              } else if (decoded.phanquyen === "Trưởng Khoa") {
+                Cookies.set("accessToken", accessToken);
+                navigate("/truongkhoa");
+              } else if (decoded.phanquyen === "Trưởng Bộ Môn") {
+                Cookies.set("accessToken", accessToken);
+                navigate("/truong-bm");
+              }
+            } else {
+              toast.error("Đã xảy ra lỗi !");
+            }
+          } else {
+            toast.error(response.data.EM);
           }
-
-        }
-        else {
-          toast.error(response.data.EM)
+        } catch (error) {
+          console.error("Đã xảy ra lỗi:", error);
+          toast.error("Đã xảy ra lỗi.");
         }
       };
       FectData();
     }
-  }, [user]);
+  }, [user, navigate]);
+
   return (
     <div className="admin-login">
-
       <div>
         <button className="Button-gg" onClick={() => login()}>
-          <img src={logoGG} alt="Logo" className="logo-gg" />{" "}
-
-          <div className="content-sign ">  <p>Sign in with Google</p></div>
+          <img src={logoGG} alt="Logo" className="logo-gg" />
+          <div className="content-sign">
+            <p>Sign in with Google</p>
+          </div>
         </button>
       </div>
-
     </div>
   );
 };

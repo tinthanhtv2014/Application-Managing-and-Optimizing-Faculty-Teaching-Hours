@@ -100,6 +100,14 @@ const RenderData = ({
   return (
     <>
       <Container>
+        <Row className="mb-4">
+          {" "}
+          <Col>
+            <Button variant="outlined">Mở Cổng Đăng Ký</Button>
+          </Col>
+          <Col></Col>
+          <Col></Col>
+        </Row>
         <Row>
           <Col>
             <Box sx={{ maxWidth: 220 }}>

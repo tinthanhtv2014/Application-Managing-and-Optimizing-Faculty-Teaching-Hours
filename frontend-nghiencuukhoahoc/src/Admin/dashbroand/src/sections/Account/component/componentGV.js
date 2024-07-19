@@ -92,6 +92,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
     });
   };
   const formatDate = (dateString) => {
+    if (!dateString) return "Chưa cập nhật"; // Check for null or undefined date
     const chuyenTime = dateString.split("T")[0];
     const dateParts = chuyenTime.split("-");
     if (dateParts.length === 3) {
