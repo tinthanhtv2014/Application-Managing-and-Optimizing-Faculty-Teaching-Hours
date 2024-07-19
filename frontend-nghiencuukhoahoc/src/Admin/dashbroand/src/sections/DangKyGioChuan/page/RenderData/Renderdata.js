@@ -52,7 +52,6 @@ const RenderData = ({
           const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
           );
-          console.log(response.data);
 
           if (response.data.EC === 1) {
             if (response.data.DT && response.data.DT.length > 0) {
@@ -98,7 +97,7 @@ const RenderData = ({
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
             { MAGV: MaGV, TENNAMHOC: selectNamHoc }
           );
-          console.log(response.data.DT);
+          console.log("response.data.DT", response.data.DT);
           setDataRenderKhungChuan(response.data.DT);
         } else if (isOpenOption === "Chọn Khung Giờ") {
           setDataRenderKhungChuan(dataKhungChuan);

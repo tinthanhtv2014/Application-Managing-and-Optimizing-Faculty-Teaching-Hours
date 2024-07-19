@@ -24,13 +24,10 @@ const DangKyGioChuan = () => {
   const [isGVTapSu, setIsGVTapSu] = useState(false);
   const [
     isOpenUseEffectChucNangKhungTime,
-    setisOpenUseEffectChucNangKhungTime,
+    setIsOpenUseEffectChucNangKhungTime,
   ] = useState(false);
   const [OpenChucNangtheokhungthoigian, setOpenChucNangtheokhungthoigian] =
-    useState({
-      XemKhungGioChuan: "Xem Khung Giờ",
-      ChonKhungGio: "",
-    });
+    useState({ XemKhungGioChuan: null, ChonKhungGio: null });
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [MaGV, setMaGV] = useState(null);
@@ -38,38 +35,25 @@ const DangKyGioChuan = () => {
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
   const navigate = useNavigate();
+
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
-    console.log(decodeAuth);
     setTenDangNhapGV(decodeAuth.taikhoan);
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
 
-  useEffect(() => {
-    if (isOpenUseEffectChucNangKhungTime) {
-      if (startTime && endTime) {
-        const currentTime = moment();
-        const startMoment = moment(startTime);
-        const endMoment = moment(endTime);
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
-        if (currentTime.isBetween(startMoment, endMoment)) {
-          setOpenChucNangtheokhungthoigian({
-            XemKhungGioChuan: "Xem Khung Giờ",
-            ChonKhungGio: "Chọn Khung Giờ",
-          });
-        } else {
-          setOpenChucNangtheokhungthoigian({
-            XemKhungGioChuan: "Xem Khung Giờ",
-          });
-        }
-      } else {
-        // startTime hoặc endTime không hợp lệ
-        return;
-      }
-    }
-  }, [isOpenUseEffectChucNangKhungTime, startTime, endTime]);
+    const date = moment(dateString);
+    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
+
+    return date.format("YYYY-MM-DD"); // Định dạng ngày theo yêu cầu
+  };
+
   const fetchDataGV = async (taikhoan) => {
+    setLoading(true); // Đặt loading thành true khi bắt đầu lấy dữ liệu
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
@@ -77,21 +61,54 @@ const DangKyGioChuan = () => {
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
-      console.log("Time =>", response_XemTimeKhungGioChuan.data.DT);
-      console.log("Danh sách tài khoản:", response.data.DT);
-
+      console.log(
+        "api response_XemTimeKhungGioChuan ",
+        response_XemTimeKhungGioChuan.data.DT
+      );
       if (response_XemTimeKhungGioChuan.data.EC === 1) {
-        if (
-          response_XemTimeKhungGioChuan.data.DT &&
-          response_XemTimeKhungGioChuan.data.DT.length > 0
-        ) {
-          setStartTime(response_XemTimeKhungGioChuan.data.DT.THOIGIANBATDAU);
-          setEndTime(response_XemTimeKhungGioChuan.data.DT.THOIGIANKETTHUC);
-          setisOpenUseEffectChucNangKhungTime(true);
+        if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
+          const startTime =
+            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
+          const endTime =
+            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
+          console.log("endTime", endTime);
+          // Định dạng startTime và endTime chỉ lấy ngày
+          const formattedStartDate = formatDate(startTime);
+          const formattedEndDate = formatDate(endTime);
+
+          setStartTime(formattedStartDate);
+          setEndTime(formattedEndDate);
+
+          setIsOpenUseEffectChucNangKhungTime(true);
+
+          // Lấy thời gian hiện tại và định dạng chỉ có ngày
+          const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
+
+          console.log("Current Date:", currentDate);
+          console.log("Start Date:", formattedStartDate);
+          console.log("End Date:", formattedEndDate);
+
+          // So sánh currentDate với startMoment và endMoment
+          if (
+            moment(currentDate, "YYYY-MM-DD").isBetween(
+              moment(formattedStartDate, "YYYY-MM-DD"),
+              moment(formattedEndDate, "YYYY-MM-DD"),
+              null,
+              "[)"
+            )
+          ) {
+            setOpenChucNangtheokhungthoigian({
+              XemKhungGio: "Xem Khung Giờ",
+              ChonKhungGio: "Chọn Khung Giờ",
+            });
+          } else {
+            setOpenChucNangtheokhungthoigian({
+              XemKhungGio: "Xem Khung Giờ",
+            });
+          }
         } else {
           setOpenChucNangtheokhungthoigian({
-            XemKhungGioChuan: "Xem Khung Giờ",
-            ChonKhungGio: "",
+            XemKhungGio: "Xem Khung Giờ",
           });
         }
       }
@@ -101,41 +118,49 @@ const DangKyGioChuan = () => {
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         setMaGV(response.data.DT.MAGV);
 
-        if (response.data.DT.TENCHUCDANH === "Giảng viên (Hạng III)") {
-          setIsGVHangIII(true);
-        } else if (
-          response.data.DT.TENCHUCDANH === "Giảng viên cao cấp (Hạng I)"
-        ) {
-          setIsGVCaoCapHangI(true);
-        } else if (
-          response.data.DT.TENCHUCDANH === "Giảng viên chính (Hạng II)"
-        ) {
-          setIsGVChinhHangII(true);
-        } else if (response.data.DT.TENCHUCDANH === "Trợ Giảng") {
-          setIsTroGiang(true);
-        } else if (response.data.DT.TENCHUCDANH === "Giảng viên Tập sự") {
-          setIsGVTapSu(true);
+        switch (response.data.DT.TENCHUCDANH) {
+          case "Giảng viên (Hạng III)":
+            setIsGVHangIII(true);
+            break;
+          case "Giảng viên cao cấp (Hạng I)":
+            setIsGVCaoCapHangI(true);
+            break;
+          case "Giảng viên chính (Hạng II)":
+            setIsGVChinhHangII(true);
+            break;
+          case "Trợ Giảng":
+            setIsTroGiang(true);
+            break;
+          case "Giảng viên Tập sự":
+            setIsGVTapSu(true);
+            break;
+          default:
+            break;
         }
-
-        setLoading(false);
-      } else {
-        setLoading(true);
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+    } finally {
+      setLoading(false); // Đặt loading thành false sau khi lấy dữ liệu xong
     }
   };
-  console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
+
   const handleMoveProfileGV = () => {
-    navigate("/admin/account-giangvien");
+    if (!loading) {
+      navigate("/admin/account-giangvien");
+    }
   };
+
+  if (loading) {
+    return <Typography>Đang tải dữ liệu, vui lòng đợi...</Typography>; // Hiển thị thông báo tải dữ liệu
+  }
+
   if (isGVHangIII) {
     return <GV_Hang_III ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
   if (isTroGiang) {
     return <TroGiang ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
   }
-
   if (isGVCaoCapHangI) {
     return (
       <GV_CaoCap_Hang_I ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />
@@ -158,7 +183,7 @@ const DangKyGioChuan = () => {
     <Typography>
       Hãy Cập Nhật Chức Danh Để Đăng Ký Khung Giờ Chuẩn{" "}
       <Button variant="outlined" onClick={handleMoveProfileGV}>
-        Cập Nhật Chức Danh <i class="fa-solid fa-right-long ml-4"></i>
+        Cập Nhật Chức Danh <i className="fa-solid fa-right-long ml-4"></i>
       </Button>{" "}
     </Typography>
   );
