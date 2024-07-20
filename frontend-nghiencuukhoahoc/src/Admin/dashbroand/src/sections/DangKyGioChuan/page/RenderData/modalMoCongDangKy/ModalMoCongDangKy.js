@@ -63,7 +63,28 @@ const ModalMoCongDangKy = ({
     // Định dạng ngày theo yêu cầu, sử dụng múi giờ địa phương
     return date.local().format("YYYY-MM-DDTHH:mm"); // Chuyển đổi sang định dạng ngày giờ địa phương
   };
+  const handleOffDangky = async () => {
+    if (TimeDangKyKhungGioChuan) {
+      try {
+        const response = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`
+        );
 
+        console.log("response.data.DT", response.data.DT);
+
+        if (response.data.EC === 1) {
+          toast.success("Đóng Khung Giờ Chuẩn Thành Công");
+        } else {
+          toast.error(response.data.EM);
+        }
+      } catch (error) {
+        console.error("Lỗi khi đóng khung giờ chuẩn:", error);
+        toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+      }
+    } else {
+      toast.error("Bạn chưa mở cổng!! ");
+    }
+  };
   const handleOpenModangKy = async () => {
     console.log("StartTime + EndTime", StartTime + EndTime);
     if (error) return;
@@ -187,7 +208,10 @@ const ModalMoCongDangKy = ({
           </Box>
 
           <Button variant="outlined" onClick={handleOpenModangKy}>
-            Xác Nhận
+            Mở Cổng
+          </Button>
+          <Button variant="outlined" onClick={handleOffDangky}>
+            Đóng cổng
           </Button>
           <Typography>
             {TimeDangKyKhungGioChuan && TimeDangKyKhungGioChuan}
