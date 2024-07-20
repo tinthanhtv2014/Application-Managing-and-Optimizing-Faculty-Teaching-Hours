@@ -160,7 +160,9 @@ const RenderData = ({
               Mở Cổng Đăng Ký
             </Button>
             <Typography>
-              Thời gian mở cổng từ :{TimeDangKyKhungGioChuan}
+              {TimeDangKyKhungGioChuan
+                ? "Thời gian mở cổng từ :" + TimeDangKyKhungGioChuan
+                : "Hiện đang đóng cổng đăng ký  "}
             </Typography>
           </Col>
         </Row>

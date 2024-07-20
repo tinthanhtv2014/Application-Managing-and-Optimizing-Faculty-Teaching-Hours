@@ -7,7 +7,7 @@ import {
   FormControl,
   Button,
 } from "@mui/material";
-import { Container } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -73,6 +73,9 @@ const ModalMoCongDangKy = ({
         console.log("response.data.DT", response.data.DT);
 
         if (response.data.EC === 1) {
+          setTimeDangKyKhungGioChuan("");
+          setEndTime("");
+          setStartTime("");
           toast.success("Đóng Khung Giờ Chuẩn Thành Công");
         } else {
           toast.error(response.data.EM);
@@ -142,80 +145,87 @@ const ModalMoCongDangKy = ({
         }}
       >
         <Container>
-          <Typography variant="h6" component="h2">
-            Mở Cổng Đăng Ký Khung Giờ Chuẩn
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: 2,
-            }}
-          >
-            <Typography variant="subtitle1">Thời Gian Bắt Đầu</Typography>
-            <input
-              type="datetime-local"
-              value={formatDate(StartTime) || ""}
-              onChange={handleStartTimeChange}
-              className="input-timechucdanh"
-              style={{
-                padding: "10px",
-                borderRadius: "4px",
-                border: "1px solid #bdb3b3",
-                fontSize: "16px",
-                color: "#333",
-                width: "100%",
-                boxSizing: "border-box",
+          <Row>
+            <Typography variant="h6" component="h2">
+              Mở Cổng Đăng Ký Khung Giờ Chuẩn
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 2,
               }}
-            />
-          </Box>
-          {error && <Typography color="error">{error}</Typography>}
-
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Số Ngày"
-              value={SoNgay}
-              onChange={(e) => setSoNgay(e.target.value)}
-              variant="outlined"
-              type="number"
-            />
-          </FormControl>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: 2,
-            }}
-          >
-            <Typography variant="subtitle1">Thời Gian Kết Thúc</Typography>
-            <input
-              type="datetime-local"
-              value={formatDate(EndTime) || ""}
-              disabled
-              className="input-timechucdanh mt-2"
-              style={{
-                padding: "10px",
-                borderRadius: "4px",
-                border: "1px solid #bdb3b3",
-                fontSize: "16px",
-                color: "#333",
-                width: "100%",
-                boxSizing: "border-box",
+            >
+              <Typography variant="subtitle1">Thời Gian Bắt Đầu</Typography>
+              <input
+                type="datetime-local"
+                value={formatDate(StartTime) || ""}
+                onChange={handleStartTimeChange}
+                className="input-timechucdanh"
+                style={{
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: "1px solid #bdb3b3",
+                  fontSize: "16px",
+                  color: "#333",
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              />
+            </Box>
+            {error && <Typography color="error">{error}</Typography>}
+            <FormControl fullWidth margin="normal">
+              <TextField
+                label="Số Ngày"
+                value={SoNgay}
+                onChange={(e) => setSoNgay(e.target.value)}
+                variant="outlined"
+                type="number"
+              />
+            </FormControl>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 2,
               }}
-            />
-          </Box>
-
-          <Button variant="outlined" onClick={handleOpenModangKy}>
-            Mở Cổng
-          </Button>
-          <Button variant="outlined" onClick={handleOffDangky}>
-            Đóng cổng
-          </Button>
-          <Typography>
-            {TimeDangKyKhungGioChuan && TimeDangKyKhungGioChuan}
-          </Typography>
+            >
+              <Typography variant="subtitle1">Thời Gian Kết Thúc</Typography>
+              <input
+                type="datetime-local"
+                value={formatDate(EndTime) || ""}
+                disabled
+                className="input-timechucdanh mt-2"
+                style={{
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: "1px solid #bdb3b3",
+                  fontSize: "16px",
+                  color: "#333",
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              />
+            </Box>
+            <Col>
+              {" "}
+              <Button variant="outlined" onClick={handleOpenModangKy}>
+                Mở Cổng
+              </Button>
+            </Col>{" "}
+            <Col>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleOffDangky}
+              >
+                Đóng cổng
+              </Button>
+            </Col>
+            <Typography>
+              {TimeDangKyKhungGioChuan && TimeDangKyKhungGioChuan}
+            </Typography>
+          </Row>
         </Container>
       </Box>
     </Modal>
