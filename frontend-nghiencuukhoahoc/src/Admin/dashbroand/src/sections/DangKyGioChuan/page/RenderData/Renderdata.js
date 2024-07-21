@@ -28,6 +28,7 @@ const RenderData = ({
   dataListNamHoc,
   MaGV,
   OpenChucNangtheokhungthoigian,
+  fetchDataGV,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,7 @@ const RenderData = ({
           toast.error("Lỗi khi gọi API để lấy dữ liệu.");
         } finally {
           setLoading(false);
-          setDataRenderKhungChuan(dataKhungChuan);
+
           setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
         }
       };
@@ -298,45 +299,53 @@ const RenderData = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataRenderKhungChuan.map((khungChuan, index) => (
-                  <TableRow
-                    className={`table-row ${
-                      selectedRow === index ? "selected" : ""
-                    }`}
-                    key={index}
-                    onClick={() => handleRowClick(index, khungChuan)} // Xử lý khi click vào dòng
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "#f5f5f5",
-                      },
-                    }}
-                  >
-                    <TableCell align="center" className="text-info">
-                      {khungChuan.TENKHUNGCHUAN ?? ""}
-                    </TableCell>
-                    <TableCell align="center">
-                      {khungChuan.GIOGIANGDAY_HANHCHINH ?? ""}
-                    </TableCell>
-                    <TableCell align="center" className="text-info">
-                      {khungChuan.GIOGIANGDAY_CHUAN ?? ""}
-                    </TableCell>
-                    <TableCell align="center">
-                      {khungChuan.GIONGHIENCUUKHOAHOC_HANHCHINH ?? ""}
-                    </TableCell>
-                    <TableCell align="center" className="text-info">
-                      {khungChuan.GIONGHIENCUUKHOAHOC_CHUAN ?? ""}
-                    </TableCell>
-                    <TableCell align="center">
-                      {khungChuan.GIOPHUCVUCONGDONG_HANHCHINH ?? ""}
-                    </TableCell>
-                    <TableCell align="center" className="text-info">
-                      {khungChuan.GIOPHUCVUCONGDONG_CHUAN ?? ""}
-                    </TableCell>
-                    <TableCell align="center">
-                      {khungChuan.GHICHU ?? ""}
+                {dataRenderKhungChuan && dataRenderKhungChuan.length > 0 ? (
+                  dataRenderKhungChuan.map((khungChuan, index) => (
+                    <TableRow
+                      className={`table-row ${
+                        selectedRow === index ? "selected" : ""
+                      }`}
+                      key={index}
+                      onClick={() => handleRowClick(index, khungChuan)}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#f5f5f5",
+                        },
+                      }}
+                    >
+                      <TableCell align="center" className="text-info">
+                        {khungChuan.TENKHUNGCHUAN ?? ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {khungChuan.GIOGIANGDAY_HANHCHINH ?? ""}
+                      </TableCell>
+                      <TableCell align="center" className="text-info">
+                        {khungChuan.GIOGIANGDAY_CHUAN ?? ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {khungChuan.GIONGHIENCUUKHOAHOC_HANHCHINH ?? ""}
+                      </TableCell>
+                      <TableCell align="center" className="text-info">
+                        {khungChuan.GIONGHIENCUUKHOAHOC_CHUAN ?? ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {khungChuan.GIOPHUCVUCONGDONG_HANHCHINH ?? ""}
+                      </TableCell>
+                      <TableCell align="center" className="text-info">
+                        {khungChuan.GIOPHUCVUCONGDONG_CHUAN ?? ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {khungChuan.GHICHU ?? ""}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} align="center">
+                      Không có dữ liệu để hiển thị
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -351,6 +360,7 @@ const RenderData = ({
         TimeDangKyKhungGioChuan={TimeDangKyKhungGioChuan}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        fetchDataGV={fetchDataGV}
       />
     </>
   );

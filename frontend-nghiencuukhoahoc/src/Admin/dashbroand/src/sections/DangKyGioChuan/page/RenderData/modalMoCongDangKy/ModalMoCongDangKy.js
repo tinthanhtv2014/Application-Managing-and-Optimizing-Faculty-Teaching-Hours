@@ -21,6 +21,7 @@ const ModalMoCongDangKy = ({
   setStartTime,
   EndTime,
   setEndTime,
+  fetchDataGV,
 }) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -73,6 +74,7 @@ const ModalMoCongDangKy = ({
         console.log("response.data.DT", response.data.DT);
 
         if (response.data.EC === 1) {
+          fetchDataGV();
           setTimeDangKyKhungGioChuan("");
           setEndTime("");
           setStartTime("");
@@ -104,6 +106,7 @@ const ModalMoCongDangKy = ({
       console.log("response.data.DT", response.data.DT);
 
       if (response.data.EC === 1) {
+        fetchDataGV();
         setTimeDangKyKhungGioChuan(
           `${formatDateShow(
             response.data.DT.THOIGIANBATDAU

@@ -172,6 +172,7 @@ const DangKyGioChuan = () => {
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}
+        fetchDataGV={fetchDataGV}
       />
     );
   }

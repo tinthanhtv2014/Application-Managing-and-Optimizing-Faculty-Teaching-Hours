@@ -9,6 +9,7 @@ const GV_CaoCap_Hang_II = ({
   ChucDanhGiangVien,
   MaGV,
   OpenChucNangtheokhungthoigian,
+  fetchDataGV,
 }) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -27,7 +28,7 @@ const GV_CaoCap_Hang_II = ({
         const auth = Cookies.get("accessToken");
         const decodeAuth = jwtDecode(auth);
         setTenDangNhapGV(decodeAuth.taikhoan);
-        await fetchDataGV();
+        await fetchDataGV_II();
       } catch (error) {
         console.error("Lỗi khi giải mã token hoặc lấy dữ liệu:", error);
         setError(error);
@@ -37,7 +38,7 @@ const GV_CaoCap_Hang_II = ({
     fetchData();
   }, []);
 
-  const fetchDataGV = async () => {
+  const fetchDataGV_II = async () => {
     try {
       const [response_ListKhungChuan, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
@@ -85,6 +86,7 @@ const GV_CaoCap_Hang_II = ({
         dataListNamHoc={ListNamHoc}
         MaGV={MaGV}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        fetchDataGV={fetchDataGV}
       />
     </>
   );
