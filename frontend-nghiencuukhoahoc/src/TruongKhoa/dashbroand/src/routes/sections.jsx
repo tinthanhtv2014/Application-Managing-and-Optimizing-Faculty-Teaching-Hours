@@ -17,7 +17,9 @@ const ListOrdersChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTie
 const ListOrdersDaHuy = lazy(() => import('../sections/ListOrders/ListOrdersDaHuy/ListOrdersDaHuy'));
 const ListOrdersDaGiao = lazy(() => import('../sections/ListOrders/ListOrdersDaGiao/ListOrdersDaGiao'));
 const ListOrdersPage = lazy(() => import('../pages/ListOrders'));
-const IndexPage = lazy(() => import('../pages/app'));
+
+const TrangChu = lazy(() => import('../pages/app'));
+
 const BlogPage = lazy(() => import('../pages/blog'));
 const UserPage = lazy(() => import('../pages/user'));
 const LoginPage = lazy(() => import('../pages/login'));
@@ -26,16 +28,31 @@ const Page404 = lazy(() => import('../pages/page-not-found'));
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/',  // Thống kê theo biểu đồ.
+      path: '/',  //Trang chủ
 
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <IndexPage />
+            <TrangChu />
           </Suspense>
         </DashboardLayout>
       )
     },
+
+    {
+      path: '/thong-ke',  //Trang chủ
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <TrangChu />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+
+
+    //====================================================================================================
     {
       path: '/bo-mon', //: Danh sách các bộ môn.
       element: (
