@@ -29,6 +29,7 @@ const RenderData = ({
   MaGV,
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
+  IsOpenCheckKhoa,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
@@ -159,9 +160,14 @@ const RenderData = ({
               Mở Cổng Đăng Ký
             </Button>
             <Typography>
-              {TimeDangKyKhungGioChuan
-                ? "Thời gian mở cổng từ :" + TimeDangKyKhungGioChuan
-                : "Hiện đang đóng cổng đăng ký  "}
+              {IsOpenCheckKhoa && (
+                <>
+                  {" "}
+                  {TimeDangKyKhungGioChuan
+                    ? `Thời gian mở cổng từ: ${TimeDangKyKhungGioChuan}`
+                    : "Hiện đang đóng cổng đăng ký"}
+                </>
+              )}
             </Typography>
           </Col>
         </Row>

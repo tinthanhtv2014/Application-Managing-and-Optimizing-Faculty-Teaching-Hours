@@ -21,7 +21,7 @@ const DangKyGioChuan = () => {
   const [isGVHangIII, setIsGVHangIII] = useState(false);
 
   const [isGVTapSu, setIsGVTapSu] = useState(false);
-
+  const [IsOpenCheckKhoa, setIsOpenCheckKhoa] = useState(false);
   const [OpenChucNangtheokhungthoigian, setOpenChucNangtheokhungthoigian] =
     useState({ XemKhungGioChuan: null, ChonKhungGio: null });
 
@@ -56,9 +56,10 @@ const DangKyGioChuan = () => {
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
+      console.log("TENKHOA USER", response.data.DT.TENKHOA);
       console.log(
-        "api response_XemTimeKhungGioChuan ",
-        response_XemTimeKhungGioChuan.data.DT
+        "TENKHOA time admin:",
+        response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
       );
       if (response_XemTimeKhungGioChuan.data.EC === 1) {
         if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
@@ -66,7 +67,7 @@ const DangKyGioChuan = () => {
             response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
           const endTime =
             response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
-          console.log("endTime", endTime);
+
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
@@ -77,7 +78,6 @@ const DangKyGioChuan = () => {
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
-          console.log("Current Date:", currentDate);
           console.log("Start Date:", formattedStartDate);
           console.log("End Date:", formattedEndDate);
 
@@ -88,12 +88,15 @@ const DangKyGioChuan = () => {
               moment(formattedEndDate, "YYYY-MM-DD"),
               null,
               "[)"
-            )
+            ) &&
+            response.data.DT.TENKHOA ==
+              response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
           ) {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
               ChonKhungGio: "Chọn Khung Giờ",
             });
+            setIsOpenCheckKhoa(true);
           } else {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
@@ -149,6 +152,7 @@ const DangKyGioChuan = () => {
   if (isGVHangIII) {
     return (
       <GV_Hang_III
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}
@@ -160,6 +164,7 @@ const DangKyGioChuan = () => {
   if (isGVCaoCapHangI) {
     return (
       <GV_CaoCap_Hang_I
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}
@@ -170,6 +175,7 @@ const DangKyGioChuan = () => {
   if (isGVChinhHangII) {
     return (
       <GV_Chinh_Hang_II
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}
@@ -180,6 +186,7 @@ const DangKyGioChuan = () => {
   if (isGVTapSu) {
     return (
       <GV_TapSu
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}

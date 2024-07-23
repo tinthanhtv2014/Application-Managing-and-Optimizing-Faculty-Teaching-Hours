@@ -10,6 +10,7 @@ const GV_CaoCap_Hang_II = ({
   MaGV,
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
+  IsOpenCheckKhoa,
 }) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -87,6 +88,7 @@ const GV_CaoCap_Hang_II = ({
         MaGV={MaGV}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         fetchDataGV={fetchDataGV}
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
       />
     </>
   );

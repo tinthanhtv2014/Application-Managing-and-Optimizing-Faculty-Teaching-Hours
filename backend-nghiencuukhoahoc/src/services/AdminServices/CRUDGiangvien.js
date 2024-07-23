@@ -57,35 +57,37 @@ const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
   try {
     let [results, fields] = await pool.execute(
       `SELECT 
-        TK.TENDANGNHAP,
-        GV.TENGV,
-        GV.MAGV,
-        CV.TENCHUCVU, 
-        
-        CD.TENCHUCDANH, 
-        CCD.THOIGIANNHAN,
-
-        GV.DIENTHOAI, 
-        GV.DIACHI, 
-        BM.TENBOMON, 
-        TK.PHANQUYEN, 
-        TK.TRANGTHAITAIKHOAN
-      FROM 
-        taikhoan AS TK
-      LEFT JOIN 
-        giangvien AS GV ON TK.MAGV = GV.MAGV
-      LEFT JOIN 
-        giu_chuc_vu AS GCV ON GV.MAGV = GCV.MAGV
-      LEFT JOIN 
-        chucvu AS CV ON GCV.MACHUCVU = CV.MACHUCVU
-      LEFT JOIN 
-        co_chuc_danh AS CCD ON GV.MAGV = CCD.MAGV
-      LEFT JOIN 
-        chucdanh AS CD ON CCD.MACHUCDANH = CD.MACHUCDANH
-      LEFT JOIN 
-        bomon AS BM ON GV.MABOMON = BM.MABOMON
-      WHERE 
-        TK.TENDANGNHAP = ?;`,
+  TK.TENDANGNHAP,
+  GV.TENGV,
+  GV.MAGV,
+  CV.TENCHUCVU,
+  CD.TENCHUCDANH,
+  CCD.THOIGIANNHAN,
+  GV.DIENTHOAI,
+  GV.DIACHI,
+  BM.TENBOMON,
+  TK.PHANQUYEN,
+  TK.TRANGTHAITAIKHOAN,
+  K.TENKHOA
+FROM 
+  taikhoan AS TK
+LEFT JOIN 
+  giangvien AS GV ON TK.MAGV = GV.MAGV
+LEFT JOIN 
+  giu_chuc_vu AS GCV ON GV.MAGV = GCV.MAGV
+LEFT JOIN 
+  chucvu AS CV ON GCV.MACHUCVU = CV.MACHUCVU
+LEFT JOIN 
+  co_chuc_danh AS CCD ON GV.MAGV = CCD.MAGV
+LEFT JOIN 
+  chucdanh AS CD ON CCD.MACHUCDANH = CD.MACHUCDANH
+LEFT JOIN 
+  bomon AS BM ON GV.MABOMON = BM.MABOMON
+LEFT JOIN 
+  khoa AS K ON BM.MAKHOA = K.MAKHOA
+WHERE 
+  TK.TENDANGNHAP = ?;
+;`,
       [TENDANGNHAP]
     );
 

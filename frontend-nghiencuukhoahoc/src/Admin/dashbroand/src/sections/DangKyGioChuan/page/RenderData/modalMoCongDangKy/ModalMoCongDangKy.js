@@ -34,6 +34,7 @@ const ModalMoCongDangKy = ({
   const [loading, setLoading] = useState(true);
   const [dataListKhoa, setdataListKhoa] = useState(null);
   const [TenKhoa, setTenKhoa] = useState(null);
+
   useEffect(() => {
     if (StartTime && EndTime) {
       const startTimeMoment = moment(StartTime);
@@ -77,26 +78,30 @@ const ModalMoCongDangKy = ({
 
   const handleOffDangky = async () => {
     if (TimeDangKyKhungGioChuan) {
-      try {
-        const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`,
-          { TENKHOA: TenKhoa }
-        );
+      if (TenKhoa) {
+        try {
+          const response = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`,
+            { TENKHOA: TenKhoa }
+          );
 
-        console.log("response.data.DT", response.data.DT);
+          console.log("response.data.DT", response.data.DT);
 
-        if (response.data.EC === 1) {
-          fetchDataGV();
-          setTimeDangKyKhungGioChuan("");
-          setEndTime("");
-          setStartTime("");
-          toast.success("Đóng Khung Giờ Chuẩn Thành Công");
-        } else {
-          toast.error(response.data.EM);
+          if (response.data.EC === 1) {
+            fetchDataGV();
+            setTimeDangKyKhungGioChuan("");
+            setEndTime("");
+            setStartTime("");
+            toast.success("Đóng Khung Giờ Chuẩn Thành Công");
+          } else {
+            toast.error(response.data.EM);
+          }
+        } catch (error) {
+          console.error("Lỗi khi đóng khung giờ chuẩn:", error);
+          toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
         }
-      } catch (error) {
-        console.error("Lỗi khi đóng khung giờ chuẩn:", error);
-        toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+      } else {
+        toast.error("Bạn chưa chọn khoa!! ");
       }
     } else {
       toast.error("Bạn chưa mở cổng!! ");
@@ -106,34 +111,38 @@ const ModalMoCongDangKy = ({
     console.log("StartTime + EndTime", StartTime + EndTime);
     if (error) return;
 
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/thoigianxacnhan`,
-        {
-          THOIGIANBATDAU: StartTime,
-          THOIGIANKETTHUC: EndTime,
-          TENKHOA: TenKhoa,
-        }
-      );
-
-      console.log("response.data.DT", response.data.DT);
-
-      if (response.data.EC === 1) {
-        fetchDataGV();
-        setTimeDangKyKhungGioChuan(
-          `${formatDateShow(
-            response.data.DT.THOIGIANBATDAU
-          )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
+    if (TenKhoa) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/tao/thoigianxacnhan`,
+          {
+            THOIGIANBATDAU: StartTime,
+            THOIGIANKETTHUC: EndTime,
+            TENKHOA: TenKhoa,
+          }
         );
-        toast.success("Mở Khung Giờ Chuẩn Thành Công");
-        setStartTime(response.data.DT.THOIGIANBATDAU);
-        setEndTime(response.data.DT.THOIGIANKETTHUC);
-      } else {
-        toast.error(response.data.EM);
+
+        console.log("response.data.DT", response.data.DT);
+
+        if (response.data.EC === 1) {
+          fetchDataGV();
+          setTimeDangKyKhungGioChuan(
+            `${formatDateShow(
+              response.data.DT.THOIGIANBATDAU
+            )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
+          );
+          toast.success("Mở Khung Giờ Chuẩn Thành Công");
+          setStartTime(response.data.DT.THOIGIANBATDAU);
+          setEndTime(response.data.DT.THOIGIANKETTHUC);
+        } else {
+          toast.error(response.data.EM);
+        }
+      } catch (error) {
+        console.error("Lỗi khi mở khung giờ chuẩn:", error);
+        toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
       }
-    } catch (error) {
-      console.error("Lỗi khi mở khung giờ chuẩn:", error);
-      toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+    } else {
+      toast.error("Bạn chưa chọn khoa để mở");
     }
   };
 
@@ -219,7 +228,11 @@ const ModalMoCongDangKy = ({
                 }}
               />
             </Box>{" "}
-            <Box sx={{ maxWidth: 300 }}>
+            <Box
+              sx={{
+                maxWidth: 300,
+              }}
+            >
               <FormControl fullWidth>
                 <InputLabel id="khoa-select-label">Chọn Khoa</InputLabel>
                 <Select
@@ -228,7 +241,9 @@ const ModalMoCongDangKy = ({
                   className="height-selectGV"
                   value={TenKhoa}
                   label="Chọn Khoa"
-                  onChange={(e) => setTenKhoa(e.target.value)}
+                  onChange={(e) => {
+                    setTenKhoa(e.target.value);
+                  }}
                 >
                   {dataListKhoa && dataListKhoa.length > 0 ? (
                     dataListKhoa.map((khoa, index) => (
