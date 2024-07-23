@@ -78,8 +78,9 @@ const ModalMoCongDangKy = ({
   const handleOffDangky = async () => {
     if (TimeDangKyKhungGioChuan) {
       try {
-        const response = await CookiesAxios.get(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`,
+          { TENKHOA: TenKhoa }
         );
 
         console.log("response.data.DT", response.data.DT);

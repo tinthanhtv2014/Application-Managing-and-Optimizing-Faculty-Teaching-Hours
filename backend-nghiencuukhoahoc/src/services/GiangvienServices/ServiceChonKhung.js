@@ -235,7 +235,7 @@ const tao_THOIGIAN_CHONKHUNG = async (
     );
 
     // Kiểm tra xem thời gian đã tồn tại trong bảng chưa
-    await delete_THOIGIAN_CHONKHUNG();
+    await delete_THOIGIAN_CHONKHUNG(TENKHOA);
     const [results_thoigian_xacnhan, fields] = await pool.execute(
       "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
       [TENKHOA]
@@ -271,19 +271,43 @@ const tao_THOIGIAN_CHONKHUNG = async (
   }
 };
 
-const delete_THOIGIAN_CHONKHUNG = async () => {
+const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
+  console.log("check ten khoa ", TENKHOA);
   try {
-    await pool.execute("TRUNCATE TABLE thoigian_xacnhan");
+    // Truy vấn để lấy tất cả các mã thời gian xác nhận dựa trên tên khoa
+    const [results] = await pool.execute(
+      "SELECT MA_THOIGIAN_XACNHAN FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
+      [TENKHOA]
+    );
+
+    if (results.length === 0) {
+      return {
+        EM: "Không tìm thấy thời gian xác nhận nào cho khoa này",
+        EC: 0,
+        DT: null,
+      };
+    }
+
+    if (results.length > 0) {
+      await pool.execute(
+        `DELETE  FROM thoigian_xacnhan WHERE MA_THOIGIAN_XACNHAN = ?;
+
+        `,
+        [results[0].MA_THOIGIAN_XACNHAN]
+      );
+      console.log("xoa thanh cogn ==================");
+    }
+
     return {
       EM: "Xóa thời gian chọn khung thành công",
       EC: 1,
       DT: null,
     };
   } catch (error) {
+    console.log("check loi ", error);
     return {
       EM: "Có lỗi xảy ra khi xóa thời gian chọn khung: delete_THOIGIAN_CHONKHUNG",
       EC: -1,
-      DT: error.message,
     };
   }
 };

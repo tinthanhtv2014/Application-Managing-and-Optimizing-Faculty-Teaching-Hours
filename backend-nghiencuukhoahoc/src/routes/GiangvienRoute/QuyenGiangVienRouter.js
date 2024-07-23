@@ -30,7 +30,7 @@ const QuyenGiangVienRouter = (app) => {
   router.post("/xem/canhan/khunggiochuan", select_CHONKHUNG); // xem thông tin khung chuẩn của 1 giảng viên
   router.post("/tao/khunggiochuan", create_CHONKHUNG); // tạo khung chuẩn cho 1 giảng viên chưa có
   router.post("/tao/thoigianxacnhan", create_THOIGIAN_XACNHAN);
-  router.get("/xoa/thoigianxacnhan", delete_THOIGIAN_XACNHAN);
+  router.post("/xoa/thoigianxacnhan", delete_THOIGIAN_XACNHAN);
   router.put("/sua/thoigianxacnhan/:SONGAYKETTHUC", update_THOIGIAN_XACNHAN);
   router.get("/xem/thoigianxacnhan", xem_THOIGIAN_XACNHAN);
   // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt

@@ -143,8 +143,9 @@ const xem_THOIGIAN_XACNHAN = async (req, res) => {
 };
 
 const delete_THOIGIAN_XACNHAN = async (req, res) => {
+  const TENKHOA = req.body.TENKHOA;
   try {
-    let results = await delete_THOIGIAN_CHONKHUNG();
+    let results = await delete_THOIGIAN_CHONKHUNG(TENKHOA);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
