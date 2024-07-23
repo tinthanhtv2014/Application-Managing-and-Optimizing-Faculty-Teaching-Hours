@@ -295,7 +295,7 @@ const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
         `,
         [results[0].MA_THOIGIAN_XACNHAN]
       );
-      console.log("xoa thanh cogn ==================");
+      console.log("xoa thanh cong ==================");
     }
 
     return {

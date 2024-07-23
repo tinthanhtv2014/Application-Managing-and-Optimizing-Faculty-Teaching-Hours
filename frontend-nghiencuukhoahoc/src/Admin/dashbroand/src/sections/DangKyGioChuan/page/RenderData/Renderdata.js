@@ -80,11 +80,9 @@ const RenderData = ({
           toast.error("Lỗi khi gọi API để lấy dữ liệu.");
         } finally {
           setLoading(false);
-
-          setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
         }
       };
-
+      setSelectNamhoc(dataListNamHoc[0].TENNAMHOC);
       TimeKhungGioChuan();
     }
   }, [dataKhungChuan]);
