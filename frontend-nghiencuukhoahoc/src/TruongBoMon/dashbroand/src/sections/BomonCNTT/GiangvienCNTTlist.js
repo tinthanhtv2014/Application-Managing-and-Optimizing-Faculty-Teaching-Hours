@@ -1,106 +1,136 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import ReactPaginate from "react-paginate";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import "./GiangvienCNTT.scss";
+
 const GiangvienCNTTList = (props) => {
-  const [dataGIANGVIEN, setDataGIANGVIEN] = useState(null);
-  const [currentPage, setCurrentPage] = useState(3);
+  const [dataGIANGVIEN, setDataGIANGVIEN] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(9);
-  const [currentLimit, setCurrentLimit] = useState(8);
+  const [currentLimit, setCurrentLimit] = useState(10);
+  const [showLoader, setShowLoader] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
+
   const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
+    withCredentials: true,
   });
-  const [temperary, setTemperary] = useState("");
-  const fetctDataGIANGVIEN = async () => {
-    const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${currentPage}&limit=${currentLimit}`
-    );
-    setDataGIANGVIEN(response.data.DT);
+  const auth = Cookies.get("accessToken");
+  const navigate = useNavigate();
 
-    const { totalRows, totalPages } = response.data.DT;
+  const fetchDataGIANGVIEN = async (page = currentPage) => {
+    setShowLoader(true);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}`
+      );
+      const { totalRows, totalPages } = response.data.DT;
 
-    setTotalPages(totalPages); // Cập nhật totalPages từ dữ liệu trả về
-    setDataGIANGVIEN(totalRows);
-    console.log("check reposnseseseádsadadadsa: ", dataGIANGVIEN);
+      // Đảm bảo mỗi hàng có thuộc tính `id`
+      const rowsWithId = totalRows.map((item, index) => ({
+        ...item,
+        id: item.id || index, // Nếu dữ liệu không có `id`, sử dụng `index` tạm thời
+      }));
+
+      setDataGIANGVIEN(rowsWithId);
+      setTotalPages(totalPages);
+      setShowLoader(false);
+      if (initialLoad) {
+        setInitialLoad(false);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setShowLoader(false);
+    }
   };
 
   useEffect(() => {
-    fetctDataGIANGVIEN();
+    if (auth) {
+      try {
+        const decodedToken = jwtDecode(auth);
+        const expirationTime = decodedToken.exp * 1000;
+        const currentTime = Date.now();
+        if (expirationTime < currentTime) {
+          Cookies.remove("accessToken");
+          navigate("/login");
+        } else {
+          fetchDataGIANGVIEN();
+        }
+      } catch (error) {
+        console.error("Token decoding error:", error);
+        Cookies.remove("accessToken");
+        navigate("/login");
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, auth]);
+
+  useEffect(() => {
+    fetchDataGIANGVIEN();
   }, [currentPage]);
 
-  const handlePageClick = async (event) => {
+  const handlePageClick = (event) => {
     setCurrentPage(+event.selected + 1);
-    await fetctDataGIANGVIEN(+event.selected + 1);
   };
+
+  if (showLoader && initialLoad) {
+    return <div className="loader"></div>;
+  }
+
+  const columns = [
+    { field: "TENKHOA", headerName: "Tên khoa", width: 150 },
+    { field: "TENBOMON", headerName: "Tên bộ môn", width: 150 },
+    { field: "MAGV", headerName: "Mã số giảng viên", width: 150 },
+    { field: "TENGV", headerName: "Tên giảng viên", width: 150 },
+    { field: "TENDANGNHAP", headerName: "Tên đăng nhập", width: 150 },
+    { field: "TENCHUCDANH", headerName: "Tên chức danh", width: 150 },
+    { field: "TENCHUCVU", headerName: "Tên chức vụ", width: 150 },
+    { field: "DIACHI", headerName: "Địa chỉ", width: 150 },
+    { field: "DIENTHOAI", headerName: "Điện thoại", width: 150 },
+    { field: "EMAIL", headerName: "Email", width: 150 },
+    { field: "PHANQUYEN", headerName: "Quyền hạn", width: 150 },
+    {
+      field: "TRANGTHAITAIKHOAN",
+      headerName: "Trạng thái hoạt động",
+      width: 150,
+      renderCell: (params) => (
+        <span
+          className={
+            params.value === "Đang hoạt động"
+              ? "active-status"
+              : "inactive-status"
+          }
+        >
+          {params.value}
+        </span>
+      ),
+    },
+  ];
+  const rowHeight = 52; // Chiều cao của mỗi hàng trong px
+  const dataGridHeight = dataGIANGVIEN.length * rowHeight;
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Tên khoa</TableCell>
-              <TableCell align="left">Tên bộ môn</TableCell>
-              <TableCell align="left">Mã số giảng viên</TableCell>
-              <TableCell align="left">Tên giảng viên</TableCell>
-              <TableCell align="left">Tên đăng nhập</TableCell>
-              <TableCell align="left">Tên Chức danh</TableCell>
-              <TableCell align="left">Tên chức vụ</TableCell>
-              <TableCell align="left">Địa chỉ</TableCell>
-              <TableCell align="left">Điện thoại</TableCell>
-              <TableCell align="left">Email</TableCell>
-
-              <TableCell align="left">Quyền hạn</TableCell>
-              <TableCell align="left">Trạng thái hoạt động</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataGIANGVIEN &&
-              dataGIANGVIEN.length > 0 &&
-              dataGIANGVIEN.map((giangvien) => (
-                <TableRow
-                  key={giangvien.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {giangvien.TENKHOA}
-                  </TableCell>
-
-                  <TableCell align="left">{giangvien.TENBOMON}</TableCell>
-                  <TableCell align="left">{giangvien.MAGV}</TableCell>
-                  <TableCell align="left">{giangvien.TENGV}</TableCell>
-                  <TableCell align="left">{giangvien.TENDANGNHAP}</TableCell>
-                  <TableCell align="left">
-                    {giangvien.TENCHUCDANH
-                      ? giangvien.TENCHUCDANH
-                      : "temperary"}
-                  </TableCell>
-                  <TableCell align="left">
-                    {giangvien.TENCHUCVU ? giangvien.TENCHUCVU : "temperary"}
-                  </TableCell>
-                  <TableCell align="left">
-                    {giangvien.DIACHI ? giangvien.DIACHI : "temperary"}
-                  </TableCell>
-                  <TableCell align="left">
-                    {giangvien.DIENTHOAI ? giangvien.DIENTHOAI : "temperary"}
-                  </TableCell>
-                  <TableCell align="left">
-                    {giangvien.EMAIL ? giangvien.EMAIL : "temperary"}
-                  </TableCell>
-                  <TableCell align="left">{giangvien.PHANQUYEN}</TableCell>
-                  <TableCell align="left">
-                    {giangvien.TRANGTHAITAIKHOAN}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <h1 className="header">DANH SÁCH GIẢNG VIÊN THUỘC BỘ MÔN</h1>
+      <div
+        style={{
+          height: dataGridHeight > 653 ? dataGridHeight : 653,
+          width: "100%",
+        }}
+      >
+        <DataGrid
+          rows={dataGIANGVIEN}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10]}
+          pagination
+          checkboxSelection
+          disableColumnMenu
+        />
+      </div>
       {totalPages > 0 && (
         <div className="product-footer">
           <ReactPaginate
