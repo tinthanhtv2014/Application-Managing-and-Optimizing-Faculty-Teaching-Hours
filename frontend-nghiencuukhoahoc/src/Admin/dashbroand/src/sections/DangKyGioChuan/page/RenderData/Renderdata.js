@@ -192,7 +192,7 @@ const RenderData = ({
                 </Select>
               </FormControl>
             </Box>
-          </Col>{" "}
+          </Col>
           <Col>
             <Box sx={{ maxWidth: 220 }}>
               <FormControl fullWidth className="profile-email-input">

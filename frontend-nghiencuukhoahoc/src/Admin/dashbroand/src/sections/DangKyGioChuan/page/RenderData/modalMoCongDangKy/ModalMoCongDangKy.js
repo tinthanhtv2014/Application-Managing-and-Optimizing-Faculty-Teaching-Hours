@@ -6,6 +6,9 @@ import {
   TextField,
   FormControl,
   Button,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
@@ -26,25 +29,32 @@ const ModalMoCongDangKy = ({
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
-  const [SoNgay, setSoNgay] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [dataListKhoa, setdataListKhoa] = useState(null);
+  const [TenKhoa, setTenKhoa] = useState(null);
   useEffect(() => {
-    if (StartTime && SoNgay) {
+    if (StartTime && EndTime) {
       const startTimeMoment = moment(StartTime);
-      const endTimeMoment = startTimeMoment.add(Number(SoNgay), "days");
+      const endTimeMoment = moment(EndTime);
 
-      if (endTimeMoment.isBefore(moment())) {
-        setError("Thời gian kết thúc phải ở tương lai");
-        setEndTime(moment().add(1, "days").format("YYYY-MM-DDTHH:mm"));
+      if (endTimeMoment.isBefore(startTimeMoment)) {
+        setError("Thời gian kết thúc phải sau thời gian bắt đầu");
+        setEndTime(moment(StartTime).add(1, "days").format("YYYY-MM-DDTHH:mm"));
       } else {
         setError("");
-        setEndTime(endTimeMoment.format("YYYY-MM-DDTHH:mm"));
       }
+      fetchDataKhoa();
     }
-  }, [SoNgay, StartTime]);
+  }, [EndTime, StartTime]);
+  const fetchDataKhoa = async () => {
+    const response = await CookiesAxios.get(
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+    );
+    console.log("list khoa =>", response.data.DT);
+    setdataListKhoa(response.data.DT);
+  };
 
   const formatDateShow = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
@@ -64,6 +74,7 @@ const ModalMoCongDangKy = ({
     // Định dạng ngày theo yêu cầu, sử dụng múi giờ địa phương
     return date.local().format("YYYY-MM-DDTHH:mm"); // Chuyển đổi sang định dạng ngày giờ địa phương
   };
+
   const handleOffDangky = async () => {
     if (TimeDangKyKhungGioChuan) {
       try {
@@ -100,6 +111,7 @@ const ModalMoCongDangKy = ({
         {
           THOIGIANBATDAU: StartTime,
           THOIGIANKETTHUC: EndTime,
+          TENKHOA: TenKhoa,
         }
       );
 
@@ -129,8 +141,13 @@ const ModalMoCongDangKy = ({
     setStartTime(value);
   };
 
-  console.log("CHECK THOIGIANBATDAU", StartTime);
-  console.log("CHECK THOIGIANKETTHUC", EndTime);
+  const handleEndTimeChange = (e) => {
+    const value = e.target.value;
+    setEndTime(value);
+  };
+
+  // console.log("CHECK THOIGIANBATDAU", StartTime);
+  // console.log("CHECK THOIGIANKETTHUC", EndTime);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -177,15 +194,6 @@ const ModalMoCongDangKy = ({
               />
             </Box>
             {error && <Typography color="error">{error}</Typography>}
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Số Ngày"
-                value={SoNgay}
-                onChange={(e) => setSoNgay(e.target.value)}
-                variant="outlined"
-                type="number"
-              />
-            </FormControl>
             <Box
               sx={{
                 display: "flex",
@@ -197,7 +205,7 @@ const ModalMoCongDangKy = ({
               <input
                 type="datetime-local"
                 value={formatDate(EndTime) || ""}
-                disabled
+                onChange={handleEndTimeChange}
                 className="input-timechucdanh mt-2"
                 style={{
                   padding: "10px",
@@ -209,14 +217,37 @@ const ModalMoCongDangKy = ({
                   boxSizing: "border-box",
                 }}
               />
+            </Box>{" "}
+            <Box sx={{ maxWidth: 300 }}>
+              <FormControl fullWidth>
+                <InputLabel id="khoa-select-label">Chọn Khoa</InputLabel>
+                <Select
+                  labelId="khoa-select-label"
+                  id="khoa-select"
+                  className="height-selectGV"
+                  value={TenKhoa}
+                  label="Chọn Khoa"
+                  onChange={(e) => setTenKhoa(e.target.value)}
+                >
+                  {dataListKhoa && dataListKhoa.length > 0 ? (
+                    dataListKhoa.map((khoa, index) => (
+                      <MenuItem key={index} value={khoa.MAKHOA}>
+                        {khoa.TENKHOA}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>Không có khoa nào</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Box>
-            <Col>
+            <Col className="mt-2">
               {" "}
               <Button variant="outlined" onClick={handleOpenModangKy}>
                 Mở Cổng
               </Button>
             </Col>{" "}
-            <Col>
+            <Col className="mt-2">
               <Button
                 variant="outlined"
                 color="secondary"
@@ -228,7 +259,7 @@ const ModalMoCongDangKy = ({
             <Typography>
               {TimeDangKyKhungGioChuan && TimeDangKyKhungGioChuan}
             </Typography>
-          </Row>
+          </Row>{" "}
         </Container>
       </Box>
     </Modal>
