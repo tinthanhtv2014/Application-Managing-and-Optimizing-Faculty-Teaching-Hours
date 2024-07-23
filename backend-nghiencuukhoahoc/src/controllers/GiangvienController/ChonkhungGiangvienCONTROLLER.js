@@ -83,8 +83,12 @@ const create_THOIGIAN_XACNHAN = async (req, res) => {
   try {
     const THOIGIANBATDAU = req.body.THOIGIANBATDAU;
     const THOIGIANKETTHUC = req.body.THOIGIANKETTHUC;
-
-    let results = await tao_THOIGIAN_CHONKHUNG(THOIGIANBATDAU, THOIGIANKETTHUC);
+    const TENKHOA = req.body.TENKHOA;
+    let results = await tao_THOIGIAN_CHONKHUNG(
+      THOIGIANBATDAU,
+      THOIGIANKETTHUC,
+      TENKHOA
+    );
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,

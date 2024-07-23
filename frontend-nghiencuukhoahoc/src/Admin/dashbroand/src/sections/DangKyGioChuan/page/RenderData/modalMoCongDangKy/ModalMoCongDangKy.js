@@ -231,7 +231,7 @@ const ModalMoCongDangKy = ({
                 >
                   {dataListKhoa && dataListKhoa.length > 0 ? (
                     dataListKhoa.map((khoa, index) => (
-                      <MenuItem key={index} value={khoa.MAKHOA}>
+                      <MenuItem key={index} value={khoa.TENKHOA}>
                         {khoa.TENKHOA}
                       </MenuItem>
                     ))

@@ -216,8 +216,14 @@ const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC, MAKHUNG) => {
   }
 };
 
-const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
+const tao_THOIGIAN_CHONKHUNG = async (
+  THOIGIANBATDAU,
+  THOIGIANKETTHUC,
+  TENKHOA
+) => {
+  console.log("TENKHOA", TENKHOA);
   console.log("THOIGIANBATDAU", THOIGIANBATDAU);
+
   console.log("THOIGIANKETTHUC", THOIGIANKETTHUC);
   try {
     // Định dạng lại ngày tháng để đảm bảo đúng định dạng YYYY-MM-DD HH:mm:ss
@@ -230,11 +236,21 @@ const tao_THOIGIAN_CHONKHUNG = async (THOIGIANBATDAU, THOIGIANKETTHUC) => {
 
     // Kiểm tra xem thời gian đã tồn tại trong bảng chưa
     await delete_THOIGIAN_CHONKHUNG();
-
+    const [results_thoigian_xacnhan, fields] = await pool.execute(
+      "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
+      [TENKHOA]
+    );
+    console.log("results_MAKHOA =>", results_thoigian_xacnhan.length);
+    if (results_thoigian_xacnhan.length > 0) {
+      return {
+        EM: "Khoa này đã mở cổng rồi !",
+        EC: 0,
+      };
+    }
     // Nếu bản ghi không tồn tại, thực hiện thêm mới
     await pool.execute(
-      "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC) VALUES (?, ?)",
-      [formattedStartTime, formattedEndTime]
+      "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC,TEN_KHOA) VALUES (?, ?,?)",
+      [formattedStartTime, formattedEndTime, TENKHOA]
     );
     const [results] = await pool.execute(
       "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
