@@ -1,3 +1,54 @@
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `bangphancong`
+--
+ALTER TABLE `bangphancong`
+  MODIFY `MAPHANCONG` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `bomon`
+--
+ALTER TABLE `bomon`
+  MODIFY `MABOMON` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT cho bảng `chucdanh`
+--
+ALTER TABLE `chucdanh`
+  MODIFY `MACHUCDANH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT cho bảng `chucvu`
+--
+ALTER TABLE `chucvu`
+  MODIFY `MACHUCVU` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT cho bảng `chuongtrinhdaotao`
+--
+ALTER TABLE `chuongtrinhdaotao`
+  MODIFY `MACHUONGTRINH` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `khoa`
+--
+ALTER TABLE `khoa`
+  MODIFY `MAKHOA` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT cho bảng `khunggiochuan`
+--
+ALTER TABLE `khunggiochuan`
+  MODIFY `MAKHUNG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT cho bảng `namhoc`
+--
+ALTER TABLE `namhoc`
+  MODIFY `MANAMHOC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 INSERT INTO `khoa` (`TENKHOA`, `MAKHOA`) VALUES
 ('Khoa Công Nghệ Thông Tin', 1),
 ('Khoa Kỹ Thuật Công Nghệ', 11);
@@ -112,55 +163,4 @@ INSERT INTO KHUNGGIOCHUAN (MACHUCDANH, TENKHUNGCHUAN, GIOGIANGDAY_HANHCHINH, GIO
 (3, 'Khung 1', 630, 210, 675, 225, 455, 151),
 (3, 'Khung 2', 810, 270, 540, 180, 410, 136),
 (3, 'Khung 3', 990, 330, 405, 135, 365, 121);
-
--- AUTO_INCREMENT cho các bảng đã đổ
---
-
---
--- AUTO_INCREMENT cho bảng `bangphancong`
---
-ALTER TABLE `bangphancong`
-  MODIFY `MAPHANCONG` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `bomon`
---
-ALTER TABLE `bomon`
-  MODIFY `MABOMON` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT cho bảng `chucdanh`
---
-ALTER TABLE `chucdanh`
-  MODIFY `MACHUCDANH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT cho bảng `chucvu`
---
-ALTER TABLE `chucvu`
-  MODIFY `MACHUCVU` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT cho bảng `chuongtrinhdaotao`
---
-ALTER TABLE `chuongtrinhdaotao`
-  MODIFY `MACHUONGTRINH` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `khoa`
---
-ALTER TABLE `khoa`
-  MODIFY `MAKHOA` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT cho bảng `khunggiochuan`
---
-ALTER TABLE `khunggiochuan`
-  MODIFY `MAKHUNG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT cho bảng `namhoc`
---
-ALTER TABLE `namhoc`
-  MODIFY `MANAMHOC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
