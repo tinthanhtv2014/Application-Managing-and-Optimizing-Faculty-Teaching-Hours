@@ -3,7 +3,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import GV_Hang_III from "./page/GV_Hang_III";
-import TroGiang from "./page/TroGiang";
+
 import GV_CaoCap_Hang_I from "./page/GV_CaoCap_Hang_I";
 import GV_Chinh_Hang_II from "./page/GV_Chinh_Hang_II";
 import GV_TapSu from "./page/GV_TapSu";
@@ -14,22 +14,17 @@ import { useNavigate } from "react-router-dom";
 const DangKyGioChuan = () => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
+
   const [ChucDanhGiangVien, setChucDanhGiangVien] = useState(null);
   const [isGVCaoCapHangI, setIsGVCaoCapHangI] = useState(false);
   const [isGVChinhHangII, setIsGVChinhHangII] = useState(false);
   const [isGVHangIII, setIsGVHangIII] = useState(false);
-  const [isTroGiang, setIsTroGiang] = useState(false);
+
   const [isGVTapSu, setIsGVTapSu] = useState(false);
-  const [
-    isOpenUseEffectChucNangKhungTime,
-    setIsOpenUseEffectChucNangKhungTime,
-  ] = useState(false);
+
   const [OpenChucNangtheokhungthoigian, setOpenChucNangtheokhungthoigian] =
     useState({ XemKhungGioChuan: null, ChonKhungGio: null });
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+
   const [MaGV, setMaGV] = useState(null);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -39,7 +34,7 @@ const DangKyGioChuan = () => {
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
-    setTenDangNhapGV(decodeAuth.taikhoan);
+
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
 
@@ -76,10 +71,8 @@ const DangKyGioChuan = () => {
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
 
-          setStartTime(formattedStartDate);
-          setEndTime(formattedEndDate);
-
-          setIsOpenUseEffectChucNangKhungTime(true);
+          // setStartTime(formattedStartDate);
+          // setEndTime(formattedEndDate);
 
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
@@ -128,9 +121,7 @@ const DangKyGioChuan = () => {
           case "Giảng viên chính (Hạng II)":
             setIsGVChinhHangII(true);
             break;
-          case "Trợ Giảng":
-            setIsTroGiang(true);
-            break;
+
           case "Giảng viên Tập sự":
             setIsGVTapSu(true);
             break;
@@ -156,14 +147,24 @@ const DangKyGioChuan = () => {
   }
 
   if (isGVHangIII) {
-    return <GV_Hang_III ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
+    return (
+      <GV_Hang_III
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        ChucDanhGiangVien={ChucDanhGiangVien}
+        MaGV={MaGV}
+        fetchDataGV={fetchDataGV}
+      />
+    );
   }
-  if (isTroGiang) {
-    return <TroGiang ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
-  }
+
   if (isGVCaoCapHangI) {
     return (
-      <GV_CaoCap_Hang_I ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />
+      <GV_CaoCap_Hang_I
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        ChucDanhGiangVien={ChucDanhGiangVien}
+        MaGV={MaGV}
+        fetchDataGV={fetchDataGV}
+      />
     );
   }
   if (isGVChinhHangII) {
@@ -177,7 +178,14 @@ const DangKyGioChuan = () => {
     );
   }
   if (isGVTapSu) {
-    return <GV_TapSu ChucDanhGiangVien={ChucDanhGiangVien} MaGV={MaGV} />;
+    return (
+      <GV_TapSu
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        ChucDanhGiangVien={ChucDanhGiangVien}
+        MaGV={MaGV}
+        fetchDataGV={fetchDataGV}
+      />
+    );
   }
 
   return (

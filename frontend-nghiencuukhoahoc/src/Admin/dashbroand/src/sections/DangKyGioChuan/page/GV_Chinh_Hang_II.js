@@ -49,11 +49,11 @@ const GV_CaoCap_Hang_II = ({
         ),
       ]);
 
-      console.log(
-        "Check response_ListKhungChuan:",
-        response_ListKhungChuan.data.DT
-      );
-      console.log("Check responseListNamHoc:", responseListNamHoc.data.DT);
+      // console.log(
+      //   "Check response_ListKhungChuan:",
+      //   response_ListKhungChuan.data.DT
+      // );
+      // console.log("Check responseListNamHoc:", responseListNamHoc.data.DT);
 
       if (response_ListKhungChuan.data.EC === 1) {
         setListKhungGioChuan(response_ListKhungChuan.data.DT);
