@@ -488,7 +488,7 @@ const updateTaiKhoan = async (
       "select * from taikhoan where TENDANGNHAP = ?",
       [tenDangnhap]
     );
-    console.log(results1);
+    // console.log(results1);
     if (results1.length > 0) {
       const isCorrectPass = await bcrypt.compare(
         matKhaucu,

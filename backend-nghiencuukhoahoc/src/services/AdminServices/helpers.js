@@ -166,7 +166,7 @@ const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
       query,
       isOpenGetAllApiGV ? [] : [MABOMON]
     );
-    console.log(results);
+    // console.log(results);
     return {
       EM: "",
       EC: 1,

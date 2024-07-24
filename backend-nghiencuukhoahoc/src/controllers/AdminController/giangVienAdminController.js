@@ -75,7 +75,7 @@ const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
 const getOnlyGiangVienbyBoMon = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
-    console.log(MABOMON);
+    // console.log(MABOMON);
     let results = await selectOnlyGiangVien(MABOMON);
 
     return res.status(200).json({
@@ -119,7 +119,7 @@ const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
     const { TRANGTHAITAIKHOAN, MABOMON, isOpenGetAllApiGV } = req.body;
     const MAGV = req.params.MAGV;
     // console.log(MAGV);
-    console.log("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
+    // console.log("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
     // console.log(MABOMON);
     let results = await updateTrangThaiTaiKhoanGiangVien(
       MAGV,
@@ -222,8 +222,8 @@ const deleteGiangVienController = async (req, res) => {
     let MAGV = req.query.MAGV;
     let MABOMON = req.query.MABOMON;
     let isOpenGetAllApiGV = req.query.isOpenGetAllApiGV;
-    console.log(MAGV);
-    console.log(MABOMON);
+    // console.log(MAGV);
+    // console.log(MABOMON);
     let results = await deleteGiangVien(MAGV, MABOMON, isOpenGetAllApiGV);
 
     return res.status(200).json({

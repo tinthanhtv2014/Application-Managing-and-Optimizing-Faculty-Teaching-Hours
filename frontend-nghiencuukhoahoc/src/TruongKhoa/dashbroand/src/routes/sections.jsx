@@ -63,7 +63,7 @@ export default function Router() {
         </DashboardLayout>
       )
     }, {
-      path: '/dang-ky-khung-gio-chuan', //: Danh sách các bộ môn.
+      path: '/dang-ky-muc-chuan-gio-giang', //: Đăng Ký mức chuẩn giờ giảng
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>

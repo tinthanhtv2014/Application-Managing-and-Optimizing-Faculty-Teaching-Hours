@@ -86,7 +86,7 @@ const DangKyGioChuan = () => {
               "[)"
             ) &&
             response.data.DT.TENKHOA ==
-              response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
+            response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
           ) {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",

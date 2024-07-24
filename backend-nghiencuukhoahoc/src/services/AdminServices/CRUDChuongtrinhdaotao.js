@@ -222,7 +222,7 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
       dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
     );
-    console.log("check 2", kiemtra_tenchuongtrinh);
+    // console.log("check 2", kiemtra_tenchuongtrinh);
     await pool.execute(
       `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH) VALUES (?, ?,?)`,
       [
@@ -234,7 +234,7 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
       dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
     );
-    console.log("check 1", kiemtra_tenmonhoc);
+    // console.log("check 1", kiemtra_tenmonhoc);
     await pool.execute(
       `INSERT INTO thuoc (MACHUONGTRINH,MAMONHOC,SOTHUTUHOCKI) VALUES (?, ?,?)`,
       [

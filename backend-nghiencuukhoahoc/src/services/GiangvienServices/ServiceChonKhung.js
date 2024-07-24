@@ -34,9 +34,9 @@ const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
 const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
-    console.log("TENCHUCDANH:  ", TENCHUCDANH);
-    console.log("chucdanh:  ", chucdanh);
-    console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
+    // console.log("TENCHUCDANH:  ", TENCHUCDANH);
+    // console.log("chucdanh:  ", chucdanh);
+    // console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
     if (!chucdanh) {
       return {
         EM: "Không có chức danh này",
@@ -67,9 +67,9 @@ const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
 const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
-    console.log("TENCHUCDANH:  ", TENCHUCDANH);
-    console.log("chucdanh:  ", chucdanh);
-    console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
+    // console.log("TENCHUCDANH:  ", TENCHUCDANH);
+    // console.log("chucdanh:  ", chucdanh);
+    // console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
     if (!chucdanh) {
       return {
         EM: "Không có chức danh này",
@@ -167,13 +167,13 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     );
 
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
-    console.log(MAGV);
-    console.log("MANAMHOC", MANAMHOC);
+    // console.log(MAGV);
+    // console.log("MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
       "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
-    console.log(results1);
+    // console.log(results1);
     return {
       EM: "xem thông tin khung hiện tại thành công",
       EC: 1,
@@ -221,10 +221,10 @@ const tao_THOIGIAN_CHONKHUNG = async (
   THOIGIANKETTHUC,
   TENKHOA
 ) => {
-  console.log("TENKHOA", TENKHOA);
-  console.log("THOIGIANBATDAU", THOIGIANBATDAU);
+  // console.log("TENKHOA", TENKHOA);
+  // console.log("THOIGIANBATDAU", THOIGIANBATDAU);
 
-  console.log("THOIGIANKETTHUC", THOIGIANKETTHUC);
+  // console.log("THOIGIANKETTHUC", THOIGIANKETTHUC);
   try {
     // Định dạng lại ngày tháng để đảm bảo đúng định dạng YYYY-MM-DD HH:mm:ss
     const formattedStartTime = moment(THOIGIANBATDAU).format(
@@ -240,7 +240,7 @@ const tao_THOIGIAN_CHONKHUNG = async (
       "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
       [TENKHOA]
     );
-    console.log("results_MAKHOA =>", results_thoigian_xacnhan.length);
+    // console.log("results_MAKHOA =>", results_thoigian_xacnhan.length);
     if (results_thoigian_xacnhan.length > 0) {
       return {
         EM: "Khoa này đã mở cổng rồi !",
@@ -272,7 +272,7 @@ const tao_THOIGIAN_CHONKHUNG = async (
 };
 
 const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
-  console.log("check ten khoa ", TENKHOA);
+  // console.log("check ten khoa ", TENKHOA);
   try {
     // Truy vấn để lấy tất cả các mã thời gian xác nhận dựa trên tên khoa
     const [results] = await pool.execute(
@@ -295,7 +295,7 @@ const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
         `,
         [results[0].MA_THOIGIAN_XACNHAN]
       );
-      console.log("xoa thanh cong ==================");
+      // console.log("xoa thanh cong ==================");
     }
 
     return {
