@@ -5,7 +5,12 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 
-const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
+const GV_CaoCap_Hang_I = ({
+  ChucDanhGiangVien,
+  MaGV,
+  OpenChucNangtheokhungthoigian,
+  fetchDataGV,
+}) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -15,8 +20,6 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
   const [error, setError] = useState(null);
   const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
   const [ListKhungGioChuan, setListKhungGioChuan] = useState(null);
-  const [ListTenKhung_TENCHUCDANH, setListTenKhung_TENCHUCDANH] =
-    useState(null);
   const [ListNamHoc, setListNamHoc] = useState(null);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
         const auth = Cookies.get("accessToken");
         const decodeAuth = jwtDecode(auth);
         setTenDangNhapGV(decodeAuth.taikhoan);
-        await fetchDataGV();
+        await fetchDataGV_II();
       } catch (error) {
         console.error("Lỗi khi giải mã token hoặc lấy dữ liệu:", error);
         setError(error);
@@ -35,23 +38,20 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
     fetchData();
   }, []);
 
-  const fetchDataGV = async () => {
+  const fetchDataGV_II = async () => {
     try {
-      const [response, response1, responseListNamHoc] = await Promise.all([
+      console.log("ChucDanhGiangVien:", ChucDanhGiangVien);
+      const [response_ListKhungChuan, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/khunggiochuan/${ChucDanhGiangVien}`
-        ),
-        CookiesAxios.get(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/all/tenkhung/${ChucDanhGiangVien}`
         ),
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
         ),
       ]);
 
-      if (response.data.EC === 1) {
-        setListTenKhung_TENCHUCDANH(response1.data.DT);
-        setListKhungGioChuan(response.data.DT);
+      if (response_ListKhungChuan.data.EC === 1) {
+        setListKhungGioChuan(response_ListKhungChuan.data.DT);
         setListNamHoc(responseListNamHoc.data.DT);
       } else {
         toast.error("Không thể lấy dữ liệu khung giờ chuẩn");
@@ -63,6 +63,8 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
       setLoading(false);
     }
   };
+
+  console.log("Data Khung chuan:", ListKhungGioChuan);
 
   if (loading) {
     return <p>Đang tải...</p>;
@@ -76,9 +78,10 @@ const GV_CaoCap_Hang_I = ({ ChucDanhGiangVien, MaGV }) => {
     <>
       <RenderData
         dataKhungChuan={ListKhungGioChuan}
-        dataTenKhungChuan={ListTenKhung_TENCHUCDANH}
         dataListNamHoc={ListNamHoc}
         MaGV={MaGV}
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        fetchDataGV={fetchDataGV}
       />
     </>
   );

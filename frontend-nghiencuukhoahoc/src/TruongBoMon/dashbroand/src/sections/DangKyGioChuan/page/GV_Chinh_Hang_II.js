@@ -5,7 +5,12 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 
-const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
+const GV_CaoCap_Hang_II = ({
+  ChucDanhGiangVien,
+  MaGV,
+  OpenChucNangtheokhungthoigian,
+  fetchDataGV,
+}) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
   });
@@ -23,7 +28,7 @@ const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
         const auth = Cookies.get("accessToken");
         const decodeAuth = jwtDecode(auth);
         setTenDangNhapGV(decodeAuth.taikhoan);
-        await fetchDataGV();
+        await fetchDataGV_CHINH_HANG_2();
       } catch (error) {
         console.error("Lỗi khi giải mã token hoặc lấy dữ liệu:", error);
         setError(error);
@@ -33,7 +38,7 @@ const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
     fetchData();
   }, []);
 
-  const fetchDataGV = async () => {
+  const fetchDataGV_CHINH_HANG_2 = async () => {
     try {
       const [response_ListKhungChuan, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
@@ -65,7 +70,7 @@ const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
   };
 
   console.log("Data Khung chuan:", ListKhungGioChuan);
-
+  console.log("chjeck thông tin gv21312313123123123:", MaGV);
   if (loading) {
     return <p>Đang tải...</p>;
   }
@@ -80,6 +85,8 @@ const GV_CaoCap_Hang_II = ({ ChucDanhGiangVien, MaGV }) => {
         dataKhungChuan={ListKhungGioChuan}
         dataListNamHoc={ListNamHoc}
         MaGV={MaGV}
+        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
+        fetchDataGV={fetchDataGV}
       />
     </>
   );
