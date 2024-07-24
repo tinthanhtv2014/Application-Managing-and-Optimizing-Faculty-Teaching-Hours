@@ -40,6 +40,7 @@ const GV_CaoCap_Hang_I = ({
 
   const fetchDataGV_II = async () => {
     try {
+      console.log("ChucDanhGiangVien:", ChucDanhGiangVien);
       const [response_ListKhungChuan, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/khunggiochuan/${ChucDanhGiangVien}`

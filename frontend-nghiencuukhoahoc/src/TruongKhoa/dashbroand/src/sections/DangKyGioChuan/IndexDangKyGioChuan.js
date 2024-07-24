@@ -79,19 +79,24 @@ const DangKyGioChuan = () => {
 
           console.log("Start Date:", formattedStartDate); // Log giá trị đã định dạng
           console.log("End Date:", formattedEndDate); // Log giá trị đã định dạng
-          console.log("currentDate:", currentDate);
+          console.log("Current Date:", currentDate); // Log giá trị đã định dạng
+          console.log("TENKHOA từ response:", response.data.DT.TENKHOA); // Log giá trị TENKHOA
+          console.log("TENKHOA từ response_XemTimeKhungGioChuan:", response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA); // Log giá trị TENKHOA
 
           // So sánh currentDate với startMoment và endMoment
-          if (
-            moment(currentDate, "YYYY-MM-DD").isBetween(
-              moment(formattedStartDate, "YYYY-MM-DD"),
-              moment(formattedEndDate, "YYYY-MM-DD"),
-              null,
-              "[)"
-            ) &&
-            response.data.DT.TENKHOA ==
-            response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
-          ) {
+          const isInDateRange = moment(currentDate, "YYYY-MM-DD").isBetween(
+            moment(formattedStartDate, "YYYY-MM-DD"),
+            moment(formattedEndDate, "YYYY-MM-DD"),
+            null,
+            "[)"
+          );
+
+          const isSameKhoa = response.data.DT.TENKHOA === response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA;
+
+          console.log("Is in Date Range:", isInDateRange); // Log kết quả so sánh ngày tháng
+          console.log("Is Same Khoa:", isSameKhoa); // Log kết quả so sánh TENKHOA
+
+          if (isInDateRange && isSameKhoa) {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
               ChonKhungGio: "Chọn Khung Giờ",
@@ -124,7 +129,6 @@ const DangKyGioChuan = () => {
           case "Giảng viên chính (Hạng II)":
             setIsGVChinhHangII(true);
             break;
-
           case "Giảng viên Tập sự":
             setIsGVTapSu(true);
             break;
@@ -138,7 +142,6 @@ const DangKyGioChuan = () => {
       setLoading(false); // Đặt loading thành false sau khi lấy dữ liệu xong
     }
   };
-
 
   const handleMoveProfileGV = () => {
     if (!loading) {
