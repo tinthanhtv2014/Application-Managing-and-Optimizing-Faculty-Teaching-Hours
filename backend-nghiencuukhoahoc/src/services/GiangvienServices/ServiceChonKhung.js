@@ -347,6 +347,7 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
   const [results, fields] = await pool.execute(
     "select * from thoigian_xacnhan"
   );
+  console.log("tim_THOIGIAN_CHONKHUNG: ", results)
   return {
     EM: "Xem thời gian thành công !",
     EC: 1,

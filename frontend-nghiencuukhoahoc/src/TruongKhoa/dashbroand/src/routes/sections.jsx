@@ -49,6 +49,15 @@ export default function Router() {
           </Suspense>
         </DashboardLayout>
       )
+    }, {
+      path: '/dang-ky-muc-chuan-gio-giang', //: Đăng Ký mức chuẩn giờ giảng
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DangKyGioChuan />
+          </Suspense>
+        </DashboardLayout>
+      )
     },
 
 
@@ -59,15 +68,6 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <UserPage />
-          </Suspense>
-        </DashboardLayout>
-      )
-    }, {
-      path: '/dang-ky-muc-chuan-gio-giang', //: Đăng Ký mức chuẩn giờ giảng
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
       )

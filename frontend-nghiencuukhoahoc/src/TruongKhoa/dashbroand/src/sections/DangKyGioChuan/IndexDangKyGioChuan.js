@@ -34,7 +34,7 @@ const DangKyGioChuan = () => {
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
-
+    console.log("fetchDataGV run");
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
 
@@ -53,29 +53,29 @@ const DangKyGioChuan = () => {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
+
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
 
+      console.log("fetchDataGV ok");
+
       if (response_XemTimeKhungGioChuan.data.EC === 1) {
+
         if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
-          const startTime =
-            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
-          const endTime =
-            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
+          const startTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
+          const endTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
 
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
-
-          // setStartTime(formattedStartDate);
-          // setEndTime(formattedEndDate);
 
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
           console.log("Start Date:", formattedStartDate);
           console.log("End Date:", formattedEndDate);
+          console.log("currentDate:", currentDate);
 
           // So sánh currentDate với startMoment và endMoment
           if (
