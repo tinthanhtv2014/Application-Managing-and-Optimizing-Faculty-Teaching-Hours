@@ -56,26 +56,32 @@ const DangKyGioChuan = () => {
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
-
-      if (response_XemTimeKhungGioChuan.data.EC === 1) {
-        if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
-          const startTime =
-            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
-          const endTime =
-            response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
+      console.log(
+        "response_XemTimeKhungGioChuan.data.DT",
+        response_XemTimeKhungGioChuan.data.DT
+      );
+      if (
+        response_XemTimeKhungGioChuan.data.EC === 1 &&
+        response_XemTimeKhungGioChuan.data.DT.length > 0
+      ) {
+        // Tìm phần tử có TEN_KHOA trùng khớp
+        const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
+          (item) => item.TEN_KHOA === response.data.DT.TENKHOA
+        );
+        console.log("matchedKhoa", matchedKhoa);
+        if (matchedKhoa) {
+          const startTime = matchedKhoa.THOIGIANBATDAU;
+          const endTime = matchedKhoa.THOIGIANKETTHUC;
 
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
 
-          // setStartTime(formattedStartDate);
-          // setEndTime(formattedEndDate);
-
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
-          console.log("Start Date:", formattedStartDate);
-          console.log("End Date:", formattedEndDate);
+          // console.log("Start Date:", formattedStartDate);
+          // console.log("End Date:", formattedEndDate);
 
           // So sánh currentDate với startMoment và endMoment
           if (
@@ -84,9 +90,7 @@ const DangKyGioChuan = () => {
               moment(formattedEndDate, "YYYY-MM-DD"),
               null,
               "[)"
-            ) &&
-            response.data.DT.TENKHOA ==
-            response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
+            )
           ) {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
@@ -103,6 +107,10 @@ const DangKyGioChuan = () => {
             XemKhungGio: "Xem Khung Giờ",
           });
         }
+      } else {
+        setOpenChucNangtheokhungthoigian({
+          XemKhungGio: "Xem Khung Giờ",
+        });
       }
 
       if (response.data.EC === 1) {
@@ -120,7 +128,6 @@ const DangKyGioChuan = () => {
           case "Giảng viên chính (Hạng II)":
             setIsGVChinhHangII(true);
             break;
-
           case "Giảng viên Tập sự":
             setIsGVTapSu(true);
             break;
