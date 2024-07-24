@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import "./Renderdata.scss";
-import { Col, Container, Row, Toast } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -30,6 +30,7 @@ const RenderData = ({
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
   IsOpenCheckKhoa,
+  TenDangNhapGV,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
@@ -67,7 +68,7 @@ const RenderData = ({
               );
             } else {
               // Xử lý trường hợp không có dữ liệu
-              toast.warn("Không có dữ liệu thời gian khung giờ chuẩn.");
+              // toast.warn("Không có dữ liệu thời gian khung giờ chuẩn.");
               setStartTime("");
               setEndTime("");
             }
@@ -140,12 +141,12 @@ const RenderData = ({
     if (response.data.EC === 1) {
       toast.success(response.data.EM);
     } else {
-      toast.error(response.data.EM);
+      // toast.error(response.data.EM);
     }
   };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
+  // console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
   if (loading) {
     return <p>loading</p>;
   }
@@ -365,6 +366,7 @@ const RenderData = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         fetchDataGV={fetchDataGV}
+        TenDangNhapGV={TenDangNhapGV}
       />
     </>
   );

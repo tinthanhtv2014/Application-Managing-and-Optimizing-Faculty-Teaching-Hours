@@ -58,8 +58,8 @@ const DangKyGioChuan = () => {
       );
       console.log("TENKHOA USER", response.data.DT.TENKHOA);
       console.log(
-        "TENKHOA time admin:",
-        response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA
+        "check time khung gio =>",
+        response_XemTimeKhungGioChuan.data.EC
       );
       if (response_XemTimeKhungGioChuan.data.EC === 1) {
         if (response_XemTimeKhungGioChuan.data.DT.length > 0) {

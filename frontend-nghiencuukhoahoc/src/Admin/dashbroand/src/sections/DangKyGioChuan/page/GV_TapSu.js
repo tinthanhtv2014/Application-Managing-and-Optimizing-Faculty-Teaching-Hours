@@ -10,6 +10,7 @@ const GV_CaoCap_Hang_II = ({
   MaGV,
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
+  IsOpenCheckKhoa,
 }) => {
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -49,11 +50,11 @@ const GV_CaoCap_Hang_II = ({
         ),
       ]);
 
-      // console.log(
-      //   "Check response_ListKhungChuan:",
-      //   response_ListKhungChuan.data.DT
-      // );
-      // console.log("Check responseListNamHoc:", responseListNamHoc.data.DT);
+      console.log(
+        "Check response_ListKhungChuan:",
+        response_ListKhungChuan.data.DT
+      );
+      console.log("Check responseListNamHoc:", responseListNamHoc.data.DT);
 
       if (response_ListKhungChuan.data.EC === 1) {
         setListKhungGioChuan(response_ListKhungChuan.data.DT);
@@ -87,6 +88,8 @@ const GV_CaoCap_Hang_II = ({
         MaGV={MaGV}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         fetchDataGV={fetchDataGV}
+        IsOpenCheckKhoa={IsOpenCheckKhoa}
+        TenDangNhapGV={TenDangNhapGV}
       />
     </>
   );

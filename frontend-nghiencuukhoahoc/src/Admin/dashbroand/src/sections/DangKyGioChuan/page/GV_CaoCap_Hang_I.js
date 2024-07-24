@@ -89,6 +89,7 @@ const GV_CaoCap_Hang_II = ({
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         fetchDataGV={fetchDataGV}
         IsOpenCheckKhoa={IsOpenCheckKhoa}
+        TenDangNhapGV={TenDangNhapGV}
       />
     </>
   );
