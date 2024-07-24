@@ -8,6 +8,7 @@ const {
   tao_THOIGIAN_CHONKHUNG,
   sua_THOIGIAN_CHONKHUNG,
   tim_THOIGIAN_CHONKHUNG,
+  tim_THOIGIAN_CHONKHUNG_theoTENKHOA,
   delete_THOIGIAN_CHONKHUNG,
 } = require("../../services/GiangvienServices/ServiceChonKhung");
 
@@ -142,6 +143,26 @@ const xem_THOIGIAN_XACNHAN = async (req, res) => {
   }
 };
 
+const xem_THOIGIAN_XACNHAN_theoTENKHOA = async (req, res) => {
+  const tenKhoa = req.params.tenKhoa; // Lấy tên khoa từ params
+  try {
+    let results = await tim_THOIGIAN_CHONKHUNG_theoTENKHOA(tenKhoa);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Đã xảy ra lỗi máy chủ",
+      EC: 500,
+      DT: null,
+    });
+  }
+};
+
+
 const delete_THOIGIAN_XACNHAN = async (req, res) => {
   const TENKHOA = req.body.TENKHOA;
   try {
@@ -168,5 +189,6 @@ module.exports = {
   create_THOIGIAN_XACNHAN,
   update_THOIGIAN_XACNHAN,
   xem_THOIGIAN_XACNHAN,
+  xem_THOIGIAN_XACNHAN_theoTENKHOA,
   delete_THOIGIAN_XACNHAN,
 };

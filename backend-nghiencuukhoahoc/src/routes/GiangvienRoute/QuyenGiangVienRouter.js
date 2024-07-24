@@ -17,6 +17,7 @@ const {
   create_THOIGIAN_XACNHAN,
   update_THOIGIAN_XACNHAN,
   xem_THOIGIAN_XACNHAN,
+  xem_THOIGIAN_XACNHAN_theoTENKHOA,
   delete_THOIGIAN_XACNHAN,
 } = require("../../controllers/GiangvienController/ChonkhungGiangvienCONTROLLER");
 
@@ -33,6 +34,8 @@ const QuyenGiangVienRouter = (app) => {
   router.post("/xoa/thoigianxacnhan", delete_THOIGIAN_XACNHAN);
   router.put("/sua/thoigianxacnhan/:SONGAYKETTHUC", update_THOIGIAN_XACNHAN);
   router.get("/xem/thoigianxacnhan", xem_THOIGIAN_XACNHAN);
+  router.get("/xem/thoigianxacnhantheokhoa/:tenKhoa", xem_THOIGIAN_XACNHAN_theoTENKHOA);
+
   // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
 
   return app.use("/api/v1/quyengiangvien/giangvien", router);

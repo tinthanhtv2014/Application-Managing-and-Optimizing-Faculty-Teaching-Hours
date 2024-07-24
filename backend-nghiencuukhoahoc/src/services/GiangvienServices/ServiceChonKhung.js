@@ -364,6 +364,29 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
   }
 };
 
+const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa) => {
+  try {
+    const [results, fields] = await pool.execute(
+      "SELECT * FROM thoigian_xacnhan WHERE ten_khoa = ?",
+      [tenKhoa]
+    );
+    console.log("tim_THOIGIAN_CHONKHUNG: ", results);
+    return {
+      EM: "Xem thời gian thành công !",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    console.log("error tim_THOIGIAN_CHONKHUNG: ", error);
+    return {
+      EM: "error tim_THOIGIAN_CHONKHUNG",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+
 module.exports = {
   timChucDanh_TENCHUCDANH,
   timKhungGioChuan_TENCHUCDANH,
@@ -374,5 +397,6 @@ module.exports = {
   tao_THOIGIAN_CHONKHUNG,
   sua_THOIGIAN_CHONKHUNG,
   tim_THOIGIAN_CHONKHUNG,
+  tim_THOIGIAN_CHONKHUNG_theoTENKHOA,
   delete_THOIGIAN_CHONKHUNG,
 };
