@@ -34,7 +34,7 @@ const DangKyGioChuan = () => {
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
-    console.log("fetchDataGV run");
+
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
 
@@ -53,24 +53,25 @@ const DangKyGioChuan = () => {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
-
-      console.log("Response from xemprofile API:", response.data); // Thêm log để kiểm tra dữ liệu trả về
-
-      const tenKhoa = response.data.DT.TENKHOA; // Lấy tên khoa từ response
-
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhantheokhoa/${tenKhoa}`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
-
-      console.log("Response from xemthoigianxacnhan API:", response_XemTimeKhungGioChuan.data); // Thêm log để kiểm tra dữ liệu trả về
-
-      if (response_XemTimeKhungGioChuan.data.EC === 1) {
-        if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
-          const startTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
-          const endTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
-
-          console.log("Raw Start Time:", startTime); // Log giá trị thời gian trước khi định dạng
-          console.log("Raw End Time:", endTime); // Log giá trị thời gian trước khi định dạng
+      console.log(
+        "response_XemTimeKhungGioChuan.data.DT",
+        response_XemTimeKhungGioChuan.data.DT
+      );
+      if (
+        response_XemTimeKhungGioChuan.data.EC === 1 &&
+        response_XemTimeKhungGioChuan.data.DT.length > 0
+      ) {
+        // Tìm phần tử có TEN_KHOA trùng khớp
+        const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
+          (item) => item.TEN_KHOA === response.data.DT.TENKHOA
+        );
+        console.log("matchedKhoa", matchedKhoa);
+        if (matchedKhoa) {
+          const startTime = matchedKhoa.THOIGIANBATDAU;
+          const endTime = matchedKhoa.THOIGIANKETTHUC;
 
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
@@ -79,26 +80,18 @@ const DangKyGioChuan = () => {
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
-          console.log("Start Date:", formattedStartDate); // Log giá trị đã định dạng
-          console.log("End Date:", formattedEndDate); // Log giá trị đã định dạng
-          console.log("Current Date:", currentDate); // Log giá trị đã định dạng
-          console.log("TENKHOA từ response:", response.data.DT.TENKHOA); // Log giá trị TENKHOA
-          console.log("TENKHOA từ response_XemTimeKhungGioChuan:", response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA); // Log giá trị TENKHOA
+          // console.log("Start Date:", formattedStartDate);
+          // console.log("End Date:", formattedEndDate);
 
           // So sánh currentDate với startMoment và endMoment
-          const isInDateRange = moment(currentDate, "YYYY-MM-DD").isBetween(
-            moment(formattedStartDate, "YYYY-MM-DD"),
-            moment(formattedEndDate, "YYYY-MM-DD"),
-            null,
-            "[)"
-          );
-
-          const isSameKhoa = response.data.DT.TENKHOA === response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA;
-
-          console.log("Is in Date Range:", isInDateRange); // Log kết quả so sánh ngày tháng
-          console.log("Is Same Khoa:", isSameKhoa); // Log kết quả so sánh TENKHOA
-
-          if (isInDateRange && isSameKhoa) {
+          if (
+            moment(currentDate, "YYYY-MM-DD").isBetween(
+              moment(formattedStartDate, "YYYY-MM-DD"),
+              moment(formattedEndDate, "YYYY-MM-DD"),
+              null,
+              "[)"
+            )
+          ) {
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
               ChonKhungGio: "Chọn Khung Giờ",
@@ -114,6 +107,10 @@ const DangKyGioChuan = () => {
             XemKhungGio: "Xem Khung Giờ",
           });
         }
+      } else {
+        setOpenChucNangtheokhungthoigian({
+          XemKhungGio: "Xem Khung Giờ",
+        });
       }
 
       if (response.data.EC === 1) {
@@ -145,10 +142,9 @@ const DangKyGioChuan = () => {
     }
   };
 
-
   const handleMoveProfileGV = () => {
     if (!loading) {
-      navigate("/truongkhoa/thong-tin");
+      navigate("/giangvien/");
     }
   };
 
