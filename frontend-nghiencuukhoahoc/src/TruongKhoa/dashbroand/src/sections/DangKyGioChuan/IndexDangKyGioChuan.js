@@ -54,17 +54,21 @@ const DangKyGioChuan = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
 
+      console.log("Response from xemprofile API:", response.data); // Thêm log để kiểm tra dữ liệu trả về
+
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
 
-      console.log("fetchDataGV ok");
+      console.log("Response from xemthoigianxacnhan API:", response_XemTimeKhungGioChuan.data); // Thêm log để kiểm tra dữ liệu trả về
 
       if (response_XemTimeKhungGioChuan.data.EC === 1) {
-
         if (response_XemTimeKhungGioChuan.data.DT.length > 0) {
           const startTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANBATDAU;
           const endTime = response_XemTimeKhungGioChuan.data.DT[0].THOIGIANKETTHUC;
+
+          console.log("Raw Start Time:", startTime); // Log giá trị thời gian trước khi định dạng
+          console.log("Raw End Time:", endTime); // Log giá trị thời gian trước khi định dạng
 
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
@@ -73,8 +77,8 @@ const DangKyGioChuan = () => {
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
-          console.log("Start Date:", formattedStartDate);
-          console.log("End Date:", formattedEndDate);
+          console.log("Start Date:", formattedStartDate); // Log giá trị đã định dạng
+          console.log("End Date:", formattedEndDate); // Log giá trị đã định dạng
           console.log("currentDate:", currentDate);
 
           // So sánh currentDate với startMoment và endMoment
@@ -134,6 +138,7 @@ const DangKyGioChuan = () => {
       setLoading(false); // Đặt loading thành false sau khi lấy dữ liệu xong
     }
   };
+
 
   const handleMoveProfileGV = () => {
     if (!loading) {

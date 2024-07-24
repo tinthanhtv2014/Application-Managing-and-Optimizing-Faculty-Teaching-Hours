@@ -344,15 +344,24 @@ const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
 };
 
 const tim_THOIGIAN_CHONKHUNG = async () => {
-  const [results, fields] = await pool.execute(
-    "select * from thoigian_xacnhan"
-  );
-  console.log("tim_THOIGIAN_CHONKHUNG: ", results)
-  return {
-    EM: "Xem thời gian thành công !",
-    EC: 1,
-    DT: results,
-  };
+  try {
+    const [results, fields] = await pool.execute(
+      "select * from thoigian_xacnhan"
+    );
+    console.log("tim_THOIGIAN_CHONKHUNG: ", results)
+    return {
+      EM: "Xem thời gian thành công !",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    console.log("error tim_THOIGIAN_CHONKHUNG: ", error)
+    return {
+      EM: "error tim_THOIGIAN_CHONKHUNG",
+      EC: -1,
+      DT: [],
+    };
+  }
 };
 
 module.exports = {

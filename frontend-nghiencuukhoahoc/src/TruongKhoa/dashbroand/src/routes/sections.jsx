@@ -50,7 +50,7 @@ export default function Router() {
         </DashboardLayout>
       )
     }, {
-      path: '/dang-ky-muc-chuan-gio-giang', //: Đăng Ký mức chuẩn giờ giảng
+      path: '/dang-ky-khung-gio-chuan', //: Đăng Ký mức chuẩn giờ giảng
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>

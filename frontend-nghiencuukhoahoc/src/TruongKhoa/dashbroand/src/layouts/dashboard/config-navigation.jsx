@@ -13,10 +13,6 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Đăng Ký Mức Chuẩn Giờ Giảng',
-    path: '/dang-ky-muc-chuan-gio-giang',
-    icon: icon('ic_user'),
-  }, {
     title: 'Đăng ký khung giờ chuẩn',
     path: '/dang-ky-khung-gio-chuan',
     icon: icon('ic_user'),
