@@ -81,7 +81,7 @@ const DangKyGioChuan = () => {
           console.log("End Date:", formattedEndDate); // Log giá trị đã định dạng
           console.log("Current Date:", currentDate); // Log giá trị đã định dạng
           console.log("TENKHOA từ response:", response.data.DT.TENKHOA); // Log giá trị TENKHOA
-          console.log("TENKHOA từ response_XemTimeKhungGioChuan:", response_XemTimeKhungGioChuan.data.DT[0].TEN_KHOA); // Log giá trị TENKHOA
+          console.log("TENKHOA từ response_XemTimeKhungGioChuan:", response_XemTimeKhungGioChuan.data.DT); // Log giá trị TENKHOA
 
           // So sánh currentDate với startMoment và endMoment
           const isInDateRange = moment(currentDate, "YYYY-MM-DD").isBetween(
