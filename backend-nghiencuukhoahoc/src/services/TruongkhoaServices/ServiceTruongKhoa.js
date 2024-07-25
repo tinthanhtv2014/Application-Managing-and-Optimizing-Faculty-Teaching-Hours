@@ -6,57 +6,60 @@ const xem_giangvien_khoa = async (page, limit, TENKHOA) => {
       let offset = (page - 1) * limit;
       let [results0, fields] = await pool.execute(
         `SELECT 
-          BOMON.TENBOMON,
-          GIANGVIEN.TENGV,
-          TAIKHOAN.TENDANGNHAP,
-          CHUCDANH.TENCHUCDANH,
-          CHUCVU.TENCHUCVU,
-          TAIKHOAN.PHANQUYEN
-        FROM 
-          TAIKHOAN
-        LEFT JOIN 
-          GIANGVIEN ON TAIKHOAN.MAGV = GIANGVIEN.MAGV
-        LEFT JOIN 
-          BOMON ON GIANGVIEN.MABOMON = BOMON.MABOMON
-        LEFT JOIN 
-          KHOA ON BOMON.MAKHOA = KHOA.MAKHOA
-        LEFT JOIN 
-          GIU_CHUC_VU ON GIANGVIEN.MAGV = GIU_CHUC_VU.MAGV
-        LEFT JOIN 
-          CHUCVU ON GIU_CHUC_VU.MACHUCVU = CHUCVU.MACHUCVU
-        LEFT JOIN 
-          CO_CHUC_DANH ON GIANGVIEN.MAGV = CO_CHUC_DANH.MAGV
-        LEFT JOIN 
-          CHUCDANH ON CO_CHUC_DANH.MACHUCDANH = CHUCDANH.MACHUCDANH
-        WHERE 
-          KHOA.TENKHOA = ?
-        ORDER BY 
-          TAIKHOAN.TENDANGNHAP ASC
-        LIMIT ? OFFSET ?;`,
+  bomon.TENBOMON,
+  giangvien.TENGV,
+  taikhoan.TENDANGNHAP,
+  chucdanh.TENCHUCDANH,
+  chucvu.TENCHUCVU,
+  taikhoan.PHANQUYEN
+FROM 
+  taikhoan
+LEFT JOIN 
+  giangvien ON taikhoan.MAGV = giangvien.MAGV
+LEFT JOIN 
+  bomon ON giangvien.MABOMON = bomon.MABOMON
+LEFT JOIN 
+  khoa ON bomon.MAKHOA = khoa.MAKHOA
+LEFT JOIN 
+  giu_chuc_vu ON giangvien.MAGV = giu_chuc_vu.MAGV
+LEFT JOIN 
+  chucvu ON giu_chuc_vu.MACHUCVU = chucvu.MACHUCVU
+LEFT JOIN 
+  co_chuc_danh ON giangvien.MAGV = co_chuc_danh.MAGV
+LEFT JOIN 
+  chucdanh ON co_chuc_danh.MACHUCDANH = chucdanh.MACHUCDANH
+WHERE 
+  khoa.TENKHOA = ?
+ORDER BY 
+  taikhoan.TENDANGNHAP ASC
+LIMIT ? OFFSET ?;
+`,
         [TENKHOA, limit, offset]
       );
 
       const [totalCountResult] = await pool.execute(
         `SELECT 
-          COUNT(*) as total
-        FROM 
-          TAIKHOAN
-        LEFT JOIN 
-          GIANGVIEN ON TAIKHOAN.MAGV = GIANGVIEN.MAGV
-        LEFT JOIN 
-          BOMON ON GIANGVIEN.MABOMON = BOMON.MABOMON
-        LEFT JOIN 
-          KHOA ON BOMON.MAKHOA = KHOA.MAKHOA
-        LEFT JOIN 
-          GIU_CHUC_VU ON GIANGVIEN.MAGV = GIU_CHUC_VU.MAGV
-        LEFT JOIN 
-          CHUCVU ON GIU_CHUC_VU.MACHUCVU = CHUCVU.MACHUCVU
-        LEFT JOIN 
-          CO_CHUC_DANH ON GIANGVIEN.MAGV = CO_CHUC_DANH.MAGV
-        LEFT JOIN 
-          CHUCDANH ON CO_CHUC_DANH.MACHUCDANH = CHUCDANH.MACHUCDANH
-        WHERE 
-          KHOA.TENKHOA = ?;`, [TENKHOA]
+  COUNT(*) AS total
+FROM 
+  taikhoan
+LEFT JOIN 
+  giangvien ON taikhoan.MAGV = giangvien.MAGV
+LEFT JOIN 
+  bomon ON giangvien.MABOMON = bomon.MABOMON
+LEFT JOIN 
+  khoa ON bomon.MAKHOA = khoa.MAKHOA
+LEFT JOIN 
+  giu_chuc_vu ON giangvien.MAGV = giu_chuc_vu.MAGV
+LEFT JOIN 
+  chucvu ON giu_chuc_vu.MACHUCVU = chucvu.MACHUCVU
+LEFT JOIN 
+  co_chuc_danh ON giangvien.MAGV = co_chuc_danh.MAGV
+LEFT JOIN 
+  chucdanh ON co_chuc_danh.MACHUCDANH = chucdanh.MACHUCDANH
+WHERE 
+  khoa.TENKHOA = ?;
+`,
+        [TENKHOA]
       );
 
       const totalCount = totalCountResult[0].total;
@@ -74,33 +77,34 @@ const xem_giangvien_khoa = async (page, limit, TENKHOA) => {
     } else {
       let [results0, fields] = await pool.execute(
         `SELECT 
-          BOMON.TENBOMON,
-          GIANGVIEN.TENGV,
-          TAIKHOAN.TENDANGNHAP,
-          CHUCDANH.TENCHUCDANH,
-          CHUCVU.TENCHUCVU,
-          TAIKHOAN.PHANQUYEN
-        FROM 
-          TAIKHOAN
-        LEFT JOIN 
-          GIANGVIEN ON TAIKHOAN.MAGV = GIANGVIEN.MAGV
-        LEFT JOIN 
-          BOMON ON GIANGVIEN.MABOMON = BOMON.MABOMON
-        LEFT JOIN 
-          KHOA ON BOMON.MAKHOA = KHOA.MAKHOA
-        LEFT JOIN 
-          GIU_CHUC_VU ON GIANGVIEN.MAGV = GIU_CHUC_VU.MAGV
-        LEFT JOIN 
-          CHUCVU ON GIU_CHUC_VU.MACHUCVU = CHUCVU.MACHUCVU
-        LEFT JOIN 
-          CO_CHUC_DANH ON GIANGVIEN.MAGV = CO_CHUC_DANH.MAGV
-        LEFT JOIN 
-          CHUCDANH ON CO_CHUC_DANH.MACHUCDANH = CHUCDANH.MACHUCDANH
-        WHERE 
-          KHOA.TENKHOA = ?
-        ORDER BY 
-          TAIKHOAN.TENDANGNHAP ASC;`
-        , [TENKHOA]
+  bomon.TENBOMON,
+  giangvien.TENGV,
+  taikhoan.TENDANGNHAP,
+  chucdanh.TENCHUCDANH,
+  chucvu.TENCHUCVU,
+  taikhoan.PHANQUYEN
+FROM 
+  taikhoan
+LEFT JOIN 
+  giangvien ON taikhoan.MAGV = giangvien.MAGV
+LEFT JOIN 
+  bomon ON giangvien.MABOMON = bomon.MABOMON
+LEFT JOIN 
+  khoa ON bomon.MAKHOA = khoa.MAKHOA
+LEFT JOIN 
+  giu_chuc_vu ON giangvien.MAGV = giu_chuc_vu.MAGV
+LEFT JOIN 
+  chucvu ON giu_chuc_vu.MACHUCVU = chucvu.MACHUCVU
+LEFT JOIN 
+  co_chuc_danh ON giangvien.MAGV = co_chuc_danh.MAGV
+LEFT JOIN 
+  chucdanh ON co_chuc_danh.MACHUCDANH = chucdanh.MACHUCDANH
+WHERE 
+  khoa.TENKHOA = ?
+ORDER BY 
+  taikhoan.TENDANGNHAP ASC;
+`,
+        [TENKHOA]
       );
       return {
         EM: "Xem thông tin giảng viên thành công",

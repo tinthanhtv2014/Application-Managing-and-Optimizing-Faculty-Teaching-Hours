@@ -31,7 +31,7 @@ import GiangvienCNTTlist from "../../BomonCNTT/GiangvienCNTTlist";
 export default function UserPage() {
   return (
     <>
-      <GiangvienCNTTlist></GiangvienCNTTlist>
+      <GiangvienCNTTlist />
     </>
   );
 }
