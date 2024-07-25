@@ -1,0 +1,108 @@
+/* GiangvienCNTT.scss */
+
+/* Bố cục của bảng */
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.data-grid-container {
+  width: 100%;
+  height: 100%;
+  background-color: #a14b4b;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.MuiDataGrid-root {
+  border: none;
+}
+
+.MuiDataGrid-cell {
+  border-bottom: 1px solid #be5858;
+}
+
+.MuiDataGrid-columnHeaders {
+  background-color: #c4cacf !important;
+  color: rgb(15, 15, 15);
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  font-size: 16px;
+  font-weight: bold !important;
+}
+
+.MuiDataGrid-footerContainer {
+  background-color: #f1f1f1;
+}
+
+.MuiDataGrid-row {
+  &:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+.active-status {
+  color: green;
+  font-weight: bold;
+}
+
+.inactive-status {
+  color: red;
+  font-weight: bold;
+}
+
+/* GiangvienCNTT.scss */
+
+/* Thay đổi màu sắc cho phần phân trang */
+.product-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  display: block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  color: #000; /* Màu chữ đen */
+  text-decoration: none;
+  border: 1px solid #000; /* Viền đen */
+  background-color: #fff; /* Nền trắng */
+}
+
+.page-link:hover {
+  background-color: #000; /* Nền đen khi hover */
+  color: #fff; /* Chữ trắng khi hover */
+}
+
+.active {
+  background-color: #000; /* Nền đen cho trang hiện tại */
+  color: #fff; /* Chữ trắng cho trang hiện tại */
+}
+
+.MuiDataGrid-cell {
+  border: 1px solid #ddd;
+}
+.MuiDataGrid-row:hover {
+  background-color: #f5f5f5;
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #000000;
+  border-color: #000000;
+}

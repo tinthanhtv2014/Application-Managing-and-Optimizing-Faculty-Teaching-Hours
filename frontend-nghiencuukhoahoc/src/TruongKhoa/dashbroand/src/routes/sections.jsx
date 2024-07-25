@@ -49,7 +49,21 @@ export default function Router() {
           </Suspense>
         </DashboardLayout>
       )
-    }, {
+    },
+
+    {
+      path: "/giang-vien", // Danh sách giảng viên trong khoa.
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserPage />
+          </Suspense>
+        </DashboardLayout>
+      ),
+    },
+
+    {
       path: '/dang-ky-khung-gio-chuan', //: Đăng Ký mức chuẩn giờ giảng
       element: (
         <DashboardLayout>

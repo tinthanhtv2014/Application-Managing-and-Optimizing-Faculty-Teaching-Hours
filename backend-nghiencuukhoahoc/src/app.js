@@ -19,6 +19,8 @@ const CRUDNamHoc = require("./routes/AdminRoute/NamHocRouter");
 const CRUDgiangvien_CNTT = require("./routes/TruongbomonRoute/giangvienRoute");
 const QuyenGiangVienRouter = require("./routes/GiangvienRoute/QuyenGiangVienRouter");
 
+const TruongKhoaRoute = require("./routes/TruongkhoaRoute/TruongKhoaRoute");
+
 //=================================================================================
 
 const corsOptions = {
@@ -48,6 +50,8 @@ CRUDMonHoc(app); //CRUD môn học
 CRUDNamHoc(app); // CRUD năm học
 CRUDgiangvien_CNTT(app);
 QuyenGiangVienRouter(app); // Api cho quyền giảng viên
+
+TruongKhoaRoute(app) // Các router cho trưởng khoa sử dụng
 //=====================================================================================================
 
 app.get("/", (req, res) => {
