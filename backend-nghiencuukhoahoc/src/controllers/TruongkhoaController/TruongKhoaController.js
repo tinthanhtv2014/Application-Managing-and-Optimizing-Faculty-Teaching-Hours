@@ -7,9 +7,9 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
         let page = req.query.page;
         let limit = req.query.limit;
         let TENKHOA = req.query.TENKHOA;
-        console.log("page: ", page)
-        console.log("limit: ", limit)
-        console.log("TENKHOA: ", TENKHOA)
+        // console.log("page: ", page)
+        // console.log("limit: ", limit)
+        // console.log("TENKHOA: ", TENKHOA)
         let results = await xem_giangvien_khoa(page, limit, TENKHOA);
 
         return res.status(200).json({
