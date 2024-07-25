@@ -1,6 +1,6 @@
 const pool = require("../../config/database");
 
-const xem_giangvien = async (page, limit) => {
+const xem_giangvien = async (page, limit, TENBOMON) => {
   // try {
   if (page && limit) {
     let offset = (page - 1) * limit;
@@ -14,10 +14,10 @@ const xem_giangvien = async (page, limit) => {
             LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
             LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
             LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-            where bm.TENBOMON = 'Bộ môn Công nghệ thông tin'
+            where bm.TENBOMON = ?
             ORDER BY tk.TENDANGNHAP ASC
             LIMIT ? OFFSET ?;`,
-      [limit, offset]
+      [TENBOMON, limit, offset]
     );
 
     const totalCountResult = await pool.execute(
@@ -30,7 +30,8 @@ const xem_giangvien = async (page, limit) => {
           LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
           LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
           LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-          WHERE bm.TENBOMON = 'Bộ môn Công nghệ thông tin';`
+          WHERE bm.TENBOMON = ?;`,
+      [TENBOMON]
     );
     const totalCount = totalCountResult[0][0].total;
     let totalPages = Math.ceil(totalCount / limit);
@@ -55,8 +56,9 @@ const xem_giangvien = async (page, limit) => {
             LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
             LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
             LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-            where bm.TENBOMON = 'Bộ môn Công nghệ thông tin'
-            ORDER BY tk.TENDANGNHAP ASC;`
+            where bm.TENBOMON = ?
+            ORDER BY tk.TENDANGNHAP ASC;`,
+      [TENBOMON]
     );
     return {
       EM: " xem thông tin giảng viên thành công",
