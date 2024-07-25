@@ -29,41 +29,43 @@ function TrangChu() {
   }, [token]);
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
-    >
-      <Typography variant="h4" sx={{ mb: 5, textAlign: 'center' }}>
-        Hi, Welcome back 👋
-      </Typography>
-
-      <Grid
-        container
-        spacing={3}
+    <>
+      <Container
+        maxWidth="xl"
         sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
         }}
       >
-        <Grid xs={12} sm={6} md={3} display="flex" justifyContent="center">
-          <AppWidgetSummary
-            title="Thống kê"
-            icon={<img alt="icon" src={imgThongKe} />}
-          />
-        </Grid>
+        <Typography variant="h4" sx={{ mb: 5, textAlign: 'center' }}>
+          Hi, Welcome back 👋
+        </Typography>
 
-        <Grid xs={12} sm={6} md={3} display="flex" justifyContent="center">
-          <AppWidgetSummary
-            title="Danh sách giảng viên"
-            icon={<img alt="icon" src={imgDanhSach} />}
-          />
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+            <AppWidgetSummary
+              title="Thống kê"
+              icon={<img alt="icon" src={imgThongKe} />}
+            />
+          </Grid>
+
+          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+            <AppWidgetSummary
+              title="Danh sách giảng viên"
+              icon={<img alt="icon" src={imgDanhSach} />}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 
 }

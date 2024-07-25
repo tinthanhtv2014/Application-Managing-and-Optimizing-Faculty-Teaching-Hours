@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Loading from "../component/ComponentLoading/CompnentLoading.tsx";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -13,6 +13,7 @@ const PrivateRoute = () => {
   const [loading, setLoading] = useState(true);
   const [redirect, setRedirect] = useState(true);
   const auth = Cookies.get("accessToken");
+  const navigate = useNavigate();
   console.log("check cookie =>", auth);
   const CookiesAxios = axios.create({
     withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
@@ -98,7 +99,7 @@ const PrivateRoute = () => {
   if (phanQuyenTK) {
     return <DashboardTruongKhoa />;
   }
-  return <p>ag auisfgu8asdfu8</p>; // or some default component if needed
+  return navigate("/");
 };
 
 export default PrivateRoute;

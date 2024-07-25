@@ -6,10 +6,10 @@ import { AuthProvider } from "./Authentication/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import LoginAdmin from "../src/Admin/dashbroand/src/pages/login.jsx";
 
-import DashBoardAdmin from "./Admin/dashbroand/src/main";
-import DashboardTruongBoMon from "./TruongBoMon/dashbroand/src/main.jsx";
-import DashboardGiangVien from "./GiangVien/dashbroand/src/main.jsx";
-import DashboardTruongKhoa from "./TruongKhoa/dashbroand/src/main.jsx";
+// import DashBoardAdmin from "./Admin/dashbroand/src/main";
+// import DashboardTruongBoMon from "./TruongBoMon/dashbroand/src/main.jsx";
+// import DashboardGiangVien from "./GiangVien/dashbroand/src/main.jsx";
+// import DashboardTruongKhoa from "./TruongKhoa/dashbroand/src/main.jsx";
 import PrivateRoute from "./Authentication/PrivateRoute.js";
 function App() {
   return (
@@ -18,11 +18,10 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginAdmin />} />
           <Route path="/login" element={<LoginAdmin />} />
-          {/* <Route path="/admin/*" element={<DashBroandAdmin />} /> */}
           <Route path="/admin/*" element={<PrivateRoute />} />
           <Route path="/giang-vien/*" element={<PrivateRoute />} />
-          <Route path="/truong-bm/*" element={<DashboardTruongBoMon />} />
-          <Route path="/truongkhoa/*" element={<DashboardTruongKhoa />} />
+          <Route path="/truong-bm/*" element={<PrivateRoute />} />
+          <Route path="/truongkhoa/*" element={<PrivateRoute />} />
           {/* <Route path="/" element={<TruongKhoaLogin />} /> */}
         </Routes>
         <ToastContainer
