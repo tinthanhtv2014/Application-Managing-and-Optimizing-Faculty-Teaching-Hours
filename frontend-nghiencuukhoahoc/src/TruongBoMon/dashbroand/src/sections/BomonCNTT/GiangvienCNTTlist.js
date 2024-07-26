@@ -21,11 +21,16 @@ const GiangvienCNTTList = (props) => {
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
 
-  const fetchDataGIANGVIEN = async (page = currentPage) => {
+  const fetchDataGIANGVIEN = async (page = currentPage, taikhoan) => {
     setShowLoader(true);
     try {
+      const tenbomon = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
+      );
+      console.log("check ten bomon:", tenbomon.data.DT.TENBOMON);
+      const DataTenbomon = tenbomon.data.DT.TENBOMON;
       const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}&TENBOMON=${DataTenbomon}`
       );
       const { totalRows, totalPages } = response.data.DT;
 
@@ -57,7 +62,7 @@ const GiangvienCNTTList = (props) => {
           Cookies.remove("accessToken");
           navigate("/login");
         } else {
-          fetchDataGIANGVIEN();
+          fetchDataGIANGVIEN(currentPage, decodedToken.taikhoan);
         }
       } catch (error) {
         console.error("Token decoding error:", error);

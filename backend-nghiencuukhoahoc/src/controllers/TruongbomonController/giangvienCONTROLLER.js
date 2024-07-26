@@ -6,7 +6,8 @@ const get_giangvien_CNTT = async (req, res) => {
   try {
     let page = req.query.page;
     let limit = req.query.limit;
-    let results = await xem_giangvien(page, limit);
+    let TENBOMON = req.query.TENBOMON;
+    let results = await xem_giangvien(page, limit, TENBOMON);
 
     return res.status(200).json({
       EM: results.EM,
