@@ -6,7 +6,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
+import CookiesAxios from "./CookiesAxios.js";
 import KhoaList from "./components/KhoaList.js";
 
 import BoMonList from "./components/BoMonList.js";
@@ -41,9 +41,9 @@ const ComponenCreateGiangVien = () => {
   const [QuyenGiangVien, setQuyenGiangVien] = useState();
   const [TrangThaiGV, setTrangThaiGV] = useState();
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+  // const CookiesAxios = axios.create({
+  //   withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
+  // });
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
   //----------------------------ISOPEN--------------------------------------
@@ -66,8 +66,15 @@ const ComponenCreateGiangVien = () => {
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
 
   const fetchData = async () => {
+    const token = Cookies.get("accessToken");
+
     const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Đảm bảo gửi token JWT trong header
+        },
+      }
     );
     // console.log(response.data.DT);
     setdataListKhoa(response.data.DT);

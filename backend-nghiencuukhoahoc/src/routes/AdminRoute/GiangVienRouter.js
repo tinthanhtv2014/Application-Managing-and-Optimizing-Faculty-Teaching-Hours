@@ -29,23 +29,29 @@ const {
   updateChucdanhController,
   deleteChucdanhController,
 } = require("../../controllers/AdminController/chucdanhAdminCONTROLLER");
-
+const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
-  router.post("/xem", getAllGiangVien);
+  router.post("/xem", checkUserJWT, getAllGiangVien);
 
-  router.get("/only/xem/:MABOMON", getOnlyGiangVienbyBoMon);
-  router.get("/only/xemprofile/:TENDANGNHAP", getOnlyGiangVienbyTENDANGNHAP);
+  router.get("/only/xem/:MABOMON", checkUserJWT, getOnlyGiangVienbyBoMon);
+  router.get(
+    "/only/xemprofile/:TENDANGNHAP",
+
+    getOnlyGiangVienbyTENDANGNHAP
+  );
 
   router.post("/tao", createGiangVienControler);
 
   router.put(
     "/sua/trangthai/:MAGV",
+
     updateTrangThaiTaiKhoanGiangVienController
   ); //phúc viết
   router.put("/sua/:MAGV", updateGiangVienController);
   router.put(
     "/sua/thongtin/:TENDANGNHAP",
+
     update_ChucVu_ChucDanh_GiangVien_Controller
   ); //lam
 

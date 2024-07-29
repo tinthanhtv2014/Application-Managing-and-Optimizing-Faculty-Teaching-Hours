@@ -15,23 +15,27 @@ export default function AppWidgetSummary({ title, icon, sx, ...other }) {
       spacing={2} // Khoảng cách giữa các hàng
       direction="column" // Thiết lập bố trí theo cột
       sx={{
-        width: 200, // Chiều rộng cố định cho thẻ
-        height: 200, // Chiều cao cố định cho thẻ
+        width: 270, // Chiều rộng cố định cho thẻ
+        height: 250, // Chiều cao cố định cho thẻ
         px: 3,
         py: 5,
         borderRadius: 2,
         alignItems: 'center', // Căn giữa các phần tử theo chiều ngang
         textAlign: 'center', // Căn giữa văn bản
-        filter: 'drop-shadow(0.20em 0.20em 0.2em)', // Đổ bóng đậm hơn cho thẻ
+        filter: 'drop-shadow(0.10em 0.15em 0.15em )',// Đổ bóng đậm hơn cho thẻ
+        userSelect: "none",
+        cursor: "pointer",
+
         ...sx,
+
       }}
       {...other}
     >
       {icon && (
         <Box
           sx={{
-            width: 64,
-            height: 64,
+            width: 80,
+            height: 80,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -49,7 +53,7 @@ export default function AppWidgetSummary({ title, icon, sx, ...other }) {
       <Typography variant="h5" sx={{ color: '#21409A', fontWeight: 'bold' }}>
         {title}
       </Typography>
-    </Card>
+    </Card >
   );
 }
 

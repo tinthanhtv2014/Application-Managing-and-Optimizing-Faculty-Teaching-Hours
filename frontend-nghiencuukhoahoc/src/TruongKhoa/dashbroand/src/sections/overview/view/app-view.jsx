@@ -50,49 +50,54 @@ function TrangChu() {
             alignItems: 'center',
           }}
         >
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Thống kê"
               icon={<img alt="icon" src={imgThongKe} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
             />
           </Grid>
 
-          <Grid lg={6} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+          <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
+            <AppWidgetSummary
+              title="Danh sách giảng viên"
+              icon={<img alt="icon" src={imgDanhSach} />}
+            />
+          </Grid>    <Grid lg={3} xs={12} sm={6} md={3} display="flex" justifyContent="center">
             <AppWidgetSummary
               title="Danh sách giảng viên"
               icon={<img alt="icon" src={imgDanhSach} />}
