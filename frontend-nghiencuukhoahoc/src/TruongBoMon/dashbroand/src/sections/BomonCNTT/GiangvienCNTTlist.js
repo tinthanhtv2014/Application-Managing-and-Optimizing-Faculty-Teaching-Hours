@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./GiangvienCNTT.scss";
 
-const GiangvienCNTTList = (props) => {
+const GiangvienCNTTList = () => {
   const [dataGIANGVIEN, setDataGIANGVIEN] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(9);
+  const [totalPages, setTotalPages] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(10);
   const [showLoader, setShowLoader] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -27,17 +27,17 @@ const GiangvienCNTTList = (props) => {
       const tenbomon = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
-      console.log("check ten bomon:", tenbomon.data.DT.TENBOMON);
       const DataTenbomon = tenbomon.data.DT.TENBOMON;
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}&TENBOMON=${DataTenbomon}`
       );
+
+      console.log("check repossnnnnnsse: ", response);
       const { totalRows, totalPages } = response.data.DT;
 
-      // Đảm bảo mỗi hàng có thuộc tính `id`
       const rowsWithId = totalRows.map((item, index) => ({
         ...item,
-        id: item.id || index, // Nếu dữ liệu không có `id`, sử dụng `index` tạm thời
+        id: item.id || index,
       }));
 
       setDataGIANGVIEN(rowsWithId);
@@ -75,11 +75,11 @@ const GiangvienCNTTList = (props) => {
   }, [navigate, auth]);
 
   useEffect(() => {
-    fetchDataGIANGVIEN();
+    fetchDataGIANGVIEN(currentPage, jwtDecode(auth).taikhoan);
   }, [currentPage]);
 
   const handlePageClick = (event) => {
-    setCurrentPage(+event.selected + 1);
+    setCurrentPage(event.selected + 1);
   };
 
   if (showLoader && initialLoad) {
@@ -115,8 +115,10 @@ const GiangvienCNTTList = (props) => {
       ),
     },
   ];
-  const rowHeight = 52; // Chiều cao của mỗi hàng trong px
+
+  const rowHeight = 52;
   const dataGridHeight = dataGIANGVIEN.length * rowHeight;
+
   return (
     <>
       <h1 className="header">DANH SÁCH GIẢNG VIÊN THUỘC BỘ MÔN</h1>
@@ -129,14 +131,14 @@ const GiangvienCNTTList = (props) => {
         <DataGrid
           rows={dataGIANGVIEN}
           columns={columns}
-          pageSize={5}
+          pageSize={currentLimit}
           rowsPerPageOptions={[5, 10]}
           pagination
           checkboxSelection
           disableColumnMenu
         />
       </div>
-      {totalPages > 0 && (
+      {totalPages > 1 && (
         <div className="product-footer">
           <ReactPaginate
             nextLabel="next >"
@@ -156,7 +158,6 @@ const GiangvienCNTTList = (props) => {
             breakLinkClassName="page-link"
             containerClassName="pagination"
             activeClassName="active"
-            renderOnZeroPageCount={null}
           />
         </div>
       )}

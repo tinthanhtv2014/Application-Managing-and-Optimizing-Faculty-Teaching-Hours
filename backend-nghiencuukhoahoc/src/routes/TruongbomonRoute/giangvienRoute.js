@@ -5,11 +5,13 @@ const router = express.Router();
 
 const {
   get_giangvien_CNTT,
+  get_giangvien_CNTT_da_chon_khung,
 } = require("../../controllers/TruongbomonController/giangvienCONTROLLER");
 
 const CRUDgiangvien_CNTT = (app) => {
   //route cho khoa
   router.get("/xem", get_giangvien_CNTT);
+  router.get("/xem/chonkhung", get_giangvien_CNTT_da_chon_khung);
   //   router.post("/tao", createNAMHOC);
   //   router.put("/sua/:MANAMHOC", updateNAMHOC);
   //   router.delete("/xoa", deleteNAMHOC);
