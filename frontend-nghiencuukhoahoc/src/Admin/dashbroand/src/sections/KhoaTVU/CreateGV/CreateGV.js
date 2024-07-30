@@ -6,7 +6,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import CookiesAxios from "./CookiesAxios.js";
+import CookiesAxios from "../../CookiesAxios.js";
 import KhoaList from "./components/KhoaList.js";
 
 import BoMonList from "./components/BoMonList.js";

@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
+import CookiesAxios from "../../../CookiesAxios.js";
 import { Modal, Button, Table } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ComponentExcel.scss";
@@ -12,9 +12,7 @@ const ComponentExcelGV = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const auth = Cookies.get("accessToken");
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+
   const navigate = useNavigate();
 
   const handleAddUser = async () => {
