@@ -22,6 +22,7 @@ import axios from "axios";
 import moment from "moment";
 import { toast } from "react-toastify";
 import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
+import CookiesAxios from "../../../CookiesAxios";
 const RenderData = ({
   dataKhungChuan,
   dataTenKhungChuan,
@@ -45,9 +46,7 @@ const RenderData = ({
   const [TimeDangKyKhungGioChuan, setTimeDangKyKhungGioChuan] = useState("");
   const [StartTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+
   useEffect(() => {
     if (dataKhungChuan) {
       const TimeKhungGioChuan = async () => {

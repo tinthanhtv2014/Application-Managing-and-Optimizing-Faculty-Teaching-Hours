@@ -4,8 +4,6 @@ import "../../CreateKhoa/CreateKhoa.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
 const BoMonList = ({ dataListBoMon, activeRowBM, handleChoseRowBM }) => {
-  console.log("check activeRowBM=>", activeRowBM);
-
   return (
     <div className="custom-select-container">
       <Box sx={{ maxWidth: 300 }}>

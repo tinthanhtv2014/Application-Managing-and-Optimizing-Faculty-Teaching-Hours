@@ -19,6 +19,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ComponentExcelGV from "./components/ComponentExcel.js";
 import { toast } from "react-toastify";
+import CookiesAxios from "../../CookiesAxios.js";
 const CreateKhoa = () => {
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenKhoa, setTenKhoa] = useState("");
@@ -31,9 +32,7 @@ const CreateKhoa = () => {
   const [QuyenGiangVien, setQuyenGiangVien] = useState();
   const [TrangThaiGV, setTrangThaiGV] = useState();
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
   //----------------------------ISOPEN--------------------------------------

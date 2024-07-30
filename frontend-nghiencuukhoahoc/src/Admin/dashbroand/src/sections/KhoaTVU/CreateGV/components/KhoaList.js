@@ -3,13 +3,7 @@ import "../../CreateKhoa/CreateKhoa.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
-const KhoaList = ({
-  dataListKhoa,
-  activeRow,
-  handleChose,
-  handleDelete,
-  handleChoseEditKhoa,
-}) => {
+const KhoaList = ({ dataListKhoa, activeRow, handleChose }) => {
   console.log("check Active Row", activeRow);
 
   return (

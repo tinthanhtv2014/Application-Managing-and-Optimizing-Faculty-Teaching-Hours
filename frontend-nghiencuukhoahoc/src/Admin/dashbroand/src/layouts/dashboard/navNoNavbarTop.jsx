@@ -20,7 +20,7 @@ import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
 
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';
-
+import CookiesAxios from '../../sections/CookiesAxios.js';
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
 import Cookies from "js-cookie";
@@ -52,7 +52,7 @@ export default function NavNoTop
       const decoded = jwtDecode(auth);
       const fetchData = async () => {
         try {
-          const response = await axios.get(
+          const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
             { withCredentials: true }
           );

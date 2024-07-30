@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CookiesAxios from "../../../CookiesAxios.js";

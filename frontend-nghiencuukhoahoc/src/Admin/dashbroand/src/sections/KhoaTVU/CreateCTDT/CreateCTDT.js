@@ -2,11 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import ComponentExcelCTDT from "./component/ComponentExcel";
+import CookiesAxios from "../../CookiesAxios";
 const CreateKhoa = () => {
   const [tenKhoa, setTenKhoa] = useState("");
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here

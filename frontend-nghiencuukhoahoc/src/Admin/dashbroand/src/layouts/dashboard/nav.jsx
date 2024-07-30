@@ -17,7 +17,7 @@ import { useResponsive } from '../../hooks/use-responsive';
 
 import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
 
-
+import CookiesAxios from '../../sections/CookiesAxios.js';
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';
 import axios from 'axios';
@@ -47,7 +47,7 @@ export default function Nav({ openNav, onCloseNav }) {
       const decoded = jwtDecode(auth);
       const fetchData = async () => {
         try {
-          const response = await axios.get(
+          const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
             { withCredentials: true }
           );

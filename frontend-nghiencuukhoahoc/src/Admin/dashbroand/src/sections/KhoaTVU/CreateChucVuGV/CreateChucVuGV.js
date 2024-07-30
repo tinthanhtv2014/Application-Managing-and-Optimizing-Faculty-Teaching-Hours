@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Container, Row, Col, Table } from "react-bootstrap";
 import "./CreateChucVuGV.scss";
+import CookiesAxios from "../../CookiesAxios";
 const CreateChucvuChucdanh = () => {
   const [tenChucvu, setTenchucvu] = useState("");
   const [machucvu, setMachucvu] = useState("");
@@ -9,9 +10,6 @@ const CreateChucvuChucdanh = () => {
   const [tenChucdanh, setTenchucdanh] = useState("");
   const [datachucvu, setDataChucvu] = useState([]);
   const [datachucdanh, setDataChucdanh] = useState([]);
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
 
   //hàm thêm chức vụ chức danh ==================================
   const handleSubmitchucvu = async (e) => {

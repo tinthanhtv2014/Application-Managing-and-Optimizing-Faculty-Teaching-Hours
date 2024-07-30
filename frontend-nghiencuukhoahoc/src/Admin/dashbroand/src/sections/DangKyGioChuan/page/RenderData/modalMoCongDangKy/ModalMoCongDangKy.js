@@ -14,7 +14,7 @@ import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { toast } from "react-toastify";
-
+import CookiesAxios from "../../../../CookiesAxios";
 const ModalMoCongDangKy = ({
   isOpen,
   onClose,
@@ -27,10 +27,6 @@ const ModalMoCongDangKy = ({
   fetchDataGV,
   TenDangNhapGV,
 }) => {
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [dataListKhoa, setdataListKhoa] = useState(null);

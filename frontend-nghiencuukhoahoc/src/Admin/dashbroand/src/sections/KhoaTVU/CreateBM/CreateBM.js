@@ -4,11 +4,10 @@ import { Form, Button, Container, Row, Col, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import CookiesAxios from "../../CookiesAxios";
 const CreateKhoa = () => {
   const [tenKhoa, setTenKhoa] = useState("");
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
+
   const navigate = useNavigate();
   const [dataListKhoa, setdataListKhoa] = useState();
   const auth = Cookies.get("accessToken");
