@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import ReactPaginate from "react-paginate";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./GiangvienCNTT.scss";
+import CookiesAxios from "../CookiesAxios";
 
 const GiangvienCNTTList = () => {
   const [dataGIANGVIEN, setDataGIANGVIEN] = useState([]);
@@ -15,30 +16,53 @@ const GiangvienCNTTList = () => {
   const [showLoader, setShowLoader] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
 
-  const CookiesAxios = axios.create({
-    withCredentials: true,
-  });
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
 
   const fetchDataGIANGVIEN = async (page = currentPage, taikhoan) => {
     setShowLoader(true);
     try {
-      const tenbomon = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
+      const tenbomonResponse = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth}`, // Đảm bảo gửi token JWT trong header
+          },
+        }
       );
-      const DataTenbomon = tenbomon.data.DT.TENBOMON;
+      console.log("API response:", tenbomonResponse);
+      const DataTenbomon = tenbomonResponse.data.DT.TENBOMON;
       const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}&TENBOMON=${DataTenbomon}`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem?page=${page}&limit=${currentLimit}&TENBOMON=${DataTenbomon}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth}`, // Đảm bảo gửi token JWT trong header
+          },
+        }
       );
 
-      console.log("check repossnnnnnsse: ", response);
+      console.log("API response:", response);
+
       const { totalRows, totalPages } = response.data.DT;
 
       const rowsWithId = totalRows.map((item, index) => ({
         ...item,
         id: item.id || index,
+        TENGV: item.TENGV || "N/A",
+        TENKHOA: item.TENKHOA || "N/A",
+        TENBOMON: item.TENBOMON || "N/A",
+        MAGV: item.MAGV || "N/A",
+        TENDANGNHAP: item.TENDANGNHAP || "N/A",
+        TENCHUCDANH: item.TENCHUCDANH || "N/A",
+        TENCHUCVU: item.TENCHUCVU || "N/A",
+        DIACHI: item.DIACHI || "N/A",
+        DIENTHOAI: item.DIENTHOAI || "N/A",
+        EMAIL: item.EMAIL || "N/A",
+        PHANQUYEN: item.PHANQUYEN || "N/A",
+        TRANGTHAITAIKHOAN: item.TRANGTHAITAIKHOAN || "N/A",
       }));
+
+      console.log("Processed rows:", rowsWithId);
 
       setDataGIANGVIEN(rowsWithId);
       setTotalPages(totalPages);
@@ -75,8 +99,10 @@ const GiangvienCNTTList = () => {
   }, [navigate, auth]);
 
   useEffect(() => {
-    fetchDataGIANGVIEN(currentPage, jwtDecode(auth).taikhoan);
-  }, [currentPage]);
+    if (auth) {
+      fetchDataGIANGVIEN(currentPage, jwtDecode(auth).taikhoan);
+    }
+  }, [currentPage, auth]);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected + 1);
