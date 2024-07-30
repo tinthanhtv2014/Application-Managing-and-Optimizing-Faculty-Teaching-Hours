@@ -37,37 +37,44 @@ const CRUDGiangVien = (app) => {
   router.get("/only/xem/:MABOMON", checkUserJWT, getOnlyGiangVienbyBoMon);
   router.get(
     "/only/xemprofile/:TENDANGNHAP",
+    checkUserJWT,
 
     getOnlyGiangVienbyTENDANGNHAP
   );
 
-  router.post("/tao", createGiangVienControler);
+  router.post("/tao", checkUserJWT, createGiangVienControler);
 
   router.put(
     "/sua/trangthai/:MAGV",
+    checkUserJWT,
 
     updateTrangThaiTaiKhoanGiangVienController
   ); //phúc viết
-  router.put("/sua/:MAGV", updateGiangVienController);
+  router.put("/sua/:MAGV", checkUserJWT, updateGiangVienController);
   router.put(
     "/sua/thongtin/:TENDANGNHAP",
+    checkUserJWT,
 
     update_ChucVu_ChucDanh_GiangVien_Controller
   ); //lam
 
-  router.delete("/xoa", deleteGiangVienController);
+  router.delete("/xoa", checkUserJWT, deleteGiangVienController);
 
   //Route cho chức vụ
-  router.get("/xemchucvu", getAllChucvu);
-  router.post("/taochucvu", createChucVuControler);
-  router.put("/suachucvu/:MACHUCVU", updateChucVuController);
-  router.delete("/xoachucvu", deleteChucVuController);
+  router.get("/xemchucvu", checkUserJWT, getAllChucvu);
+  router.post("/taochucvu", checkUserJWT, createChucVuControler);
+  router.put("/suachucvu/:MACHUCVU", checkUserJWT, updateChucVuController);
+  router.delete("/xoachucvu", checkUserJWT, deleteChucVuController);
 
   //route cho chức danh
-  router.get("/xemchucdanh", getAllChucdanh);
-  router.post("/taochucdanh", createChucdanhControler);
-  router.put("/suachucdanh/:MACHUCDANH", updateChucdanhController);
-  router.delete("/xoachucdanh", deleteChucdanhController);
+  router.get("/xemchucdanh", checkUserJWT, getAllChucdanh);
+  router.post("/taochucdanh", checkUserJWT, createChucdanhControler);
+  router.put(
+    "/suachucdanh/:MACHUCDANH",
+    checkUserJWT,
+    updateChucdanhController
+  );
+  router.delete("/xoachucdanh", checkUserJWT, deleteChucdanhController);
 
   return app.use("/api/v1/admin/giangvien", router);
 };

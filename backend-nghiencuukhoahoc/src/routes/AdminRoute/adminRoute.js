@@ -17,26 +17,32 @@ const {
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 
 const CRUDTaiKhoan = (app) => {
-  //login cho admin
-  router.post("/dangnhap", loginTaikhoanAdminController); //đăng nhập với tài khoản và mk
-  router.post("/dangxuat", logoutTaikhoanAdminController); // đăng xuất
-  router.post("/dangnhapgoogle", loginTaikhoanGOOGLEController); // đăng nhập với email google
-  //chức năng CRUD tài khoản của admin
-  router.post("/tao", createTaiKhoanController); //Tạo
-  router.post("/login");
+  // Routes không yêu cầu xác thực JWT
+  router.post("/dangnhap", loginTaikhoanAdminController); // Đăng nhập với tài khoản và mật khẩu
+  router.post("/dangxuat", logoutTaikhoanAdminController); // Đăng xuất
+  router.post("/dangnhapgoogle", loginTaikhoanGOOGLEController); // Đăng nhập với email Google
 
-  //Tạo hàng loạt tài khoản bằng một mảng
-  // dataTaiKhoanExcelArray phải bao gồm TENDANGNHAP, MAGV, MATKHAU, PHANQUYEN, TRANGTHAITAIKHOAN
-  router.post("/tao/excel", createTaiKhoanExcelController);
-  router.post("/only/tao", createTaiKhoanOnlyController); // bao gồm tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
+  // Các routes yêu cầu xác thực JWT
+  router.post("/tao", checkUserJWT, createTaiKhoanController); // Tạo tài khoản
+  router.post("/tao/excel", checkUserJWT, createTaiKhoanExcelController); // Tạo hàng loạt tài khoản
+  router.post("/only/tao", checkUserJWT, createTaiKhoanOnlyController); // Tạo tài khoản chỉ với thông tin cần thiết
 
-  router.get("/xem/:MABOMON", getAllTaiKhoanController); //xem
-  router.get("/xem/phanquyen/:MABOMON", getAllTaiKhoanPHANQUYENController);
-  router.get("/xem/trangthai/:MABOMON", getAllTaiKhoanTRANGTHAIController);
+  router.get("/xem/:MABOMON", checkUserJWT, getAllTaiKhoanController); // Xem tất cả tài khoản theo mã bộ môn
+  router.get(
+    "/xem/phanquyen/:MABOMON",
+    checkUserJWT,
+    getAllTaiKhoanPHANQUYENController
+  ); // Xem tài khoản theo phân quyền và mã bộ môn
+  router.get(
+    "/xem/trangthai/:MABOMON",
+    checkUserJWT,
+    getAllTaiKhoanTRANGTHAIController
+  ); // Xem tài khoản theo trạng thái và mã bộ môn
   router.get("/protected", checkUserJWT, (req, res) => {
     res.json({ message: "Protected data", user: req.user }); // Sử dụng thông tin người dùng từ req.user
   });
-  //Sửa
+
+  // Sửa tài khoản
   router.put("/sua/:tenDangNhap", checkUserJWT, updateTaiKhoanController);
 
   return app.use("/api/v1/admin/taikhoan", router);

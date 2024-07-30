@@ -16,19 +16,24 @@ const {
   deleteChuongtrinhdaotaoController,
   createCHUONGTRINHDAOTAOExcelController,
 } = require("../../controllers/AdminController/chuongtrinhdaotaoAdminCONTROLLER");
-
+const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDMonHoc = (app) => {
-  //route cho khoa
-  router.get("/xem", getAllMONHOC);
-  router.post("/tao", createMONHOC);
-  router.put("/sua/:MAMONHOC", updateMONHOC);
-  router.delete("/xoa", deleteMONHOC);
+  // Route cho môn học, yêu cầu xác thực JWT
+  router.get("/xem", checkUserJWT, getAllMONHOC);
+  router.post("/tao", checkUserJWT, createMONHOC);
+  router.put("/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
+  router.delete("/xoa", checkUserJWT, deleteMONHOC);
 
-  //router cho chuong trinh dao tao
-  router.get("/chuongtrinh/xem", getAllChuongtrinhdaotao);
-  router.post("/chuongtrinh/tao", createCHUONGTRINHDAOTAOExcelController);
-  router.put("/sua/:MAMONHOC", updateMONHOC);
-  router.delete("/xoa", deleteMONHOC);
+  // Router cho chương trình đào tạo, yêu cầu xác thực JWT
+  router.get("/chuongtrinh/xem", checkUserJWT, getAllChuongtrinhdaotao);
+  router.post(
+    "/chuongtrinh/tao",
+    checkUserJWT,
+    createCHUONGTRINHDAOTAOExcelController
+  );
+  router.put("/chuongtrinh/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
+  router.delete("/chuongtrinh/xoa", checkUserJWT, deleteMONHOC);
+
   return app.use("/api/v1/admin/monhoc", router);
 };
 

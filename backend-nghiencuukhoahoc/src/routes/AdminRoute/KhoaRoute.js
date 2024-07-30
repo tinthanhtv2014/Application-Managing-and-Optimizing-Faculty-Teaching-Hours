@@ -9,14 +9,14 @@ const {
   deleteKHOA,
   getOneKHOA,
 } = require("../../controllers/AdminController/khoaAdminCONTROLLER");
-
+const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDKhoa = (app) => {
-  //route cho khoa
-  router.get("/xem", getAllKHOA);
-  router.post("/only/xem", getOneKHOA);
-  router.post("/tao", createKHOA);
-  router.put("/sua/:makhoa", updateKHOA);
-  router.delete("/xoa", deleteKHOA);
+  // Route cho khoa, yêu cầu xác thực JWT
+  router.get("/xem", checkUserJWT, getAllKHOA);
+  router.post("/only/xem", checkUserJWT, getOneKHOA);
+  router.post("/tao", checkUserJWT, createKHOA);
+  router.put("/sua/:makhoa", checkUserJWT, updateKHOA);
+  router.delete("/xoa", checkUserJWT, deleteKHOA);
 
   return app.use("/api/v1/admin/khoa", router);
 };

@@ -3,20 +3,20 @@ const app = express();
 
 const router = express.Router();
 const {
-    getAllNAMHOC,
-    createNAMHOC,
-    updateNAMHOC,
-    deleteNAMHOC
+  getAllNAMHOC,
+  createNAMHOC,
+  updateNAMHOC,
+  deleteNAMHOC,
 } = require("../../controllers/AdminController/namhocController");
-
+const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDNamHoc = (app) => {
-    //route cho khoa
-    router.get("/xem", getAllNAMHOC);
-    router.post("/tao", createNAMHOC);
-    router.put("/sua/:MANAMHOC", updateNAMHOC);
-    router.delete("/xoa", deleteNAMHOC);
+  // Route cho năm học, yêu cầu xác thực JWT
+  router.get("/xem", checkUserJWT, getAllNAMHOC);
+  router.post("/tao", checkUserJWT, createNAMHOC);
+  router.put("/sua/:MANAMHOC", checkUserJWT, updateNAMHOC);
+  router.delete("/xoa", checkUserJWT, deleteNAMHOC);
 
-    return app.use("/api/v1/admin/namhoc", router);
+  return app.use("/api/v1/admin/namhoc", router);
 };
 
 module.exports = CRUDNamHoc;
