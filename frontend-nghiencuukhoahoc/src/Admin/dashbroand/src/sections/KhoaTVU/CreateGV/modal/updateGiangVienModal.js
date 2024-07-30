@@ -12,7 +12,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import "../components/KhoaList.scss";
+// import "../components/KhoaList.scss";
 import "./updateGiangVienModal.scss";
 
 const UpdateGiangVienModal = ({
@@ -275,16 +275,19 @@ const UpdateGiangVienModal = ({
             <>
               {" "}
               <FormControl fullWidth margin="normal">
-                <TextField
-                  label="Thời gian nhận chức vụ"
-                  type="date"
-                  value={TimeChucVu}
-                  onChange={(e) => setTimeChucVu(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  fullWidth
-                />
+                <div className="div-inputtime">
+                  {" "}
+                  <input
+                    label="Thời gian nhận chức vụ"
+                    type="date"
+                    value={TimeChucVu}
+                    onChange={(e) => setTimeChucVu(e.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                  />
+                </div>
               </FormControl>
             </>
           ) : (
@@ -316,19 +319,16 @@ const UpdateGiangVienModal = ({
           </FormControl>
           {ChucDanhGiangVien !== lecturerData.TENCHUCDANH ? (
             <>
-              {" "}
               <FormControl fullWidth margin="normal">
-                <TextField
-                  label="Thời gian nhận chức danh"
-                  type="date"
-                  value={TimeChucDanh}
-                  onChange={(e) => setTimeChucDanh(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  fullWidth
-                  className="input-time"
-                />
+                <div className="div-inputtime">
+                  {" "}
+                  <input
+                    type="date"
+                    value={TimeChucDanh}
+                    onChange={(e) => setTimeChucDanh(e.target.value)}
+                    className="input-time-modal"
+                  />
+                </div>
               </FormControl>
             </>
           ) : (

@@ -47,7 +47,7 @@ const CreateGiangVienForm = ({
         />
         <Box sx={{ maxWidth: 300 }}>
           <FormControl fullWidth className="mt-2">
-            <InputLabel id="demo-simple-select-label ">Phân Quyền</InputLabel>
+            <InputLabel id="demo-simple-select-label">Phân Quyền</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
