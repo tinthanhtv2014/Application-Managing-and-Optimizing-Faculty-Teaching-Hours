@@ -345,7 +345,7 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
                         <span>Thời gian nhận chức danh:</span>
                       </Col>
                       <Col xs={12} sm={6} lg={3}>
-                        <p className="pmleft-1">
+                        <p className="pmleft-1 ">
                           {formatDate(editData.THOIGIANNHAN)}
                         </p>
                       </Col>

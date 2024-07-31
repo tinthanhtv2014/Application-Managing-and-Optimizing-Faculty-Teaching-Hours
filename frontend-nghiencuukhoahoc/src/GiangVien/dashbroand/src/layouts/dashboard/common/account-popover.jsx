@@ -15,7 +15,7 @@ import avat from "../../../../public/assets/images/avatars/lufy2.jpg";
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-
+import CookiesAxios from '../../../sections/CookiesAxios';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -56,7 +56,7 @@ export default function AccountPopover() {
       const decoded = jwtDecode(auth);
       const fetchData = async () => {
         try {
-          const response = await axios.get(
+          const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
             { withCredentials: true }
           );
@@ -84,7 +84,7 @@ export default function AccountPopover() {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
+      const response = await CookiesAxios.post(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangxuat`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

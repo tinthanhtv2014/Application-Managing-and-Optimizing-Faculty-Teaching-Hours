@@ -27,7 +27,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx';
-
+import CookiesAxios from '../../sections/CookiesAxios.js';
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
@@ -48,7 +48,7 @@ export default function Nav({ openNav, onCloseNav }) {
       const decoded = jwtDecode(auth);
       const fetchData = async () => {
         try {
-          const response = await axios.get(
+          const response = await CookiesAxios.get(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${decoded.taikhoan}`,
             { withCredentials: true }
           );
