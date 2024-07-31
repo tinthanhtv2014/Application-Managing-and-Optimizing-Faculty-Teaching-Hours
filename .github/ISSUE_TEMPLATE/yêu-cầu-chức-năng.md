@@ -2,8 +2,8 @@
 name: Yêu cầu Chức năng
 about: Phân phối Giờ Chuẩn Nghiên cứu Khoa học cho Giảng viên
 title: ''
-labels: ''
-assignees: ''
+labels: enhancement, help wanted
+assignees: BaoQuocZero, Minurte1, tinthanhtv2014
 
 ---
 
