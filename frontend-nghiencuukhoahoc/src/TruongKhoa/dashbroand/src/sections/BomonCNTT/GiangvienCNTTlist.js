@@ -93,33 +93,33 @@ const GiangvienCNTTList = (props) => {
   }
 
   const columns = [
-    { field: "TENKHOA", headerName: "Tên khoa", width: 150 },
+    // { field: "TENKHOA", headerName: "Tên khoa", width: 150 },
     { field: "TENBOMON", headerName: "Tên bộ môn", width: 150 },
-    { field: "MAGV", headerName: "Mã số giảng viên", width: 150 },
+    // { field: "MAGV", headerName: "Mã số giảng viên", width: 150 },
     { field: "TENGV", headerName: "Tên giảng viên", width: 150 },
     { field: "TENDANGNHAP", headerName: "Tên đăng nhập", width: 150 },
     { field: "TENCHUCDANH", headerName: "Tên chức danh", width: 150 },
     { field: "TENCHUCVU", headerName: "Tên chức vụ", width: 150 },
-    { field: "DIACHI", headerName: "Địa chỉ", width: 150 },
-    { field: "DIENTHOAI", headerName: "Điện thoại", width: 150 },
-    { field: "EMAIL", headerName: "Email", width: 150 },
+    // { field: "DIACHI", headerName: "Địa chỉ", width: 150 },
+    // { field: "DIENTHOAI", headerName: "Điện thoại", width: 150 },
+    // { field: "EMAIL", headerName: "Email", width: 150 },
     { field: "PHANQUYEN", headerName: "Quyền hạn", width: 150 },
-    {
-      field: "TRANGTHAITAIKHOAN",
-      headerName: "Trạng thái hoạt động",
-      width: 150,
-      renderCell: (params) => (
-        <span
-          className={
-            params.value === "Đang hoạt động"
-              ? "active-status"
-              : "inactive-status"
-          }
-        >
-          {params.value}
-        </span>
-      ),
-    },
+    // {
+    //   field: "TRANGTHAITAIKHOAN",
+    //   headerName: "Trạng thái hoạt động",
+    //   width: 150,
+    //   renderCell: (params) => (
+    //     <span
+    //       className={
+    //         params.value === "Đang hoạt động"
+    //           ? "active-status"
+    //           : "inactive-status"
+    //       }
+    //     >
+    //       {params.value}
+    //     </span>
+    //   ),
+    // },
   ];
 
   const rowHeight = 52; // Chiều cao của mỗi hàng trong px
