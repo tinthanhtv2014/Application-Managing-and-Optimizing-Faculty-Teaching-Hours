@@ -4,12 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
-
+import CookiesAxios from "../../CookiesAxios";
 const GV_Hang_III = ({ ChucDanhGiangVien, MaGV }) => {
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
-
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

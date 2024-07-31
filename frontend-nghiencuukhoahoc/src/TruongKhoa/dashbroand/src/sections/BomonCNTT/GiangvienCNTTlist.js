@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./GiangvienCNTT.scss";
 import { lime } from "@mui/material/colors";
-
+import CookiesAxios from "../CookiesAxios";
 const GiangvienCNTTList = (props) => {
   const [dataGIANGVIEN, setDataGIANGVIEN] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,9 +16,6 @@ const GiangvienCNTTList = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
 
-  const CookiesAxios = axios.create({
-    withCredentials: true,
-  });
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
 
@@ -29,8 +26,8 @@ const GiangvienCNTTList = (props) => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
 
-      console.log("khoa.data.DT.TENKHOA: ", khoa.data.DT.TENKHOA)
-      const TENKHOA = khoa.data.DT.TENKHOA // Lấy tên khoa từ khoa
+      console.log("khoa.data.DT.TENKHOA: ", khoa.data.DT.TENKHOA);
+      const TENKHOA = khoa.data.DT.TENKHOA; // Lấy tên khoa từ khoa
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/xem?page=${page}&limit=${currentLimit}&TENKHOA=${TENKHOA}`
       );

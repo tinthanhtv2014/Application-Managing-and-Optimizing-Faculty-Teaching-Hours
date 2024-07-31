@@ -14,15 +14,12 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../component/componentGV.scss";
 import { toast } from "react-toastify";
-
+import CookiesAxios from "../../CookiesAxios";
 const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(giangVien);
   const [dataChucDanh, setdataChucDanh] = useState(null);
   const [TimeChucDanh, setTimeChucDanh] = useState(editData.THOIGIANNHAN);
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
 
   const handleEditClick = async () => {
     setIsEditing(true);

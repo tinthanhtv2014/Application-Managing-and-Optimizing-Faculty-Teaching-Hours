@@ -4,15 +4,12 @@ import GiangVienProfile from "./component/componentGV";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import CookiesAxios from "../CookiesAxios";
 const AccountGV = () => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
-
-  const CookiesAxios = axios.create({
-    withCredentials: true, // Đảm bảo gửi cookie với mỗi yêu cầu
-  });
 
   useEffect(() => {
     const auth = Cookies.get("accessToken");
