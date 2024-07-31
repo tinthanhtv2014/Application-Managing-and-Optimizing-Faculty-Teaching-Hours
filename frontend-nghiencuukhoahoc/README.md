@@ -31,6 +31,8 @@
    /quan-ly-chuc-vu: Thêm, sửa, xóa chức vụ.
    /quan-ly-danh-muc-gio-chuan: Thêm, sửa, xóa danh mục giờ chuẩn.
    /quan-ly-chuc-danh: Thêm, sửa, xóa chức danh.
+
+   -------------CHƯA LÀM-------------
    /nhap-lop-tu-file: Nhập lớp từ file Excel.
    /nhap-chuong-trinh-tu-file: Nhập chương trình đào tạo từ file Excel.
    /quan-ly-mon-hoc: Thêm, sửa, xóa môn học.

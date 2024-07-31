@@ -168,7 +168,7 @@ const createChuongtrinhdaotaoExcel = async (
 
   // try {
   let results = [];
-
+  console.log("check results =>", dataChuongtrinhdaotaoExcelArray);
   // Kiểm tra thông tin trong file excel
   for (var i = 0; i < dataChuongtrinhdaotaoExcelArray.length; i++) {
     if (
@@ -184,19 +184,10 @@ const createChuongtrinhdaotaoExcel = async (
         DT: [],
       }; // Tiếp tục thực hiện các lệnh khác
     }
-    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
-      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
-    );
-    if (kiemtra_tenchuongtrinh.length < 0) {
-      return {
-        EM: `chương trình đào tạo không tồn tại`,
-        EC: 0,
-        DT: [],
-      }; // Tiếp tục thực hiện các lệnh khác
-    }
-    let kiemtra_tenbomon = selectBomon_TENBOMON(
+    let kiemtra_tenbomon = await selectBomon_TENBOMON(
       dataChuongtrinhdaotaoExcelArray[i].TENBOMON
     );
+    console.log("check ten bo mon ", kiemtra_tenbomon.length);
     if (kiemtra_tenbomon.length < 0) {
       return {
         EM: `bộ môn không tồn tại`,
@@ -204,11 +195,35 @@ const createChuongtrinhdaotaoExcel = async (
         DT: [],
       }; // Tiếp tục thực hiện các lệnh khác
     }
+    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+    );
+    console.log("check ten bo mon =>>>> ", kiemtra_tenbomon[0].MABOMON);
+    if (!kiemtra_tenchuongtrinh) {
+      // Tạo thêm chương trình đào tạo nếu không tồn tại
+      await pool.execute(
+        `INSERT INTO chuongtrinhdaotao (TENCHUONGTRINH, MABOMON) VALUES (?, ?)`,
+        [
+          dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH,
+          kiemtra_tenbomon[0].MABOMON,
+        ]
+      );
+      kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+        dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+      );
+    }
+    if (kiemtra_tenchuongtrinh.length === 0) {
+      return {
+        EM: `Không thể tạo chương trình đào tạo`,
+        EC: 0,
+        DT: [],
+      };
+    }
 
-    let kiemtra_tenmonhoc = timmonhoc_TENMONHOC(
+    let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
       dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
     );
-    if (kiemtra_tenmonhoc.length > 0) {
+    if (kiemtra_tenmonhoc) {
       return {
         EM: `ten mon hoc da ton tai`,
         EC: 0,
