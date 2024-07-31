@@ -1,4 +1,4 @@
-# NghienCuuKhoaHoc
+# Managing-and-Optimizing-Faculty-Teaching-Hours
 # Server configuration
 BACKEND
 PORT=
