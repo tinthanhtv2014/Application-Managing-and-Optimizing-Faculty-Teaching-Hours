@@ -75,8 +75,8 @@ const updateChuongtrinhdaotaoController = async (req, res) => {
 
 const deleteChuongtrinhdaotaoController = async (req, res) => {
   try {
-    let MACHUONGTRINH = req.query.MACHUONGTRINH;
-    let results = await xoaChuongtrinh(MACHUONGTRINH);
+    let TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+    let results = await xoaChuongtrinh(TENCHUONGTRINH);
 
     return res.status(200).json({
       EM: results.EM,
@@ -86,9 +86,9 @@ const deleteChuongtrinhdaotaoController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "có lỗi ở deleteChuongtrinhdaotaoController",
+      EC: -1,
+      DT: [],
     });
   }
 };

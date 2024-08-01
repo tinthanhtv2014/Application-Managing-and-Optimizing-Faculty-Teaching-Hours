@@ -32,6 +32,23 @@ const selectChuongtrinhdaotao = async () => {
   }
 };
 
+const timkiemChuongtrinhdaotao_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM chuongtrinhdaotao WHERE TENCHUONGTRINH = ?`,
+      [TENCHUONGTRINH]
+    );
+    console.log("check resut: ", results1[0]);
+    return results1[0];
+  } catch (error) {
+    return {
+      EM: "Lỗi services timkiemChuongtrinhdaotao_TENCHUONGTRINH",
+      EC: -1,
+      DT: {},
+    };
+  }
+};
+
 const selectChuongtrinhdaotao_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -130,35 +147,41 @@ const updateChuongtrinhdaotao = async (
   }
 };
 
-const xoaChuongtrinh = async (MACHUONGTRINH) => {
-  try {
-    let [results1, fields1] = await pool.execute(
-      `select * from chuongtrinhdaotao where MACHUONGTRINH = ?`,
-      [MACHUONGTRINH]
-    );
-    if (results1.length > 0) {
-      let [results, fields] = await pool.execute(
+const xoaChuongtrinh = async (TENCHUONGTRINH) => {
+  // try {
+  const kiemtra_tenchuongtrinh = await timkiemChuongtrinhdaotao_TENCHUONGTRINH(
+    TENCHUONGTRINH
+  );
+  console.log("check tenchuong trinh: ", kiemtra_tenchuongtrinh);
+  if (kiemtra_tenchuongtrinh) {
+    let [results_detete_table_thuocCTDT, fields_detete_table_thuocCTDT] =
+      await pool.execute(`DELETE FROM thuoc WHERE MACHUONGTRINH = ?`, [
+        kiemtra_tenchuongtrinh.MACHUONGTRINH,
+      ]);
+
+    let [results_detete_table_CTDT, fields_detete_table_CTDT] =
+      await pool.execute(
         `DELETE FROM chuongtrinhdaotao WHERE MACHUONGTRINH = ?`,
-        [MACHUONGTRINH]
+        [kiemtra_tenchuongtrinh.MACHUONGTRINH]
       );
-      return {
-        EM: "xóa chương trình thành công",
-        EC: 1,
-        DT: results,
-      };
-    }
     return {
-      EM: " chương trình này không tồn tại",
-      EC: 0,
-      DT: [],
-    };
-  } catch (error) {
-    return {
-      EM: "lỗi services createChucVu",
-      EC: -1,
+      EM: "xóa chương trình thành công",
+      EC: 1,
       DT: [],
     };
   }
+  return {
+    EM: " chương trình này không tồn tại",
+    EC: 0,
+    DT: [],
+  };
+  // } catch (error) {
+  //   return {
+  //     EM: "lỗi services xoaChuongtrinh",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
 };
 
 const createChuongtrinhdaotaoExcel = async (

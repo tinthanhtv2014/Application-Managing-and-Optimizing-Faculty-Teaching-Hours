@@ -32,7 +32,7 @@ const CRUDMonHoc = (app) => {
     createCHUONGTRINHDAOTAOExcelController
   );
   router.put("/chuongtrinh/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
-
+  router.delete("/chuongtrinh/xoa", deleteChuongtrinhdaotaoController);
   return app.use("/api/v1/admin/monhoc", router);
 };
 
