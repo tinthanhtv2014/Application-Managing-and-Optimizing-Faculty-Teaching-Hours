@@ -1,6 +1,3 @@
-
-# Phần mềm quản lý khung giờ tối ưu cho giảng viên TVU - KTCN
-
 # Managing and Optimizing Faculty Teaching Hours
 
 This project is aimed at managing and optimizing faculty teaching hours using a web application built with React.js and Node.js. The backend uses MySQL for data storage.
