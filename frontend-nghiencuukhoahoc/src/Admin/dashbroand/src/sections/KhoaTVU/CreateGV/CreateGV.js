@@ -200,27 +200,6 @@ const ComponenCreateGiangVien = () => {
     }
   };
 
-  const handleDeleteBoMon = async (MaBoMon) => {
-    if (MaBoMon) {
-      try {
-        const response = await CookiesAxios.delete(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/xoa`,
-          {
-            params: {
-              mabomon: MaBoMon,
-            },
-          }
-        );
-        //    console.log(response.data);
-        getBoMonByMaKhoa(MaKhoa);
-        setActiveRowBM(null);
-        setTenBoMon("");
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
-    }
-  };
-
   const handleChoseEditBM = (bomon) => {
     setTenBoMon(bomon.TENBOMON);
     setMaBoMon(bomon.MABOMON);
@@ -450,7 +429,6 @@ const ComponenCreateGiangVien = () => {
             dataListBoMon={dataListBoMon}
             activeRowBM={activeRowBM}
             handleChoseRowBM={handleChoseRowBM}
-            handleDeleteBoMon={handleDeleteBoMon}
             handleChoseEditBM={handleChoseEditBM}
           />
         </Col>{" "}

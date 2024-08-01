@@ -10,7 +10,7 @@ import {
   Box,
   FormControl,
 } from "@mui/material";
-import axios from "axios";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../component/componentGV.scss";
 import { toast } from "react-toastify";
@@ -56,11 +56,11 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
 
     if (isValidPhoneNumber(editData.DIENTHOAI)) {
       try {
-        const response = await axios.put(
+        const response = await CookiesAxios.put(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/thongtin/${editData.TENDANGNHAP}`,
           editData
         );
-        console.log("Check", response.data.DT[0]);
+        console.log("Check", response.data);
         if (response.data.EC === 1) {
           setIsEditing(false);
           toast.success("Chỉnh sửa thông tin thành công");

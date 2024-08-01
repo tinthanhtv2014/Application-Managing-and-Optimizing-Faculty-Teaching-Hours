@@ -10,6 +10,7 @@ const {
 } = require("../../controllers/AdminController/monhocAdminController");
 
 const {
+  getOnlyChuongtrinhdaotao,
   getAllChuongtrinhdaotao,
   createChuongtrinhdaotaoControler,
   updateChuongtrinhdaotaoController,
@@ -26,6 +27,7 @@ const CRUDMonHoc = (app) => {
 
   // Router cho chương trình đào tạo, yêu cầu xác thực JWT
   router.get("/chuongtrinh/xem", checkUserJWT, getAllChuongtrinhdaotao);
+  router.post("/chuongtrinh/xem", checkUserJWT, getOnlyChuongtrinhdaotao);
   router.post(
     "/chuongtrinh/tao",
     checkUserJWT,

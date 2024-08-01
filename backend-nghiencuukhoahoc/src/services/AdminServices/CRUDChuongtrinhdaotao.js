@@ -12,20 +12,57 @@ const {
   timchuongtrinh_TENCHUONGTRINH,
   timmonhoc_TENMONHOC,
 } = require("./helpers");
-
 const selectChuongtrinhdaotao = async () => {
   try {
-    let [results1, fields1] = await pool.execute(
-      `select ctdt.*,mh.* from chuongtrinhdaotao as ctdt, thuoc as t, monhoc as mh where ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC`
-    );
+    let query = `
+    SELECT ctdt.*
+    FROM chuongtrinhdaotao 
+   
+  `;
+
+    let [results1, fields1] = await pool.execute(query);
+    console.log(results1);
     return {
-      EM: " xem thông tin chương trình đào tạo thành công",
+      EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
       DT: results1,
     };
   } catch (error) {
     return {
-      EM: "lỗi services selectChucVu",
+      EM: "Lỗi services selectChucVu",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+const selectOnlyChuongtrinhdaotao = async (MABOMON, isOpenGetAllApiGV) => {
+  console.log("MABOMON", MABOMON);
+  console.log("isOpenGetAllApiGV", isOpenGetAllApiGV);
+  try {
+    let query = `
+    SELECT ctdt.*, mh.* 
+    FROM chuongtrinhdaotao AS ctdt
+    JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
+    JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
+  `;
+
+    if (!isOpenGetAllApiGV) {
+      query += ` WHERE ctdt.MABOMON = ?`;
+    }
+
+    let [results1, fields1] = await pool.execute(
+      query,
+      isOpenGetAllApiGV ? [] : [MABOMON]
+    );
+    console.log(results1);
+    return {
+      EM: "Xem thông tin chương trình đào tạo thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectChucVu",
       EC: -1,
       DT: [],
     };
@@ -310,4 +347,6 @@ module.exports = {
   updateChuongtrinhdaotao,
   xoaChuongtrinh,
   createChuongtrinhdaotaoExcel,
+  selectOnlyChuongtrinhdaotao,
+  selectChuongtrinhdaotao,
 };
