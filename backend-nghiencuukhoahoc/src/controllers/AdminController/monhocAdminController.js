@@ -67,9 +67,9 @@ const updateMONHOC = async (req, res) => {
 
 const deleteMONHOC = async (req, res) => {
   try {
-    const MAMONHOC = req.query.MAMONHOC;
+    const TENMONHOC = req.query.TENMONHOC;
 
-    let results = await deleteMonHoc(MAMONHOC);
+    let results = await deleteMonHoc(TENMONHOC);
 
     return res.status(200).json({
       EM: results.EM,
