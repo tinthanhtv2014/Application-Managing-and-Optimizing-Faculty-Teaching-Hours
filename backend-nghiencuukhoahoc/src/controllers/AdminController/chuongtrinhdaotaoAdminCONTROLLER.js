@@ -6,6 +6,7 @@ const {
   updateChuongtrinhdaotao,
   xoaChuongtrinh,
   createChuongtrinhdaotaoExcel,
+  selectOnlyChuongtrinhdaotao_withHOCKI,
 } = require("../../services/AdminServices/CRUDChuongtrinhdaotao");
 
 const getAllChuongtrinhdaotao = async (req, res) => {
@@ -26,16 +27,35 @@ const getAllChuongtrinhdaotao = async (req, res) => {
     });
   }
 };
-const getOnlyChuongtrinhdaotao = async (req, res) => {
-  const MABOMON = req.body.MABOMON;
-  const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
-  const TENCHUONGTRINHDAOTAO = req.body.TENCHUONGTRINHDAOTAO;
+
+const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
+  const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+  const SOTHUTUHOCKI = req.body.SOTHUTUHOCKI;
   try {
-    let results = await selectOnlyChuongtrinhdaotao(
-      MABOMON,
-      isOpenGetAllApiGV,
-      TENCHUONGTRINHDAOTAO
+    let results = await selectOnlyChuongtrinhdaotao_withHOCKI(
+      TENCHUONGTRINH,
+      SOTHUTUHOCKI
     );
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
+
+const getOnlyChuongtrinhdaotao = async (req, res) => {
+  const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+  try {
+    let results = await selectOnlyChuongtrinhdaotao(TENCHUONGTRINH);
 
     return res.status(200).json({
       EM: results.EM,
@@ -144,4 +164,5 @@ module.exports = {
   deleteChuongtrinhdaotaoController,
   createCHUONGTRINHDAOTAOExcelController,
   getOnlyChuongtrinhdaotao,
+  getOnlyChuongtrinhdaotao_withHOCKI,
 };

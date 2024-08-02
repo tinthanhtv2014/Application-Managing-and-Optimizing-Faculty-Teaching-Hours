@@ -35,34 +35,43 @@ const selectChuongtrinhdaotao = async () => {
     };
   }
 };
-const selectOnlyChuongtrinhdaotao = async (MABOMON, isOpenGetAllApiGV) => {
-  console.log("MABOMON", MABOMON);
-  console.log("isOpenGetAllApiGV", isOpenGetAllApiGV);
+const selectOnlyChuongtrinhdaotao = async (TENCHUONGTRINH) => {
   try {
-    let query = `
-    SELECT ctdt.*, mh.* 
-    FROM chuongtrinhdaotao AS ctdt
-    JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
-    JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
-  `;
-
-    if (!isOpenGetAllApiGV) {
-      query += ` WHERE ctdt.MABOMON = ?`;
-    }
-
-    let [results1, fields1] = await pool.execute(
-      query,
-      isOpenGetAllApiGV ? [] : [MABOMON]
+    let [results_ctdt_bomon, fields1] = await pool.execute(
+      `SELECT ctdt.*,mh.*,t.SOTHUTUHOCKI FROM chuongtrinhdaotao as ctdt,thuoc as t, monhoc as mh WHERE ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC and ctdt.TENCHUONGTRINH = ?`,
+      [TENCHUONGTRINH]
     );
-    console.log(results1);
     return {
       EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
-      DT: results1,
+      DT: results_ctdt_bomon,
     };
   } catch (error) {
     return {
-      EM: "Lỗi services selectChucVu",
+      EM: "Lỗi services selectOnlyChuongtrinhdaotao",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const selectOnlyChuongtrinhdaotao_withHOCKI = async (
+  TENCHUONGTRINH,
+  SOTHUTUHOCKI
+) => {
+  try {
+    let [results_ctdt_bomon, fields1] = await pool.execute(
+      `SELECT ctdt.*,mh.*,t.SOTHUTUHOCKI FROM chuongtrinhdaotao as ctdt,thuoc as t, monhoc as mh WHERE ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC and ctdt.TENCHUONGTRINH = ? and t.SOTHUTUHOCKI = ?`,
+      [TENCHUONGTRINH, SOTHUTUHOCKI]
+    );
+    return {
+      EM: "Xem thông tin chương trình đào tạo thành công",
+      EC: 1,
+      DT: results_ctdt_bomon,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectOnlyChuongtrinhdaotao",
       EC: -1,
       DT: [],
     };
@@ -349,4 +358,5 @@ module.exports = {
   createChuongtrinhdaotaoExcel,
   selectOnlyChuongtrinhdaotao,
   selectChuongtrinhdaotao,
+  selectOnlyChuongtrinhdaotao_withHOCKI,
 };
