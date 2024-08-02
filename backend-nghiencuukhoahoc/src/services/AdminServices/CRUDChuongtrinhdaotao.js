@@ -15,7 +15,7 @@ const {
 const selectChuongtrinhdaotao = async () => {
   try {
     let query = `
-    SELECT ctdt.*
+    SELECT *
     FROM chuongtrinhdaotao 
    
   `;

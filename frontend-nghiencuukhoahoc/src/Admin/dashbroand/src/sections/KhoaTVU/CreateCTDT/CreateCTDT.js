@@ -54,11 +54,13 @@ const ComponenCreateGiangVien = () => {
   const [activeRowGV, setActiveRowGV] = useState(null);
   const [disabledGV, setDisableGV] = useState(true);
   const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(true);
-  const [TenChuongTrinhDaoTao, setTenChuongTrinhDaoTao] = useState("All");
+  const [TenChuongTrinhDaoTao, setTenChuongTrinhDaoTao] = useState("");
+
   // --------------------------ISOPEN---------------------------------------
   const [ValueExcel, setValueExcel] = useState("Excel");
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
   const [dataListKhoa, setdataListKhoa] = useState();
+  const [dataListCTDT, setdatListCTDT] = useState(null);
   const [dataListBoMon, setdataListBoMon] = useState(null);
   const [dataListGiangVien, setdataListGiangVien] = useState(null);
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
@@ -67,14 +69,13 @@ const ComponenCreateGiangVien = () => {
     const token = Cookies.get("accessToken");
 
     const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Đảm bảo gửi token JWT trong header
-        },
-      }
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
     );
-    // console.log(response.data.DT);
+    const response_ChuongTinhDaoTao = await CookiesAxios.get(
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
+    );
+
+    setdatListCTDT(response_ChuongTinhDaoTao.data.DT);
     setdataListKhoa(response.data.DT);
   };
 
@@ -434,32 +435,28 @@ const ComponenCreateGiangVien = () => {
           />
         </Col>{" "}
         <Col md={2}>
-          {" "}
           <Box sx={{ maxWidth: 300 }}>
             <FormControl fullWidth>
-              <InputLabel id="select-label-trang-thai">Trạng thái</InputLabel>
+              <InputLabel id="select-label-trang-thai">
+                Chương Trình Đào Tạo
+              </InputLabel>
               <Select
                 labelId="select-label-trang-thai"
                 id="trang-thai-select"
-                className={`height-selectGV ${
-                  searchStatus === "Đang hoạt động"
-                    ? "text-success"
-                    : searchStatus === "Ngưng hoạt động"
-                    ? "text-danger"
-                    : ""
-                }`}
-                value={searchStatus}
-                label="Trạng thái"
+                className={`height-selectGV`}
+                value={TenChuongTrinhDaoTao}
+                label="Chương Trình Đào Tạo"
                 onChange={handleStatusChange}
               >
                 <MenuItem value="All">Hiển thị tất cả</MenuItem>
-                <MenuItem value="Đang hoạt động" className="text-success">
-                  Đang hoạt động
-                </MenuItem>
-                <MenuItem value="Ngưng hoạt động" className="text-danger">
-                  Ngưng hoạt động
-                </MenuItem>
-              </Select>{" "}
+
+                {Array.isArray(dataListCTDT) &&
+                  dataListCTDT.map((chuongTrinh, index) => (
+                    <MenuItem key={index} value={chuongTrinh.TENCHUONGTRINH}>
+                      {chuongTrinh.TENCHUONGTRINH}
+                    </MenuItem>
+                  ))}
+              </Select>
             </FormControl>
           </Box>
         </Col>
