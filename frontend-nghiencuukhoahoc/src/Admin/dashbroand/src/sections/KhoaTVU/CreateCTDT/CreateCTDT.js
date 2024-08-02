@@ -94,41 +94,22 @@ const ComponenCreateGiangVien = () => {
     }
   };
   useEffect(() => {
-    if (isOpenGetAllApiGV) {
+    if (MaBoMon && TenChuongTrinhDaoTao) {
       const fetchDataAllGV = async () => {
         try {
           const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`,
-            { isOpenGetAllApiGV: isOpenGetAllApiGV, MABOMON: MaBoMon }
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/only/xem`,
+            { MABOMON: MaBoMon, TENCHUONGTRINHDAOTAO: TenChuongTrinhDaoTao }
           );
-          console.log("Dữ liệu bộ môn theo mã bộ:", response.data.DT);
-          setdataListGiangVien(response.data.DT);
+          console.log("setdatListCTDT", response.data.D);
+          setdatListCTDT(response.data.DT);
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
         }
       };
       fetchDataAllGV();
-      // console.log("check isOpenGetAllApiGV", isOpenGetAllApiGV);
-    } else {
-      if (MaBoMon) {
-        const fetchDataAllGV = async () => {
-          try {
-            const response = await CookiesAxios.post(
-              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`,
-              { isOpenGetAllApiGV: isOpenGetAllApiGV, MABOMON: MaBoMon }
-            );
-            //     console.log("Danh sách tài khoản:", response.data);
-            setdataListGiangVien(response.data.DT);
-          } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
-          }
-        };
-        fetchDataAllGV();
-      } else {
-        toast.error("Vui lòng chọn bộ môn mà bạn muốn xem");
-      }
     }
-  }, [isOpenGetAllApiGV]);
+  }, [MaBoMon, TenChuongTrinhDaoTao]);
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -166,7 +147,6 @@ const ComponenCreateGiangVien = () => {
             },
           }
         );
-        //      console.log(response.data);
         setActiveRow(null);
         setDisableBM(true);
         fetchData();
@@ -186,7 +166,6 @@ const ComponenCreateGiangVien = () => {
 
   const handleChoseRowBM = async (bomon) => {
     setDisableGV(false);
-
     setMaBoMon(bomon);
     setActiveRowBM(bomon);
 
@@ -353,8 +332,8 @@ const ComponenCreateGiangVien = () => {
   const handleStatusChange = (e) => {
     setTenChuongTrinhDaoTao(e.target.value);
     // console.log("check=>", searchStatus);
-    setSearchStatus(e.target.value);
-    setCurrentPage(0);
+    // setSearchStatus(e.target.value);
+    // setCurrentPage(0);
   };
 
   const [dataListChucVuGiangVien, setdataListChucVuGiangVien] = useState();
