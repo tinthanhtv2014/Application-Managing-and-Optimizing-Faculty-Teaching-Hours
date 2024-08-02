@@ -1,0 +1,29 @@
+
+.modal-updateGV{
+background-color: #ffffff;
+}
+
+.modal-updateGV {
+    overflow: auto; /* Cho phép cuộn */
+  }
+  
+  /* Đối với trình duyệt dựa trên WebKit (Chrome, Safari, Edge) */
+  .modal-updateGV::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn */
+  }
+  
+  /* Đối với Firefox */
+  .modal-updateGV {
+    scrollbar-width: none; /* Ẩn thanh cuộn */
+  }
+
+
+.div-inputtime{
+  width: 100%;
+
+  input{
+    width: 100%;
+    border-radius: 8px;
+    height: 50px;
+  }
+}

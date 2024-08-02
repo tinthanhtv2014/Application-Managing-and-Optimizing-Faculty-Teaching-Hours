@@ -12,22 +12,76 @@ const {
   timchuongtrinh_TENCHUONGTRINH,
   timmonhoc_TENMONHOC,
 } = require("./helpers");
-
 const selectChuongtrinhdaotao = async () => {
   try {
-    let [results1, fields1] = await pool.execute(
-      `select ctdt.*,mh.* from chuongtrinhdaotao as ctdt, thuoc as t, monhoc as mh where ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC`
-    );
+    let query = `
+    SELECT ctdt.*
+    FROM chuongtrinhdaotao 
+   
+  `;
+
+    let [results1, fields1] = await pool.execute(query);
+    console.log(results1);
     return {
-      EM: " xem thông tin chương trình đào tạo thành công",
+      EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
       DT: results1,
     };
   } catch (error) {
     return {
-      EM: "lỗi services selectChucVu",
+      EM: "Lỗi services selectChucVu",
       EC: -1,
       DT: [],
+    };
+  }
+};
+const selectOnlyChuongtrinhdaotao = async (MABOMON, isOpenGetAllApiGV) => {
+  console.log("MABOMON", MABOMON);
+  console.log("isOpenGetAllApiGV", isOpenGetAllApiGV);
+  try {
+    let query = `
+    SELECT ctdt.*, mh.* 
+    FROM chuongtrinhdaotao AS ctdt
+    JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
+    JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
+  `;
+
+    if (!isOpenGetAllApiGV) {
+      query += ` WHERE ctdt.MABOMON = ?`;
+    }
+
+    let [results1, fields1] = await pool.execute(
+      query,
+      isOpenGetAllApiGV ? [] : [MABOMON]
+    );
+    console.log(results1);
+    return {
+      EM: "Xem thông tin chương trình đào tạo thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectChucVu",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const timkiemChuongtrinhdaotao_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM chuongtrinhdaotao WHERE TENCHUONGTRINH = ?`,
+      [TENCHUONGTRINH]
+    );
+    console.log("check resut: ", results1[0]);
+    return results1[0];
+  } catch (error) {
+    return {
+      EM: "Lỗi services timkiemChuongtrinhdaotao_TENCHUONGTRINH",
+      EC: -1,
+      DT: {},
     };
   }
 };
@@ -130,35 +184,41 @@ const updateChuongtrinhdaotao = async (
   }
 };
 
-const xoaChuongtrinh = async (MACHUONGTRINH) => {
-  try {
-    let [results1, fields1] = await pool.execute(
-      `select * from chuongtrinhdaotao where MACHUONGTRINH = ?`,
-      [MACHUONGTRINH]
-    );
-    if (results1.length > 0) {
-      let [results, fields] = await pool.execute(
+const xoaChuongtrinh = async (TENCHUONGTRINH) => {
+  // try {
+  const kiemtra_tenchuongtrinh = await timkiemChuongtrinhdaotao_TENCHUONGTRINH(
+    TENCHUONGTRINH
+  );
+  console.log("check tenchuong trinh: ", kiemtra_tenchuongtrinh);
+  if (kiemtra_tenchuongtrinh) {
+    let [results_detete_table_thuocCTDT, fields_detete_table_thuocCTDT] =
+      await pool.execute(`DELETE FROM thuoc WHERE MACHUONGTRINH = ?`, [
+        kiemtra_tenchuongtrinh.MACHUONGTRINH,
+      ]);
+
+    let [results_detete_table_CTDT, fields_detete_table_CTDT] =
+      await pool.execute(
         `DELETE FROM chuongtrinhdaotao WHERE MACHUONGTRINH = ?`,
-        [MACHUONGTRINH]
+        [kiemtra_tenchuongtrinh.MACHUONGTRINH]
       );
-      return {
-        EM: "xóa chương trình thành công",
-        EC: 1,
-        DT: results,
-      };
-    }
     return {
-      EM: " chương trình này không tồn tại",
-      EC: 0,
-      DT: [],
-    };
-  } catch (error) {
-    return {
-      EM: "lỗi services createChucVu",
-      EC: -1,
+      EM: "xóa chương trình thành công",
+      EC: 1,
       DT: [],
     };
   }
+  return {
+    EM: " chương trình này không tồn tại",
+    EC: 0,
+    DT: [],
+  };
+  // } catch (error) {
+  //   return {
+  //     EM: "lỗi services xoaChuongtrinh",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
 };
 
 const createChuongtrinhdaotaoExcel = async (
@@ -168,7 +228,7 @@ const createChuongtrinhdaotaoExcel = async (
 
   // try {
   let results = [];
-
+  console.log("check results =>", dataChuongtrinhdaotaoExcelArray);
   // Kiểm tra thông tin trong file excel
   for (var i = 0; i < dataChuongtrinhdaotaoExcelArray.length; i++) {
     if (
@@ -184,19 +244,10 @@ const createChuongtrinhdaotaoExcel = async (
         DT: [],
       }; // Tiếp tục thực hiện các lệnh khác
     }
-    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
-      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
-    );
-    if (kiemtra_tenchuongtrinh.length < 0) {
-      return {
-        EM: `chương trình đào tạo không tồn tại`,
-        EC: 0,
-        DT: [],
-      }; // Tiếp tục thực hiện các lệnh khác
-    }
-    let kiemtra_tenbomon = selectBomon_TENBOMON(
+    let kiemtra_tenbomon = await selectBomon_TENBOMON(
       dataChuongtrinhdaotaoExcelArray[i].TENBOMON
     );
+    console.log("check ten bo mon ", kiemtra_tenbomon.length);
     if (kiemtra_tenbomon.length < 0) {
       return {
         EM: `bộ môn không tồn tại`,
@@ -204,11 +255,35 @@ const createChuongtrinhdaotaoExcel = async (
         DT: [],
       }; // Tiếp tục thực hiện các lệnh khác
     }
+    let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+      dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+    );
+    console.log("check ten bo mon =>>>> ", kiemtra_tenbomon[0].MABOMON);
+    if (!kiemtra_tenchuongtrinh) {
+      // Tạo thêm chương trình đào tạo nếu không tồn tại
+      await pool.execute(
+        `INSERT INTO chuongtrinhdaotao (TENCHUONGTRINH, MABOMON) VALUES (?, ?)`,
+        [
+          dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH,
+          kiemtra_tenbomon[0].MABOMON,
+        ]
+      );
+      kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
+        dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
+      );
+    }
+    if (kiemtra_tenchuongtrinh.length === 0) {
+      return {
+        EM: `Không thể tạo chương trình đào tạo`,
+        EC: 0,
+        DT: [],
+      };
+    }
 
-    let kiemtra_tenmonhoc = timmonhoc_TENMONHOC(
+    let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
       dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
     );
-    if (kiemtra_tenmonhoc.length > 0) {
+    if (kiemtra_tenmonhoc) {
       return {
         EM: `ten mon hoc da ton tai`,
         EC: 0,
@@ -272,4 +347,6 @@ module.exports = {
   updateChuongtrinhdaotao,
   xoaChuongtrinh,
   createChuongtrinhdaotaoExcel,
+  selectOnlyChuongtrinhdaotao,
+  selectChuongtrinhdaotao,
 };

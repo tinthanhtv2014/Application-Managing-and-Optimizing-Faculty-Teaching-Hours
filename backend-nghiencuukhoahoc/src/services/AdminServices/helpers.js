@@ -188,7 +188,8 @@ const timchuongtrinh_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
       "SELECT * FROM chuongtrinhdaotao WHERE TENCHUONGTRINH = ?",
       [TENCHUONGTRINH]
     );
-    console.log("Check timChucVu_MACHUCVU:   ", results1);
+
+    console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
     return results1[0];
   } catch (error) {
     console.log("timchuongtrinh_TENCHUONGTRINH errr >>>", error);
@@ -202,7 +203,7 @@ const timmonhoc_TENMONHOC = async (TENMONHOC) => {
       "SELECT * FROM monhoc WHERE TENMONHOC = ?",
       [TENMONHOC]
     );
-    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    console.log("Check timmonhoc_TENMONHOC:   ", results1[0]);
     return results1[0];
   } catch (error) {
     console.log("timmonhoc_TENMONHOC errr >>>", error);

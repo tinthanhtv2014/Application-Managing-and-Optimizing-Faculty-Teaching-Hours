@@ -1,0 +1,86 @@
+/* Table styles */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd; /* Thêm đường viền dọc cho mỗi cột */
+  }
+  
+  .custom-table th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Table row styles */
+  .custom-table-row {
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-table-row:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .custom-table-row.active {
+    background-color: #6fa441;
+    color: #fff;
+  }
+  
+  /* Icon styles */
+  .custom-table-row .table-row-icon {
+    color: rgb(178, 6, 6);
+    margin-right: 10px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .custom-table-row .table-row-icon-edit {
+    color: #236199;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .custom-table-row:hover .table-row-icon,
+  .custom-table-row:hover .table-row-icon-edit {
+    opacity: 1;
+  }
+  
+  .custom-table-row .table-row-icon:hover,
+  .custom-table-row .table-row-icon-edit:hover {
+    transform: scale(1.2);
+  }
+  
+
+
+  .inactive-status {
+    color: red;
+  }
+  
+  .active-status {
+    color: green;
+  }
+  
+
+
+
+  .height-selectGV{
+    height: 50px;
+
+  }
+  .width-input-50{
+    width: 50%;
+  }
+  .btn-xemAllGV{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+  }
