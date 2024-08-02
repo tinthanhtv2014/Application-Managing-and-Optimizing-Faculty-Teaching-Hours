@@ -35,24 +35,19 @@ const selectChuongtrinhdaotao = async () => {
     };
   }
 };
-const selectOnlyChuongtrinhdaotao = async (MABOMON, isOpenGetAllApiGV) => {
+const selectOnlyChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINHDAOTAO) => {
   console.log("MABOMON", MABOMON);
-  console.log("isOpenGetAllApiGV", isOpenGetAllApiGV);
+  console.log("TENCHUONGTRINHDAOTAO", TENCHUONGTRINHDAOTAO);
   try {
-    let query = `
-    SELECT ctdt.*, mh.* 
-    FROM chuongtrinhdaotao AS ctdt
-    JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
-    JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
-  `;
-
-    if (!isOpenGetAllApiGV) {
-      query += ` WHERE ctdt.MABOMON = ?`;
-    }
-
     let [results1, fields1] = await pool.execute(
-      query,
-      isOpenGetAllApiGV ? [] : [MABOMON]
+      `
+      SELECT ctdt.*, mh.* 
+      FROM chuongtrinhdaotao AS ctdt
+      JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
+      JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
+      WHERE ctdt.MABOMON = ? AND ctdt.TENCHUONGTRINH = ?
+    `,
+      [MABOMON, TENCHUONGTRINHDAOTAO]
     );
     console.log(results1);
     return {

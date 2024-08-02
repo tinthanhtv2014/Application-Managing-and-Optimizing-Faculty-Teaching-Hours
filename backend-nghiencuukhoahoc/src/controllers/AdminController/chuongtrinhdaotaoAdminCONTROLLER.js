@@ -28,12 +28,11 @@ const getAllChuongtrinhdaotao = async (req, res) => {
 };
 const getOnlyChuongtrinhdaotao = async (req, res) => {
   const MABOMON = req.body.MABOMON;
-  const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
+
   const TENCHUONGTRINHDAOTAO = req.body.TENCHUONGTRINHDAOTAO;
   try {
     let results = await selectOnlyChuongtrinhdaotao(
       MABOMON,
-      isOpenGetAllApiGV,
       TENCHUONGTRINHDAOTAO
     );
 
