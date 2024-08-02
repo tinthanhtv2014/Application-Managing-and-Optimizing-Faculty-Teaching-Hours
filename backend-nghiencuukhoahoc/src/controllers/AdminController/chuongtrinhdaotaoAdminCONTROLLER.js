@@ -27,7 +27,6 @@ const getAllChuongtrinhdaotao = async (req, res) => {
     });
   }
 };
-<<<<<<< HEAD
 
 const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
   const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
@@ -36,16 +35,6 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
     let results = await selectOnlyChuongtrinhdaotao_withHOCKI(
       TENCHUONGTRINH,
       SOTHUTUHOCKI
-=======
-const getOnlyChuongtrinhdaotao = async (req, res) => {
-  const MABOMON = req.body.MABOMON;
-
-  const TENCHUONGTRINHDAOTAO = req.body.TENCHUONGTRINHDAOTAO;
-  try {
-    let results = await selectOnlyChuongtrinhdaotao(
-      MABOMON,
-      TENCHUONGTRINHDAOTAO
->>>>>>> 053ddf076f734ab912987522dcb85648f8b5b1e5
     );
 
     return res.status(200).json({

@@ -28,10 +28,10 @@ const CRUDMonHoc = (app) => {
 
   // Router cho chương trình đào tạo, yêu cầu xác thực JWT
   router.get("/chuongtrinh/xem", getAllChuongtrinhdaotao);
-  router.post("/chuongtrinh/only/xem", getOnlyChuongtrinhdaotao);
+  router.post("/chuongtrinh/only/xem", checkUserJWT, getOnlyChuongtrinhdaotao);
   router.post(
     "/chuongtrinh/only/hocki/xem",
-
+    checkUserJWT,
     getOnlyChuongtrinhdaotao_withHOCKI
   );
   router.post(

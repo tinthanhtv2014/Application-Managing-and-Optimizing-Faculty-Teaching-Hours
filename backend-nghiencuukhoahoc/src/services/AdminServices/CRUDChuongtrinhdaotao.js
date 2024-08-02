@@ -35,27 +35,12 @@ const selectChuongtrinhdaotao = async () => {
     };
   }
 };
-<<<<<<< HEAD
+
 const selectOnlyChuongtrinhdaotao = async (TENCHUONGTRINH) => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
       `SELECT ctdt.*,mh.*,t.SOTHUTUHOCKI FROM chuongtrinhdaotao as ctdt,thuoc as t, monhoc as mh WHERE ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC and ctdt.TENCHUONGTRINH = ?`,
       [TENCHUONGTRINH]
-=======
-const selectOnlyChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINHDAOTAO) => {
-  console.log("MABOMON", MABOMON);
-  console.log("TENCHUONGTRINHDAOTAO", TENCHUONGTRINHDAOTAO);
-  try {
-    let [results1, fields1] = await pool.execute(
-      `
-      SELECT ctdt.*, mh.* 
-      FROM chuongtrinhdaotao AS ctdt
-      JOIN thuoc AS t ON ctdt.MACHUONGTRINH = t.MACHUONGTRINH
-      JOIN monhoc AS mh ON t.MAMONHOC = mh.MAMONHOC
-      WHERE ctdt.MABOMON = ? AND ctdt.TENCHUONGTRINH = ?
-    `,
-      [MABOMON, TENCHUONGTRINHDAOTAO]
->>>>>>> 053ddf076f734ab912987522dcb85648f8b5b1e5
     );
     return {
       EM: "Xem thông tin chương trình đào tạo thành công",
