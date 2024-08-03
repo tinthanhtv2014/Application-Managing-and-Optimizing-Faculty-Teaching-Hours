@@ -66,11 +66,11 @@ const DangKyGioChuan = () => {
         const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
           (item) => item.TEN_KHOA === response.data.DT.TENKHOA
         );
-        console.log("matchedKhoa", matchedKhoa);
+
         if (matchedKhoa) {
           const startTime = matchedKhoa.THOIGIANBATDAU;
           const endTime = matchedKhoa.THOIGIANKETTHUC;
-
+          // console.log("matchedKhoa", matchedKhoa);
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
@@ -90,6 +90,7 @@ const DangKyGioChuan = () => {
               "[)"
             )
           ) {
+            console.log("check true ");
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
               ChonKhungGio: "Chọn Khung Giờ",
