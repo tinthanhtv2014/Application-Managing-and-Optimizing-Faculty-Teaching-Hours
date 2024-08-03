@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 01, 2024 lúc 03:36 AM
+-- Thời gian đã tạo: Th8 03, 2024 lúc 02:37 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -96,13 +96,6 @@ CREATE TABLE `chon_khung` (
   `MAKHUNG` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Đang đổ dữ liệu cho bảng `chon_khung`
---
-
-INSERT INTO `chon_khung` (`MAGV`, `MANAMHOC`, `MAKHUNG`) VALUES
-('99998', 8, 10);
-
 -- --------------------------------------------------------
 
 --
@@ -160,8 +153,7 @@ INSERT INTO `chucvu` (`MACHUCVU`, `TENCHUCVU`) VALUES
 CREATE TABLE `chuongtrinhdaotao` (
   `MACHUONGTRINH` int(11) NOT NULL,
   `MABOMON` int(11) NOT NULL,
-  `TENCHUONGTRINH` text DEFAULT NULL,
-  `TRANGTHAISUDUNG` text DEFAULT NULL
+  `TENCHUONGTRINH` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -184,8 +176,6 @@ CREATE TABLE `co_chuc_danh` (
 INSERT INTO `co_chuc_danh` (`MACHUCDANH`, `MAGV`, `THOIGIANNHAN`, `TRANGTHAI`) VALUES
 (1, '00245', '2024-07-08', 'Đang giữ chức danh'),
 (1, '00254', '2024-07-09', 'Đang giữ chức danh'),
-(1, '99997', '2024-07-23', 'Đang giữ chức danh'),
-(1, '99998', '2024-07-24', 'Đang giữ chức danh'),
 (1, '99999', '2024-07-09', 'Đang giữ chức danh'),
 (2, '00249', '2024-07-09', 'Đang giữ chức danh'),
 (2, '00250', '2024-07-08', 'Đang giữ chức danh'),
@@ -195,13 +185,27 @@ INSERT INTO `co_chuc_danh` (`MACHUCDANH`, `MAGV`, `THOIGIANNHAN`, `TRANGTHAI`) V
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `co_quy_dinh`
+--
+
+CREATE TABLE `co_quy_dinh` (
+  `MA_QUY_DOI` int(11) NOT NULL,
+  `MA_LOAI_DANH_MUC` int(11) NOT NULL,
+  `MA_LOAI_TAC_GIA` int(11) NOT NULL,
+  `SO_TAC_GIA` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `dang_ky_thuc_hien_quy_doi`
 --
 
 CREATE TABLE `dang_ky_thuc_hien_quy_doi` (
-  `MADANHMUC` int(11) NOT NULL,
+  `MA_DANH_MUC` int(11) NOT NULL,
   `MAGV` varchar(255) NOT NULL,
   `MANAMHOC` int(11) NOT NULL,
+  `MA_LOAI_TAC_GIA` int(11) NOT NULL,
   `SOGIOQUYDOI` int(11) DEFAULT NULL,
   `TRANGTHAI` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -213,11 +217,20 @@ CREATE TABLE `dang_ky_thuc_hien_quy_doi` (
 --
 
 CREATE TABLE `danhmucquydoispkhcn` (
-  `MADANHMUC` int(11) NOT NULL,
-  `GIOQUYDOI` int(11) DEFAULT NULL,
-  `NOIDUNGDANHMUC` text DEFAULT NULL,
-  `SOTACGIA` int(11) DEFAULT NULL,
-  `GHICHU` text DEFAULT NULL
+  `MA_DANH_MUC` int(11) NOT NULL,
+  `MA_LOAI_DANH_MUC` int(11) NOT NULL,
+  `GIO_CHUAN` int(11) DEFAULT NULL,
+  `NOI_DUNG_DANH_MUC` text DEFAULT NULL,
+  `ISBN` varchar(50) DEFAULT NULL,
+  `WOS_SCOUPUS` varchar(50) DEFAULT NULL,
+  `HANG_WOS_SCOUPUS` varchar(10) DEFAULT NULL,
+  `LOI_NHUAN` varchar(100) DEFAULT NULL,
+  `DON_VI_TINH` varchar(50) DEFAULT NULL,
+  `GIAI_THUONG` varchar(50) DEFAULT NULL,
+  `XEP_HANG_QUARTILES` varchar(50) DEFAULT NULL,
+  `NAM_THUC_HIEN` text DEFAULT NULL,
+  `TRANG_THAI_DANH_MUC` varchar(100) DEFAULT NULL,
+  `GHI_CHU_DANH_MUC` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -266,8 +279,6 @@ INSERT INTO `giangvien` (`MAGV`, `MABOMON`, `TENGV`, `EMAIL`, `DIENTHOAI`, `DIAC
 ('12702', 16, 'Nguyễn Thừa Phát Tài', NULL, NULL, NULL),
 ('12705', 16, '', '', '', ''),
 ('14204', 16, 'Nguyễn Bá Nhiệm', NULL, NULL, NULL),
-('99997', 16, 'Misaki', 'misakimer@gmail.com', '0958764123', 'Lõi Trái Đất'),
-('99998', 16, 'Bảo One', 'baoquocone@gmail.com', '0987654321', 'Sao Thủy'),
 ('99999', 16, 'Nguyễn Lâm Quốc Bảo', 'baoquoczero@gmail.com', '0987654321', 'Sao Hỏa');
 
 -- --------------------------------------------------------
@@ -297,8 +308,6 @@ INSERT INTO `giu_chuc_vu` (`MAGV`, `MACHUCVU`, `SOQUYETDINH`, `TUNGAY`) VALUES
 ('01548', 8, NULL, NULL),
 ('12705', 8, NULL, NULL),
 ('14204', 8, NULL, NULL),
-('99997', 2, '22', '2024-07-25'),
-('99998', 6, '87', '2024-07-24'),
 ('99999', 6, '99', '2024-07-09');
 
 -- --------------------------------------------------------
@@ -381,6 +390,28 @@ INSERT INTO `khunggiochuan` (`MAKHUNG`, `MACHUCDANH`, `TENKHUNGCHUAN`, `GIOGIANG
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `loai_danh_muc`
+--
+
+CREATE TABLE `loai_danh_muc` (
+  `MA_LOAI_DANH_MUC` int(11) NOT NULL,
+  `TEN_LOAI_DANH_MUC` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `loai_tac_gia`
+--
+
+CREATE TABLE `loai_tac_gia` (
+  `MA_LOAI_TAC_GIA` int(11) NOT NULL,
+  `TEN_LOAI_TAC_GIA` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `lop`
 --
 
@@ -395,6 +426,21 @@ CREATE TABLE `lop` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `luat_quy_doi_gio_chuan`
+--
+
+CREATE TABLE `luat_quy_doi_gio_chuan` (
+  `MA_QUY_DOI` int(11) NOT NULL,
+  `MA_QUY_DINH` int(11) NOT NULL,
+  `TEN_QUY_DOI` text DEFAULT NULL,
+  `TY_LE` float DEFAULT NULL,
+  `TRANG_THAI_QUY_DOI` text DEFAULT NULL,
+  `GHI_CHU_QUY_DOI` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `monhoc`
 --
 
@@ -402,8 +448,7 @@ CREATE TABLE `monhoc` (
   `MAMONHOC` int(11) NOT NULL,
   `TENMONHOC` text DEFAULT NULL,
   `SOTINCHILYTHUYET` int(11) DEFAULT NULL,
-  `SOTINCHITHUCHANH` int(11) DEFAULT NULL,
-  `GHICHU` text DEFAULT NULL
+  `SOTINCHITHUCHANH` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -430,6 +475,17 @@ INSERT INTO `namhoc` (`MANAMHOC`, `TENNAMHOC`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `quy_dinh`
+--
+
+CREATE TABLE `quy_dinh` (
+  `MA_QUY_DINH` int(11) NOT NULL,
+  `TEN_QUY_DINH` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `taikhoan`
 --
 
@@ -447,7 +503,6 @@ CREATE TABLE `taikhoan` (
 
 INSERT INTO `taikhoan` (`TENDANGNHAP`, `MAGV`, `MATKHAU`, `PHANQUYEN`, `TRANGTHAITAIKHOAN`) VALUES
 ('annb@tvu.edu.vn', '00245', NULL, 'Trưởng Khoa', 'Đang hoạt động'),
-('baoquocone@gmail.com', '99998', NULL, 'Trưởng Khoa', 'Đang hoạt động'),
 ('baoquoczero@gmail.com', '99999', NULL, 'Admin', 'Đang hoạt động'),
 ('diemhanh_tvu@tvu.edu.vn', '12705', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('duongminh@tvu.edu.vn', '00248', NULL, 'Trưởng Bộ Môn', 'Đang hoạt động'),
@@ -457,7 +512,6 @@ INSERT INTO `taikhoan` (`TENDANGNHAP`, `MAGV`, `MATKHAU`, `PHANQUYEN`, `TRANGTHA
 ('hvthanh@tvu.edu.vn', '00243', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('lamnn@tvu.edu.vn', '00244', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('lmtu@tvu.edu.vn', '03539', NULL, 'Giảng Viên', 'Đang hoạt động'),
-('misakimer@gmail.com', '99997', NULL, 'Trưởng Bộ Môn', 'Đang hoạt động'),
 ('namtv@tvu.edu.vn', '12701', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('ngocdanthanhdt@tvu.edu.vn', '00246', NULL, 'Giảng Viên', 'Đang hoạt động'),
 ('nhiemnb@tvu.edu.vn', '14204', NULL, 'Giảng Viên', 'Đang hoạt động'),
@@ -570,18 +624,28 @@ ALTER TABLE `co_chuc_danh`
   ADD KEY `FK_CO_CHUC_DANH2` (`MAGV`);
 
 --
+-- Chỉ mục cho bảng `co_quy_dinh`
+--
+ALTER TABLE `co_quy_dinh`
+  ADD PRIMARY KEY (`MA_QUY_DOI`,`MA_LOAI_DANH_MUC`,`MA_LOAI_TAC_GIA`),
+  ADD KEY `FK_CO_QUY_DINH2` (`MA_LOAI_DANH_MUC`),
+  ADD KEY `FK_CO_QUY_DINH3` (`MA_LOAI_TAC_GIA`);
+
+--
 -- Chỉ mục cho bảng `dang_ky_thuc_hien_quy_doi`
 --
 ALTER TABLE `dang_ky_thuc_hien_quy_doi`
-  ADD PRIMARY KEY (`MADANHMUC`,`MAGV`,`MANAMHOC`),
+  ADD PRIMARY KEY (`MA_DANH_MUC`,`MAGV`,`MANAMHOC`,`MA_LOAI_TAC_GIA`),
   ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI2` (`MAGV`),
-  ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI3` (`MANAMHOC`);
+  ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI3` (`MANAMHOC`),
+  ADD KEY `FK_DANG_KY_THUC_HIEN_QUY_DOI4` (`MA_LOAI_TAC_GIA`);
 
 --
 -- Chỉ mục cho bảng `danhmucquydoispkhcn`
 --
 ALTER TABLE `danhmucquydoispkhcn`
-  ADD PRIMARY KEY (`MADANHMUC`);
+  ADD PRIMARY KEY (`MA_DANH_MUC`),
+  ADD KEY `FK_THUOC_DANH_MUC` (`MA_LOAI_DANH_MUC`);
 
 --
 -- Chỉ mục cho bảng `giangvien`
@@ -623,11 +687,30 @@ ALTER TABLE `khunggiochuan`
   ADD KEY `FK_CO_KHUNG_GIO_CHUAN` (`MACHUCDANH`);
 
 --
+-- Chỉ mục cho bảng `loai_danh_muc`
+--
+ALTER TABLE `loai_danh_muc`
+  ADD PRIMARY KEY (`MA_LOAI_DANH_MUC`);
+
+--
+-- Chỉ mục cho bảng `loai_tac_gia`
+--
+ALTER TABLE `loai_tac_gia`
+  ADD PRIMARY KEY (`MA_LOAI_TAC_GIA`);
+
+--
 -- Chỉ mục cho bảng `lop`
 --
 ALTER TABLE `lop`
   ADD PRIMARY KEY (`MALOP`),
   ADD KEY `FK_HOC` (`MACHUONGTRINH`);
+
+--
+-- Chỉ mục cho bảng `luat_quy_doi_gio_chuan`
+--
+ALTER TABLE `luat_quy_doi_gio_chuan`
+  ADD PRIMARY KEY (`MA_QUY_DOI`),
+  ADD KEY `FK_DUOC_QUY_DINH` (`MA_QUY_DINH`);
 
 --
 -- Chỉ mục cho bảng `monhoc`
@@ -640,6 +723,12 @@ ALTER TABLE `monhoc`
 --
 ALTER TABLE `namhoc`
   ADD PRIMARY KEY (`MANAMHOC`);
+
+--
+-- Chỉ mục cho bảng `quy_dinh`
+--
+ALTER TABLE `quy_dinh`
+  ADD PRIMARY KEY (`MA_QUY_DINH`);
 
 --
 -- Chỉ mục cho bảng `taikhoan`
@@ -779,12 +868,27 @@ ALTER TABLE `co_chuc_danh`
   ADD CONSTRAINT `FK_CO_CHUC_DANH2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`);
 
 --
+-- Các ràng buộc cho bảng `co_quy_dinh`
+--
+ALTER TABLE `co_quy_dinh`
+  ADD CONSTRAINT `FK_CO_QUY_DINH` FOREIGN KEY (`MA_QUY_DOI`) REFERENCES `luat_quy_doi_gio_chuan` (`MA_QUY_DOI`),
+  ADD CONSTRAINT `FK_CO_QUY_DINH2` FOREIGN KEY (`MA_LOAI_DANH_MUC`) REFERENCES `loai_danh_muc` (`MA_LOAI_DANH_MUC`),
+  ADD CONSTRAINT `FK_CO_QUY_DINH3` FOREIGN KEY (`MA_LOAI_TAC_GIA`) REFERENCES `loai_tac_gia` (`MA_LOAI_TAC_GIA`);
+
+--
 -- Các ràng buộc cho bảng `dang_ky_thuc_hien_quy_doi`
 --
 ALTER TABLE `dang_ky_thuc_hien_quy_doi`
-  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI` FOREIGN KEY (`MADANHMUC`) REFERENCES `danhmucquydoispkhcn` (`MADANHMUC`),
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI` FOREIGN KEY (`MA_DANH_MUC`) REFERENCES `danhmucquydoispkhcn` (`MA_DANH_MUC`),
   ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI2` FOREIGN KEY (`MAGV`) REFERENCES `giangvien` (`MAGV`),
-  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI3` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`);
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI3` FOREIGN KEY (`MANAMHOC`) REFERENCES `namhoc` (`MANAMHOC`),
+  ADD CONSTRAINT `FK_DANG_KY_THUC_HIEN_QUY_DOI4` FOREIGN KEY (`MA_LOAI_TAC_GIA`) REFERENCES `loai_tac_gia` (`MA_LOAI_TAC_GIA`);
+
+--
+-- Các ràng buộc cho bảng `danhmucquydoispkhcn`
+--
+ALTER TABLE `danhmucquydoispkhcn`
+  ADD CONSTRAINT `FK_THUOC_DANH_MUC` FOREIGN KEY (`MA_LOAI_DANH_MUC`) REFERENCES `loai_danh_muc` (`MA_LOAI_DANH_MUC`);
 
 --
 -- Các ràng buộc cho bảng `giangvien`
@@ -810,6 +914,12 @@ ALTER TABLE `khunggiochuan`
 --
 ALTER TABLE `lop`
   ADD CONSTRAINT `FK_HOC` FOREIGN KEY (`MACHUONGTRINH`) REFERENCES `chuongtrinhdaotao` (`MACHUONGTRINH`);
+
+--
+-- Các ràng buộc cho bảng `luat_quy_doi_gio_chuan`
+--
+ALTER TABLE `luat_quy_doi_gio_chuan`
+  ADD CONSTRAINT `FK_DUOC_QUY_DINH` FOREIGN KEY (`MA_QUY_DINH`) REFERENCES `quy_dinh` (`MA_QUY_DINH`);
 
 --
 -- Các ràng buộc cho bảng `taikhoan`
