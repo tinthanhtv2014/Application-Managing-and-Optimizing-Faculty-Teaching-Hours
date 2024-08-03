@@ -2,8 +2,7 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This section lists the versions of the project currently supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -14,8 +13,25 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a vulnerability in this project, please report it as soon as possible. 
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+### How to Report
+- **Email:** Please send the details to [security@example.com](mailto:security@example.com).
+- **Form:** Alternatively, you can fill out [this form](https://example.com/security-report).
+
+### What to Include in Your Report
+- A detailed description of the vulnerability.
+- Steps to reproduce the issue.
+- The impact of the vulnerability.
+- Any potential fixes or mitigations you might suggest.
+
+### Response Expectations
+- **Acknowledgement:** You will receive an acknowledgement of your report within 24 hours.
+- **Update Frequency:** We will provide updates on the status of the vulnerability at least once every 7 days.
+- **Resolution Time:** We aim to address and patch reported vulnerabilities within 30 days of acknowledgement.
+
+### What to Expect
+- **Accepted Reports:** If the vulnerability is accepted, you will receive a detailed plan on how we will address it, along with an estimated timeline.
+- **Declined Reports:** If the vulnerability is declined, you will receive an explanation as to why it was not accepted.
+
+We greatly appreciate your help in keeping our project secure.
