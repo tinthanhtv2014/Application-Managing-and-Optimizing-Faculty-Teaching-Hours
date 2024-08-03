@@ -6,13 +6,14 @@ const router = express.Router();
 const {
   get_chuongtrinhdaotao_tenbomon,
   get_chuongtrinhdaotao,
+  getOnlyChuongtrinhdaotao_withHOCKI,
 } = require("../../controllers/TruongbomonController/chuongtrinhdaotaoCONTROLLER");
 const { checkUserJWT } = require("../../middlewares/JWTAction");
-const CRUDgiangvien_CNTT = (app) => {
+const CRUDchuongtrinh_CNTT = (app) => {
   //route cho khoa
-  router.get("/xem", checkUserJWT, get_chuongtrinhdaotao);
-  router.get("/xem/bomon", get_chuongtrinhdaotao_tenbomon);
-
+  router.post("/xem", checkUserJWT, get_chuongtrinhdaotao);
+  router.post("/xem/bomon", get_chuongtrinhdaotao_tenbomon);
+  router.post("/xem/hocki", getOnlyChuongtrinhdaotao_withHOCKI);
   //   router.post("/tao", createNAMHOC);
   //   router.put("/sua/:MANAMHOC", updateNAMHOC);
   //   router.delete("/xoa", deleteNAMHOC);
@@ -20,4 +21,4 @@ const CRUDgiangvien_CNTT = (app) => {
   return app.use("/api/v1/truongbomon/chuongtrinh", router);
 };
 
-module.exports = CRUDgiangvien_CNTT;
+module.exports = CRUDchuongtrinh_CNTT;
