@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
-
+import { Button } from "@mui/material";
+import QuyDinhModal from "./modals/QuyDinhModal";
+import TyLeQuyDoiGioChuanModal from "./modals/TyLeQuyDoiGioChuanModal";
+import LoaiDanhMucModal from "./modals/LoaiDanhMucModal";
+import DanhMucQuyDoiKHCNModal from "./modals/DanhMucQuyDoiKHCNModal";
+import LoaiTacGiaModal from "./modals/LoaiTacGiaModal";
+import { Col, Container, Row } from "react-bootstrap";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -27,98 +25,77 @@ const DanhMucGioChuan = () => {
 
   return (
     <>
-      <h1>Hello DanhMucGioChuan</h1>
-      <Button variant="outlined" onClick={() => handleClickOpen("quyDinh")}>
-        Quy định
-      </Button>
-      <Button
-        variant="outlined"
-        onClick={() => handleClickOpen("tyLeQuyDoiGioChuan")}
-      >
-        Tỷ lệ quy đổi giờ chuẩn
-      </Button>
-      <Button variant="outlined" onClick={() => handleClickOpen("loaiDanhMuc")}>
-        Loại danh mục
-      </Button>
-      <Button
-        variant="outlined"
-        onClick={() => handleClickOpen("danhMucQuyDoiKHCN")}
-      >
-        Danh mục quy đổi khoa học công nghệ
-      </Button>
-      <Button variant="outlined" onClick={() => handleClickOpen("loaiTacGia")}>
-        Loại tác giả
-      </Button>
+      <Container>
+        <h1 className="my-4">Hello DanhMucGioChuan</h1>
+        <Row>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("quyDinh")}
+            >
+              Quy định
+            </Button>
+          </Col>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("tyLeQuyDoiGioChuan")}
+            >
+              Tỷ lệ quy đổi giờ chuẩn
+            </Button>
+          </Col>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("loaiDanhMuc")}
+            >
+              Loại danh mục
+            </Button>
+          </Col>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("danhMucQuyDoiKHCN")}
+            >
+              Danh mục quy đổi khoa học công nghệ
+            </Button>
+          </Col>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("loaiTacGia")}
+            >
+              Loại tác giả
+            </Button>
+          </Col>
+        </Row>
 
-      {/* Modal Quy định */}
-      <Dialog open={open.quyDinh} onClose={() => handleClose("quyDinh")}>
-        <DialogTitle>Quy định</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Nội dung Quy định.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose("quyDinh")}>Đóng</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal Tỷ lệ quy đổi giờ chuẩn */}
-      <Dialog
-        open={open.tyLeQuyDoiGioChuan}
-        onClose={() => handleClose("tyLeQuyDoiGioChuan")}
-      >
-        <DialogTitle>Tỷ lệ quy đổi giờ chuẩn</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Nội dung Tỷ lệ quy đổi giờ chuẩn.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose("tyLeQuyDoiGioChuan")}>
-            Đóng
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal Loại danh mục */}
-      <Dialog
-        open={open.loaiDanhMuc}
-        onClose={() => handleClose("loaiDanhMuc")}
-      >
-        <DialogTitle>Loại danh mục</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Nội dung Loại danh mục.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose("loaiDanhMuc")}>Đóng</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal Danh mục quy đổi khoa học công nghệ */}
-      <Dialog
-        open={open.danhMucQuyDoiKHCN}
-        onClose={() => handleClose("danhMucQuyDoiKHCN")}
-      >
-        <DialogTitle>Danh mục quy đổi khoa học công nghệ</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Nội dung Danh mục quy đổi khoa học công nghệ.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose("danhMucQuyDoiKHCN")}>Đóng</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal Loại tác giả */}
-      <Dialog open={open.loaiTacGia} onClose={() => handleClose("loaiTacGia")}>
-        <DialogTitle>Loại tác giả</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Nội dung Loại tác giả.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose("loaiTacGia")}>Đóng</Button>
-        </DialogActions>
-      </Dialog>
+        <QuyDinhModal
+          open={open.quyDinh}
+          handleClose={() => handleClose("quyDinh")}
+        />
+        <TyLeQuyDoiGioChuanModal
+          open={open.tyLeQuyDoiGioChuan}
+          handleClose={() => handleClose("tyLeQuyDoiGioChuan")}
+        />
+        <LoaiDanhMucModal
+          open={open.loaiDanhMuc}
+          handleClose={() => handleClose("loaiDanhMuc")}
+        />
+        <DanhMucQuyDoiKHCNModal
+          open={open.danhMucQuyDoiKHCN}
+          handleClose={() => handleClose("danhMucQuyDoiKHCN")}
+        />
+        <LoaiTacGiaModal
+          open={open.loaiTacGia}
+          handleClose={() => handleClose("loaiTacGia")}
+        />
+      </Container>
     </>
   );
 };
