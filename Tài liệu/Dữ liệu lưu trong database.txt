@@ -32,6 +32,12 @@ ALTER TABLE `chuongtrinhdaotao`
   MODIFY `MACHUONGTRINH` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `danhmucquydoispkhcn`
+--
+ALTER TABLE `danhmucquydoispkhcn`
+  MODIFY `MA_DANH_MUC` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `khoa`
 --
 ALTER TABLE `khoa`
@@ -42,6 +48,12 @@ ALTER TABLE `khoa`
 --
 ALTER TABLE `khunggiochuan`
   MODIFY `MAKHUNG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT cho bảng `loai_tac_gia`
+--
+ALTER TABLE `loai_tac_gia`
+  MODIFY `MA_LOAI_TAC_GIA` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `monhoc`
@@ -56,12 +68,16 @@ ALTER TABLE `namhoc`
   MODIFY `MANAMHOC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT cho bảng `quy_dinh`
+--
+ALTER TABLE `quy_dinh`
+  MODIFY `MA_QUY_DINH` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `thoigian_xacnhan`
 --
 ALTER TABLE `thoigian_xacnhan`
   MODIFY `MA_THOIGIAN_XACNHAN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
-ALTER TABLE `monhoc` CHANGE `MAMONHOC` `MAMONHOC` INT(11) NOT NULL AUTO_INCREMENT;
 
 INSERT INTO `khoa` (`TENKHOA`, `MAKHOA`) VALUES
 ('Khoa Công Nghệ Thông Tin', 1),
@@ -116,6 +132,7 @@ INSERT INTO `giangvien` (`MAGV`, `MABOMON`, `TENGV`, `EMAIL`, `DIENTHOAI`, `DIAC
 ('12702', 16, 'Nguyễn Thừa Phát Tài', NULL, NULL, NULL),
 ('12705', 16, '', '', '', ''),
 ('14204', 16, 'Nguyễn Bá Nhiệm', NULL, NULL, NULL),
+('99997', 16, 'Bảo Trưởng Khoa', 'baoquocone@gmail.com', '0325698741', 'Sao Hỏa'),
 ('99999', 16, 'Nguyễn Lâm Quốc Bảo', 'baoquoczero@gmail.com', '0987654321', 'Sao Hỏa');
 
 INSERT INTO `taikhoan` (`TENDANGNHAP`, `MAGV`, `MATKHAU`, `PHANQUYEN`, `TRANGTHAITAIKHOAN`) VALUES
