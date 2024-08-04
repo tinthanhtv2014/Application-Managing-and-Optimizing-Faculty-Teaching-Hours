@@ -10,6 +10,7 @@ import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
 
 
 
+const DangKyDanhMucGioChuan = lazy(() => import('../sections/RegisterDanhMucGioChuan/RegisterDanhMucGioChuan'));
 const DanhMucGioChuan = lazy(() => import('../sections/DanhMucGioChuan/DanhMucGioChuan'));
 const AdminCreate = lazy(() => import('../sections/Admincreate/AdminCreate'));
 const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
@@ -214,6 +215,15 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
 
+          </Suspense>
+        </DashboardLayout>
+      )
+    }, {
+      path: '/dang-ky-danh-muc', // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DangKyDanhMucGioChuan />
           </Suspense>
         </DashboardLayout>
       )
