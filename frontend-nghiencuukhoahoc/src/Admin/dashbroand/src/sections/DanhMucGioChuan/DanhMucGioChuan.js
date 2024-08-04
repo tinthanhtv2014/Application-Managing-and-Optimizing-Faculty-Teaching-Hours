@@ -26,8 +26,9 @@ const DanhMucGioChuan = () => {
   return (
     <>
       <Container>
-        <h1 className="my-4">Hello DanhMucGioChuan</h1>
         <Row>
+          <h4> Quản lý danh mục</h4>
+          <p></p>
           <Col md={4} sm={6} xs={12} className="mb-3">
             <Button
               variant="outlined"
