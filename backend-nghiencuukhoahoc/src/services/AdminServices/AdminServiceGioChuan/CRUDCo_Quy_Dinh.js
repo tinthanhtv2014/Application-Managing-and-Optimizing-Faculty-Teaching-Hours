@@ -19,6 +19,24 @@ const select_Co_Quy_Dinh = async () => {
   }
 };
 
+const create_Co_Quy_Dinh_excel = async () => {
+  try {
+    let [results, fields] = await pool.execute(``);
+    return {
+      EM: "thêm thông tin danh mục quy đổi thành công",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectDanhMucQuyDoi",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   select_Co_Quy_Dinh,
+  create_Co_Quy_Dinh_excel,
 };
