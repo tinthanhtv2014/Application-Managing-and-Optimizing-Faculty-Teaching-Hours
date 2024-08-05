@@ -61,7 +61,7 @@ const createQuyDinh = async (TEN_QUY_DINH) => {
     }
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO quy_dinh (TEN_QUY_DINH) VALUES (?)`,
+      `INSERT INTO quy_dinh (TEN_QUY_DINH,TRANG_THAI_QUY_DINH) VALUES (?,N'Đang áp dụng')`,
       [TEN_QUY_DINH]
     );
     let [resultsData, fieldsData] = await pool.execute(
@@ -94,8 +94,8 @@ const updateQuyDinh = async (id, TEN_QUY_DINH) => {
     }
 
     let [results, fields] = await pool.execute(
-      `UPDATE quy_dinh SET TEN_QUY_DINH = ? WHERE MA_QUY_DINH = ?`,
-      [TEN_QUY_DINH, id]
+      `UPDATE quy_dinh SET TRANG_THAI_QUY_DINH = N'Ngưng áp dụng' WHERE MA_QUY_DINH = ?`,
+      [id]
     );
     return {
       EM: "Cập nhật quy định thành công",

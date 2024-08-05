@@ -45,7 +45,7 @@ const createLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
     }
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO loai_danh_muc (TEN_LOAI_DANH_MUC) VALUES (?)`,
+      `INSERT INTO loai_danh_muc (TEN_LOAI_DANH_MUC,TRANG_THAI_DANH_MUC) VALUES (?,N'Đang áp dụng')`,
       [TEN_LOAI_DANH_MUC]
     );
     return {
@@ -74,8 +74,8 @@ const updateLoaiDanhMuc = async (id, TEN_LOAI_DANH_MUC) => {
     }
 
     let [results, fields] = await pool.execute(
-      `UPDATE loai_danh_muc SET TEN_LOAI_DANH_MUC = ? WHERE MA_LOAI_DANH_MUC = ?`,
-      [TEN_LOAI_DANH_MUC, id]
+      `UPDATE loai_danh_muc SET TRANG_THAI_DANH_MUC = N'Ngưng áp dụng' WHERE MA_LOAI_DANH_MUC = ?`,
+      [id]
     );
     return {
       EM: "Cập nhật loại danh mục thành công",

@@ -29,6 +29,10 @@ const {
   deleteTyLeQuyDoi,
 } = require("../../services/AdminServices/AdminServiceGioChuan/CRUDTyLe");
 
+const {
+  select_Co_Quy_Dinh,
+} = require("../../services/AdminServices/AdminServiceGioChuan/CRUDCo_Quy_Dinh");
+
 const getAllQuyDinh = async (req, res) => {
   try {
     let results = await selectQuyDinh();
