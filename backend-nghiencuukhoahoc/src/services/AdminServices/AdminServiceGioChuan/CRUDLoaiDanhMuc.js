@@ -2,7 +2,8 @@ const pool = require("../../../config/database");
 
 const selectLoaiDanhMuc = async () => {
   try {
-    let [results, fields] = await pool.execute(`SELECT * FROM loai_danh_muc`);
+    let [results, fields] = await pool.execute(` SELECT * FROM loai_danh_muc 
+      ORDER BY MA_LOAI_DANH_MUC DESC`);
     return {
       EM: "Xem thông tin loại danh mục thành công",
       EC: 1,
@@ -48,10 +49,12 @@ const createLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
       `INSERT INTO loai_danh_muc (TEN_LOAI_DANH_MUC,TRANG_THAI_DANH_MUC) VALUES (?,N'Đang áp dụng')`,
       [TEN_LOAI_DANH_MUC]
     );
+    const results_Data = await selectLoaiDanhMuc();
+    console.log("check results_Data", results_Data.DT);
     return {
       EM: "Thêm loại danh mục mới thành công",
       EC: 1,
-      DT: results,
+      DT: results_Data.DT,
     };
   } catch (error) {
     return {
@@ -92,17 +95,20 @@ const updateLoaiDanhMuc = async (id, TEN_LOAI_DANH_MUC) => {
 };
 
 const deleteLoaiDanhMuc = async (id) => {
+  console.log("check id =>", id);
   try {
     let [results, fields] = await pool.execute(
       `DELETE FROM loai_danh_muc WHERE MA_LOAI_DANH_MUC = ?`,
       [id]
     );
+    const results_Data = await selectLoaiDanhMuc();
     return {
       EM: "Xóa loại danh mục thành công",
       EC: 1,
-      DT: results,
+      DT: results_Data.DT,
     };
   } catch (error) {
+    console.log("check error deleteLoaiDanhMuc ", error);
     return {
       EM: "Lỗi services deleteLoaiDanhMuc",
       EC: -1,

@@ -225,7 +225,6 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
     }
-
     // Thêm dữ liệu mới vào danh sách hiện có
   };
 
