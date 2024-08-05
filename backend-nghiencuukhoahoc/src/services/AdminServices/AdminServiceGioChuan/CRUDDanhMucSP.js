@@ -80,10 +80,11 @@ const createDanhMucQuyDoi = async (
         GHI_CHU_DANH_MUC,
       ]
     );
+    const results_Data = await selectDanhMucQuyDoi();
     return {
       EM: "Thêm danh mục quy đổi mới thành công",
       EC: 1,
-      DT: results,
+      DT: results_Data.DT,
     };
   } catch (error) {
     return {
@@ -161,10 +162,11 @@ const deleteDanhMucQuyDoi = async (id) => {
       `DELETE FROM danhmucquydoispkhcn WHERE MA_DANH_MUC = ?`,
       [id]
     );
+    const results_Data = await selectDanhMucQuyDoi();
     return {
       EM: "Xóa danh mục quy đổi thành công",
       EC: 1,
-      DT: results,
+      DT: results_Data.DT,
     };
   } catch (error) {
     return {
