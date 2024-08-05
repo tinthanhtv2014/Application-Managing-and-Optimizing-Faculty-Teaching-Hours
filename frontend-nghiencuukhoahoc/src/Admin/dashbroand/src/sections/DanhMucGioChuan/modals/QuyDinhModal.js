@@ -7,10 +7,13 @@ import {
   DialogTitle,
   Button,
   TextField,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Grid,
 } from "@mui/material";
 import CookiesAxios from "../../CookiesAxios";
@@ -58,8 +61,11 @@ const QuyDinhModal = ({ open, handleClose }) => {
 
   const handleDeleteQuyDinh = async (id) => {
     try {
-      await CookiesAxios.delete(`/api/quy_dinh/${id}`);
-      setQuyDinhs(quyDinhs.filter((qd) => qd.MA_QUY_DINH !== id));
+      const response = await CookiesAxios.delete(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh/${id}`
+      );
+      console.log("check handleDeleteQuyDinh", response.data);
+      setQuyDinhs(response.data.DT);
     } catch (error) {
       console.error("Error deleting quy dinh:", error);
     }
@@ -87,25 +93,34 @@ const QuyDinhModal = ({ open, handleClose }) => {
               Thêm
             </Button>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <p>Tên các quy định đang hiện hành</p>
-            <List>
-              {quyDinhs.map((qd) => (
-                <ListItem
-                  key={qd.MA_QUY_DINH}
-                  secondaryAction={
-                    <i
-                      class="bi bi-trash"
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
-                    ></i>
-                  }
-                >
-                  <ListItemText primary={qd.TEN_QUY_DINH} />
-                </ListItem>
-              ))}
-            </List>
+          <Grid item xs={12}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Mã Quy Định</TableCell>
+                    <TableCell>Tên Quy Định</TableCell>
+                    <TableCell>Hành Động</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {quyDinhs.map((qd) => (
+                    <TableRow key={qd.MA_QUY_DINH}>
+                      <TableCell>{qd.MA_QUY_DINH}</TableCell>
+                      <TableCell>{qd.TEN_QUY_DINH}</TableCell>
+                      <TableCell>
+                        <i
+                          className="fa-solid fa-trash"
+                          aria-label="delete"
+                          onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
+                          style={{ cursor: "pointer" }}
+                        ></i>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
       </DialogContent>

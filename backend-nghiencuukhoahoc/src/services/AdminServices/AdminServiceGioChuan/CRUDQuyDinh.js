@@ -32,7 +32,22 @@ const selectQuyDinh_TEN_QUY_DINH = async (TEN_QUY_DINH) => {
     };
   }
 };
-
+const selectQuyDinh_TEN_QUY_DINHbyID = async (id) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `select * from quy_dinh where MA_QUY_DINH = ?`,
+      [id]
+    );
+    console.log("check select quy dinh results1 =>", results1);
+    return results1;
+  } catch (error) {
+    return {
+      EM: "lỗi services selectQuyDinh",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const createQuyDinh = async (TEN_QUY_DINH) => {
   console.log(" check TEN_QUY_DINH", TEN_QUY_DINH);
   try {
@@ -98,7 +113,8 @@ const updateQuyDinh = async (id, TEN_QUY_DINH) => {
 
 const deleteQuyDinh = async (id) => {
   try {
-    let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH);
+    console.log("check id ", id);
+    let results1 = await selectQuyDinh_TEN_QUY_DINHbyID(id);
     if (results1.length === 0) {
       return {
         EM: "Quy định này không tồn tại",
@@ -111,12 +127,17 @@ const deleteQuyDinh = async (id) => {
       `DELETE FROM quy_dinh WHERE MA_QUY_DINH = ?`,
       [id]
     );
+    let [resultsData, fieldsData] = await pool.execute(
+      `SELECT * FROM quy_dinh`
+    );
+    console.log("check resultsData", resultsData);
     return {
       EM: "Xóa quy định thành công",
       EC: 1,
-      DT: results,
+      DT: resultsData,
     };
   } catch (error) {
+    console.log("check error = >", error);
     return {
       EM: "Lỗi services deleteQuyDinh",
       EC: -1,
