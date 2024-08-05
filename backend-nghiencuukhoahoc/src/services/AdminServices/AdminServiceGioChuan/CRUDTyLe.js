@@ -5,12 +5,14 @@ const selectTyLeQuyDoi = async () => {
     let [results, fields] = await pool.execute(
       `SELECT * FROM ty_le_quy_doi_gio_chuan`
     );
+    // console.log("check select =>", results);
     return {
       EM: "Xem thông tin tỷ lệ quy đổi thành công",
       EC: 1,
       DT: results,
     };
   } catch (error) {
+    console.log("check error selectTyLeQuyDoi =>", error);
     return {
       EM: "Lỗi services selectTyLeQuyDoi",
       EC: -1,
@@ -62,10 +64,12 @@ const createTyLeQuyDoi = async (
       `INSERT INTO ty_le_quy_doi_gio_chuan (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) VALUES (?, ?, ?, ?, ?)`,
       [MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI]
     );
+    const results_data = await selectTyLeQuyDoi();
+    console.log("selectTyLeQuyDoi", results_data);
     return {
       EM: "Thêm tỷ lệ quy đổi mới thành công",
       EC: 1,
-      DT: results,
+      DT: results_data.DT,
     };
   } catch (error) {
     console.log("check error", error);

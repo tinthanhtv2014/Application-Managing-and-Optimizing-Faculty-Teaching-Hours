@@ -213,14 +213,14 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/tylequydoi`,
         {
-          MA_QUY_DINH: quyDinhs,
+          MA_QUY_DINH: selectedQuyDinh,
           TEN_QUY_DOI: tenQuyDoi,
           TY_LE: tyLe,
           TRANG_THAI_QUY_DOI: trangThaiQuyDoi,
           GHI_CHU_QUY_DOI: ghiChuQuyDoi,
         }
       );
-      // console.log("check fetch Quy dinh =>", response.data);
+      console.log("check fetch setTyLeQuyDoi =>", response.data);
       setTyLeQuyDoi(response.data.DT);
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
