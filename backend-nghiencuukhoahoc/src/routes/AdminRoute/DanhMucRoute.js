@@ -25,6 +25,8 @@ const {
   addTyLeQuyDoi,
   editTyLeQuyDoi,
   removeTyLeQuyDoi,
+
+  getAll_Co_Quy_Dinh,
 } = require("../../controllers/AdminController/danhmucAdminController.js");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
@@ -59,6 +61,9 @@ const CRUDDanhMuc = (app) => {
   router.post("/tylequydoi", checkUserJWT, addTyLeQuyDoi);
   router.put("/tylequydoi/:id", checkUserJWT, editTyLeQuyDoi);
   router.delete("/tylequydoi/:id", checkUserJWT, removeTyLeQuyDoi);
+
+  // Route cho các API bảng có quy định yêu cầu xác thực JWT
+  router.get("/coquydinh", getAll_Co_Quy_Dinh);
   return app.use("/api/v1/admin/danhmuc", router);
 };
 

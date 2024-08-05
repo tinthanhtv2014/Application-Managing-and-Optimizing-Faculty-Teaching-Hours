@@ -536,29 +536,58 @@ const removeTyLeQuyDoi = async (req, res) => {
   }
 };
 // --------------------TY LE QUY DOI--------------END----------------
+
+// --------------------CO QUY DINH--------------Start----------------
+const getAll_Co_Quy_Dinh = async (req, res) => {
+  try {
+    let results = await select_Co_Quy_Dinh();
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "có lỗi ở getAll_Co_Quy_Dinh",
+      EC: 1,
+      DT: [],
+    });
+  }
+};
+
 module.exports = {
+  //danh mục quy đổi
   getDanhMucQuyDoi,
   addDanhMucQuyDoi,
   editDanhMucQuyDoi,
   removeDanhMucQuyDoi,
 
+  //quy định
   getQuyDinh,
   addQuyDinh,
   editQuyDinh,
   removeQuyDinh,
 
+  //danh mục
   getLoaiDanhMuc,
   addLoaiDanhMuc,
   editLoaiDanhMuc,
   removeLoaiDanhMuc,
 
+  //loại tác giả
   getLoaiTacGia,
   addLoaiTacGia,
   editLoaiTacGia,
   removeLoaiTacGia,
 
+  //tỉ lệ quy đổi
   getTyLeQuyDoi,
   addTyLeQuyDoi,
   editTyLeQuyDoi,
   removeTyLeQuyDoi,
+
+  //có quy định
+  getAll_Co_Quy_Dinh,
 };

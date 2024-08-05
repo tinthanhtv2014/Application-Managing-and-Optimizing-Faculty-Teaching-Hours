@@ -18,3 +18,7 @@ const select_Co_Quy_Dinh = async () => {
     };
   }
 };
+
+module.exports = {
+  select_Co_Quy_Dinh,
+};
