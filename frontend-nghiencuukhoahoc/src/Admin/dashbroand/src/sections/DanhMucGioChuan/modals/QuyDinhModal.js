@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  Grid,
 } from "@mui/material";
 
 import axios from "axios";
@@ -58,28 +59,47 @@ const QuyDinhModal = ({ open, handleClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Quy định</DialogTitle>
       <DialogContent>
         <DialogContentText>Danh sách các quy định hiện tại.</DialogContentText>
-        <List>
-          {quyDinhs.map((qd) => (
-            <ListItem key={qd.MA_QUY_DINH}>
-              <ListItemText primary={qd.TEN_QUY_DINH} />
-              <IconButton
-                edge="end"
-                onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
-              ></IconButton>
-            </ListItem>
-          ))}
-        </List>
-        <TextField
-          value={newQuyDinh}
-          onChange={(e) => setNewQuyDinh(e.target.value)}
-          label="Thêm quy định mới"
-          fullWidth
-        />
-        <Button onClick={handleAddQuyDinh}>Thêm</Button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              value={newQuyDinh}
+              onChange={(e) => setNewQuyDinh(e.target.value)}
+              label="Thêm quy định mới"
+              fullWidth
+              margin="normal"
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddQuyDinh}
+            >
+              Thêm
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <List>
+              {quyDinhs.map((qd) => (
+                <ListItem
+                  key={qd.MA_QUY_DINH}
+                  secondaryAction={
+                    <i
+                      class="bi bi-trash"
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
+                    ></i>
+                  }
+                >
+                  <ListItemText primary={qd.TEN_QUY_DINH} />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Đóng</Button>

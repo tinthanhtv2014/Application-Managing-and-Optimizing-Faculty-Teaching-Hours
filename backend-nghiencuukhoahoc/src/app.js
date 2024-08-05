@@ -19,7 +19,7 @@ const CRUDNamHoc = require("./routes/AdminRoute/NamHocRouter");
 const CRUDgiangvien_CNTT = require("./routes/TruongbomonRoute/giangvienRoute");
 const CRUDchuongtrinh_CNTT = require("./routes/TruongbomonRoute/chuongtrinhRoute");
 const QuyenGiangVienRouter = require("./routes/GiangvienRoute/QuyenGiangVienRouter");
-
+const CURDanhMuc = require("./routes/AdminRoute/DanhMucRoute");
 const TruongKhoaRoute = require("./routes/TruongkhoaRoute/TruongKhoaRoute");
 
 //=================================================================================
@@ -53,6 +53,7 @@ CRUDgiangvien_CNTT(app);
 QuyenGiangVienRouter(app); // Api cho quyền giảng viên
 CRUDchuongtrinh_CNTT(app);
 TruongKhoaRoute(app); // Các router cho trưởng khoa sử dụng
+CURDanhMuc(app); // route CRUD bảng taikhoan dành cho admin
 //=====================================================================================================
 
 app.get("/", (req, res) => {
