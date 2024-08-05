@@ -559,7 +559,7 @@ const getAll_Co_Quy_Dinh = async (req, res) => {
   }
 };
 
-const create_Co_Quy_Dinh_excel = async (req, res) => {
+const add_Co_Quy_Dinh_excel = async (req, res) => {
   try {
     let results = await create_Co_Quy_Dinh_excel();
 
@@ -611,5 +611,5 @@ module.exports = {
 
   //có quy định
   getAll_Co_Quy_Dinh,
-  create_Co_Quy_Dinh_excel,
+  add_Co_Quy_Dinh_excel,
 };

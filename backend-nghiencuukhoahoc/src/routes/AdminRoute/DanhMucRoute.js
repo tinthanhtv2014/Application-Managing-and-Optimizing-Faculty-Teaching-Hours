@@ -27,7 +27,7 @@ const {
   removeTyLeQuyDoi,
 
   getAll_Co_Quy_Dinh,
-  create_Co_Quy_Dinh_excel,
+  add_Co_Quy_Dinh_excel,
 } = require("../../controllers/AdminController/danhmucAdminController.js");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
@@ -65,7 +65,7 @@ const CRUDDanhMuc = (app) => {
 
   // Route cho các API bảng có quy định yêu cầu xác thực JWT
   router.get("/coquydinh", getAll_Co_Quy_Dinh);
-  router.post("/coquydinh", create_Co_Quy_Dinh_excel);
+  router.post("/coquydinh", add_Co_Quy_Dinh_excel);
   return app.use("/api/v1/admin/danhmuc", router);
 };
 
