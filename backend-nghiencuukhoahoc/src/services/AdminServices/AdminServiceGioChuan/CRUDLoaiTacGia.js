@@ -2,7 +2,9 @@ const pool = require("../../../config/database");
 
 const selectLoaiTacGia = async () => {
   try {
-    let [results, fields] = await pool.execute(`SELECT * FROM loai_tac_gia`);
+    let [results, fields] = await pool.execute(
+      `SELECT * FROM loai_tac_gia ORDER BY MA_LOAI_TAC_GIA DESC;`
+    );
     return {
       EM: "Xem thông tin loại tác giả thành công",
       EC: 1,
@@ -48,10 +50,11 @@ const createLoaiTacGia = async (TEN_LOAI_TAC_GIA) => {
       `INSERT INTO loai_tac_gia (TEN_LOAI_TAC_GIA) VALUES (?)`,
       [TEN_LOAI_TAC_GIA]
     );
+    const results_data = await selectLoaiTacGia();
     return {
       EM: "Thêm loại tác giả mới thành công",
       EC: 1,
-      DT: results,
+      DT: results_data.DT,
     };
   } catch (error) {
     return {
@@ -97,10 +100,11 @@ const deleteLoaiTacGia = async (id) => {
       `DELETE FROM loai_tac_gia WHERE MA_LOAI_TAC_GIA = ?`,
       [id]
     );
+    const results_data = await selectLoaiTacGia();
     return {
       EM: "Xóa loại tác giả thành công",
       EC: 1,
-      DT: results,
+      DT: results_data.DT,
     };
   } catch (error) {
     return {
