@@ -88,6 +88,7 @@ const QuyDinhModal = ({ open, handleClose }) => {
             </Button>
           </Grid>
           <Grid item xs={12} md={6}>
+            <p>Tên các quy định đang hiện hành</p>
             <List>
               {quyDinhs.map((qd) => (
                 <ListItem
