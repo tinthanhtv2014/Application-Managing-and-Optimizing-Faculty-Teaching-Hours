@@ -42,6 +42,12 @@ const createTyLeQuyDoi = async (
   TRANG_THAI_QUY_DOI,
   GHI_CHU_QUY_DOI
 ) => {
+  console.log("MA_QUY_DINH:", MA_QUY_DINH);
+  console.log("TEN_QUY_DOI:", TEN_QUY_DOI);
+  console.log("TY_LE:", TY_LE);
+  console.log("TRANG_THAI_QUY_DOI:", TRANG_THAI_QUY_DOI);
+  console.log("GHI_CHU_QUY_DOI:", GHI_CHU_QUY_DOI);
+
   try {
     let results1 = await selectTyLeQuyDoi_TEN_QUY_DOI(TEN_QUY_DOI);
     if (results1.length > 0) {
@@ -62,6 +68,7 @@ const createTyLeQuyDoi = async (
       DT: results,
     };
   } catch (error) {
+    console.log("check error", error);
     return {
       EM: "Lỗi services createTyLeQuyDoi",
       EC: -1,

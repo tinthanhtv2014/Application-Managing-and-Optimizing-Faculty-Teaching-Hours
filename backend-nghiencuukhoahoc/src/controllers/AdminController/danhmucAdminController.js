@@ -229,10 +229,11 @@ const addQuyDinh = async (req, res) => {
 
 const editQuyDinh = async (req, res) => {
   const { TEN_QUY_DINH } = req.body;
+  const { TRANG_THAI_QUY_DINH } = req.body;
   const { id } = req.params;
 
   try {
-    const results = await updateQuyDinh(id, TEN_QUY_DINH);
+    const results = await updateQuyDinh(id, TEN_QUY_DINH, TRANG_THAI_QUY_DINH);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,

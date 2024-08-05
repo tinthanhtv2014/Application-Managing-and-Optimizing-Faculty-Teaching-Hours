@@ -82,7 +82,7 @@ const createQuyDinh = async (TEN_QUY_DINH) => {
   }
 };
 
-const updateQuyDinh = async (id, TEN_QUY_DINH) => {
+const updateQuyDinh = async (id, TEN_QUY_DINH, TRANG_THAI_QUY_DINH) => {
   try {
     let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH);
     if (results1.length === 0) {
@@ -94,8 +94,8 @@ const updateQuyDinh = async (id, TEN_QUY_DINH) => {
     }
 
     let [results, fields] = await pool.execute(
-      `UPDATE quy_dinh SET TRANG_THAI_QUY_DINH = N'Ngưng áp dụng' WHERE MA_QUY_DINH = ?`,
-      [id]
+      `UPDATE quy_dinh SET TRANG_THAI_QUY_DINH = ? WHERE MA_QUY_DINH = ?`,
+      [TRANG_THAI_QUY_DINH, id]
     );
     return {
       EM: "Cập nhật quy định thành công",

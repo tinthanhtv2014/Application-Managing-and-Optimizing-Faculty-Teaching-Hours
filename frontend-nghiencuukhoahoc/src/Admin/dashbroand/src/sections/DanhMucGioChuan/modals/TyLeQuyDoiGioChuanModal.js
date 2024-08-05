@@ -165,7 +165,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-
+import CookiesAxios from "../../CookiesAxios";
 const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
   const [quyDinhs, setQuyDinhs] = useState([]);
   const [tyLeQuyDoi, setTyLeQuyDoi] = useState([]);
@@ -184,48 +184,49 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
 
   // Giả lập dữ liệu quy định
   const fetchQuyDinhs = async () => {
-    const sampleQuyDinhs = [
-      { MA_QUY_DINH: 1, TEN_QUY_DINH: "Quy định 1" },
-      { MA_QUY_DINH: 2, TEN_QUY_DINH: "Quy định 2" },
-    ];
-    setQuyDinhs(sampleQuyDinhs);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh`
+      );
+      // console.log("check fetch Quy dinh =>", response.data);
+      setQuyDinhs(response.data.DT);
+    } catch (error) {
+      console.error("Error fetching quy dinhs:", error);
+    }
   };
 
   // Giả lập dữ liệu tỷ lệ quy đổi
   const fetchTyLeQuyDoi = async () => {
-    const sampleTyLeQuyDoi = [
-      {
-        MA_QUY_DOI: 1,
-        MA_QUY_DINH: 1,
-        TEN_QUY_DOI: "Tỷ lệ 1",
-        TY_LE: "10%",
-        TRANG_THAI_QUY_DOI: "Hoạt động",
-        GHI_CHU_QUY_DOI: "Ghi chú 1",
-      },
-      {
-        MA_QUY_DOI: 2,
-        MA_QUY_DINH: 2,
-        TEN_QUY_DOI: "Tỷ lệ 2",
-        TY_LE: "20%",
-        TRANG_THAI_QUY_DOI: "Không hoạt động",
-        GHI_CHU_QUY_DOI: "Ghi chú 2",
-      },
-    ];
-    setTyLeQuyDoi(sampleTyLeQuyDoi);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/tylequydoi`
+      );
+      // console.log("check fetch Quy dinh =>", response.data);
+      setTyLeQuyDoi(response.data.DT);
+    } catch (error) {
+      console.error("Error fetching quy dinhs:", error);
+    }
   };
 
   const handleAddTyLeQuyDoi = async () => {
-    const newTyLeQuyDoi = {
-      MA_QUY_DINH: selectedQuyDinh,
-      TEN_QUY_DOI: tenQuyDoi,
-      TY_LE: tyLe,
-      TRANG_THAI_QUY_DOI: trangThaiQuyDoi,
-      GHI_CHU_QUY_DOI: ghiChuQuyDoi,
-    };
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/tylequydoi`,
+        {
+          MA_QUY_DINH: quyDinhs,
+          TEN_QUY_DOI: tenQuyDoi,
+          TY_LE: tyLe,
+          TRANG_THAI_QUY_DOI: trangThaiQuyDoi,
+          GHI_CHU_QUY_DOI: ghiChuQuyDoi,
+        }
+      );
+      // console.log("check fetch Quy dinh =>", response.data);
+      setTyLeQuyDoi(response.data.DT);
+    } catch (error) {
+      console.error("Error fetching quy dinhs:", error);
+    }
 
     // Thêm dữ liệu mới vào danh sách hiện có
-    setTyLeQuyDoi((prev) => [...prev, newTyLeQuyDoi]);
-    handleClose();
   };
 
   return (

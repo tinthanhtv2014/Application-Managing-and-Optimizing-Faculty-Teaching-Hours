@@ -6,6 +6,7 @@ import LoaiDanhMucModal from "./modals/LoaiDanhMucModal";
 import DanhMucQuyDoiKHCNModal from "./modals/DanhMucQuyDoiKHCNModal";
 import LoaiTacGiaModal from "./modals/LoaiTacGiaModal";
 import { Col, Container, Row } from "react-bootstrap";
+import CoQuyDinh from "./modals/CoQuyDinh";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -13,6 +14,7 @@ const DanhMucGioChuan = () => {
     loaiDanhMuc: false,
     danhMucQuyDoiKHCN: false,
     loaiTacGia: false,
+    coQuyDinh: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -73,6 +75,15 @@ const DanhMucGioChuan = () => {
             >
               Loại tác giả
             </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("coQuyDinh")}
+            >
+              Có Quy Định
+            </Button>
           </Col>
         </Row>
 
@@ -95,6 +106,10 @@ const DanhMucGioChuan = () => {
         <LoaiTacGiaModal
           open={open.loaiTacGia}
           handleClose={() => handleClose("loaiTacGia")}
+        />
+        <CoQuyDinh
+          open={open.coQuyDinh}
+          handleClose={() => handleClose("coQuyDinh")}
         />
       </Container>
     </>
