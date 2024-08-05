@@ -1,119 +1,104 @@
 const pool = require("../../config/database");
 
-const selectQuyDinh = async () => {
+const selectTyLeQuyDoi = async () => {
     try {
-        let [results, fields] = await pool.execute(`SELECT * FROM quy_dinh`);
+        let [results, fields] = await pool.execute(`SELECT * FROM ty_le_quy_doi_gio_chuan`);
         return {
-            EM: "Xem thông tin quy định thành công",
+            EM: "Xem thông tin tỷ lệ quy đổi thành công",
             EC: 1,
             DT: results,
         };
     } catch (error) {
         return {
-            EM: "Lỗi services selectQuyDinh",
+            EM: "Lỗi services selectTyLeQuyDoi",
             EC: -1,
             DT: [],
         };
     }
 };
 
-
-const selectQuyDinh_TEN_QUY_DINH = async (TEN_QUY_DINH) => {
+const selectTyLeQuyDoi_TEN_QUY_DOI = async (TEN_QUY_DOI) => {
     try {
-        let [results1, fields1] = await pool.execute(`select * from quy_dinh where TEN_QUY_DINH = ?`,
-            [TEN_QUY_DINH]);
-        return results1;
-
+        let [results, fields] = await pool.execute(`SELECT * FROM ty_le_quy_doi_gio_chuan WHERE TEN_QUY_DOI = ?`, [TEN_QUY_DOI]);
+        return results;
     } catch (error) {
         return {
-            EM: "lỗi services selectQuyDinh",
+            EM: "Lỗi services selectTyLeQuyDoi",
             EC: -1,
             DT: [],
         };
     }
 };
 
-const createQuyDinh = async (TEN_QUY_DINH) => {
+const createTyLeQuyDoi = async (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) => {
     try {
-        let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH)
+        let results1 = await selectTyLeQuyDoi_TEN_QUY_DOI(TEN_QUY_DOI);
         if (results1.length > 0) {
             return {
-                EM: "Quy định này đã tồn tại",
+                EM: "Tỷ lệ quy đổi này đã tồn tại",
                 EC: 0,
                 DT: [],
             };
         }
 
         let [results, fields] = await pool.execute(
-            `INSERT INTO quy_dinh (TEN_QUY_DINH) VALUES (?)`,
-            [TEN_QUY_DINH]
+            `INSERT INTO ty_le_quy_doi_gio_chuan (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) VALUES (?, ?, ?, ?, ?)`,
+            [MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI]
         );
         return {
-            EM: "Thêm quy định mới thành công",
+            EM: "Thêm tỷ lệ quy đổi mới thành công",
             EC: 1,
             DT: results,
         };
     } catch (error) {
         return {
-            EM: "Lỗi services createQuyDinh",
+            EM: "Lỗi services createTyLeQuyDoi",
             EC: -1,
             DT: [],
         };
     }
 };
 
-const updateQuyDinh = async (id, TEN_QUY_DINH) => {
+const updateTyLeQuyDoi = async (id, MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) => {
     try {
-        let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH)
+        let results1 = await selectTyLeQuyDoi_TEN_QUY_DOI(TEN_QUY_DOI);
         if (results1.length === 0) {
             return {
-                EM: "Quy định này không tồn tại",
+                EM: "Tỷ lệ quy đổi này không tồn tại",
                 EC: 0,
                 DT: [],
             };
         }
 
         let [results, fields] = await pool.execute(
-            `UPDATE quy_dinh SET TEN_QUY_DINH = ? WHERE MA_QUY_DINH = ?`,
-            [TEN_QUY_DINH, id]
+            `UPDATE ty_le_quy_doi_gio_chuan SET MA_QUY_DINH = ?, TEN_QUY_DOI = ?, TY_LE = ?, TRANG_THAI_QUY_DOI = ?, GHI_CHU_QUY_DOI = ? WHERE MA_QUY_DOI = ?`,
+            [MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI, id]
         );
         return {
-            EM: "Cập nhật quy định thành công",
+            EM: "Cập nhật tỷ lệ quy đổi thành công",
             EC: 1,
             DT: results,
         };
     } catch (error) {
         return {
-            EM: "Lỗi services updateQuyDinh",
+            EM: "Lỗi services updateTyLeQuyDoi",
             EC: -1,
             DT: [],
         };
     }
 };
 
-const deleteQuyDinh = async (id) => {
+const deleteTyLeQuyDoi = async (id) => {
     try {
-        let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH)
-        if (results1.length === 0) {
-            return {
-                EM: "Quy định này không tồn tại",
-                EC: 0,
-                DT: [],
-            };
-        }
-
-        let [results, fields] = await pool.execute(
-            `DELETE FROM quy_dinh WHERE MA_QUY_DINH = ?`,
-            [id]
-        );
+        let [results, fields] = await pool.execute(`DELETE FROM ty_le_quy_doi_gio_chuan WHERE MA_QUY_DOI = ?`, [id]);
         return {
-            EM: "Xóa quy định thành công",
+            EM: "Xóa tỷ lệ quy đổi thành công",
             EC: 1,
             DT: results,
         };
     } catch (error) {
         return {
-            EM: "Lỗi services deleteQuyDinh",
+            EM: "Lỗi services deleteTyLeQuyDoi",
             EC: -1,
             DT: [],
         };
@@ -121,8 +106,8 @@ const deleteQuyDinh = async (id) => {
 };
 
 module.exports = {
-    selectQuyDinh,
-    createQuyDinh,
-    updateQuyDinh,
-    deleteQuyDinh,
+    selectTyLeQuyDoi,
+    createTyLeQuyDoi,
+    updateTyLeQuyDoi,
+    deleteTyLeQuyDoi,
 };
