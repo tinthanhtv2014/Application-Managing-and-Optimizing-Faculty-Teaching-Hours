@@ -34,6 +34,7 @@ const selectQuyDinh_TEN_QUY_DINH = async (TEN_QUY_DINH) => {
 };
 
 const createQuyDinh = async (TEN_QUY_DINH) => {
+  console.log(" check TEN_QUY_DINH", TEN_QUY_DINH);
   try {
     let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH);
     if (results1.length > 0) {
@@ -48,10 +49,14 @@ const createQuyDinh = async (TEN_QUY_DINH) => {
       `INSERT INTO quy_dinh (TEN_QUY_DINH) VALUES (?)`,
       [TEN_QUY_DINH]
     );
+    let [resultsData, fieldsData] = await pool.execute(
+      `SELECT * FROM quy_dinh`
+    );
+    console.log("check resultsData", resultsData);
     return {
       EM: "Thêm quy định mới thành công",
       EC: 1,
-      DT: results,
+      DT: resultsData,
     };
   } catch (error) {
     return {

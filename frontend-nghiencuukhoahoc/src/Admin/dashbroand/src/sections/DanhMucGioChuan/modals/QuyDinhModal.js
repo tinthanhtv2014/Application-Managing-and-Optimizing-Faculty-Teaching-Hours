@@ -13,7 +13,7 @@ import {
   IconButton,
   Grid,
 } from "@mui/material";
-
+import CookiesAxios from "../../CookiesAxios";
 import axios from "axios";
 
 const QuyDinhModal = ({ open, handleClose }) => {
@@ -28,8 +28,11 @@ const QuyDinhModal = ({ open, handleClose }) => {
 
   const fetchQuyDinhs = async () => {
     try {
-      const response = await axios.get("/api/quy_dinh");
-      setQuyDinhs(response.data);
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh`
+      );
+      // console.log("check fetch Quy dinh =>", response.data);
+      setQuyDinhs(response.data.DT);
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
     }
@@ -39,10 +42,14 @@ const QuyDinhModal = ({ open, handleClose }) => {
     if (newQuyDinh.trim() === "") return;
 
     try {
-      const response = await axios.post("/api/quy_dinh", {
-        TEN_QUY_DINH: newQuyDinh,
-      });
-      setQuyDinhs([...quyDinhs, response.data]);
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh`,
+        {
+          TEN_QUY_DINH: newQuyDinh,
+        }
+      );
+      console.log("check response.data", response.data.DT);
+      setQuyDinhs(response.data.DT);
       setNewQuyDinh("");
     } catch (error) {
       console.error("Error adding quy dinh:", error);
@@ -51,7 +58,7 @@ const QuyDinhModal = ({ open, handleClose }) => {
 
   const handleDeleteQuyDinh = async (id) => {
     try {
-      await axios.delete(`/api/quy_dinh/${id}`);
+      await CookiesAxios.delete(`/api/quy_dinh/${id}`);
       setQuyDinhs(quyDinhs.filter((qd) => qd.MA_QUY_DINH !== id));
     } catch (error) {
       console.error("Error deleting quy dinh:", error);
