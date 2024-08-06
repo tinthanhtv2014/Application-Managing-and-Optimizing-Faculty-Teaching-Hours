@@ -27,6 +27,27 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
     }
 };
 
+const test = async (req, res) => {
+    try {
+        console.log("test: ", req.body)
+        let results = 'Ok'
+
+        return res.status(200).json({
+            EM: results,
+            EC: 1,
+            DT: results,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            EM: results,
+            EC: -1,
+            DT: results,
+        });
+    }
+};
+
 module.exports = {
     GiangVien_thuoc_KhoaController,
+    test
 };

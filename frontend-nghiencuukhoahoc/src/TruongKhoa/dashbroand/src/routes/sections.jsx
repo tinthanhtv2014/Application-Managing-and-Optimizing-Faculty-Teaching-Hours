@@ -74,28 +74,20 @@ export default function Router() {
       )
     },
 
+    {
+      path: '/test',
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <FileExcel />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+
 
     //====================================================================================================
-    {
-      path: '/bo-mon', //: Danh sách các bộ môn.
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <UserPage />
-          </Suspense>
-        </DashboardLayout>
-      )
-    },
-    {
-      path: '/thong-tin', //: Danh sách các bộ môn.
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <AccountGV />
-          </Suspense>
-        </DashboardLayout>
-      )
-    },
+
     {
       path: '/login',
       element: <LoginPage />
