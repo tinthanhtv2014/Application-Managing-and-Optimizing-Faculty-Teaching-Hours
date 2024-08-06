@@ -4,6 +4,9 @@ const router = express.Router();
 const {
   updateThongTinGiangVienController,
 } = require("../../controllers/GiangvienController/GiangVienController");
+const {
+  select_thongtin_danhmuc,
+} = require("../../controllers/GiangvienController/danhmucGiangVienCONTROLLER");
 
 const {
   getKhungGioChuan_TENCHUCDANH,
@@ -34,9 +37,15 @@ const QuyenGiangVienRouter = (app) => {
   router.post("/xoa/thoigianxacnhan", delete_THOIGIAN_XACNHAN);
   router.put("/sua/thoigianxacnhan/:SONGAYKETTHUC", update_THOIGIAN_XACNHAN);
   router.get("/xem/thoigianxacnhan", xem_THOIGIAN_XACNHAN);
-  router.get("/xem/thoigianxacnhantheokhoa/:tenKhoa", xem_THOIGIAN_XACNHAN_theoTENKHOA);
+  router.get(
+    "/xem/thoigianxacnhantheokhoa/:tenKhoa",
+    xem_THOIGIAN_XACNHAN_theoTENKHOA
+  );
 
   // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
+
+  //router cho danh mục chọn khung
+  router.post("/xem/canhan/thongtinkhung", select_thongtin_danhmuc);
 
   return app.use("/api/v1/quyengiangvien/giangvien", router);
 };

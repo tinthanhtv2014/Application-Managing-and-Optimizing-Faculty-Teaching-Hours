@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,17 +9,22 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CookiesAxios from "../../CookiesAxios";
 import Cookies from "js-cookie";
 const ChuongtrinhDT_CNTT = () => {
+  const [Tenbomon, setTenbomon] = useState([]);
+
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
-  const fetchdata = async () => {
-    const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem`,
+  const fetchdata = async (taikhoan) => {
+    const tenbomonResponse = await CookiesAxios.get(
+      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`,
       {
         headers: {
           Authorization: `Bearer ${auth}`, // Đảm bảo gửi token JWT trong header
         },
       }
     );
+    setTenbomon(tenbomonResponse.data.DT.TENBOMON);
+    console.log("check ten bo mon: asadasda", tenbomonResponse);
+    console.log("check ten bo mon: ", Tenbomon);
   };
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const ChuongtrinhDT_CNTT = () => {
           Cookies.remove("accessToken");
           navigate("/login");
         } else {
-          fetchdata();
+          fetchdata(decodedToken.taikhoan);
         }
       } catch (error) {
         console.error("Token decoding error:", error);

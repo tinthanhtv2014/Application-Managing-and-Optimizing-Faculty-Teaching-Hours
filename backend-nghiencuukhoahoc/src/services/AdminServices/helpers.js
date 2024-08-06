@@ -225,6 +225,20 @@ const timnamhoc_MANAMHOC = async (MANAMHOC) => {
   }
 };
 
+const timnamhoc_TENNAMHOC = async (TENNAMHOC) => {
+  try {
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM namhoc WHERE namhoc.TENNAMHOC = ?",
+      [TENNAMHOC]
+    );
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    return results1[0].MANAMHOC;
+  } catch (error) {
+    console.log("timnamhoc_TENNAMHOC errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -240,4 +254,5 @@ module.exports = {
   timchuongtrinh_TENCHUONGTRINH,
   timmonhoc_TENMONHOC,
   timnamhoc_MANAMHOC,
+  timnamhoc_TENNAMHOC,
 };
