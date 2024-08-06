@@ -31,6 +31,7 @@ const {
 
 const {
   select_Co_Quy_Dinh,
+  create_Co_Quy_Dinh,
   create_Co_Quy_Dinh_excel,
 } = require("../../services/AdminServices/AdminServiceGioChuan/CRUDCo_Quy_Dinh");
 
@@ -577,6 +578,31 @@ const add_Co_Quy_Dinh_excel = async (req, res) => {
     });
   }
 };
+const addCoQuyDinh = async (req, res) => {
+  const { MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA } =
+    req.body;
+  try {
+    let results = await create_Co_Quy_Dinh(
+      MA_QUY_DOI,
+      MA_LOAI_DANH_MUC,
+      MA_LOAI_TAC_GIA,
+      SO_TAC_GIA
+    );
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "có lỗi ở getAll_Co_Quy_Dinh",
+      EC: 1,
+      DT: [],
+    });
+  }
+};
 
 module.exports = {
   //danh mục quy đổi
@@ -611,5 +637,6 @@ module.exports = {
 
   //có quy định
   getAll_Co_Quy_Dinh,
+  addCoQuyDinh,
   add_Co_Quy_Dinh_excel,
 };
