@@ -21,6 +21,7 @@ const {
   createQuyDinh,
   updateQuyDinh,
   deleteQuyDinh,
+  selectQuyDinh_TRANGTHAI,
 } = require("../../services/AdminServices/AdminServiceGioChuan/CRUDQuyDinh");
 const {
   selectTyLeQuyDoi,
@@ -53,6 +54,7 @@ const getAllQuyDinh = async (req, res) => {
     });
   }
 };
+
 const getDanhMucQuyDoi = async (req, res) => {
   try {
     const results = await selectDanhMucQuyDoi();
@@ -209,6 +211,26 @@ const getQuyDinh = async (req, res) => {
   }
 };
 
+const getAllQuyDinh_TRANGTHAI = async (req, res) => {
+  try {
+    const TRANG_THAI_QUY_DINH = req.body.TRANG_THAI_QUY_DINH;
+    let results = await selectQuyDinh_TRANGTHAI(TRANG_THAI_QUY_DINH);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Internal server error",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 const addQuyDinh = async (req, res) => {
   const { TEN_QUY_DINH } = req.body;
 
@@ -230,12 +252,11 @@ const addQuyDinh = async (req, res) => {
 };
 
 const editQuyDinh = async (req, res) => {
-  const { TEN_QUY_DINH } = req.body;
   const { TRANG_THAI_QUY_DINH } = req.body;
   const { id } = req.params;
 
   try {
-    const results = await updateQuyDinh(id, TEN_QUY_DINH, TRANG_THAI_QUY_DINH);
+    const results = await updateQuyDinh(id, TRANG_THAI_QUY_DINH);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -621,7 +642,7 @@ module.exports = {
   addQuyDinh,
   editQuyDinh,
   removeQuyDinh,
-
+  getAllQuyDinh_TRANGTHAI,
   //danh mục
   getLoaiDanhMuc,
   addLoaiDanhMuc,

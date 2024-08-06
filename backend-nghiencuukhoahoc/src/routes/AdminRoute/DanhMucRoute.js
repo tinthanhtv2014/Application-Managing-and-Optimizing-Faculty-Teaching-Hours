@@ -10,6 +10,7 @@ const {
   addQuyDinh,
   editQuyDinh,
   removeQuyDinh,
+  getAllQuyDinh_TRANGTHAI,
 
   getLoaiDanhMuc,
   addLoaiDanhMuc,
@@ -37,6 +38,7 @@ const CRUDDanhMuc = (app) => {
   // Route cho các API quản lý quy định, yêu cầu xác thực JWT
   router.get("/quydinh", checkUserJWT, getQuyDinh);
   router.post("/quydinh", checkUserJWT, addQuyDinh);
+  router.post("/quydinh/trangthai", checkUserJWT, getAllQuyDinh_TRANGTHAI);
   router.put("/quydinh/:id", checkUserJWT, editQuyDinh);
   router.delete("/quydinh/:id", checkUserJWT, removeQuyDinh);
 

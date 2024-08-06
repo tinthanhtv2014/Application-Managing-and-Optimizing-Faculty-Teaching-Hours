@@ -82,23 +82,14 @@ const createQuyDinh = async (TEN_QUY_DINH) => {
   }
 };
 
-const updateQuyDinh = async (id, TEN_QUY_DINH, TRANG_THAI_QUY_DINH) => {
+const updateQuyDinh = async (id, TRANG_THAI_QUY_DINH) => {
   try {
-    let results1 = await selectQuyDinh_TEN_QUY_DINH(TEN_QUY_DINH);
-    if (results1.length === 0) {
-      return {
-        EM: "Quy định này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
     let [results, fields] = await pool.execute(
       `UPDATE quy_dinh SET TRANG_THAI_QUY_DINH = ? WHERE MA_QUY_DINH = ?`,
       [TRANG_THAI_QUY_DINH, id]
     );
     return {
-      EM: "Cập nhật quy định thành công",
+      EM: "Cập nhật trạng thái quy định thành công",
       EC: 1,
       DT: results,
     };
@@ -146,9 +137,34 @@ const deleteQuyDinh = async (id) => {
   }
 };
 
+//select theo trạng thái
+
+const selectQuyDinh_TRANGTHAI = async (TRANG_THAI_QUY_DINH) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `select qd.TEN_QUY_DINH,qd.TRANG_THAI_QUY_DINH,tlqd.TEN_QUY_DOI,tlqd.TY_LE,ltg.TEN_LOAI_TAC_GIA,ldm.TEN_LOAI_DANH_MUC from quy_dinh as qd,ty_le_quy_doi_gio_chuan as tlqd,loai_danh_muc as ldm,loai_tac_gia as ltg where qd.TRANG_THAI_QUY_DINH = ?`,
+      [TRANG_THAI_QUY_DINH]
+    );
+    return {
+      EM: "xem quy định thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    return {
+      EM: "lỗi services selectQuyDinh",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   selectQuyDinh,
   createQuyDinh,
   updateQuyDinh,
   deleteQuyDinh,
+
+  //select theo trạng thái
+  selectQuyDinh_TRANGTHAI,
 };
