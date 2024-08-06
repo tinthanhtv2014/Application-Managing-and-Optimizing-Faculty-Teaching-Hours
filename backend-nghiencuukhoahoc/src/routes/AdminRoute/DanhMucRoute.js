@@ -16,6 +16,7 @@ const {
   addLoaiDanhMuc,
   editLoaiDanhMuc,
   removeLoaiDanhMuc,
+  getLoaiDanhMuc_TRANGTHAI,
 
   getLoaiTacGia,
   addLoaiTacGia,
@@ -51,6 +52,7 @@ const CRUDDanhMuc = (app) => {
   // Route cho các API quản lý loại danh mục, yêu cầu xác thực JWT
   router.get("/loaidanhmuc", checkUserJWT, getLoaiDanhMuc);
   router.post("/loaidanhmuc", checkUserJWT, addLoaiDanhMuc);
+  router.post("/loaidanhmuc/trangthai", checkUserJWT, getLoaiDanhMuc_TRANGTHAI);
   router.put("/loaidanhmuc/:id", checkUserJWT, editLoaiDanhMuc);
   router.delete("/loaidanhmuc/:id", checkUserJWT, removeLoaiDanhMuc);
 

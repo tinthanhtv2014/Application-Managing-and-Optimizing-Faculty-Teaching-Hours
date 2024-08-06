@@ -9,6 +9,7 @@ const {
   createLoaiDanhMuc,
   updateLoaiDanhMuc,
   deleteLoaiDanhMuc,
+  selectLoaiDanhMuc_TRANGTHAI,
 } = require("../../services/AdminServices/AdminServiceGioChuan/CRUDLoaiDanhMuc");
 const {
   selectLoaiTacGia,
@@ -312,6 +313,25 @@ const getLoaiDanhMuc = async (req, res) => {
   }
 };
 
+const getLoaiDanhMuc_TRANGTHAI = async (req, res) => {
+  try {
+    const TRANG_THAI_DANH_MUC = req.body.TRANG_THAI_DANH_MUC;
+    const results = await selectLoaiDanhMuc_TRANGTHAI(TRANG_THAI_DANH_MUC);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Internal server error",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 const addLoaiDanhMuc = async (req, res) => {
   const { TEN_LOAI_DANH_MUC } = req.body;
 
@@ -333,11 +353,11 @@ const addLoaiDanhMuc = async (req, res) => {
 };
 
 const editLoaiDanhMuc = async (req, res) => {
-  const { TEN_LOAI_DANH_MUC } = req.body;
+  const { TRANG_THAI_DANH_MUC } = req.body;
   const { id } = req.params;
 
   try {
-    const results = await updateLoaiDanhMuc(id, TEN_LOAI_DANH_MUC);
+    const results = await updateLoaiDanhMuc(id, TRANG_THAI_DANH_MUC);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -648,6 +668,7 @@ module.exports = {
   addLoaiDanhMuc,
   editLoaiDanhMuc,
   removeLoaiDanhMuc,
+  getLoaiDanhMuc_TRANGTHAI,
 
   //loại tác giả
   getLoaiTacGia,

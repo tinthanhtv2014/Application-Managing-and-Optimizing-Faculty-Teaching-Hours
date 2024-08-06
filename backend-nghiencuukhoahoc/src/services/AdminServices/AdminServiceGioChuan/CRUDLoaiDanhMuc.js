@@ -65,23 +65,14 @@ const createLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
   }
 };
 
-const updateLoaiDanhMuc = async (id, TEN_LOAI_DANH_MUC) => {
+const updateLoaiDanhMuc = async (id, TRANG_THAI_DANH_MUC) => {
   try {
-    let results1 = await selectLoaiDanhMuc_TEN_LOAI_DANH_MUC(TEN_LOAI_DANH_MUC);
-    if (results1.length === 0) {
-      return {
-        EM: "Loại danh mục này không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
-
     let [results, fields] = await pool.execute(
-      `UPDATE loai_danh_muc SET TRANG_THAI_DANH_MUC = N'Ngưng áp dụng' WHERE MA_LOAI_DANH_MUC = ?`,
-      [id]
+      `UPDATE loai_danh_muc SET TRANG_THAI_DANH_MUC = ? WHERE MA_LOAI_DANH_MUC = ?`,
+      [TRANG_THAI_DANH_MUC, id]
     );
     return {
-      EM: "Cập nhật loại danh mục thành công",
+      EM: "Cập nhật trạng thái loại danh mục thành công",
       EC: 1,
       DT: results,
     };
@@ -117,9 +108,30 @@ const deleteLoaiDanhMuc = async (id) => {
   }
 };
 
+const selectLoaiDanhMuc_TRANGTHAI = async (TRANG_THAI_DANH_MUC) => {
+  try {
+    let [results, fields] = await pool.execute(
+      `select ldm.*, dm.* from danhmucquydoispkhcn as dm, loai_danh_muc as ldm where dm.MA_LOAI_DANH_MUC = ldm.MA_LOAI_DANH_MUC and ldm.TRANG_THAI_DANH_MUC = ?`,
+      [TRANG_THAI_DANH_MUC]
+    );
+    return {
+      EM: "Xem thông tin loại danh mục thành công",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectLoaiDanhMuc",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   selectLoaiDanhMuc,
   createLoaiDanhMuc,
   updateLoaiDanhMuc,
   deleteLoaiDanhMuc,
+  selectLoaiDanhMuc_TRANGTHAI,
 };
