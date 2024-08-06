@@ -581,6 +581,11 @@ const add_Co_Quy_Dinh_excel = async (req, res) => {
 const addCoQuyDinh = async (req, res) => {
   const { MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA } =
     req.body;
+  console.log("check data MA_QUY_DOI =>", MA_QUY_DOI);
+  console.log("check data MA_LOAI_DANH_MUC =>", MA_LOAI_DANH_MUC);
+
+  console.log("check data MA_LOAI_TAC_GIA =>", MA_LOAI_TAC_GIA);
+  console.log("check data SO_TAC_GIA =>", SO_TAC_GIA);
   try {
     let results = await create_Co_Quy_Dinh(
       MA_QUY_DOI,

@@ -41,20 +41,22 @@ const create_Co_Quy_Dinh = async (
   MA_LOAI_TAC_GIA,
   SO_TAC_GIA
 ) => {
-  if (SO_TAC_GIA == null || typeof SO_TAC_GIA !== "number") {
-    return {
-      EM: "SO_TAC_GIA không hợp lệ, phải là một số và không được null",
-      EC: -1,
-      DT: [],
-    };
-  }
+  // if (SO_TAC_GIA == null || typeof SO_TAC_GIA !== "number") {
+  //   return {
+  //     EM: "SO_TAC_GIA không hợp lệ, phải là một số và không được null",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
+
   try {
     let [results, fields] = await pool.execute(
       `INSERT INTO co_quy_dinh (MA_QUY_DOI,MA_LOAI_DANH_MUC,MA_LOAI_TAC_GIA,SO_TAC_GIA) VALUES (?,?,?,?)`,
       [MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA]
     );
+
     const results_Data = select_Co_Quy_Dinh();
-    console.log("check select_Co_Quy_Dinh", results_Data);
+    console.log("check select_Co_Quy_Dinh", results);
     return {
       EM: "Thêm có quy định thành công ",
       EC: 1,
