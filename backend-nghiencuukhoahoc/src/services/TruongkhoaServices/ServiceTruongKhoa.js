@@ -122,11 +122,6 @@ ORDER BY
   }
 };
 
-const test = async (dataExcel) => {
-
-}
-
 module.exports = {
   xem_giangvien_khoa,
-  test
 };
