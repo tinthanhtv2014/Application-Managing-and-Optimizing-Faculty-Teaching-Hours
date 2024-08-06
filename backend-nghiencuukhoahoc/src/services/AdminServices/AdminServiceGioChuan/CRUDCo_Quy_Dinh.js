@@ -11,6 +11,7 @@ const select_Co_Quy_Dinh = async () => {
       DT: results,
     };
   } catch (error) {
+    console.log("check errror", error);
     return {
       EM: "Lỗi services selectDanhMucQuyDoi",
       EC: -1,
@@ -55,8 +56,8 @@ const create_Co_Quy_Dinh = async (
       [MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA]
     );
 
-    const results_Data = select_Co_Quy_Dinh();
-    console.log("check select_Co_Quy_Dinh", results);
+    const results_Data = await select_Co_Quy_Dinh();
+    console.log("check select_Co_Quy_Dinh", results_Data);
     return {
       EM: "Thêm có quy định thành công ",
       EC: 1,
