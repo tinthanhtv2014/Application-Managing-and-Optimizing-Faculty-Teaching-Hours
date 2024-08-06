@@ -11,6 +11,7 @@ const select_Co_Quy_Dinh = async () => {
       DT: results,
     };
   } catch (error) {
+    console.log("check errror", error);
     return {
       EM: "Lỗi services selectDanhMucQuyDoi",
       EC: -1,
@@ -35,8 +36,45 @@ const create_Co_Quy_Dinh_excel = async () => {
     };
   }
 };
+const create_Co_Quy_Dinh = async (
+  MA_QUY_DOI,
+  MA_LOAI_DANH_MUC,
+  MA_LOAI_TAC_GIA,
+  SO_TAC_GIA
+) => {
+  // if (SO_TAC_GIA == null || typeof SO_TAC_GIA !== "number") {
+  //   return {
+  //     EM: "SO_TAC_GIA không hợp lệ, phải là một số và không được null",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
+
+  try {
+    let [results, fields] = await pool.execute(
+      `INSERT INTO co_quy_dinh (MA_QUY_DOI,MA_LOAI_DANH_MUC,MA_LOAI_TAC_GIA,SO_TAC_GIA) VALUES (?,?,?,?)`,
+      [MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA]
+    );
+
+    const results_Data = await select_Co_Quy_Dinh();
+    console.log("check select_Co_Quy_Dinh", results_Data);
+    return {
+      EM: "Thêm có quy định thành công ",
+      EC: 1,
+      DT: results_Data.DT,
+    };
+  } catch (error) {
+    console.log("check error ->", error);
+    return {
+      EM: "Lỗi services create_Co_Quy_Dinh",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 
 module.exports = {
   select_Co_Quy_Dinh,
+  create_Co_Quy_Dinh,
   create_Co_Quy_Dinh_excel,
 };
