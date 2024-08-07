@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Table,
@@ -32,21 +32,36 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [TenDeTaiNghienCuu, setTenDeTaiNghienCuu] = useState("");
   const navigate = useNavigate();
   const [tacGiaList, setTacGiaList] = useState([
-    { ten: "", loai: "" },
-    // Thêm các tác giả khác nếu có
+    {
+      ten: "",
+      loai: "",
+      khoa: "",
+      boMon: "",
+      maSoGV: "",
+      tenGV: "",
+      emailGV: "",
+    },
   ]);
+
   const [LoaiTacGia, setLoaiTacGia] = useState([]);
+  const [data_Khoa, setData_Khoa] = useState([]);
+  const [data_BoMon, setData_BoMon] = useState([]);
+
   useEffect(() => {
     const token = Cookies.get("accessToken");
     if (token) {
       const decoded = jwtDecode(token);
       // console.log("check decoded", decoded.taikhoan);
       const fectData = async () => {
-        const response = await CookiesAxios.get(
+        const response_LoaiTacGia = await CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaitacgia`
         );
+        const response_Khoa = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+        );
 
-        setLoaiTacGia(response.data.DT);
+        setData_Khoa(response_Khoa.data.DT);
+        setLoaiTacGia(response_LoaiTacGia.data.DT);
       };
       fectData();
       try {
@@ -55,19 +70,51 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       }
     }
   }, []);
+  useEffect(() => {
+    tacGiaList.forEach((tacGia, index) => {
+      if (tacGia.khoa) {
+        fetchBoMonData(tacGia.khoa, index);
+      }
+    });
+  }, [tacGiaList]);
+  const fetchBoMonData = useCallback(async (khoa, index) => {
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
+        { MAKHOA: khoa }
+      );
+      setData_BoMon((prevData) => ({
+        ...prevData,
+        [index]: response.data.DT,
+      }));
+    } catch (error) {
+      console.error("Error fetching BoMon data:", error);
+    }
+  }, []);
+  // ===========================================
   const handleLoaiTacGiaChange = (index, value) => {
-    const newList = [...tacGiaList];
-    newList[index].loai = value;
-    setTacGiaList(newList);
+    const newTacGiaList = [...tacGiaList];
+    newTacGiaList[index].loai = value;
+    setTacGiaList(newTacGiaList);
   };
   const handleAddTacGia = () => {
-    setTacGiaList([...tacGiaList, { ten: "", loai: "" }]);
+    setTacGiaList([
+      ...tacGiaList,
+      {
+        ten: "",
+        loai: "",
+        khoa: "",
+        boMon: "",
+        maSoGV: "",
+        tenGV: "",
+        emailGV: "",
+      },
+    ]);
   };
-
-  const handleTacGiaChange = (index, value) => {
-    const updatedTacGiaList = [...tacGiaList];
-    updatedTacGiaList[index].ten = value;
-    setTacGiaList(updatedTacGiaList);
+  const handleTacGiaChange = (index, field, value) => {
+    const newTacGiaList = [...tacGiaList];
+    newTacGiaList[index][field] = value;
+    setTacGiaList(newTacGiaList);
   };
   const handleRemoveTacGia = (index) => {
     const updatedTacGiaList = tacGiaList.filter((_, i) => i !== index);
@@ -154,48 +201,67 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       className="row-with-border-danhmuc-nodisplay-flex d-flex position-re"
                     >
                       <Col md={6} className="mt-2">
-                        {" "}
-                        <TextField
-                          label={`Khoa nào`}
-                          value={tacGia.ten}
-                          onChange={(e) =>
-                            handleTacGiaChange(index, e.target.value)
-                          }
-                          fullWidth
-                          margin="normal"
-                        />{" "}
-                        <TextField
-                          label={`Bộ Môn nào`}
-                          value={tacGia.ten}
-                          onChange={(e) =>
-                            handleTacGiaChange(index, e.target.value)
-                          }
-                          fullWidth
-                          margin="normal"
-                        />{" "}
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel id={`khoa-label-${index}`}>
+                            Khoa
+                          </InputLabel>
+                          <Select
+                            labelId={`khoa-label-${index}`}
+                            value={tacGia.khoa}
+                            label="Khoa"
+                            onChange={(e) =>
+                              handleTacGiaChange(index, "khoa", e.target.value)
+                            }
+                          >
+                            {data_Khoa.map((loai) => (
+                              <MenuItem key={loai.MAKHOA} value={loai.MAKHOA}>
+                                {loai.TENKHOA}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel id={`boMon-label-${index}`}>
+                            Bộ Môn
+                          </InputLabel>
+                          <Select
+                            labelId={`boMon-label-${index}`}
+                            value={tacGia.boMon}
+                            label="Bộ Môn"
+                            onChange={(e) =>
+                              handleTacGiaChange(index, "boMon", e.target.value)
+                            }
+                          >
+                            {(data_BoMon[index] || []).map((loai) => (
+                              <MenuItem key={loai.MABOMON} value={loai.MABOMON}>
+                                {loai.TENBOMON}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                         <TextField
                           label={`Mã Số GV`}
-                          value={tacGia.ten}
+                          value={tacGia.maSoGV}
                           onChange={(e) =>
-                            handleTacGiaChange(index, e.target.value)
+                            handleTacGiaChange(index, "maSoGV", e.target.value)
                           }
                           fullWidth
                           margin="normal"
-                        />{" "}
+                        />
                         <TextField
                           label={`Tên Giảng Viên`}
-                          value={tacGia.ten}
+                          value={tacGia.tenGV}
                           onChange={(e) =>
-                            handleTacGiaChange(index, e.target.value)
+                            handleTacGiaChange(index, "tenGV", e.target.value)
                           }
                           fullWidth
                           margin="normal"
-                        />{" "}
+                        />
                         <TextField
                           label={`Email Giảng Viên`}
-                          value={tacGia.ten}
+                          value={tacGia.emailGV}
                           onChange={(e) =>
-                            handleTacGiaChange(index, e.target.value)
+                            handleTacGiaChange(index, "emailGV", e.target.value)
                           }
                           fullWidth
                           margin="normal"
