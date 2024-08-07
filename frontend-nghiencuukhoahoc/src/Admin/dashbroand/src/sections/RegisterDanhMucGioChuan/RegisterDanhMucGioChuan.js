@@ -47,6 +47,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [data_Khoa, setData_Khoa] = useState([]);
   const [data_BoMon, setData_BoMon] = useState([]);
   const [selectNamHoc, setSelectNamHoc] = useState([]);
+  const [SoGioNghienCuuChuan, setSoGioNghienCuuChuan] = useState(null);
   useEffect(() => {
     const fectData = async () => {
       try {
@@ -85,12 +86,8 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
           { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
         );
-        console.log("check selectNamHoc", selectNamHoc.TENNAMHOC);
-        console.log("check decoded.taikhoan", decoded.taikhoan);
-        console.log(
-          "check fectDataThongTinGioNghienCuu =>",
-          response_Data.data.DT
-        );
+
+        setSoGioNghienCuuChuan(response_Data.data.DT.GIONGHIENCUUKHOAHOC_CHUAN);
       };
       fectDataThongTinGioNghienCuu();
     }
@@ -146,22 +143,15 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     setTacGiaList(updatedTacGiaList);
   };
 
-  const handleTongTacGia = () => {
-    const tongGio = 40; // Giả sử tổng giờ là 40 (hoặc lấy từ một input)
-    const vaiTro = tacGiaList.map((tacGia) => tacGia.vaiTro); // Giả sử `vaiTro` được lấy từ `tacGiaList`
+  const handleTongTacGia = async () => {
+    console.log("check datalist", tacGiaList);
+    const tongGio = SoGioNghienCuuChuan;
 
-    // Kiểm tra xem tác giả thứ nhất có phải là viên chức không và có được miễn trách nhiệm không
-    const laVienChucTacGiaThuNhat = tacGiaList[0]?.laVienChuc || false; // Kiểm tra thuộc tính của tác giả đầu tiên
-    const duocMienTrachNhiemTacGiaThuNhat = tacGiaList[0]?.duocMien || false; // Kiểm tra thuộc tính miễn trách nhiệm
+    // Tính toán giờ cho các tác giả
+    const authorHours = await calculateAuthorHours(tongGio, tacGiaList);
 
-    const authorHours = calculateAuthorHours(
-      tongGio,
-      vaiTro,
-      laVienChucTacGiaThuNhat,
-      duocMienTrachNhiemTacGiaThuNhat
-    );
-
-    console.log(authorHours); // Hiển thị kết quả ra console hoặc sử dụng cho mục đích khác
+    console.log(authorHours);
+    console.log("check So gio nghien cuu", SoGioNghienCuuChuan); // Hiển thị kết quả ra console hoặc sử dụng cho mục đích khác
   };
 
   const handleback = () => {
