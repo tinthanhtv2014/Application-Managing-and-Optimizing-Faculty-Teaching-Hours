@@ -29,7 +29,7 @@ const selectChuongtrinhdaotao_tenbomon = async (TENBOMON) => {
     return {
       EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
-      DT: results1,
+      DT: results_ctdt_bomon,
     };
   } catch (error) {
     return {
