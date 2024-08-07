@@ -162,7 +162,6 @@ const xem_THOIGIAN_XACNHAN_theoTENKHOA = async (req, res) => {
   }
 };
 
-
 const delete_THOIGIAN_XACNHAN = async (req, res) => {
   const TENKHOA = req.body.TENKHOA;
   try {

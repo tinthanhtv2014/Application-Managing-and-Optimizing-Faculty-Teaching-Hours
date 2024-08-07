@@ -68,8 +68,12 @@ const LoaiTacGiaModal = ({ open, handleClose }) => {
       const response = await CookiesAxios.delete(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaitacgia/${id}`
       );
-      setLoaiTacGia(response.data.DT);
-      toast.success("Xóa loại tác giả thành công!");
+      if (response.data.EC === 1) {
+        setLoaiTacGia(response.data.DT);
+        toast.success("Xóa loại tác giả thành công!");
+      } else {
+        toast.error(response.data.EM);
+      }
     } catch (error) {
       console.error("Error deleting loai tac gia:", error);
     }

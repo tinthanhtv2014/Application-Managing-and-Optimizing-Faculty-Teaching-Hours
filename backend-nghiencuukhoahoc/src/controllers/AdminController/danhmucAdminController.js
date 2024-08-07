@@ -456,7 +456,7 @@ const editLoaiTacGia = async (req, res) => {
 
 const removeLoaiTacGia = async (req, res) => {
   const { id } = req.params;
-
+  console.log("id", id);
   try {
     const results = await deleteLoaiTacGia(id);
     return res.status(200).json({

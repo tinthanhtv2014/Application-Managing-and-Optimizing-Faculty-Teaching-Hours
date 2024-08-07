@@ -18,7 +18,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-
+import { calculateAuthorHours } from "./test.js";
 import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import "./RegisterDanhMucGioChuan.scss";
@@ -46,13 +46,14 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [LoaiTacGia, setLoaiTacGia] = useState([]);
   const [data_Khoa, setData_Khoa] = useState([]);
   const [data_BoMon, setData_BoMon] = useState([]);
-
+  const [selectNamHoc, setSelectNamHoc] = useState([]);
   useEffect(() => {
-    const token = Cookies.get("accessToken");
-    if (token) {
-      const decoded = jwtDecode(token);
-      // console.log("check decoded", decoded.taikhoan);
-      const fectData = async () => {
+    const fectData = async () => {
+      try {
+        const response_NAMHOC = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+        );
+
         const response_LoaiTacGia = await CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaitacgia`
         );
@@ -62,14 +63,38 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
 
         setData_Khoa(response_Khoa.data.DT);
         setLoaiTacGia(response_LoaiTacGia.data.DT);
-      };
-      fectData();
-      try {
+
+        setSelectNamHoc(response_NAMHOC.data.DT[0]);
       } catch (error) {
         console.log("error UseEffect call api Data ", error);
       }
-    }
+    };
+
+    fectData(); // Gọi hàm fectData ở đây
   }, []);
+
+  useEffect(() => {
+    const token = Cookies.get("accessToken");
+
+    const decoded = jwtDecode(token);
+    // console.log("check decoded", decoded.taikhoan);
+
+    if (selectNamHoc && token) {
+      const fectDataThongTinGioNghienCuu = async () => {
+        const response_Data = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
+          { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
+        );
+        console.log("check selectNamHoc", selectNamHoc.TENNAMHOC);
+        console.log("check decoded.taikhoan", decoded.taikhoan);
+        console.log(
+          "check fectDataThongTinGioNghienCuu =>",
+          response_Data.data.DT
+        );
+      };
+      fectDataThongTinGioNghienCuu();
+    }
+  }, [selectNamHoc]);
   useEffect(() => {
     tacGiaList.forEach((tacGia, index) => {
       if (tacGia.khoa) {
@@ -120,6 +145,25 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     const updatedTacGiaList = tacGiaList.filter((_, i) => i !== index);
     setTacGiaList(updatedTacGiaList);
   };
+
+  const handleTongTacGia = () => {
+    const tongGio = 40; // Giả sử tổng giờ là 40 (hoặc lấy từ một input)
+    const vaiTro = tacGiaList.map((tacGia) => tacGia.vaiTro); // Giả sử `vaiTro` được lấy từ `tacGiaList`
+
+    // Kiểm tra xem tác giả thứ nhất có phải là viên chức không và có được miễn trách nhiệm không
+    const laVienChucTacGiaThuNhat = tacGiaList[0]?.laVienChuc || false; // Kiểm tra thuộc tính của tác giả đầu tiên
+    const duocMienTrachNhiemTacGiaThuNhat = tacGiaList[0]?.duocMien || false; // Kiểm tra thuộc tính miễn trách nhiệm
+
+    const authorHours = calculateAuthorHours(
+      tongGio,
+      vaiTro,
+      laVienChucTacGiaThuNhat,
+      duocMienTrachNhiemTacGiaThuNhat
+    );
+
+    console.log(authorHours); // Hiển thị kết quả ra console hoặc sử dụng cho mục đích khác
+  };
+
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
@@ -233,7 +277,10 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                             }
                           >
                             {(data_BoMon[index] || []).map((loai) => (
-                              <MenuItem key={loai.MABOMON} value={loai.MABOMON}>
+                              <MenuItem
+                                key={loai.MABOMON}
+                                value={loai.TENBOMON}
+                              >
                                 {loai.TENBOMON}
                               </MenuItem>
                             ))}
@@ -283,7 +330,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                             {LoaiTacGia.map((loai) => (
                               <MenuItem
                                 key={loai.MA_LOAI_TAC_GIA}
-                                value={loai.MA_LOAI_TAC_GIA}
+                                value={loai.TEN_LOAI_TAC_GIA}
                               >
                                 {loai.TEN_LOAI_TAC_GIA}
                               </MenuItem>
@@ -301,7 +348,71 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     <Col
                       md={4}
                       className="row-with-border-danhmuc-nodisplay-flex ml-4"
-                    ></Col>
+                    >
+                      <div key={index} className="tacGia-info mb-3">
+                        {" "}
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              Tác Giả Thuộc:
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.loai}
+                            </Typography>
+                          </Col>
+                        </Row>{" "}
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              Bộ Môn:
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.boMon}
+                            </Typography>
+                          </Col>
+                        </Row>
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              MSGV:
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.maSoGV}
+                            </Typography>
+                          </Col>
+                        </Row>
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              Tên Giảng Viên:
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.tenGV}
+                            </Typography>
+                          </Col>
+                        </Row>
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              Email Tác Giả:
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.emailGV}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Col>
                   </div>
                 ))}
                 <div className="mt-3">
@@ -311,6 +422,15 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     onClick={handleAddTacGia}
                   >
                     Thêm Tác Giả
+                  </Button>
+                </div>{" "}
+                <div className="mt-3">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleTongTacGia}
+                  >
+                    Hoàn Tất Tác Giả
                   </Button>
                 </div>
               </Col>

@@ -348,14 +348,14 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
     const [results, fields] = await pool.execute(
       "select * from thoigian_xacnhan"
     );
-    console.log("tim_THOIGIAN_CHONKHUNG: ", results)
+    console.log("tim_THOIGIAN_CHONKHUNG: ", results);
     return {
       EM: "Xem thời gian thành công !",
       EC: 1,
       DT: results,
     };
   } catch (error) {
-    console.log("error tim_THOIGIAN_CHONKHUNG: ", error)
+    console.log("error tim_THOIGIAN_CHONKHUNG: ", error);
     return {
       EM: "error tim_THOIGIAN_CHONKHUNG",
       EC: -1,
@@ -385,7 +385,6 @@ const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa) => {
     };
   }
 };
-
 
 module.exports = {
   timChucDanh_TENCHUCDANH,

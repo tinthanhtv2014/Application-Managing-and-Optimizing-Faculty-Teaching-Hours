@@ -107,6 +107,7 @@ const deleteLoaiTacGia = async (id) => {
       DT: results_data.DT,
     };
   } catch (error) {
+    console.log(error);
     return {
       EM: "Lỗi services deleteLoaiTacGia",
       EC: -1,
