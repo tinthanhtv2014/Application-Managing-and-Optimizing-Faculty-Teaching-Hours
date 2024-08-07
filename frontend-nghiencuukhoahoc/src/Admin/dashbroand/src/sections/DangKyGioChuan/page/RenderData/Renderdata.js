@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -47,6 +48,7 @@ const RenderData = ({
   const [StartTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
 
+  const navigate = useNavigate();
   useEffect(() => {
     if (dataKhungChuan) {
       const TimeKhungGioChuan = async () => {
@@ -145,6 +147,9 @@ const RenderData = ({
   };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+  const handleMoveRegisterDanhMuc = () => {
+    navigate("/admin/dang-ky-danh-muc");
+  };
   // console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
   if (loading) {
     return <p>loading</p>;
@@ -152,9 +157,8 @@ const RenderData = ({
   return (
     <>
       <Container>
-        <Row className="mb-4">
-          {" "}
-          <Col md={12}>
+        <Row className="mb-4 ">
+          <Col md={6} className="row-with-border1">
             <Button variant="outlined" onClick={handleOpenModal}>
               {" "}
               Mở Cổng Đăng Ký
@@ -163,15 +167,36 @@ const RenderData = ({
               {IsOpenCheckKhoa && (
                 <>
                   {" "}
-                  {TimeDangKyKhungGioChuan
-                    ? `Thời gian mở cổng từ: ${TimeDangKyKhungGioChuan}`
-                    : "Hiện đang đóng cổng đăng ký"}
+                  <p className="text-open-gate">
+                    {" "}
+                    {TimeDangKyKhungGioChuan
+                      ? `Thời gian mở cổng từ: ${TimeDangKyKhungGioChuan}`
+                      : "Hiện đang đóng cổng đăng ký"}
+                  </p>
                 </>
               )}
             </Typography>
+          </Col>{" "}
+          <Col md={6} className="row-with-border1">
+            <Typography>
+              <>
+                <Col>
+                  <Button
+                    variant="contained"
+                    onClick={handleMoveRegisterDanhMuc}
+                  >
+                    Thực Hiện Đăng Ký Khoa Học
+                  </Button>
+                </Col>
+              </>
+            </Typography>{" "}
+            <p className="text-open-gate">
+              Lưu ý phải đăng ký khung giờ chuẩn nghiên cứu khoa học để có thể
+              đăng ký danh mục khoa học công nghệ
+            </p>
           </Col>
         </Row>
-        <Row>
+        <Row className="">
           <Col>
             <Box sx={{ maxWidth: 220 }}>
               <FormControl fullWidth className="profile-email-input">
@@ -275,7 +300,7 @@ const RenderData = ({
             </>
           )}
         </Row>
-        <Row className="mt-4">
+        <Row className="mt-4 row-with-border ">
           <TableContainer
             component={Paper}
             sx={{ width: "100%" }}
