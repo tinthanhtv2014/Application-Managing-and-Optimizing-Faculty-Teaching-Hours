@@ -14,7 +14,15 @@
   }
 
 
+  .row-with-border-danhmuc-nodisplay-flex{
+    margin-top: 10px;
+    margin-bottom: 5px;
 
+    margin-left: 10px;
+    outline: 0.2px solid rgba(48, 54, 61, 0.2); /* Màu nhạt hơn với độ trong suốt */
+    border-radius: 9px;
+    padding: 20px 20px 20px 20px; /* Ghi gọn các thuộc tính padding */
+  }
 
   .text-open-gate{
     opacity: 0.6;
@@ -42,3 +50,21 @@
     text-overflow: ellipsis;
   }
   
+
+  
+  .position-re{
+    position: relative;
+  }
+  .position-ab{
+    position:absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+   margin-top: 10px;
+
+padding-top: 15px;
+padding-right: 10px;
+  }
+  .position-ab:hover{
+    cursor: pointer;
+  }

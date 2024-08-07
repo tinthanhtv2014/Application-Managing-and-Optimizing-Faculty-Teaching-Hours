@@ -30,9 +30,25 @@ const DangKyDanhMucGioChuan = () => {
     useState("Đăng Ký Danh Mục");
   const [TenDeTaiNghienCuu, setTenDeTaiNghienCuu] = useState("");
   const navigate = useNavigate();
+  const [tacGiaList, setTacGiaList] = useState([{ ten: "" }]);
+
+  const handleAddTacGia = () => {
+    setTacGiaList([...tacGiaList, { ten: "" }]);
+  };
+
+  const handleTacGiaChange = (index, value) => {
+    const updatedTacGiaList = [...tacGiaList];
+    updatedTacGiaList[index].ten = value;
+    setTacGiaList(updatedTacGiaList);
+  };
+  const handleRemoveTacGia = (index) => {
+    const updatedTacGiaList = tacGiaList.filter((_, i) => i !== index);
+    setTacGiaList(updatedTacGiaList);
+  };
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
+
   return (
     <>
       <Container>
@@ -69,6 +85,7 @@ const DangKyDanhMucGioChuan = () => {
         {IsOpenSelectOption === "Đăng Ký Danh Mục" ? (
           <>
             {" "}
+            {/* START----------------Tên Đề Tài--------------------------- */}
             <Row>
               <Col md={5} className="row-with-border-danhmuc">
                 <Typography className="text-open-gate detai-b">
@@ -92,6 +109,44 @@ const DangKyDanhMucGioChuan = () => {
                 </Typography>
               </Col>
             </Row>
+            {/* END----------------Tên Đề Tài--------------------------- */}
+            {/* START---------------Danh Sách Tác Giả--------------------------- */}
+            <Row>
+              <Col md={5} className="row-with-border-danhmuc-nodisplay-flex">
+                {tacGiaList.map((tacGia, index) => (
+                  <div
+                    key={index}
+                    className="mt-2 d-flex align-items-center position-re"
+                  >
+                    <TextField
+                      label={`Tên Tác Giả ${index + 1}`}
+                      value={tacGia.ten}
+                      onChange={(e) =>
+                        handleTacGiaChange(index, e.target.value)
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
+                    <i
+                      className="fa-solid fa-xmark position-ab"
+                      aria-label="delete"
+                      onClick={() => handleRemoveTacGia(index)}
+                      size="small"
+                    ></i>
+                  </div>
+                ))}
+                <div className="mt-3">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddTacGia}
+                  >
+                    Thêm Tác Giả
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            {/* END----------------Danh Sách Tác Giả--------------------------- */}
           </>
         ) : (
           "Xem Lịch Sử Đăng Ký Danh Mục"
