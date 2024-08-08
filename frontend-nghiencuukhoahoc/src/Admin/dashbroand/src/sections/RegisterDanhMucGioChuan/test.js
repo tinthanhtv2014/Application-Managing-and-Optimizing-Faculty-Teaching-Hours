@@ -4,6 +4,9 @@ export const calculateAuthorHours = (tongGio, tacGiaList) => {
   let gioTacGiaThongThuong = 0;
 
   const vaiTro = tacGiaList.map((tacGia) => tacGia.loai); // Lấy vai trò từ danh sách tác giả
+  const laVienChuc = tacGiaList.map((tacGia) => tacGia.laVienChuc); // Lấy thông tin viên chức từ danh sách tác giả
+  const duocMien = tacGiaList.map((tacGia) => tacGia.duocMien); // Lấy thông tin miễn chuẩn từ danh sách tác giả
+
   const soTacGiaThuNhat = vaiTro.filter(
     (role) => role === "Tác giả thứ nhất"
   ).length; // Đếm số tác giả thứ nhất
@@ -12,34 +15,81 @@ export const calculateAuthorHours = (tongGio, tacGiaList) => {
   ).length; // Đếm số tác giả chịu trách nhiệm
   const soTacGiaKhac = vaiTro.length - soTacGiaThuNhat - soTacGiaChiuTrachNhiem; // Số tác giả khác
 
-  // a. Giới hạn số tác giả thứ nhất và tác giả chịu trách nhiệm
-  //   if (soTacGiaThuNhat > 2) {
-  //     throw new Error("Chỉ xem xét tối đa 02 đồng tác giả thứ nhất.");
-  //   }
+  const tacGiaThuNhat = tacGiaList.find(
+    (tacGia) => tacGia.loai === "Tác giả thứ nhất"
+  ); // Tìm tác giả thứ nhất
+  console.log("tacGiaThuNhat.laVienChuc", tacGiaThuNhat.laVienChuc);
+  console.log("tacGiaThuNhat.duocMien", tacGiaThuNhat.duocMien);
+  if (tacGiaThuNhat) {
+    if (tacGiaThuNhat.laVienChuc) {
+      // Tác giả thứ nhất là viên chức của trường
+      if (tacGiaThuNhat.duocMien) {
+        // Tác giả thứ nhất được miễn chuẩn
+        gioTacGiaThuNhat = 0;
+        const gioConLai = tongGio * 0.5; // Giờ còn lại để phân phối
 
-  //   if (soTacGiaChiuTrachNhiem > 2) {
-  //     throw new Error("Chỉ xem xét tối đa 02 đồng tác giả chịu trách nhiệm.");
-  //   }
+        if (soTacGiaChiuTrachNhiem > 0) {
+          const soTacGiaConLai =
+            soTacGiaKhac + (soTacGiaChiuTrachNhiem > 0 ? 1 : 0);
+          // Chia đều giờ cho tác giả chịu trách nhiệm
+          if (soTacGiaConLai > 0) {
+            gioTacGiaChiuTrachNhiem = gioConLai / soTacGiaConLai;
+            gioTacGiaThongThuong = gioConLai / soTacGiaConLai; // Phân bổ giờ cho các tác giả còn lại
+          } else {
+            gioTacGiaChiuTrachNhiem = gioConLai / soTacGiaConLai;
+          }
+        } else if (soTacGiaKhac > 0) {
+          gioTacGiaThongThuong = gioConLai / soTacGiaKhac;
+        }
+      } else {
+        // Tác giả thứ nhất không được miễn chuẩn
+        gioTacGiaThuNhat = (tongGio * 0.5) / soTacGiaThuNhat; // Chia đều 50% cho các đồng tác giả thứ nhất
+        const gioConLai = tongGio * 0.5; // Giờ còn lại để phân phối
 
-  // b. Tác giả thứ nhất là viên chức Trường ĐHTV
-  if (soTacGiaThuNhat > 0) {
-    gioTacGiaThuNhat = (tongGio * 0.5) / soTacGiaThuNhat; // Chia đều 50% cho các đồng tác giả thứ nhất
-  }
+        if (soTacGiaChiuTrachNhiem > 0) {
+          const soTacGiaConLai =
+            soTacGiaKhac + (soTacGiaChiuTrachNhiem > 0 ? 1 : 0);
+          // Chia đều giờ cho tác giả chịu trách nhiệm
+          if (soTacGiaConLai > 0) {
+            gioTacGiaChiuTrachNhiem = gioConLai / soTacGiaConLai;
+            gioTacGiaThongThuong = gioConLai / soTacGiaConLai; // Phân bổ giờ cho các tác giả còn lại
+          } else {
+            gioTacGiaChiuTrachNhiem = gioConLai / soTacGiaConLai;
+          }
+        } else if (soTacGiaKhac > 0) {
+          gioTacGiaThongThuong = gioConLai / soTacGiaKhac;
+        }
 
-  const gioConLai = tongGio * 0.5; // Giờ còn lại để phân phối
+        // Tổng số tác giả còn lại
+      }
+    } else {
+      // Tác giả thứ nhất không phải là viên chức của trường
+      if (soTacGiaChiuTrachNhiem > 0) {
+        if (soTacGiaChiuTrachNhiem === 2) {
+          gioTacGiaChiuTrachNhiem = (tongGio * 0.5) / 2; // Chia đều 50% cho hai tác giả chịu trách nhiệm
+        } else if (soTacGiaChiuTrachNhiem === 1) {
+          gioTacGiaChiuTrachNhiem = tongGio * 0.3; // Tác giả chịu trách nhiệm nhận 30% tổng giờ
+          console.log("soTacGiaChiuTrachNhiem", soTacGiaChiuTrachNhiem);
+        }
+      }
 
-  if (soTacGiaChiuTrachNhiem > 0) {
-    if (soTacGiaChiuTrachNhiem === 2) {
-      gioTacGiaChiuTrachNhiem = gioConLai / 2; // Chia đều 50% cho hai tác giả chịu trách nhiệm
-    } else if (soTacGiaChiuTrachNhiem === 1) {
-      gioTacGiaChiuTrachNhiem = tongGio * 0.3; // Tác giả chịu trách nhiệm nhận 30% tổng giờ
+      const gioConLai = tongGio * 0.5; // Giờ còn lại để phân phối
+      const soTacGiaConLai =
+        soTacGiaKhac +
+        (soTacGiaChiuTrachNhiem > 0 ? soTacGiaChiuTrachNhiem : 0); // Tổng số tác giả còn lại
+
+      if (soTacGiaConLai > 0) {
+        gioTacGiaThongThuong = gioConLai / soTacGiaConLai; // Phân bổ giờ cho các tác giả còn lại
+      }
     }
-  }
+  } else {
+    const gioConLai = tongGio * 0.5; // Giờ còn lại để phân phối
+    const soTacGiaConLai =
+      soTacGiaKhac + (soTacGiaChiuTrachNhiem > 0 ? soTacGiaChiuTrachNhiem : 0); // Tổng số tác giả còn lại
 
-  const soTacGiaConLai = soTacGiaKhac + (soTacGiaChiuTrachNhiem > 0 ? 1 : 0); // Tổng số tác giả còn lại
-
-  if (soTacGiaConLai > 0) {
-    gioTacGiaThongThuong = gioConLai / soTacGiaConLai; // Phân bổ giờ cho các tác giả còn lại
+    if (soTacGiaConLai > 0) {
+      gioTacGiaThongThuong = gioConLai / soTacGiaConLai; // Phân bổ giờ cho các tác giả còn lại
+    }
   }
 
   return {
