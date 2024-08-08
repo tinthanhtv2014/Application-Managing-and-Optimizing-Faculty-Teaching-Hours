@@ -237,6 +237,12 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
               </Col>
             </Row>
             {/* END----------------Tên Đề Tài--------------------------- */}
+            {/* START----------------LOẠI DANH MỤC--------------------------- */}
+            <Row>
+              <Col md={7} className="row-with-border-danhmuc"></Col>
+              <Col md={4}></Col>
+            </Row>
+            {/* END----------------LOẠI DANH MỤC--------------------------- */}
             {/* START---------------Danh Sách Tác Giả--------------------------- */}
             <Row>
               <Col>
