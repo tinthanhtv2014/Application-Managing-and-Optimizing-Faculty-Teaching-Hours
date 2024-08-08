@@ -183,7 +183,77 @@ const createDanhMucQuyDoi = async (dataDanhMuc) => {
     }
 };
 
+//========================================================================================================
+
+const Sevicel_TyLe_Excel = async (dataTyLe) => {
+    try {
+        // Kiểm tra tất cả các mục trước khi thêm
+        for (let i = 0; i < dataTyLe.length; i++) {
+            let [checkTyLe, fields] = await pool.execute(
+                `SELECT * FROM ty_le_quy_doi_gio_chuan WHERE TEN_QUY_DOI = ?`,
+                [dataTyLe[i].TEN_QUY_DOI]
+            );
+            if (checkTyLe.length !== 0) {
+                console.log("Tỷ lệ này đã tồn tại: " + dataTyLe[i].TEN_QUY_DOI);
+                return {
+                    EM: "Tỷ lệ này đã tồn tại: " + dataTyLe[i].TEN_QUY_DOI,
+                    EC: 0,
+                    DT: [],
+                };
+            }
+        }
+
+        let results = [];
+        console.log("dataTyLe.length: ", dataTyLe.length);
+
+        // Thêm tất cả các mục
+        for (let i = 0; i < dataTyLe.length; i++) {
+            console.log("Trước khi thêm - i: ", i);
+            let result = await pool.execute(
+                `
+                INSERT INTO ty_le_quy_doi_gio_chuan 
+                (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) 
+                VALUES (?, ?, ?, ?, ?)
+                `,
+                [
+                    dataTyLe[i].MA_QUY_DINH,
+                    dataTyLe[i].TEN_QUY_DOI,
+                    dataTyLe[i].TY_LE,
+                    dataTyLe[i].TRANG_THAI_QUY_DOI,
+                    dataTyLe[i].GHI_CHU_QUY_DOI
+                ]
+            );
+
+            console.log("Sau khi thêm - i: ", i, " - result: ", result);
+            if (result[0].affectedRows === 0) {
+                console.log("Lỗi khi thêm - i: ", i, " - result: ", result);
+                return {
+                    EM: "Không thể thêm tỷ lệ",
+                    EC: -1,
+                    DT: [],
+                };
+            }
+
+            results.push(result.DT); // Lưu ID của loại danh mục vào kết quả
+        }
+
+        return {
+            EM: "Thêm dữ liệu thành công",
+            EC: 1,
+            DT: results,
+        };
+    } catch (error) {
+        console.error("Lỗi trong try-catch: ", error);
+        return {
+            EM: "Đã xảy ra lỗi khi thêm dữ liệu",
+            EC: -1,
+            DT: null,
+        };
+    }
+};
+
 module.exports = {
     Sevicel_LoaiDanhMuc_Excel,
-    Sevicel_DanhMuc_Excel
+    Sevicel_DanhMuc_Excel,
+    Sevicel_TyLe_Excel
 };
