@@ -42,8 +42,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       maSoGV: "",
       tenGV: "",
       emailGV: "",
-      laVienChuc: true,
+      laVienChuc: false,
       duocMien: false,
+      soGio: "",
     },
   ]);
 
