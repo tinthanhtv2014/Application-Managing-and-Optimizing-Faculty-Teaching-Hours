@@ -2,10 +2,6 @@ const {
     xem_giangvien_khoa,
 } = require("../../services/TruongkhoaServices/ServiceTruongKhoa");
 
-const {
-    add,
-} = require("../../services/TruongkhoaServices/test/test");
-
 const GiangVien_thuoc_KhoaController = async (req, res) => {
     try {
         let page = req.query.page;
@@ -31,28 +27,6 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
     }
 };
 
-const testController = async (req, res) => {
-    try {
-        let data = req.body
-        console.log("data: ", data)
-        let results = await add(data)
-
-        return res.status(200).json({
-            EM: results.EM,
-            EC: results.EC,
-            DT: results.DT,
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(200).json({
-            EM: results.EM,
-            EC: results.EC,
-            DT: results.DT,
-        });
-    }
-};
-
 module.exports = {
     GiangVien_thuoc_KhoaController,
-    testController
 };

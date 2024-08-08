@@ -5,14 +5,19 @@ const router = express.Router();
 
 const {
     GiangVien_thuoc_KhoaController,
-    testController,
 } = require("../../controllers/TruongkhoaController/TruongKhoaController");
+
+const {
+    LoaiDanhMucExcelController,
+    DanhMucExcelController,
+    TyLeExcelController
+} = require("../../controllers/TruongkhoaController/testControler");
 
 const TruongKhoaRoute = (app) => {
 
     router.get("/xem", GiangVien_thuoc_KhoaController);
 
-    router.post("/test/tao/excel", testController);
+    router.post("/test/tao/excel", TyLeExcelController);
 
     return app.use("/api/v1/truongkhoa", router);
 };
