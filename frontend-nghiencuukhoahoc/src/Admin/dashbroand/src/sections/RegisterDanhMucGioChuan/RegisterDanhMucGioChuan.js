@@ -451,24 +451,31 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     </Col>
                   </div>
                 ))}
-                <div className="mt-3">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddTacGia}
-                  >
-                    Thêm Tác Giả
-                  </Button>
-                </div>{" "}
-                <div className="mt-3">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleTongTacGia}
-                  >
-                    Hoàn Tất Tác Giả
-                  </Button>
-                </div>
+                <Row>
+                  <Col md={7} className="d-flex justify-content-end">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleTongTacGia}
+                    >
+                      Hoàn Tất Tác Giả
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      style={{ marginLeft: "10px", paddingLeft: "10px" }}
+                      onClick={handleAddTacGia}
+                    >
+                      <i
+                        className="fa-solid fa-plus"
+                        style={{ marginRight: "5px" }}
+                      />{" "}
+                      Thêm Tác Giả
+                    </Button>
+                  </Col>
+
+                  <Col md={4}></Col>
+                </Row>{" "}
               </Col>
             </Row>
             {/* END----------------Danh Sách Tác Giả--------------------------- */}
