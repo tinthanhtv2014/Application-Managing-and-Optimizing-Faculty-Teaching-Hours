@@ -134,4 +134,6 @@ module.exports = {
   updateLoaiDanhMuc,
   deleteLoaiDanhMuc,
   selectLoaiDanhMuc_TRANGTHAI,
+
+  selectLoaiDanhMuc_TEN_LOAI_DANH_MUC
 };

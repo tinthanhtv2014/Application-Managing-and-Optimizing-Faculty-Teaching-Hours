@@ -3,7 +3,7 @@ const {
 } = require("../../services/TruongkhoaServices/ServiceTruongKhoa");
 
 const {
-    test,
+    add,
 } = require("../../services/TruongkhoaServices/test/test");
 
 const GiangVien_thuoc_KhoaController = async (req, res) => {
@@ -33,8 +33,9 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
 
 const testController = async (req, res) => {
     try {
-        console.log("test: ", req.body)
-        let results = await test()
+        let data = req.body
+        console.log("data: ", data)
+        let results = await add(data)
 
         return res.status(200).json({
             EM: results.EM,
