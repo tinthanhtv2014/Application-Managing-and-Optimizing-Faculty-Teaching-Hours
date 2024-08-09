@@ -374,7 +374,22 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                         </>
                       ) : (
                         <>
-                          <p>là giảng viên trong trường</p>{" "}
+                          <Col md={6} className="mt-4">
+                            {" "}
+                            <TextField
+                              label={`Email Giảng Viên`}
+                              value={tacGia.emailGV}
+                              onChange={(e) =>
+                                handleTacGiaChange(
+                                  index,
+                                  "emailGV",
+                                  e.target.value
+                                )
+                              }
+                              fullWidth
+                              margin="normal"
+                            />
+                          </Col>
                         </>
                       )}
                       <Col md={5} className="mt-4 ml-4">
