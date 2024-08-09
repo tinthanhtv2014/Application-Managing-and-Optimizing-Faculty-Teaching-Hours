@@ -20,7 +20,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { calculateAuthorHours } from "./test.js";
+import { calculateAuthorHours } from "./test1.js";
 import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import "./RegisterDanhMucGioChuan.scss";
@@ -163,8 +163,25 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     // Tính toán giờ cho các tác giả
     const authorHours = await calculateAuthorHours(tongGio, tacGiaList);
 
+    // Cập nhật tacGiaList với giờ phù hợp
+    const updatedTacGiaList = tacGiaList.map((tacGia) => {
+      let soGio = 0;
+
+      if (tacGia.loai === "Tác giả thứ nhất") {
+        soGio = authorHours.gioTacGiaThuNhat;
+      } else if (tacGia.loai === "Tác giả chịu trách nhiệm") {
+        soGio = authorHours.gioTacGiaChiuTrachNhiem;
+      } else {
+        soGio = authorHours.gioTacGiaThongThuong;
+      }
+
+      return { ...tacGia, soGio };
+    });
+
+    setTacGiaList(updatedTacGiaList);
+
     console.log(authorHours);
-    console.log("check So gio nghien cuu", SoGioNghienCuuChuan); // Hiển thị kết quả ra console hoặc sử dụng cho mục đích khác
+    console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
   };
 
   const handleback = () => {
@@ -346,41 +363,44 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                             ))}
                           </Select>
                         </FormControl>
+                        <Col>
+                          {" "}
+                          {tacGia.loai === "Tác giả thứ nhất" && (
+                            <>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={tacGia.laVienChuc}
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        index,
+                                        "laVienChuc",
+                                        e.target.checked
+                                      )
+                                    }
+                                  />
+                                }
+                                label="Tác giả thứ nhất là viên chức của trường"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={tacGia.duocMien}
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        index,
+                                        "duocMien",
+                                        e.target.checked
+                                      )
+                                    }
+                                  />
+                                }
+                                label="Tác giả thứ nhất được miễn chuẩn"
+                              />
+                            </>
+                          )}
+                        </Col>
                       </Col>{" "}
-                      {tacGia.loai === "Tác giả thứ nhất" && (
-                        <>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={tacGia.laVienChuc}
-                                onChange={(e) =>
-                                  handleCheckboxChange(
-                                    index,
-                                    "laVienChuc",
-                                    e.target.checked
-                                  )
-                                }
-                              />
-                            }
-                            label="Tác giả thứ nhất là viên chức của trường"
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={tacGia.duocMien}
-                                onChange={(e) =>
-                                  handleCheckboxChange(
-                                    index,
-                                    "duocMien",
-                                    e.target.checked
-                                  )
-                                }
-                              />
-                            }
-                            label="Tác giả thứ nhất được miễn chuẩn"
-                          />
-                        </>
-                      )}
                       <i
                         className="fa-solid fa-xmark position-ab"
                         aria-label="delete"
@@ -451,6 +471,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                           <Col md={7}>
                             <Typography className="text-open-gate">
                               {tacGia.emailGV}
+                            </Typography>
+                          </Col>
+                        </Row>{" "}
+                        <Row className="mt-2">
+                          <Col md={4}>
+                            <Typography className="text-open-gate">
+                              Số giờ nhận được
+                            </Typography>
+                          </Col>
+                          <Col md={7}>
+                            <Typography className="text-open-gate">
+                              {tacGia.soGio}
                             </Typography>
                           </Col>
                         </Row>
