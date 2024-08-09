@@ -18,7 +18,7 @@ import {
 import axios from "axios";
 import CookiesAxios from "../../CookiesAxios";
 import "./ModalselectDanhMuc.scss";
-const ModalDanhMuc = ({ open, onClose }) => {
+const ModalDanhMuc = ({ open, onClose, handleSelectDanhMuc }) => {
   const [dataOptions, setDataOptions] = useState([]);
   const [selectedLoaiDanhMuc, setSelectedLoaiDanhMuc] = useState("");
   const [dataDanhMuc, setDataDanhMuc] = useState([]);
@@ -61,7 +61,10 @@ const ModalDanhMuc = ({ open, onClose }) => {
   const filteredDataDanhMuc = dataDanhMuc.filter((danhmuc) =>
     danhmuc.NOI_DUNG_DANH_MUC.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const handleRowClick = (danhmuc) => {
+    handleSelectDanhMuc(danhmuc); // Gọi hàm onSelect từ component cha và truyền dữ liệu của hàng được chọn
+    onClose(); // Đóng modal sau khi chọn
+  };
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -133,7 +136,11 @@ const ModalDanhMuc = ({ open, onClose }) => {
             </TableHead>
             <TableBody>
               {filteredDataDanhMuc.map((danhmuc) => (
-                <TableRow key={danhmuc.MA_DANH_MUC}>
+                <TableRow
+                  key={danhmuc.MA_DANH_MUC}
+                  onClick={() => handleRowClick(danhmuc)} // Thêm sự kiện click để chọn hàng
+                  style={{ cursor: "pointer" }} // Đổi con trỏ chuột để người dùng biết có thể click
+                >
                   <TableCell sx={{ width: "30%" }}>
                     {danhmuc.NOI_DUNG_DANH_MUC}
                   </TableCell>

@@ -35,7 +35,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [TenDeTaiNghienCuu, setTenDeTaiNghienCuu] = useState("");
   const navigate = useNavigate();
   const [isGiangVienNgoaiTruong, setIsGiangVienNgoaiTruong] = useState(false);
-
+  const [selectedDanhMuc, setSelectedDanhMuc] = useState(null);
   const [tacGiaList, setTacGiaList] = useState([
     {
       ten: "",
@@ -211,6 +211,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleSelectDanhMuc = (danhmuc) => {
+    setSelectedDanhMuc(danhmuc); // Cập nhật state khi nhận được dữ liệu từ Modal
+  };
 
   return (
     <>
@@ -295,7 +298,11 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                   </p>
                   <div>
                     {" "}
-                    <ModalDanhMuc open={open} onClose={handleClose} />
+                    <ModalDanhMuc
+                      open={open}
+                      onClose={handleClose}
+                      handleSelectDanhMuc={handleSelectDanhMuc}
+                    />
                   </div>
                 </Col>
                 <Col md={4} className="row-with-border-danhmuc"></Col>
@@ -505,6 +512,20 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       >
                         <div key={index} className="tacGia-info mb-3">
                           {" "}
+                          <Row className="mt-2">
+                            <Col md={4}>
+                              <Typography className="text-open-gate">
+                                Danh mục đã chọn:
+                              </Typography>
+                            </Col>
+                            <Col md={7}>
+                              <Typography className="text-open-gate">
+                                {selectedDanhMuc
+                                  ? selectedDanhMuc.NOI_DUNG_DANH_MUC
+                                  : "Chưa chọn danh mục"}
+                              </Typography>
+                            </Col>
+                          </Row>
                           <Row className="mt-2">
                             <Col md={4}>
                               <Typography className="text-open-gate">
