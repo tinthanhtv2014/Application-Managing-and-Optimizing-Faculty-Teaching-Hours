@@ -33,6 +33,8 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     useState("Đăng Ký Danh Mục");
   const [TenDeTaiNghienCuu, setTenDeTaiNghienCuu] = useState("");
   const navigate = useNavigate();
+  const [isGiangVienNgoaiTruong, setIsGiangVienNgoaiTruong] = useState(false);
+
   const [tacGiaList, setTacGiaList] = useState([
     {
       ten: "",
@@ -187,7 +189,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
-
+  const handleButtonClick = (isNgoaiTruong) => {
+    setIsGiangVienNgoaiTruong(isNgoaiTruong);
+  };
   return (
     <>
       <Container>
@@ -266,81 +270,114 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
               <Col>
                 {tacGiaList.map((tacGia, index) => (
                   <div key={index} className="mt-2 d-flex">
+                    {" "}
                     <Col
                       md={7}
                       className="row-with-border-danhmuc-nodisplay-flex d-flex position-re"
                     >
-                      <Col md={6} className="mt-2">
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel id={`khoa-label-${index}`}>
-                            Khoa
-                          </InputLabel>
-                          <Select
-                            labelId={`khoa-label-${index}`}
-                            value={tacGia.khoa}
-                            label="Khoa"
-                            onChange={(e) =>
-                              handleTacGiaChange(index, "khoa", e.target.value)
-                            }
-                          >
-                            {data_Khoa.map((loai) => (
-                              <MenuItem key={loai.MAKHOA} value={loai.MAKHOA}>
-                                {loai.TENKHOA}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel id={`boMon-label-${index}`}>
-                            Bộ Môn
-                          </InputLabel>
-                          <Select
-                            labelId={`boMon-label-${index}`}
-                            value={tacGia.boMon}
-                            label="Bộ Môn"
-                            onChange={(e) =>
-                              handleTacGiaChange(index, "boMon", e.target.value)
-                            }
-                          >
-                            {(data_BoMon[index] || []).map((loai) => (
-                              <MenuItem
-                                key={loai.MABOMON}
-                                value={loai.TENBOMON}
+                      {/* ------------------------------------------- */}
+                      {isGiangVienNgoaiTruong ? (
+                        <>
+                          <Col md={6} className="mt-4">
+                            <FormControl fullWidth margin="normal">
+                              <InputLabel id={`khoa-label-${index}`}>
+                                Khoa
+                              </InputLabel>
+                              <Select
+                                labelId={`khoa-label-${index}`}
+                                value={tacGia.khoa}
+                                label="Khoa"
+                                onChange={(e) =>
+                                  handleTacGiaChange(
+                                    index,
+                                    "khoa",
+                                    e.target.value
+                                  )
+                                }
                               >
-                                {loai.TENBOMON}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <TextField
-                          label={`Mã Số GV`}
-                          value={tacGia.maSoGV}
-                          onChange={(e) =>
-                            handleTacGiaChange(index, "maSoGV", e.target.value)
-                          }
-                          fullWidth
-                          margin="normal"
-                        />
-                        <TextField
-                          label={`Tên Giảng Viên`}
-                          value={tacGia.tenGV}
-                          onChange={(e) =>
-                            handleTacGiaChange(index, "tenGV", e.target.value)
-                          }
-                          fullWidth
-                          margin="normal"
-                        />
-                        <TextField
-                          label={`Email Giảng Viên`}
-                          value={tacGia.emailGV}
-                          onChange={(e) =>
-                            handleTacGiaChange(index, "emailGV", e.target.value)
-                          }
-                          fullWidth
-                          margin="normal"
-                        />
-                      </Col>
-                      <Col md={5} className="mt-2 ml-4">
+                                {data_Khoa.map((loai) => (
+                                  <MenuItem
+                                    key={loai.MAKHOA}
+                                    value={loai.MAKHOA}
+                                  >
+                                    {loai.TENKHOA}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                            <FormControl fullWidth margin="normal">
+                              <InputLabel id={`boMon-label-${index}`}>
+                                Bộ Môn
+                              </InputLabel>
+                              <Select
+                                labelId={`boMon-label-${index}`}
+                                value={tacGia.boMon}
+                                label="Bộ Môn"
+                                onChange={(e) =>
+                                  handleTacGiaChange(
+                                    index,
+                                    "boMon",
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {(data_BoMon[index] || []).map((loai) => (
+                                  <MenuItem
+                                    key={loai.MABOMON}
+                                    value={loai.TENBOMON}
+                                  >
+                                    {loai.TENBOMON}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                            <TextField
+                              label={`Mã Số GV`}
+                              value={tacGia.maSoGV}
+                              onChange={(e) =>
+                                handleTacGiaChange(
+                                  index,
+                                  "maSoGV",
+                                  e.target.value
+                                )
+                              }
+                              fullWidth
+                              margin="normal"
+                            />
+                            <TextField
+                              label={`Tên Giảng Viên`}
+                              value={tacGia.tenGV}
+                              onChange={(e) =>
+                                handleTacGiaChange(
+                                  index,
+                                  "tenGV",
+                                  e.target.value
+                                )
+                              }
+                              fullWidth
+                              margin="normal"
+                            />
+                            <TextField
+                              label={`Email Giảng Viên`}
+                              value={tacGia.emailGV}
+                              onChange={(e) =>
+                                handleTacGiaChange(
+                                  index,
+                                  "emailGV",
+                                  e.target.value
+                                )
+                              }
+                              fullWidth
+                              margin="normal"
+                            />
+                          </Col>
+                        </>
+                      ) : (
+                        <>
+                          <p>là giảng viên trong trường</p>{" "}
+                        </>
+                      )}
+                      <Col md={5} className="mt-4 ml-4">
                         <FormControl fullWidth margin="normal">
                           <InputLabel id={`loai-tac-gia-label-${index}`}>
                             Loại Tác Giả {index + 1}
@@ -400,14 +437,41 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                             </>
                           )}
                         </Col>
-                      </Col>{" "}
+                      </Col>
+                      <div className="position-ab-button">
+                        {" "}
+                        <Button
+                          variant={isGiangVienNgoaiTruong ? "text" : "outlined"}
+                          onClick={() => handleButtonClick(true)}
+                          sx={{
+                            color: isGiangVienNgoaiTruong
+                              ? "#9e9e9e"
+                              : "#1976d2",
+                          }}
+                        >
+                          Giảng viên ngoài trường
+                        </Button>
+                        <Button
+                          variant={
+                            !isGiangVienNgoaiTruong ? "text" : "outlined"
+                          }
+                          onClick={() => handleButtonClick(false)}
+                          sx={{
+                            color: !isGiangVienNgoaiTruong
+                              ? "#9e9e9e"
+                              : "#1976d2",
+                          }}
+                        >
+                          Giảng viên trong trường
+                        </Button>
+                      </div>
                       <i
                         className="fa-solid fa-xmark position-ab"
                         aria-label="delete"
                         onClick={() => handleRemoveTacGia(index)}
                         size="small"
                       ></i>{" "}
-                    </Col>{" "}
+                    </Col>
                     <Col
                       md={4}
                       className="row-with-border-danhmuc-nodisplay-flex ml-4"
