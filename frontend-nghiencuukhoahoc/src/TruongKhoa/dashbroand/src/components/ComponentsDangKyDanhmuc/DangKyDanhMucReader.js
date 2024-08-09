@@ -18,6 +18,7 @@ import {
   List,
   ListItem,
   IconButton,
+  SelectChangeEvent
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -31,9 +32,8 @@ const DangKyDanhMuc = () => {
   });
 
   const [inputFields, setInputFields] = useState({
-    tacGiaThuNhat: "",
-    tacGiaChiuTrachNhiem: "",
-    tacGia: ""
+    tacGiaName: "",
+    tacGiaType: "thuNhat"
   });
 
   const [submittedData, setSubmittedData] = useState([]);
@@ -52,24 +52,27 @@ const DangKyDanhMuc = () => {
     });
   };
 
-  const handleAddAuthor = (type) => {
-    if (type === "tacGiaThuNhat" && formData.tacGiaThuNhat.length < 2) {
+  const handleAddAuthor = () => {
+    const { tacGiaName, tacGiaType } = inputFields;
+    if (!tacGiaName) return;
+
+    if (tacGiaType === "thuNhat" && formData.tacGiaThuNhat.length < 2) {
       setFormData({
         ...formData,
-        tacGiaThuNhat: [...formData.tacGiaThuNhat, inputFields.tacGiaThuNhat],
+        tacGiaThuNhat: [...formData.tacGiaThuNhat, tacGiaName],
       });
-    } else if (type === "tacGiaChiuTrachNhiem" && formData.tacGiaChiuTrachNhiem.length < 2) {
+    } else if (tacGiaType === "chiuTrachNhiem" && formData.tacGiaChiuTrachNhiem.length < 2) {
       setFormData({
         ...formData,
-        tacGiaChiuTrachNhiem: [...formData.tacGiaChiuTrachNhiem, inputFields.tacGiaChiuTrachNhiem],
+        tacGiaChiuTrachNhiem: [...formData.tacGiaChiuTrachNhiem, tacGiaName],
       });
-    } else if (type === "tacGia") {
+    } else if (tacGiaType === "tacGia") {
       setFormData({
         ...formData,
-        tacGia: [...formData.tacGia, inputFields.tacGia],
+        tacGia: [...formData.tacGia, tacGiaName],
       });
     }
-    setInputFields({ ...inputFields, [type]: "" });
+    setInputFields({ tacGiaName: "", tacGiaType: "thuNhat" });
   };
 
   const handleRemoveAuthor = (type, index) => {
@@ -123,109 +126,87 @@ const DangKyDanhMuc = () => {
             </FormControl>
           </Box>
 
-          {/* Tác giả thứ nhất */}
+          {/* Nhập tên tác giả và chọn loại */}
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Tác Giả Thứ Nhất (Tối đa 2 người)</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <TextField
-                label="Tên Tác Giả Thứ Nhất"
-                variant="outlined"
-                fullWidth
-                name="tacGiaThuNhat"
-                value={inputFields.tacGiaThuNhat}
-                onChange={handleInputFieldChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ ml: 2 }}
-                onClick={() => handleAddAuthor("tacGiaThuNhat")}
-                disabled={formData.tacGiaThuNhat.length >= 2 || !inputFields.tacGiaThuNhat}
-              >
-                Thêm
-              </Button>
-            </Box>
-            <List>
-              {formData.tacGiaThuNhat.map((author, index) => (
-                <ListItem key={index} secondaryAction={
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGiaThuNhat", index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }>
-                  {author}
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-
-          {/* Tác giả chịu trách nhiệm */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Tác Giả Chịu Trách Nhiệm (Tối đa 2 người)</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <TextField
-                label="Tên Tác Giả Chịu Trách Nhiệm"
-                variant="outlined"
-                fullWidth
-                name="tacGiaChiuTrachNhiem"
-                value={inputFields.tacGiaChiuTrachNhiem}
-                onChange={handleInputFieldChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ ml: 2 }}
-                onClick={() => handleAddAuthor("tacGiaChiuTrachNhiem")}
-                disabled={formData.tacGiaChiuTrachNhiem.length >= 2 || !inputFields.tacGiaChiuTrachNhiem}
-              >
-                Thêm
-              </Button>
-            </Box>
-            <List>
-              {formData.tacGiaChiuTrachNhiem.map((author, index) => (
-                <ListItem key={index} secondaryAction={
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGiaChiuTrachNhiem", index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }>
-                  {author}
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-
-          {/* Tác giả */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Tác Giả (Không giới hạn số lượng)</Typography>
+            <Typography variant="h6">Thêm Tác Giả</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
               <TextField
                 label="Tên Tác Giả"
                 variant="outlined"
                 fullWidth
-                name="tacGia"
-                value={inputFields.tacGia}
+                name="tacGiaName"
+                value={inputFields.tacGiaName}
                 onChange={handleInputFieldChange}
               />
+              <FormControl variant="outlined" sx={{ ml: 2, minWidth: 150 }}>
+                <InputLabel>Loại Tác Giả</InputLabel>
+                <Select
+                  label="Loại Tác Giả"
+                  name="tacGiaType"
+                  value={inputFields.tacGiaType}
+                  onChange={handleInputFieldChange}
+                >
+                  <MenuItem value="thuNhat">Tác Giả Thứ Nhất</MenuItem>
+                  <MenuItem value="chiuTrachNhiem">Tác Giả Chịu Trách Nhiệm</MenuItem>
+                  <MenuItem value="tacGia">Tác Giả</MenuItem>
+                </Select>
+              </FormControl>
               <Button
                 variant="contained"
                 color="primary"
                 sx={{ ml: 2 }}
-                onClick={() => handleAddAuthor("tacGia")}
-                disabled={!inputFields.tacGia}
+                onClick={handleAddAuthor}
+                disabled={!inputFields.tacGiaName}
               >
                 Thêm
               </Button>
             </Box>
-            <List>
-              {formData.tacGia.map((author, index) => (
-                <ListItem key={index} secondaryAction={
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGia", index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }>
-                  {author}
-                </ListItem>
-              ))}
-            </List>
+
+            {/* Danh sách tác giả */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6">Tác Giả Thứ Nhất (Tối đa 2 người)</Typography>
+              <List>
+                {formData.tacGiaThuNhat.map((author, index) => (
+                  <ListItem key={index} secondaryAction={
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGiaThuNhat", index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }>
+                    {author}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6">Tác Giả Chịu Trách Nhiệm (Tối đa 2 người)</Typography>
+              <List>
+                {formData.tacGiaChiuTrachNhiem.map((author, index) => (
+                  <ListItem key={index} secondaryAction={
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGiaChiuTrachNhiem", index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }>
+                    {author}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6">Tác Giả (Không giới hạn số lượng)</Typography>
+              <List>
+                {formData.tacGia.map((author, index) => (
+                  <ListItem key={index} secondaryAction={
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveAuthor("tacGia", index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }>
+                    {author}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
           </Box>
 
           <Button variant="contained" color="primary" type="submit">
