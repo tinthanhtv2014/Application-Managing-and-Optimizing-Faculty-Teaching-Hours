@@ -177,7 +177,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     newTacGiaList[index][field] = value;
     setTacGiaList(newTacGiaList);
   };
+  const [currentEmail, setCurrentEmail] = useState("");
   const handleTacGiaChangeEmail = (index, field, value) => {
+    setCurrentEmail(value);
     console.log("index ");
     const newTacGiaList = [...tacGiaList];
     newTacGiaList[index][field] = value;
@@ -537,27 +539,48 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                 fullWidth
                                 margin="normal"
                               />
-                              {emailSuggestions.length > 0 && (
-                                <div
-                                  className="suggestions-list"
-                                  ref={suggestionsRef}
-                                >
-                                  {emailSuggestions.map((suggestion) => (
-                                    <div
-                                      key={suggestion.id}
-                                      onClick={() => {
-                                        handleSelectGiangVien(
+                              {currentEmail &&
+                                currentEmail === tacGia.emailGV &&
+                                emailSuggestions.length > 0 && (
+                                  <div
+                                    className="suggestions-list"
+                                    ref={suggestionsRef}
+                                  >
+                                    {emailSuggestions.map((suggestion) => (
+                                      <div
+                                        key={suggestion.id}
+                                        onClick={() => {
+                                          handleSelectGiangVien(
+                                            index,
+                                            suggestion
+                                          );
+                                          setCurrentEmail(
+                                            suggestion.TENDANGNHAP
+                                          ); // Cập nhật giá trị email hiện tại
+                                          setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
+                                        }}
+                                      >
+                                        {suggestion.TENDANGNHAP}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              {tacGia.loai == "Tác giả thứ nhất" && (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={tacGia.duocMien}
+                                      onChange={(e) =>
+                                        handleCheckboxChange(
                                           index,
-                                          suggestion
-                                        );
-                                        setSearchTerm(suggestion.TENDANGNHAP); // Cập nhật giá trị tìm kiếm
-                                        setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
-                                      }}
-                                    >
-                                      {suggestion.TENDANGNHAP}
-                                    </div>
-                                  ))}
-                                </div>
+                                          "duocMien",
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Là tác giả thứ nhất nhưng được miễn giờ chuẩn"
+                                />
                               )}
                             </Col>
                           </>
