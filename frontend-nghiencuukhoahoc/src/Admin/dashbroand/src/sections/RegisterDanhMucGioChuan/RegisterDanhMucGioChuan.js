@@ -47,6 +47,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       maSoGV: "",
       tenGV: "",
       emailGV: "",
+      searchTerm: "", // Thêm trường searchTerm
       laVienChuc: true,
       duocMien: false,
       soGio: "",
@@ -156,6 +157,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     const newList = [...tacGiaList];
     newList[index][field] = value;
     setTacGiaList(newList);
+  };
+  const handleSelectGiangVien = (index, giangVien) => {
+    const newTacGiaList = [...tacGiaList];
+    newTacGiaList[index] = {
+      ...newTacGiaList[index],
+      maSoGV: giangVien.MAGV,
+      tenGV: giangVien.TENGV,
+      emailGV: giangVien.TENDANGNHAP,
+      boMon: giangVien.TENBOMON,
+      khoa: giangVien.TENKHOA,
+    };
+    setTacGiaList(newTacGiaList);
   };
   const handleTacGiaChange = (index, field, value) => {
     const newTacGiaList = [...tacGiaList];
@@ -343,12 +356,22 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
               {/* START----------------LOẠI DANH MỤC--------------------------- */}
               <Row>
                 <Col md={7} className="row-with-border-danhmuc ">
-                  <Button variant="contained" onClick={handleOpen}>
-                    Chọn Danh Mục
-                  </Button>
-                  <p className="text-open-gate">
-                    Mở modal để có thể chọn danh mục mà bạn mong muốn
-                  </p>
+                  <Col md={4}>
+                    {" "}
+                    <Button variant="contained" onClick={handleOpen}>
+                      Chọn Danh Mục
+                    </Button>
+                  </Col>
+                  <Col md={7}>
+                    {" "}
+                    <p className="text-open-gate ml-4">
+                      Mở modal để có thể chọn danh mục mà bạn mong muốn. Chọn
+                      loại danh mục để hiển thị thêm các danh mục quy đổi giờ
+                      chuẩn từ sản phẩm công nghệ, phù hợp với từng loại danh
+                      mục.
+                    </p>
+                  </Col>
+
                   <div>
                     {" "}
                     <ModalDanhMuc
@@ -358,7 +381,21 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     />
                   </div>
                 </Col>
-                <Col md={4} className="row-with-border-danhmuc"></Col>
+                <Col md={4} className="row-with-border-danhmuc">
+                  {" "}
+                  <Col md={4}>
+                    <Typography className="text-open-gate ">
+                      Danh mục đã chọn:
+                    </Typography>
+                  </Col>
+                  <Col md={7}>
+                    <Typography className="text-open-gate">
+                      {selectedDanhMuc
+                        ? selectedDanhMuc.NOI_DUNG_DANH_MUC
+                        : "Chưa chọn danh mục"}
+                    </Typography>
+                  </Col>
+                </Col>
               </Row>
               {/* END----------------LOẠI DANH MỤC--------------------------- */}
               {/* START---------------Danh Sách Tác Giả--------------------------- */}
@@ -502,11 +539,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                     <div
                                       key={suggestion.id}
                                       onClick={() => {
-                                        handleTacGiaChange(
-                                          index,
-                                          "emailGV",
-                                          suggestion.TENDANGNHAP
-                                        );
+                                        handleSelectGiangVien(index, {
+                                          MAGV: suggestion.MAGV,
+                                          TENBOMON: suggestion.TENBOMON,
+                                          TENDANGNHAP: suggestion.TENDANGNHAP,
+                                          TENGV: suggestion.TENGV,
+                                          TENKHOA: suggestion.TENKHOA,
+                                        });
                                         setSearchTerm(suggestion.TENDANGNHAP); // Cập nhật giá trị tìm kiếm
                                         setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
                                       }}
@@ -576,20 +615,6 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       >
                         <div key={index} className="tacGia-info mb-3">
                           {" "}
-                          <Row className="mt-2">
-                            <Col md={4}>
-                              <Typography className="text-open-gate">
-                                Danh mục đã chọn:
-                              </Typography>
-                            </Col>
-                            <Col md={7}>
-                              <Typography className="text-open-gate">
-                                {selectedDanhMuc
-                                  ? selectedDanhMuc.NOI_DUNG_DANH_MUC
-                                  : "Chưa chọn danh mục"}
-                              </Typography>
-                            </Col>
-                          </Row>
                           <Row className="mt-2">
                             <Col md={4}>
                               <Typography className="text-open-gate">

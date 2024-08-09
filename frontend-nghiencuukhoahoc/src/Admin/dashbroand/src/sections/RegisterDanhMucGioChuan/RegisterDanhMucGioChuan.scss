@@ -4,7 +4,7 @@
     margin-bottom: 5px;
 
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
 
     margin-left: 10px;
@@ -50,11 +50,11 @@
 
     right: 0;
 }
-.row-with-border-danhmuc {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+// .row-with-border-danhmuc {
+//     white-space: nowrap;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//   }
   
   // .detai-a {
   //   display: flex;
