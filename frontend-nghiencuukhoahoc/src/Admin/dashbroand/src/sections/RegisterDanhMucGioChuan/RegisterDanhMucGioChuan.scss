@@ -96,3 +96,35 @@ margin-left: 20px;
   .position-ab:hover{
     cursor: pointer;
   }
+
+
+
+
+
+
+
+
+
+
+  // ------------css gợi ý -----------------
+
+  .suggestions-list {
+    position: absolute; /* Đặt vị trí tuyệt đối để hiển thị bên dưới input */
+    background-color: white; /* Màu nền trắng */
+    border: 1px solid #ccc; /* Viền nhẹ */
+    border-radius: 4px; /* Bo tròn góc */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    max-height: 200px; /* Chiều cao tối đa */
+    overflow-y: auto; /* Cuộn nếu nội dung vượt quá chiều cao tối đa */
+    z-index: 1000; /* Đảm bảo danh sách gợi ý hiển thị trên các phần tử khác */
+  }
+  
+  .suggestions-list div {
+    padding: 8px 12px; /* Padding cho từng mục gợi ý */
+    cursor: pointer; /* Con trỏ chuột khi di chuột qua */
+  }
+  
+  .suggestions-list div:hover {
+    background-color: #f0f0f0; /* Đổi màu nền khi di chuột qua mục */
+  }
+  

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Table,
@@ -36,6 +36,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const navigate = useNavigate();
   const [isGiangVienNgoaiTruong, setIsGiangVienNgoaiTruong] = useState(false);
   const [selectedDanhMuc, setSelectedDanhMuc] = useState(null);
+  const suggestionsRef = useRef(null); // Tạo ref cho danh sách gợi ý
 
   const [tacGiaList, setTacGiaList] = useState([
     {
@@ -52,6 +53,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     },
   ]);
   const [emailSuggestions, setEmailSuggestions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(null); // Từ khóa tìm kiếm
 
   const [LoaiTacGia, setLoaiTacGia] = useState([]);
   const [data_Khoa, setData_Khoa] = useState([]);
@@ -218,21 +220,51 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   };
 
   // -------------SEARCH EMAIL---------------------------------
-  useEffect(() => {}, []);
-  const fetchEmailSuggestions = async (email) => {
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
-        {
-          EMAIL: email,
+  useEffect(() => {
+    const fetchEmailSuggestions = async () => {
+      if (searchTerm) {
+        if (searchTerm.trim() === "") {
+          setEmailSuggestions([]); // Nếu từ khóa rỗng, xóa gợi ý
+          return;
         }
-      );
-      console.log(response.data);
-      if (response.data.EC === 1) {
-        setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+
+        try {
+          const response = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
+            {
+              EMAIL: searchTerm,
+            }
+          );
+          console.log("check search", response.data);
+          if (response.data.EC === 1) {
+            setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+          }
+        } catch (error) {
+          console.error("Error fetching email suggestions:", error);
+        }
       }
-    } catch (error) {
-      console.error("Error fetching email suggestions:", error);
+    };
+
+    // Gọi hàm fetchEmailSuggestions với delay
+    const delayDebounceFn = setTimeout(() => {
+      fetchEmailSuggestions();
+    }, 0); // Đợi 300ms trước khi gọi API
+
+    return () => clearTimeout(delayDebounceFn); // Dọn dẹp để tránh gọi API khi nhập quá nhanh
+  }, [searchTerm]); // Chạy lại khi searchTerm thay đổi
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(event.target)
+    ) {
+      setEmailSuggestions([]); // Ẩn gợi ý khi click bên ngoài
     }
   };
 
@@ -439,23 +471,33 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                         ) : (
                           <>
                             {" "}
-                            <Col md={7} className="mt-4">
+                            <Col
+                              md={7}
+                              className="mt-4"
+                              style={{ position: "relative" }}
+                            >
                               {" "}
+                              {/* Đặt position: relative */}
                               <TextField
                                 label={`Email Giảng Viên`}
-                                value={tacGia.emailGV}
-                                onChange={(e) =>
+                                value={searchTerm}
+                                onChange={(e) => {
+                                  setSearchTerm(e.target.value);
                                   handleTacGiaChange(
                                     index,
                                     "emailGV",
                                     e.target.value
-                                  )
-                                }
+                                  );
+                                }}
                                 fullWidth
                                 margin="normal"
                               />
                               {emailSuggestions.length > 0 && (
-                                <div className="suggestions-list">
+                                <div
+                                  className="suggestions-list"
+                                  ref={suggestionsRef}
+                                >
+                                  {" "}
                                   {emailSuggestions.map((suggestion) => (
                                     <div
                                       key={suggestion.id}
@@ -463,36 +505,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                         handleTacGiaChange(
                                           index,
                                           "emailGV",
-                                          suggestion.email
+                                          suggestion.TENDANGNHAP
                                         );
+                                        setSearchTerm(suggestion.TENDANGNHAP); // Cập nhật giá trị tìm kiếm
                                         setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
                                       }}
                                     >
-                                      {suggestion.email}
+                                      {suggestion.TENDANGNHAP}
                                     </div>
                                   ))}
                                 </div>
                               )}
-                              {tacGia.loai === "Tác giả thứ nhất" && (
-                                <>
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={tacGia.duocMien}
-                                        onChange={(e) =>
-                                          handleCheckboxChange(
-                                            index,
-                                            "duocMien",
-                                            e.target.checked
-                                          )
-                                        }
-                                      />
-                                    }
-                                    label="Tác giả thứ nhất được miễn chuẩn"
-                                  />
-                                </>
-                              )}
-                            </Col>{" "}
+                            </Col>
                           </>
                         )}
                         <Col md={4} className="mt-4 ml-4">
