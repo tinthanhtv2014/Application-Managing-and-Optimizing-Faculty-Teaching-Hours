@@ -2,26 +2,44 @@
 .row-with-border-danhmuc {
     margin-top: 10px;
     margin-bottom: 5px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     margin-left: 10px;
+
     outline: 0.2px solid rgba(48, 54, 61, 0.2); /* Màu nhạt hơn với độ trong suốt */
+
     border-radius: 9px;
+
     padding: 20px 20px 20px 20px; /* Ghi gọn các thuộc tính padding */
 
   }
-
+.pml-2{
+  margin-left: 10px !important;
+}
 
   .row-with-border-danhmuc-nodisplay-flex{
     margin-top: 10px;
     margin-bottom: 5px;
  
-    margin-left: 10px;
+    
+
     outline: 0.2px solid rgba(48, 54, 61, 0.2); /* Màu nhạt hơn với độ trong suốt */
+
     border-radius: 9px;
-    padding: 20px 20px 20px 20px; /* Ghi gọn các thuộc tính padding */
+
+    padding: 20px 20px 20px 25px; /* Ghi gọn các thuộc tính padding */
+
+
+    
   }
+  .custom-col {
+    width: calc(100% + 14px); /* Thêm chiều rộng 10px */
+    max-width: calc((7 / 12) * 100% + 14px); /* Đảm bảo chiều rộng không vượt quá 7 cột cộng thêm 10px */
+}
+
 
   .text-open-gate{
     opacity: 0.6;
@@ -38,16 +56,16 @@
     text-overflow: ellipsis;
   }
   
-  .detai-a {
-    display: flex;
-    align-items: center;
-  }
+  // .detai-a {
+  //   display: flex;
+  //   align-items: center;
+  // }
   
-  .detai-b {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  // .detai-b {
+  //   white-space: nowrap;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  // }
   
 
   
@@ -62,7 +80,6 @@
    margin-top: 10px;
 
 // padding-top: 15px;
-
 padding-right: 10px;
   }
   .position-ab-button{
