@@ -8,18 +8,22 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
-
+import CookiesAxios from "../../CookiesAxios";
 const ModalDanhMuc = ({ open, onClose }) => {
   const [dataOptions, setDataOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [fetchedData, setFetchedData] = useState(null);
-
+  const [selectedLoaiDanhMuc, setSelectedLoaiDanhMuc] = useState("");
+  const [dataDanhMuc, setDataDanhMuc] = useState([]);
+  const [dataLoaiDanhMuc, setDataLoaiDanhMuc] = useState([]);
   // Gọi API để lấy dữ liệu cho thẻ select
   useEffect(() => {
     const fetchDataOptions = async () => {
       try {
-        const response = await axios.get("URL_API_GET_OPTIONS"); // Thay đổi với URL thực tế
-        setDataOptions(response.data);
+        const response_LoaiDanhMuc = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaidanhmuc`
+        );
+        if (response_LoaiDanhMuc.data.EC === 1) {
+          setDataLoaiDanhMuc(response_LoaiDanhMuc.data.DT);
+        }
       } catch (error) {
         console.error("Error fetching options:", error);
       }
@@ -31,12 +35,15 @@ const ModalDanhMuc = ({ open, onClose }) => {
   // Hàm xử lý khi chọn option
   const handleSelectChange = async (event) => {
     const value = event.target.value;
-    setSelectedOption(value);
+    setSelectedLoaiDanhMuc(value);
 
     // Gọi API để lấy dữ liệu dựa trên option đã chọn
     try {
-      const response = await axios.get(`URL_API_GET_DATA/${value}`); // Thay đổi với URL thực tế
-      setFetchedData(response.data);
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/danhmucquydoi/${value}`
+      ); // Thay đổi với URL thực tế
+      setDataDanhMuc(response.data.DT);
+      console.log("check dataa danh muc ", response.data.DT);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -68,19 +75,24 @@ const ModalDanhMuc = ({ open, onClose }) => {
           <InputLabel id="select-label">Chọn Option</InputLabel>
           <Select
             labelId="select-label"
-            value={selectedOption}
+            value={selectedLoaiDanhMuc}
             onChange={handleSelectChange}
           >
-            {dataOptions.map((option) => (
-              <MenuItem key={option.id} value={option.value}>
-                {option.label}
+            {dataLoaiDanhMuc.map((danhmuc) => (
+              <MenuItem
+                key={danhmuc.MA_LOAI_DANH_MUC}
+                value={danhmuc.MA_LOAI_DANH_MUC}
+              >
+                {danhmuc.TEN_LOAI_DANH_MUC}
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
-
-        {/* Hiển thị dữ liệu được lấy từ backend nếu có */}
-        {fetchedData && <div>{JSON.stringify(fetchedData)}</div>}
+        </FormControl>{" "}
+        {dataDanhMuc.map((danhmuc) => (
+          <p key={danhmuc.MA_DANH_MUC} value={danhmuc.MA_DANH_MUC}>
+            {danhmuc.NOI_DUNG_DANH_MUC}
+          </p>
+        ))}
       </Box>
     </Modal>
   );

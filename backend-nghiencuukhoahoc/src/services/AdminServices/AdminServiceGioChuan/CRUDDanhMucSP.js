@@ -19,6 +19,25 @@ const selectDanhMucQuyDoi = async () => {
   }
 };
 
+const selectOnlyDanhMucQuyDoi = async (MA_LOAI_DANH_MUC) => {
+  try {
+    let [results, fields] = await pool.execute(
+      `SELECT * FROM danhmucquydoispkhcn where MA_LOAI_DANH_MUC =?`,
+      [MA_LOAI_DANH_MUC]
+    );
+    return {
+      EM: "Xem thông tin danh mục quy đổi thành công",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectDanhMucQuyDoi",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const selectDanhMucQuyDoi_NOI_DUNG_DANH_MUC = async (NOI_DUNG_DANH_MUC) => {
   try {
     let [results, fields] = await pool.execute(
@@ -182,4 +201,5 @@ module.exports = {
   createDanhMucQuyDoi,
   updateDanhMucQuyDoi,
   deleteDanhMucQuyDoi,
+  selectOnlyDanhMucQuyDoi,
 };

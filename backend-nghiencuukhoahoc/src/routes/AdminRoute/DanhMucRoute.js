@@ -5,6 +5,7 @@ const {
   addDanhMucQuyDoi,
   editDanhMucQuyDoi,
   removeDanhMucQuyDoi,
+  getOnlyDanhMucQuyDoi,
 
   getQuyDinh,
   addQuyDinh,
@@ -46,6 +47,7 @@ const CRUDDanhMuc = (app) => {
 
   // Route cho các API quản lý danh mục quy đổi, yêu cầu xác thực JWT
   router.get("/danhmucquydoi", checkUserJWT, getDanhMucQuyDoi);
+  router.get("/danhmucquydoi/:id", checkUserJWT, getOnlyDanhMucQuyDoi);
   router.post("/danhmucquydoi", checkUserJWT, addDanhMucQuyDoi);
   router.put("/danhmucquydoi/:id", checkUserJWT, editDanhMucQuyDoi);
   router.delete("/danhmucquydoi/:id", checkUserJWT, removeDanhMucQuyDoi);

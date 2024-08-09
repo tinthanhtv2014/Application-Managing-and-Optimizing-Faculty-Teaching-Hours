@@ -1,5 +1,6 @@
 const {
   selectDanhMucQuyDoi,
+  selectOnlyDanhMucQuyDoi,
   createDanhMucQuyDoi,
   updateDanhMucQuyDoi,
   deleteDanhMucQuyDoi,
@@ -57,6 +58,25 @@ const getAllQuyDinh = async (req, res) => {
   }
 };
 
+const getOnlyDanhMucQuyDoi = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("check id", id);
+    const results = await selectOnlyDanhMucQuyDoi(id);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Internal server error",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
 const getDanhMucQuyDoi = async (req, res) => {
   try {
     const results = await selectDanhMucQuyDoi();
@@ -681,6 +701,7 @@ module.exports = {
   addDanhMucQuyDoi,
   editDanhMucQuyDoi,
   removeDanhMucQuyDoi,
+  getOnlyDanhMucQuyDoi,
 
   //quy định
   getQuyDinh,
