@@ -1,5 +1,6 @@
 const {
     xem_giangvien_khoa,
+    timkiem_email_taikhoan,
 } = require("../../services/TruongkhoaServices/ServiceTruongKhoa");
 
 const GiangVien_thuoc_KhoaController = async (req, res) => {
@@ -27,6 +28,28 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
     }
 };
 
+const timkiem_email_taikhoanController = async (req, res) => {
+    try {
+        let email = req.body.EMAIL;
+        // console.log("email: ", email)
+        let results = await timkiem_email_taikhoan(email);
+
+        return res.status(200).json({
+            EM: results.EM,
+            EC: results.EC,
+            DT: results.DT,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Đã xảy ra lỗi phía server",
+            EC: -1,
+            DT: null,
+        });
+    }
+};
+
 module.exports = {
     GiangVien_thuoc_KhoaController,
+    timkiem_email_taikhoanController,
 };

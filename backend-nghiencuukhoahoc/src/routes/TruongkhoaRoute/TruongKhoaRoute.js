@@ -5,6 +5,7 @@ const router = express.Router();
 
 const {
     GiangVien_thuoc_KhoaController,
+    timkiem_email_taikhoanController,
 } = require("../../controllers/TruongkhoaController/TruongKhoaController");
 
 const {
@@ -16,6 +17,7 @@ const {
 const TruongKhoaRoute = (app) => {
 
     router.get("/xem", GiangVien_thuoc_KhoaController);
+    router.post("/timkiem/email", timkiem_email_taikhoanController);
 
     router.post("/test/tao/excel", TyLeExcelController);
 

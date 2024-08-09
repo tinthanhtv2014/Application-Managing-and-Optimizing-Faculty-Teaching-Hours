@@ -122,6 +122,37 @@ ORDER BY
   }
 };
 
+const timkiem_email_taikhoan = async (email) => {
+  try {
+    const connection = await pool.getConnection();
+    const query = "SELECT * FROM TAIKHOAN WHERE TENDANGNHAP LIKE ?";
+    const [rows] = await connection.execute(query, [`%${email}%`]);
+    connection.release();
+
+    if (rows.length > 0) {
+      return {
+        EM: "Tìm thấy các email gần đúng",
+        EC: 0,
+        DT: rows, // Trả về danh sách các tài khoản tìm được
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy email gần đúng",
+        EC: 1,
+        DT: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      EM: "Đã xảy ra lỗi tìm kiếm email",
+      EC: -1,
+      DT: null,
+    };
+  }
+};
+
 module.exports = {
   xem_giangvien_khoa,
+  timkiem_email_taikhoan,
 };
