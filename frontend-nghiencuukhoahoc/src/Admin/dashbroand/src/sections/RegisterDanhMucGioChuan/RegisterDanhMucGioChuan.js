@@ -61,6 +61,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [data_BoMon, setData_BoMon] = useState([]);
   const [selectNamHoc, setSelectNamHoc] = useState([]);
   const [SoGioNghienCuuChuan, setSoGioNghienCuuChuan] = useState(null);
+  const [SoGioDanhMucDaChon, setSoGioDanhMucDaChon] = useState(null);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const fectData = async () => {
@@ -192,7 +193,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
 
   const handleTongTacGia = async () => {
     console.log("check datalist", tacGiaList);
-    const tongGio = SoGioNghienCuuChuan;
+    const tongGio = SoGioDanhMucDaChon;
 
     // Tính toán giờ cho các tác giả
     const authorHours = await calculateAuthorHours(tongGio, tacGiaList);
@@ -240,6 +241,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   };
   const handleSelectDanhMuc = (danhmuc) => {
     setSelectedDanhMuc(danhmuc); // Cập nhật state khi nhận được dữ liệu từ Modal
+    setSoGioDanhMucDaChon(danhmuc.GIO_CHUAN);
   };
 
   // -------------SEARCH EMAIL---------------------------------
@@ -336,18 +338,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
               <Row>
                 <Col md={7} className="row-with-border-danhmuc">
                   <Col md={4}>
-                    {" "}
                     <Typography className="text-open-gate detai-b">
                       Nhập Tên Đề Tài
                     </Typography>
-                  </Col>{" "}
+                  </Col>
                   <Col md={7}>
                     <TextField
-                      hiddenLabel
-                      id="filled-hidden-label-normal"
-                      defaultValue="Normal"
-                      name="TenDeTai"
-                      type="text"
+                      label="Tên Đề Tài" // Thêm label ở đây
                       variant="outlined"
                       value={TenDeTaiNghienCuu}
                       onChange={(e) => setTenDeTaiNghienCuu(e.target.value)}
@@ -355,10 +352,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     />
                   </Col>
                 </Col>
+
                 <Col md={4} className="row-with-border-danhmuc d-flex detai-a">
                   {/* <p className="text-tendetai "></p> */}
                   <Typography className="text-open-gate detai-b">
-                    {TenDeTaiNghienCuu}
+                    {TenDeTaiNghienCuu
+                      ? TenDeTaiNghienCuu
+                      : "Bạn Chưa Nhập Tên Đề Tài Của Mình"}
                   </Typography>
                 </Col>
               </Row>
@@ -375,10 +375,12 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                   <Col md={7}>
                     {" "}
                     <p className="text-open-gate ml-4">
-                      Mở modal để có thể chọn danh mục mà bạn mong muốn. Chọn
+                      {selectedDanhMuc
+                        ? selectedDanhMuc.NOI_DUNG_DANH_MUC
+                        : `Mở modal để có thể chọn danh mục mà bạn mong muốn. Chọn
                       loại danh mục để hiển thị thêm các danh mục quy đổi giờ
                       chuẩn từ sản phẩm công nghệ, phù hợp với từng loại danh
-                      mục.
+                      mục`}
                     </p>
                   </Col>
 
@@ -391,20 +393,19 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     />
                   </div>
                 </Col>
-                <Col md={4} className="row-with-border-danhmuc">
-                  {" "}
-                  <Col md={4}>
-                    <Typography className="text-open-gate ">
-                      Danh mục đã chọn:
+                <Col md={4} className="row-with-border-danhmuc ">
+                  <div className="d-flex justify-content-between w-100 mb-2">
+                    <Typography className="text-open-gate">
+                      Số Giờ Chuẩn
                     </Typography>
-                  </Col>
-                  <Col md={7}>
+                  </div>
+                  <div className="d-flex justify-content-between w-100">
                     <Typography className="text-open-gate">
                       {selectedDanhMuc
-                        ? selectedDanhMuc.NOI_DUNG_DANH_MUC
+                        ? selectedDanhMuc.GIO_CHUAN
                         : "Chưa chọn danh mục"}
                     </Typography>
-                  </Col>
+                  </div>
                 </Col>
               </Row>
               {/* END----------------LOẠI DANH MỤC--------------------------- */}
