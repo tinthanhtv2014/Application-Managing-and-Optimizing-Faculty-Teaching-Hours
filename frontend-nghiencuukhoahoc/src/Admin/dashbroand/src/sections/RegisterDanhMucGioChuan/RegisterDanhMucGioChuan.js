@@ -301,12 +301,12 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
             <Col md={2}>
               {" "}
               <Button variant="contained" onClick={handleback}>
-                Trờ Về
+                Trở Về
               </Button>
             </Col>
           </Row>{" "}
           <Row className="mt-4">
-            <Col md={6}>
+            <Col md={7}>
               <Col md={6}>
                 {" "}
                 <FormControl fullWidth>
@@ -329,6 +329,20 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                   </Select>
                 </FormControl>
               </Col>
+            </Col>{" "}
+            <Col md={4} className="mt-2 ml-4">
+              {" "}
+              <Typography>
+                {SoGioNghienCuuChuan ? (
+                  <p className="text-open-gate">
+                    {" "}
+                    Số Giờ Nghiên Cứu Khoa Học Chuẩn Của Bạn Là{" "}
+                    <span className="text-info ">{SoGioNghienCuuChuan}</span>
+                  </p>
+                ) : (
+                  "Bạn Chưa Đăng Ký Giờ Chuẩn Cho Năm Nay"
+                )}
+              </Typography>
             </Col>
           </Row>
           {IsOpenSelectOption === "Đăng Ký Danh Mục" ? (
@@ -400,7 +414,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     </Typography>
                   </div>
                   <div className="d-flex justify-content-between w-100">
-                    <Typography className="text-open-gate">
+                    <Typography className="text-open-gate text-info">
                       {selectedDanhMuc
                         ? selectedDanhMuc.GIO_CHUAN
                         : "Chưa chọn danh mục"}
@@ -710,7 +724,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate text-info">
                                 {tacGia.soGio}
                               </Typography>
                             </Col>
