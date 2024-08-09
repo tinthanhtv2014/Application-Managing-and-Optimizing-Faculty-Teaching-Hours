@@ -444,9 +444,6 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               <TextField
                                 label={`Email Giảng Viên`}
                                 value={tacGia.emailGV}
-                                onChange={() =>
-                                  fetchEmailSuggestions(tacGia.emailGV)
-                                } // Gọi hàm khi click vào ô nhập liệu
                                 onChange={(e) =>
                                   handleTacGiaChange(
                                     index,
