@@ -22,6 +22,11 @@ const navConfig = [
     path: '/dang-ky-khung-gio-chuan',
     icon: icon('ic_user'),
   },
+  {
+    title: 'Đăng ký danh mục sản phẩm KHCN',
+    path: '/Dang-ky-danh-muc',
+    icon: icon('ic_user'),
+  },
 
 ];
 

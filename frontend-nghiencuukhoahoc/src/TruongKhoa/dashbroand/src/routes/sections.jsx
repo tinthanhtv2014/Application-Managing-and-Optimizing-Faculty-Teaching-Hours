@@ -1,5 +1,3 @@
-
-
 import { lazy, Suspense } from 'react';
 
 import { Navigate, useRoutes } from 'react-router-dom';
@@ -10,6 +8,8 @@ import DangKyGioChuan from '../sections/DangKyGioChuan/IndexDangKyGioChuan';
 import AccountGV from '../sections/Account/AccountGV';
 
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
+const DangKyDanhMuc = lazy(() => import('../sections/DangKyDanhMuc/DangKyDanhMuc'));
+
 const ChangePassword = lazy(() => import('../sections/changePassword/changePassword'));
 const ChatAdmin = lazy(() => import('../sections/ChatAdmin/ChatAdmin'));
 const OnlyChiTietHoaDon = lazy(() => import('../sections/ListOrders/ChiTietHoaDon/OnlyChiTietHoaDon'));
@@ -69,6 +69,17 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <DangKyGioChuan />
+          </Suspense>
+        </DashboardLayout>
+      )
+    },
+
+    {
+      path: '/Dang-ky-danh-muc',
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DangKyDanhMuc />
           </Suspense>
         </DashboardLayout>
       )
