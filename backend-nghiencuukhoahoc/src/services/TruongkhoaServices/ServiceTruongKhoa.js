@@ -126,7 +126,8 @@ const timkiem_email_taikhoan = async (email) => {
   try {
     //làm ơn viết THƯỜNG TABLE NHÉ !!! QUỐC BẢO
     const connection = await pool.getConnection();
-    const query = "SELECT * FROM taikhoan WHERE TENDANGNHAP LIKE ? LIMIT 5";
+    const query =
+      "SELECT khoa.TENKHOA,bomon.TENBOMON,giangvien.MAGV,giangvien.TENGV,taikhoan.TENDANGNHAP FROM taikhoan, giangvien,khoa,bomon WHERE khoa.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and giangvien.MAGV = taikhoan.MAGV and taikhoan.TENDANGNHAP LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${email}%`]);
     connection.release();
 
