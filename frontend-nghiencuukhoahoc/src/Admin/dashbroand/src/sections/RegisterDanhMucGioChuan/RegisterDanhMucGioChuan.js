@@ -44,7 +44,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       maSoGV: "",
       tenGV: "",
       emailGV: "",
-      laVienChuc: false,
+      laVienChuc: true,
       duocMien: false,
       soGio: "",
     },
@@ -140,6 +140,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
         maSoGV: "",
         tenGV: "",
         emailGV: "",
+        laVienChuc: true,
+        duocMien: false,
+        soGio: "",
       },
     ]);
   };
@@ -189,9 +192,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
-  const handleButtonClick = (isNgoaiTruong) => {
-    setIsGiangVienNgoaiTruong(isNgoaiTruong);
+  const handleButtonClick = (index, isNgoaiTruong) => {
+    console.log("check isNgoaiTruong", isNgoaiTruong);
+    setTacGiaList((prevList) =>
+      prevList.map(
+        (tacGia, i) =>
+          i === index
+            ? { ...tacGia, laVienChuc: isNgoaiTruong } // Thay đổi laVienChuc của giảng viên tại index
+            : tacGia // Giữ nguyên các giảng viên khác
+      )
+    );
   };
+
   return (
     <>
       <Container>
@@ -276,7 +288,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       className="row-with-border-danhmuc-nodisplay-flex d-flex position-re"
                     >
                       {/* ------------------------------------------- */}
-                      {isGiangVienNgoaiTruong ? (
+                      {!tacGia.laVienChuc ? (
                         <>
                           <Col md={6} className="mt-4">
                             <FormControl fullWidth margin="normal">
@@ -374,6 +386,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                         </>
                       ) : (
                         <>
+                          {" "}
                           <Col md={6} className="mt-4">
                             {" "}
                             <TextField
@@ -388,8 +401,27 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               }
                               fullWidth
                               margin="normal"
-                            />
-                          </Col>
+                            />{" "}
+                            {tacGia.loai === "Tác giả thứ nhất" && (
+                              <>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={tacGia.duocMien}
+                                      onChange={(e) =>
+                                        handleCheckboxChange(
+                                          index,
+                                          "duocMien",
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Tác giả thứ nhất được miễn chuẩn"
+                                />
+                              </>
+                            )}
+                          </Col>{" "}
                         </>
                       )}
                       <Col md={5} className="mt-4 ml-4">
@@ -415,66 +447,22 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                             ))}
                           </Select>
                         </FormControl>
-                        <Col>
-                          {" "}
-                          {tacGia.loai === "Tác giả thứ nhất" && (
-                            <>
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={tacGia.laVienChuc}
-                                    onChange={(e) =>
-                                      handleCheckboxChange(
-                                        index,
-                                        "laVienChuc",
-                                        e.target.checked
-                                      )
-                                    }
-                                  />
-                                }
-                                label="Tác giả thứ nhất là viên chức của trường"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={tacGia.duocMien}
-                                    onChange={(e) =>
-                                      handleCheckboxChange(
-                                        index,
-                                        "duocMien",
-                                        e.target.checked
-                                      )
-                                    }
-                                  />
-                                }
-                                label="Tác giả thứ nhất được miễn chuẩn"
-                              />
-                            </>
-                          )}
-                        </Col>
                       </Col>
                       <div className="position-ab-button">
-                        {" "}
                         <Button
-                          variant={isGiangVienNgoaiTruong ? "text" : "outlined"}
-                          onClick={() => handleButtonClick(true)}
+                          variant={!tacGia.laVienChuc ? "text" : "outlined"}
+                          onClick={() => handleButtonClick(index, false)}
                           sx={{
-                            color: isGiangVienNgoaiTruong
-                              ? "#9e9e9e"
-                              : "#1976d2",
+                            color: !tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
                           }}
                         >
                           Giảng viên ngoài trường
                         </Button>
                         <Button
-                          variant={
-                            !isGiangVienNgoaiTruong ? "text" : "outlined"
-                          }
-                          onClick={() => handleButtonClick(false)}
+                          variant={tacGia.laVienChuc ? "text" : "outlined"}
+                          onClick={() => handleButtonClick(index, true)}
                           sx={{
-                            color: !isGiangVienNgoaiTruong
-                              ? "#9e9e9e"
-                              : "#1976d2",
+                            color: tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
                           }}
                         >
                           Giảng viên trong trường
