@@ -147,6 +147,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
         maSoGV: "",
         tenGV: "",
         emailGV: "",
+        searchTerm: "",
         laVienChuc: true,
         duocMien: false,
         soGio: "",
@@ -159,6 +160,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     setTacGiaList(newList);
   };
   const handleSelectGiangVien = (index, giangVien) => {
+    console.log("gv ", giangVien);
     const newTacGiaList = [...tacGiaList];
     newTacGiaList[index] = {
       ...newTacGiaList[index],
@@ -171,6 +173,12 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     setTacGiaList(newTacGiaList);
   };
   const handleTacGiaChange = (index, field, value) => {
+    const newTacGiaList = [...tacGiaList];
+    newTacGiaList[index][field] = value;
+    setTacGiaList(newTacGiaList);
+  };
+  const handleTacGiaChangeEmail = (index, field, value) => {
+    console.log("index ");
     const newTacGiaList = [...tacGiaList];
     newTacGiaList[index][field] = value;
     setTacGiaList(newTacGiaList);
@@ -517,10 +525,10 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               {/* Đặt position: relative */}
                               <TextField
                                 label={`Email Giảng Viên`}
-                                value={searchTerm}
+                                value={tacGia.emailGV}
                                 onChange={(e) => {
                                   setSearchTerm(e.target.value);
-                                  handleTacGiaChange(
+                                  handleTacGiaChangeEmail(
                                     index,
                                     "emailGV",
                                     e.target.value
@@ -534,18 +542,14 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                   className="suggestions-list"
                                   ref={suggestionsRef}
                                 >
-                                  {" "}
                                   {emailSuggestions.map((suggestion) => (
                                     <div
                                       key={suggestion.id}
                                       onClick={() => {
-                                        handleSelectGiangVien(index, {
-                                          MAGV: suggestion.MAGV,
-                                          TENBOMON: suggestion.TENBOMON,
-                                          TENDANGNHAP: suggestion.TENDANGNHAP,
-                                          TENGV: suggestion.TENGV,
-                                          TENKHOA: suggestion.TENKHOA,
-                                        });
+                                        handleSelectGiangVien(
+                                          index,
+                                          suggestion
+                                        );
                                         setSearchTerm(suggestion.TENDANGNHAP); // Cập nhật giá trị tìm kiếm
                                         setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
                                       }}
