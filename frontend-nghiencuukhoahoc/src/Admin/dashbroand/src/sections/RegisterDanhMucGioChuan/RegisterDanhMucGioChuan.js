@@ -36,6 +36,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const navigate = useNavigate();
   const [isGiangVienNgoaiTruong, setIsGiangVienNgoaiTruong] = useState(false);
   const [selectedDanhMuc, setSelectedDanhMuc] = useState(null);
+
   const [tacGiaList, setTacGiaList] = useState([
     {
       ten: "",
@@ -50,6 +51,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       soGio: "",
     },
   ]);
+  const [emailSuggestions, setEmailSuggestions] = useState([]);
 
   const [LoaiTacGia, setLoaiTacGia] = useState([]);
   const [data_Khoa, setData_Khoa] = useState([]);
@@ -213,6 +215,25 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   };
   const handleSelectDanhMuc = (danhmuc) => {
     setSelectedDanhMuc(danhmuc); // Cập nhật state khi nhận được dữ liệu từ Modal
+  };
+
+  // -------------SEARCH EMAIL---------------------------------
+  useEffect(() => {}, []);
+  const fetchEmailSuggestions = async (email) => {
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
+        {
+          EMAIL: email,
+        }
+      );
+      console.log(response.data);
+      if (response.data.EC === 1) {
+        setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+      }
+    } catch (error) {
+      console.error("Error fetching email suggestions:", error);
+    }
   };
 
   return (
@@ -423,6 +444,9 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               <TextField
                                 label={`Email Giảng Viên`}
                                 value={tacGia.emailGV}
+                                onChange={() =>
+                                  fetchEmailSuggestions(tacGia.emailGV)
+                                } // Gọi hàm khi click vào ô nhập liệu
                                 onChange={(e) =>
                                   handleTacGiaChange(
                                     index,
@@ -432,7 +456,26 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                 }
                                 fullWidth
                                 margin="normal"
-                              />{" "}
+                              />
+                              {emailSuggestions.length > 0 && (
+                                <div className="suggestions-list">
+                                  {emailSuggestions.map((suggestion) => (
+                                    <div
+                                      key={suggestion.id}
+                                      onClick={() => {
+                                        handleTacGiaChange(
+                                          index,
+                                          "emailGV",
+                                          suggestion.email
+                                        );
+                                        setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
+                                      }}
+                                    >
+                                      {suggestion.email}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                               {tacGia.loai === "Tác giả thứ nhất" && (
                                 <>
                                   <FormControlLabel

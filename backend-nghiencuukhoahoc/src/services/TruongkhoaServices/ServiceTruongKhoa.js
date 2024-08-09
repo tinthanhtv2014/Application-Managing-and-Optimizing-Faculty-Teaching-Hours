@@ -124,21 +124,22 @@ ORDER BY
 
 const timkiem_email_taikhoan = async (email) => {
   try {
+    //làm ơn viết THƯỜNG TABLE NHÉ !!! QUỐC BẢO
     const connection = await pool.getConnection();
-    const query = "SELECT * FROM TAIKHOAN WHERE TENDANGNHAP LIKE ? LIMIT 5";
+    const query = "SELECT * FROM taikhoan WHERE TENDANGNHAP LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${email}%`]);
     connection.release();
 
     if (rows.length > 0) {
       return {
         EM: "Tìm thấy các email gần đúng",
-        EC: 0,
+        EC: 1,
         DT: rows, // Trả về danh sách tối đa 5 tài khoản tìm được
       };
     } else {
       return {
         EM: "Không tìm thấy email gần đúng",
-        EC: 1,
+        EC: 0,
         DT: null,
       };
     }
