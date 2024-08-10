@@ -141,7 +141,7 @@ const ChuongtrinhDT_CNTT = () => {
   );
   console.log(total_tong);
   return (
-    <div>
+    <div className="containerchuongtrinhdaotao-truongbomon">
       <h1>DANH SÁCH CHƯƠNG TRÌNH ĐÀO TẠO BỘ MÔN CÔNG NGHỆ THÔNG TIN</h1>
       <div className="formControlContainer">
         <FormControl variant="standard" className="formControl1">

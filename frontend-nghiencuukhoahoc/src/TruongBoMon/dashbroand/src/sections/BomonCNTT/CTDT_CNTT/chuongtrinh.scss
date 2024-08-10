@@ -55,16 +55,6 @@
 //   border: 1px solid #555050; /* Đường viền cho các ô bảng */
 // }
 
-// .MuiTableRow-root {
-//   &:nth-of-type(even) {
-//     background-color: #f0eaea;
-//   }
-
-//   &:hover {
-//     background-color: #f1f1f1;
-//   }
-// }
-
 // .tableHeaderCell1 {
 //   background-color: #4a4a4a; /* Màu nền cho tiêu đề chính */
 //   color: #fff; /* Màu chữ sáng */
@@ -134,18 +124,6 @@
 //   flex-wrap: wrap; /* Cho phép các select xuống dòng khi không đủ không gian */
 // }
 
-// .formControl1 {
-//   flex: 1; /* Mở rộng để sử dụng không gian còn lại */
-//   min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-//   max-width: 600px;
-// }
-
-// .formControl2 {
-//   flex: 1; /* Mở rộng để sử dụng không gian còn lại */
-//   min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-//   max-width: 500px;
-// }
-
 // .inputLabel {
 //   font-size: 50px; /* Tăng kích thước chữ của label */
 //   margin-bottom: 50px; /* Khoảng cách giữa label và select */
@@ -157,3 +135,30 @@
 //     flex-direction: column; /* Sắp xếp các select theo chiều dọc trên màn hình nhỏ */
 //   }
 // }
+
+.containerchuongtrinhdaotao-truongbomon {
+  .FormControl {
+    margin: 20px auto;
+    width: 300px;
+  }
+  .formControl1 {
+    flex: 1; /* Mở rộng để sử dụng không gian còn lại */
+    min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
+    max-width: 600px;
+  }
+
+  .formControl2 {
+    flex: 1; /* Mở rộng để sử dụng không gian còn lại */
+    min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
+    max-width: 500px;
+  }
+  .MuiTableRow-root {
+    &:nth-of-type(even) {
+      background-color: #f0eaea;
+    }
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+}
