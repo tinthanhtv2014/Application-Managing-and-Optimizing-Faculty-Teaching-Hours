@@ -9,11 +9,11 @@ const selectOnlyChuongtrinhdaotao = async (TENCHUONGTRINH) => {
     return {
       EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
-      DT: results1,
+      DT: results_ctdt_bomon,
     };
   } catch (error) {
     return {
-      EM: "Lỗi services selectChucVu",
+      EM: "Lỗi services selectOnlyChuongtrinhdaotao",
       EC: -1,
       DT: [],
     };
