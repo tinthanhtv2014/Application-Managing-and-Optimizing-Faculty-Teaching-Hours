@@ -1,159 +1,159 @@
-/* chuongtrinh.scss */
+// /* chuongtrinh.scss */
 
-body {
-  font-family: "Roboto", sans-serif;
-  margin: 0;
-  padding: 0;
-}
+// body {
+//   font-family: "Roboto", sans-serif;
+//   margin: 0;
+//   padding: 0;
+// }
 
-h1 {
-  text-align: center;
-  margin: 20px 0;
-  color: #463737;
-}
+// h1 {
+//   text-align: center;
+//   margin: 20px 0;
+//   color: #463737;
+// }
 
-.FormControl {
-  margin: 20px auto;
-  width: 300px;
-}
+// .FormControl {
+//   margin: 20px auto;
+//   width: 300px;
+// }
 
-.MuiFormControl-root {
-  margin-bottom: 20px;
-}
+// .MuiFormControl-root {
+//   margin-bottom: 20px;
+// }
 
-.MuiInputLabel-root {
-  font-size: 16px;
-  color: #583d3d;
-}
+// .MuiInputLabel-root {
+//   font-size: 16px;
+//   color: #583d3d;
+// }
 
-.MuiSelect-root {
-  font-size: 16px;
-}
+// .MuiSelect-root {
+//   font-size: 16px;
+// }
 
-.MuiMenuItem-root {
-  font-size: 16px;
-}
+// .MuiMenuItem-root {
+//   font-size: 16px;
+// }
 
-.MuiTableContainer-root {
-  margin: 20px auto;
-  width: 90%;
-  max-width: 1900px;
-}
+// .MuiTableContainer-root {
+//   margin: 20px auto;
+//   width: 90%;
+//   max-width: 1900px;
+// }
 
-.MuiTable-root {
-  border-collapse: collapse;
-  width: 100%;
-}
+// .MuiTable-root {
+//   border-collapse: collapse;
+//   width: 100%;
+// }
 
-.MuiTableHead-root {
-  background-color: #f33838;
-}
+// .MuiTableHead-root {
+//   background-color: #f33838;
+// }
 
-.MuiTableCell-root {
-  padding: 16px;
-  text-align: center;
-  border: 1px solid #555050; /* Đường viền cho các ô bảng */
-}
+// .MuiTableCell-root {
+//   padding: 16px;
+//   text-align: center;
+//   border: 1px solid #555050; /* Đường viền cho các ô bảng */
+// }
 
-.MuiTableRow-root {
-  &:nth-of-type(even) {
-    background-color: #f0eaea;
-  }
+// .MuiTableRow-root {
+//   &:nth-of-type(even) {
+//     background-color: #f0eaea;
+//   }
 
-  &:hover {
-    background-color: #f1f1f1;
-  }
-}
+//   &:hover {
+//     background-color: #f1f1f1;
+//   }
+// }
 
-.tableHeaderCell1 {
-  background-color: #4a4a4a; /* Màu nền cho tiêu đề chính */
-  color: #fff; /* Màu chữ sáng */
-  font-size: 20px; /* Kích thước chữ lớn hơn cho tiêu đề chính */
-  font-weight: bold; /* Làm chữ đậm */
-  border: 1px solid #333; /* Đường viền cho ô tiêu đề chính */
-  text-transform: uppercase; /* Chữ hoa */
-}
+// .tableHeaderCell1 {
+//   background-color: #4a4a4a; /* Màu nền cho tiêu đề chính */
+//   color: #fff; /* Màu chữ sáng */
+//   font-size: 20px; /* Kích thước chữ lớn hơn cho tiêu đề chính */
+//   font-weight: bold; /* Làm chữ đậm */
+//   border: 1px solid #333; /* Đường viền cho ô tiêu đề chính */
+//   text-transform: uppercase; /* Chữ hoa */
+// }
 
-.tableHeaderCell {
-  background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
-  color: #333; /* Màu chữ tối hơn */
-  font-size: 16px; /* Kích thước chữ vừa phải */
-  font-weight: 400; /* Trọng lượng chữ bình thường */
-  border: 1px solid #555050; /* Đường viền cho ô tiêu đề phụ */
-  text-transform: uppercase; /* Chữ hoa */
-}
+// .tableHeaderCell {
+//   background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
+//   color: #333; /* Màu chữ tối hơn */
+//   font-size: 16px; /* Kích thước chữ vừa phải */
+//   font-weight: 400; /* Trọng lượng chữ bình thường */
+//   border: 1px solid #555050; /* Đường viền cho ô tiêu đề phụ */
+//   text-transform: uppercase; /* Chữ hoa */
+// }
 
-/* Đảm bảo rằng các ô tiêu đề trong hàng chính và hàng phụ đều có kiểu dáng giống nhau */
-.tableHeaderCell1,
-.tableHeaderCell {
-  padding: 16px; /* Khoảng cách bên trong ô */
-  text-align: center; /* Căn giữa nội dung */
-}
-.tableBodyCell {
-  font-size: 15px;
-}
+// /* Đảm bảo rằng các ô tiêu đề trong hàng chính và hàng phụ đều có kiểu dáng giống nhau */
+// .tableHeaderCell1,
+// .tableHeaderCell {
+//   padding: 16px; /* Khoảng cách bên trong ô */
+//   text-align: center; /* Căn giữa nội dung */
+// }
+// .tableBodyCell {
+//   font-size: 15px;
+// }
 
-.tablefootCell {
-  font-size: 18px; /* Tăng kích thước chữ cho hàng tổng */
-  font-weight: bold; /* Làm chữ đậm */
-  color: #0a0a0a; /* Màu chữ trắng */
-  background-color: #ffffff; /* Nền màu tối để nổi bật */
-  border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô footer */
-  border-left: 1px solid #555050; /* Đường viền bên trái cho ô footer */
-  border-right: 1px solid #555050; /* Đường viền bên phải cho ô footer */
-  border-bottom: 1px solid #555050;
-}
+// .tablefootCell {
+//   font-size: 18px; /* Tăng kích thước chữ cho hàng tổng */
+//   font-weight: bold; /* Làm chữ đậm */
+//   color: #0a0a0a; /* Màu chữ trắng */
+//   background-color: #ffffff; /* Nền màu tối để nổi bật */
+//   border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô footer */
+//   border-left: 1px solid #555050; /* Đường viền bên trái cho ô footer */
+//   border-right: 1px solid #555050; /* Đường viền bên phải cho ô footer */
+//   border-bottom: 1px solid #555050;
+// }
 
-.tablefootCell:first-child {
-  font-size: 15px;
-  font-weight: bold;
-  color: #000000; /* Màu chữ trắng */
-  text-transform: uppercase;
-  background-color: #e9e6e6; /* Nền màu tối để nổi bật */
-}
+// .tablefootCell:first-child {
+//   font-size: 15px;
+//   font-weight: bold;
+//   color: #000000; /* Màu chữ trắng */
+//   text-transform: uppercase;
+//   background-color: #e9e6e6; /* Nền màu tối để nổi bật */
+// }
 
-.inputform {
-  font-size: 20px;
-}
+// .inputform {
+//   font-size: 20px;
+// }
 
-.total-row {
-  font-weight: bold;
-  background-color: #e2dcdc; /* Màu nền cho hàng tổng */
-  border-top: 2px solid #ddd; /* Đường viền trên cùng cho hàng tổng */
-}
+// .total-row {
+//   font-weight: bold;
+//   background-color: #e2dcdc; /* Màu nền cho hàng tổng */
+//   border-top: 2px solid #ddd; /* Đường viền trên cùng cho hàng tổng */
+// }
 
-.total-row .MuiTableCell-root {
-  border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô tổng số tín chỉ */
-  border-left: 1px solid #555050; /* Đường viền bên trái cho ô tổng số tín chỉ */
-  border-right: 1px solid #555050; /* Đường viền bên phải cho ô tổng số tín chỉ */
-}
+// .total-row .MuiTableCell-root {
+//   border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô tổng số tín chỉ */
+//   border-left: 1px solid #555050; /* Đường viền bên trái cho ô tổng số tín chỉ */
+//   border-right: 1px solid #555050; /* Đường viền bên phải cho ô tổng số tín chỉ */
+// }
 
-.formControlContainer {
-  display: flex;
-  gap: 16px; /* Khoảng cách giữa các select */
-  flex-wrap: wrap; /* Cho phép các select xuống dòng khi không đủ không gian */
-}
+// .formControlContainer {
+//   display: flex;
+//   gap: 16px; /* Khoảng cách giữa các select */
+//   flex-wrap: wrap; /* Cho phép các select xuống dòng khi không đủ không gian */
+// }
 
-.formControl1 {
-  flex: 1; /* Mở rộng để sử dụng không gian còn lại */
-  min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-  max-width: 600px;
-}
+// .formControl1 {
+//   flex: 1; /* Mở rộng để sử dụng không gian còn lại */
+//   min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
+//   max-width: 600px;
+// }
 
-.formControl2 {
-  flex: 1; /* Mở rộng để sử dụng không gian còn lại */
-  min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-  max-width: 500px;
-}
+// .formControl2 {
+//   flex: 1; /* Mở rộng để sử dụng không gian còn lại */
+//   min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
+//   max-width: 500px;
+// }
 
-.inputLabel {
-  font-size: 50px; /* Tăng kích thước chữ của label */
-  margin-bottom: 50px; /* Khoảng cách giữa label và select */
-  text-transform: uppercase;
-}
+// .inputLabel {
+//   font-size: 50px; /* Tăng kích thước chữ của label */
+//   margin-bottom: 50px; /* Khoảng cách giữa label và select */
+//   text-transform: uppercase;
+// }
 
-@media (max-width: 768px) {
-  .formControlContainer {
-    flex-direction: column; /* Sắp xếp các select theo chiều dọc trên màn hình nhỏ */
-  }
-}
+// @media (max-width: 768px) {
+//   .formControlContainer {
+//     flex-direction: column; /* Sắp xếp các select theo chiều dọc trên màn hình nhỏ */
+//   }
+// }
