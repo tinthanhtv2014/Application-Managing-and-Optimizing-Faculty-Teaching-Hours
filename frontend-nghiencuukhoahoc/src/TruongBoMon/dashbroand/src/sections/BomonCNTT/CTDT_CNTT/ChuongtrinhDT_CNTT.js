@@ -78,7 +78,7 @@ const ChuongtrinhDT_CNTT = () => {
       );
 
       hockiData = [...new Set(hockiData)];
-
+      console.log("check hockiData", hockiData);
       setTenHocki(hockiData);
 
       // Lưu trữ dữ liệu môn học từ API trả về
@@ -139,7 +139,7 @@ const ChuongtrinhDT_CNTT = () => {
     (acc, mon) => acc + mon.SOTINCHITHUCHANH + mon.SOTINCHITHUCHANH,
     0
   );
-  console.log(total_tong);
+  console.log("check");
   return (
     <div className="containerchuongtrinhdaotao-truongbomon">
       <h1>DANH SÁCH CHƯƠNG TRÌNH ĐÀO TẠO BỘ MÔN CÔNG NGHỆ THÔNG TIN</h1>
@@ -232,11 +232,23 @@ const ChuongtrinhDT_CNTT = () => {
               <TableCell align="center" className="tableHeaderCell">
                 Tổng Số Tín Chỉ
               </TableCell>
+              <TableCell align="center" className="tableHeaderCell">
+                Ghi Chú
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align="center" colSpan={3} className="tableHeaderCell">
+                Học Phần Bắt Buộc
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {monHocData
-              .filter((monHoc) => monHoc.SOTHUTUHOCKI === selectedHocki)
+              .filter(
+                (monHoc) =>
+                  monHoc.SOTHUTUHOCKI === selectedHocki &&
+                  monHoc.GHICHU === "bb"
+              )
               .map((monHoc, index) => (
                 <TableRow key={index}>
                   <TableCell align="center" className="tableBodyCell">
@@ -253,6 +265,44 @@ const ChuongtrinhDT_CNTT = () => {
                   </TableCell>
                   <TableCell align="center" className="tableBodyCell">
                     {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell-ghichubb">
+                    {monHoc.GHICHU === "bb" ? "Bắt buộc" : null}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+          <TableRow>
+            <TableCell align="center" colSpan={3} className="tableHeaderCell">
+              Học Phần Tự Chọn
+            </TableCell>
+          </TableRow>
+          <TableBody>
+            {monHocData
+              .filter(
+                (monHoc) =>
+                  monHoc.SOTHUTUHOCKI === selectedHocki &&
+                  monHoc.GHICHU === "tc"
+              )
+              .map((monHoc, index) => (
+                <TableRow key={index}>
+                  <TableCell align="center" className="tableBodyCell">
+                    {monHoc.TENCHUONGTRINH}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell">
+                    {monHoc.TENMONHOC}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell">
+                    {monHoc.SOTINCHILYTHUYET}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell">
+                    {monHoc.SOTINCHITHUCHANH}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell">
+                    {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
+                  </TableCell>
+                  <TableCell align="center" className="tableBodyCell-ghichutc">
+                    {monHoc.GHICHU === "tc" ? "Tự Chọn" : null}
                   </TableCell>
                 </TableRow>
               ))}

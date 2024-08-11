@@ -64,15 +64,6 @@
 //   text-transform: uppercase; /* Chữ hoa */
 // }
 
-// .tableHeaderCell {
-//   background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
-//   color: #333; /* Màu chữ tối hơn */
-//   font-size: 16px; /* Kích thước chữ vừa phải */
-//   font-weight: 400; /* Trọng lượng chữ bình thường */
-//   border: 1px solid #555050; /* Đường viền cho ô tiêu đề phụ */
-//   text-transform: uppercase; /* Chữ hoa */
-// }
-
 // /* Đảm bảo rằng các ô tiêu đề trong hàng chính và hàng phụ đều có kiểu dáng giống nhau */
 // .tableHeaderCell1,
 // .tableHeaderCell {
@@ -81,17 +72,6 @@
 // }
 // .tableBodyCell {
 //   font-size: 15px;
-// }
-
-// .tablefootCell {
-//   font-size: 18px; /* Tăng kích thước chữ cho hàng tổng */
-//   font-weight: bold; /* Làm chữ đậm */
-//   color: #0a0a0a; /* Màu chữ trắng */
-//   background-color: #ffffff; /* Nền màu tối để nổi bật */
-//   border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô footer */
-//   border-left: 1px solid #555050; /* Đường viền bên trái cho ô footer */
-//   border-right: 1px solid #555050; /* Đường viền bên phải cho ô footer */
-//   border-bottom: 1px solid #555050;
 // }
 
 // .tablefootCell:first-child {
@@ -160,5 +140,36 @@
     &:hover {
       background-color: #f1f1f1;
     }
+  }
+  .tableHeaderCell {
+    // background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
+    color: #333; /* Màu chữ tối hơn */
+    font-size: 14px; /* Kích thước chữ vừa phải */
+    font-weight: 400; /* Trọng lượng chữ bình thường */
+
+    text-transform: uppercase; /* Chữ hoa */
+  }
+
+  .tablefootCell {
+    font-size: 15px; /* Tăng kích thước chữ cho hàng tổng */
+    font-weight: bold; /* Làm chữ đậm */
+    color: #0a0a0a; /* Màu chữ trắng */
+    background-color: #ffffff; /* Nền màu tối để nổi bật */
+    // border-top: 2px solid #ddd; /* Đường viền trên cùng cho ô footer */
+    // border-left: 1px solid #555050; /* Đường viền bên trái cho ô footer */
+    // border-right: 1px solid #555050; /* Đường viền bên phải cho ô footer */
+    // border-bottom: 1px solid #555050;
+    text-transform: uppercase; /* Chữ hoa */
+  }
+  .tableBodyCell-ghichutc {
+    color: green;
+  }
+  .tableBodyCell-ghichubb {
+    color: red;
+  }
+  .tableHeaderCell1 {
+    text-transform: uppercase;
+    font-size: 15px; /* Tăng kích thước chữ cho hàng tổng */
+    font-weight: bold;
   }
 }
