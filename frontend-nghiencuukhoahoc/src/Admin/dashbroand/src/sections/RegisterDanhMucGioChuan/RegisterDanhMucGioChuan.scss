@@ -111,11 +111,11 @@ margin-left: 20px;
   .suggestions-list {
     position: absolute; /* Đặt vị trí tuyệt đối để hiển thị bên dưới input */
     background-color: white; /* Màu nền trắng */
-    border: 1px solid #ccc; /* Viền nhẹ */
+    border: 1px solid #88b9f6; /* Viền nhẹ */
     border-radius: 4px; /* Bo tròn góc */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
     max-height: 200px; /* Chiều cao tối đa */
-    overflow-y: auto; /* Cuộn nếu nội dung vượt quá chiều cao tối đa */
+    width: 100%;
     z-index: 1000; /* Đảm bảo danh sách gợi ý hiển thị trên các phần tử khác */
   }
   
@@ -125,6 +125,6 @@ margin-left: 20px;
   }
   
   .suggestions-list div:hover {
-    background-color: #f0f0f0; /* Đổi màu nền khi di chuột qua mục */
+    background-color: #f9fafb; /* Đổi màu nền khi di chuột qua mục */
   }
   
