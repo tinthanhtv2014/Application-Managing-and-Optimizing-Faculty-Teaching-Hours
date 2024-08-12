@@ -11,7 +11,8 @@ const {
 const {
     LoaiDanhMucExcelController,
     DanhMucExcelController,
-    TyLeExcelController
+    TyLeExcelController,
+    CoTyLeExcelController
 } = require("../../controllers/TruongkhoaController/testControler");
 
 const TruongKhoaRoute = (app) => {
@@ -19,7 +20,7 @@ const TruongKhoaRoute = (app) => {
     router.get("/xem", GiangVien_thuoc_KhoaController);
     router.post("/timkiem/email", timkiem_email_taikhoanController);
 
-    router.post("/test/tao/excel", TyLeExcelController);
+    router.post("/test/tao/excel", CoTyLeExcelController);
 
     return app.use("/api/v1/truongkhoa", router);
 };
