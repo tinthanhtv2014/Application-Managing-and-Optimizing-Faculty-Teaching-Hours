@@ -22,6 +22,8 @@ const QuyenGiangVienRouter = require("./routes/GiangvienRoute/QuyenGiangVienRout
 const CURDanhMuc = require("./routes/AdminRoute/DanhMucRoute");
 const TruongKhoaRoute = require("./routes/TruongkhoaRoute/TruongKhoaRoute");
 
+const DangKyDanhMucRoute = require("./routes/GiangvienRoute/DangKyDanhMucSpKHCNRoute");
+
 //=================================================================================
 
 const corsOptions = {
@@ -54,6 +56,8 @@ QuyenGiangVienRouter(app); // Api cho quyền giảng viên
 CRUDchuongtrinh_CNTT(app);
 TruongKhoaRoute(app); // Các router cho trưởng khoa sử dụng
 CURDanhMuc(app); // route CRUD bảng taikhoan dành cho admin
+
+DangKyDanhMucRoute(app);
 //=====================================================================================================
 
 app.get("/", (req, res) => {
