@@ -161,7 +161,6 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     setTacGiaList(newList);
   };
   const handleSelectGiangVien = (index, giangVien) => {
-    console.log("gv " + index, giangVien);
     const newTacGiaList = [...tacGiaList];
     newTacGiaList[index] = {
       ...newTacGiaList[index],
@@ -171,6 +170,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       boMon: giangVien.TENBOMON,
       khoa: giangVien.TENKHOA,
     };
+    console.log("check ", newTacGiaList[index]);
     setTacGiaList(newTacGiaList);
   };
   const handleTacGiaChange = (index, field, value) => {
@@ -573,7 +573,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                           setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
                                         }}
                                       >
-                                        {suggestion.tengv} ({suggestion.magv} )
+                                        {suggestion.TENGV} ({suggestion.MAGV} )
                                       </div>
                                     ))}
                                   </div>
