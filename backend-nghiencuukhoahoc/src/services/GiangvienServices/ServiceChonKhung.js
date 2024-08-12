@@ -219,7 +219,8 @@ const sua_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC, MAKHUNG) => {
 const tao_THOIGIAN_CHONKHUNG = async (
   THOIGIANBATDAU,
   THOIGIANKETTHUC,
-  TENKHOA
+  TENKHOA,
+  GHICHU
 ) => {
   // console.log("TENKHOA", TENKHOA);
   // console.log("THOIGIANBATDAU", THOIGIANBATDAU);
@@ -235,10 +236,10 @@ const tao_THOIGIAN_CHONKHUNG = async (
     );
 
     // Kiểm tra xem thời gian đã tồn tại trong bảng chưa
-    await delete_THOIGIAN_CHONKHUNG(TENKHOA);
+    await delete_THOIGIAN_CHONKHUNG(TENKHOA, GHICHU);
     const [results_thoigian_xacnhan, fields] = await pool.execute(
-      "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
-      [TENKHOA]
+      "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU = ?",
+      [TENKHOA, GHICHU]
     );
     // console.log("results_MAKHOA =>", results_thoigian_xacnhan.length);
     if (results_thoigian_xacnhan.length > 0) {
@@ -249,8 +250,8 @@ const tao_THOIGIAN_CHONKHUNG = async (
     }
     // Nếu bản ghi không tồn tại, thực hiện thêm mới
     await pool.execute(
-      "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC,TEN_KHOA) VALUES (?, ?,?)",
-      [formattedStartTime, formattedEndTime, TENKHOA]
+      "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC,TEN_KHOA,GHICHU) VALUES (?, ?,?,?)",
+      [formattedStartTime, formattedEndTime, TENKHOA, GHICHU]
     );
     const [results] = await pool.execute(
       "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
@@ -271,13 +272,13 @@ const tao_THOIGIAN_CHONKHUNG = async (
   }
 };
 
-const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
+const delete_THOIGIAN_CHONKHUNG = async (TENKHOA, GHICHU) => {
   // console.log("check ten khoa ", TENKHOA);
   try {
     // Truy vấn để lấy tất cả các mã thời gian xác nhận dựa trên tên khoa
     const [results] = await pool.execute(
-      "SELECT MA_THOIGIAN_XACNHAN FROM thoigian_xacnhan WHERE TEN_KHOA = ?",
-      [TENKHOA]
+      "SELECT MA_THOIGIAN_XACNHAN FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU = ?",
+      [TENKHOA, GHICHU]
     );
 
     if (results.length === 0) {
@@ -312,7 +313,7 @@ const delete_THOIGIAN_CHONKHUNG = async (TENKHOA) => {
   }
 };
 
-const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
+const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC, TENKHOA, GHICHU) => {
   try {
     const [results, fields] = await pool.execute(
       "select * from thoigian_xacnhan"
@@ -321,8 +322,8 @@ const sua_THOIGIAN_CHONKHUNG = async (SONGAYKETTHUC) => {
       .add(SONGAYKETTHUC, "days")
       .format("YYYY-MM-DD HH:mm:ss");
     const [results1, fields1] = await pool.execute(
-      "UPDATE thoigian_xacnhan SET THOIGIANKETTHUC = ?",
-      [THOIGIANKETTHUC]
+      "UPDATE thoigian_xacnhan SET THOIGIANKETTHUC = ? where TEN_KHOA = ? and GHICHU = ?",
+      [THOIGIANKETTHUC, TENKHOA, GHICHU]
     );
 
     const [results_thoigian, fields_thoigian] = await pool.execute(
@@ -364,11 +365,11 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
   }
 };
 
-const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa) => {
+const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa, GHICHU) => {
   try {
     const [results, fields] = await pool.execute(
-      "SELECT * FROM thoigian_xacnhan WHERE ten_khoa = ?",
-      [tenKhoa]
+      "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU= ?",
+      [tenKhoa, GHICHU]
     );
     console.log("tim_THOIGIAN_CHONKHUNG: ", results);
     return {

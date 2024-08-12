@@ -85,10 +85,12 @@ const create_THOIGIAN_XACNHAN = async (req, res) => {
     const THOIGIANBATDAU = req.body.THOIGIANBATDAU;
     const THOIGIANKETTHUC = req.body.THOIGIANKETTHUC;
     const TENKHOA = req.body.TENKHOA;
+    const GHICHU = req.body.GHICHU;
     let results = await tao_THOIGIAN_CHONKHUNG(
       THOIGIANBATDAU,
       THOIGIANKETTHUC,
-      TENKHOA
+      TENKHOA,
+      GHICHU
     );
     return res.status(200).json({
       EM: results.EM,
@@ -108,8 +110,9 @@ const create_THOIGIAN_XACNHAN = async (req, res) => {
 const update_THOIGIAN_XACNHAN = async (req, res) => {
   try {
     const SONGAYKETTHUC = req.params.SONGAYKETTHUC;
-
-    let results = await sua_THOIGIAN_CHONKHUNG(SONGAYKETTHUC);
+    const TENKHOA = req.body.TENKHOA;
+    const GHICHU = req.body.GHICHU;
+    let results = await sua_THOIGIAN_CHONKHUNG(SONGAYKETTHUC, TENKHOA, GHICHU);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -145,8 +148,9 @@ const xem_THOIGIAN_XACNHAN = async (req, res) => {
 
 const xem_THOIGIAN_XACNHAN_theoTENKHOA = async (req, res) => {
   const tenKhoa = req.params.tenKhoa; // Lấy tên khoa từ params
+  const GHICHU = req.body.GHICHU;
   try {
-    let results = await tim_THOIGIAN_CHONKHUNG_theoTENKHOA(tenKhoa);
+    let results = await tim_THOIGIAN_CHONKHUNG_theoTENKHOA(tenKhoa, GHICHU);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -164,8 +168,9 @@ const xem_THOIGIAN_XACNHAN_theoTENKHOA = async (req, res) => {
 
 const delete_THOIGIAN_XACNHAN = async (req, res) => {
   const TENKHOA = req.body.TENKHOA;
+  const GHICHU = req.body.GHICHU;
   try {
-    let results = await delete_THOIGIAN_CHONKHUNG(TENKHOA);
+    let results = await delete_THOIGIAN_CHONKHUNG(TENKHOA, GHICHU);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
