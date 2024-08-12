@@ -2,9 +2,10 @@ export const calculateAuthorHours = (tongGio, tacGiaList) => {
   let gioTacGiaThuNhat = 0;
   let gioTacGiaChiuTrachNhiem = 0;
   let gioTacGiaThongThuong = 0;
-
+  console.log("check lis = >", tacGiaList.length);
   if (tacGiaList.length === 1) {
     // Trường hợp chỉ có 1 tác giả
+
     gioTacGiaThongThuong = tongGio; // Nhận 100% tổng giờ
   } else {
     const vaiTro = tacGiaList.map((tacGia) => tacGia.loai); // Lấy vai trò từ danh sách tác giả

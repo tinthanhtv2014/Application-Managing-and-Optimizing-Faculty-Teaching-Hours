@@ -64,6 +64,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [selectNamHoc, setSelectNamHoc] = useState([]);
   const [SoGioNghienCuuChuan, setSoGioNghienCuuChuan] = useState(null);
   const [SoGioDanhMucDaChon, setSoGioDanhMucDaChon] = useState(null);
+  const [MaLoaiDanhMuc, setMaLoaiDanhMuc] = useState(null);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const fectData = async () => {
@@ -295,7 +296,30 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       setEmailSuggestions([]); // Ẩn gợi ý khi click bên ngoài
     }
   };
+  const handleTinhSoGio = async () => {
+    console.log(
+      "check DATA TO BACK =>",
 
+      tacGiaList,
+      SoGioDanhMucDaChon,
+      MaLoaiDanhMuc
+    );
+    // try {
+    //   const response = await CookiesAxios.post(
+    //     `${process.env.REACT_APP_URL_SERVER}/api/v1/`,
+    //     {
+    //       LISTGIANGVIEN: tacGiaList,
+    //       SOGIO: SoGioDanhMucDaChon,
+    //     }
+    //   );
+
+    //   if (response.data.EC === 1) {
+    //     setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching email suggestions:", error);
+    // }
+  };
   return (
     <>
       <Container>
@@ -407,6 +431,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       open={open}
                       onClose={handleClose}
                       handleSelectDanhMuc={handleSelectDanhMuc}
+                      setMaLoaiDanhMuc={setMaLoaiDanhMuc}
                     />
                   </div>
                 </Col>
@@ -776,7 +801,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleTongTacGia}
+                        onClick={handleTinhSoGio}
                       >
                         Hoàn tất đăng ký
                       </Button>

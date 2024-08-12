@@ -18,7 +18,12 @@ import {
 import axios from "axios";
 import CookiesAxios from "../../CookiesAxios";
 import "./ModalselectDanhMuc.scss";
-const ModalDanhMuc = ({ open, onClose, handleSelectDanhMuc }) => {
+const ModalDanhMuc = ({
+  open,
+  onClose,
+  handleSelectDanhMuc,
+  setMaLoaiDanhMuc,
+}) => {
   const [dataOptions, setDataOptions] = useState([]);
   const [selectedLoaiDanhMuc, setSelectedLoaiDanhMuc] = useState("");
   const [dataDanhMuc, setDataDanhMuc] = useState([]);
@@ -45,7 +50,7 @@ const ModalDanhMuc = ({ open, onClose, handleSelectDanhMuc }) => {
   const handleSelectChange = async (event) => {
     const value = event.target.value;
     setSelectedLoaiDanhMuc(value);
-
+    setMaLoaiDanhMuc(value);
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/danhmucquydoi/${value}`
