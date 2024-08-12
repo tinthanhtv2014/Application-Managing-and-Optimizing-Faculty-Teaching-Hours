@@ -228,7 +228,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       prevList.map(
         (tacGia, i) =>
           i === index
-            ? { ...tacGia, laVienChuc: isNgoaiTruong } // Thay đổi laVienChuc của giảng viên tại index
+            ? { ...tacGia, laVienChuc: !isNgoaiTruong } // Thay đổi laVienChuc của giảng viên tại index
             : tacGia // Giữ nguyên các giảng viên khác
       )
     );
@@ -626,19 +626,19 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                         </Col>
                         <div className="position-ab-button">
                           <Button
-                            variant={!tacGia.laVienChuc ? "text" : "outlined"}
-                            onClick={() => handleButtonClick(index, false)}
+                            variant={tacGia.laVienChuc ? "text" : "outlined"}
+                            onClick={() => handleButtonClick(index, true)}
                             sx={{
-                              color: !tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
+                              color: tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
                             }}
                           >
                             Giảng viên ngoài trường
                           </Button>
                           <Button
-                            variant={tacGia.laVienChuc ? "text" : "outlined"}
-                            onClick={() => handleButtonClick(index, true)}
+                            variant={!tacGia.laVienChuc ? "text" : "outlined"}
+                            onClick={() => handleButtonClick(index, false)}
                             sx={{
-                              color: tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
+                              color: !tacGia.laVienChuc ? "#9e9e9e" : "#1976d2",
                             }}
                           >
                             Giảng viên trong trường
