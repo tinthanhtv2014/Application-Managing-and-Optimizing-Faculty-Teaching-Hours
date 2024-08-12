@@ -119,34 +119,37 @@
 .containerchuongtrinhdaotao-truongbomon {
   .FormControl {
     margin: 20px auto;
-    width: 300px;
+    width: 400px;
   }
   .formControl1 {
-    flex: 1; /* Mở rộng để sử dụng không gian còn lại */
-    min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-    max-width: 600px;
+    flex: 2; /* Mở rộng để sử dụng không gian còn lại */
+    min-width: 350px; /* Đặt kích thước tối thiểu cho mỗi select */
+    max-width: 900px;
   }
 
   .formControl2 {
+    margin-left: 30px;
     flex: 1; /* Mở rộng để sử dụng không gian còn lại */
     min-width: 200px; /* Đặt kích thước tối thiểu cho mỗi select */
-    max-width: 500px;
+    max-width: 700px;
   }
   .MuiTableRow-root {
     &:nth-of-type(even) {
       background-color: #f0eaea;
     }
-
-    &:hover {
-      background-color: #f1f1f1;
-    }
   }
+
+  .tableHeaderCell1 {
+    border-right: 1px solid #ccc;
+  }
+
   .tableHeaderCell {
-    // background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
+    //background-color: #e2dcdc; /* Màu nền cho tiêu đề phụ */
     color: #333; /* Màu chữ tối hơn */
     font-size: 14px; /* Kích thước chữ vừa phải */
     font-weight: 400; /* Trọng lượng chữ bình thường */
-
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     text-transform: uppercase; /* Chữ hoa */
   }
 
@@ -160,16 +163,33 @@
     // border-right: 1px solid #555050; /* Đường viền bên phải cho ô footer */
     // border-bottom: 1px solid #555050;
     text-transform: uppercase; /* Chữ hoa */
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
   }
   .tableBodyCell-ghichutc {
     color: green;
+    background-color: #ffffff;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
   }
   .tableBodyCell-ghichubb {
     color: red;
+    background-color: #ffffff;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
   }
   .tableHeaderCell1 {
     text-transform: uppercase;
     font-size: 15px; /* Tăng kích thước chữ cho hàng tổng */
     font-weight: bold;
+  }
+  .tableBodyCell {
+    background-color: #ffffff;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
   }
 }

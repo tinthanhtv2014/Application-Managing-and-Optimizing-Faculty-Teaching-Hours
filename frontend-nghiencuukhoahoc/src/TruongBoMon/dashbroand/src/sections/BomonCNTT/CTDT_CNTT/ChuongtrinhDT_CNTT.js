@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
 import "./chuongtrinh.scss";
 const ChuongtrinhDT_CNTT = () => {
   const [tenChuongTrinh, setTenChuongTrinh] = useState([]);
@@ -142,9 +143,13 @@ const ChuongtrinhDT_CNTT = () => {
   console.log("check");
   return (
     <div className="containerchuongtrinhdaotao-truongbomon">
-      <h1>DANH SÁCH CHƯƠNG TRÌNH ĐÀO TẠO BỘ MÔN CÔNG NGHỆ THÔNG TIN</h1>
+      <h1>DANH SÁCH CHƯƠNG TRÌNH ĐÀO TẠO </h1>
       <div className="formControlContainer">
-        <FormControl variant="standard" className="formControl1">
+        <FormControl
+          variant="standard"
+          className="formControl1"
+          sx={{ m: 1, minWidth: 120 }}
+        >
           <InputLabel id="chuongtrinh-select-label" className="inputLabel">
             Tên Chương Trình
           </InputLabel>
@@ -154,11 +159,14 @@ const ChuongtrinhDT_CNTT = () => {
             value={selectedChuongTrinh}
             onChange={handleChuongTrinhChange}
             label="Tên Chương Trình"
+            inputProps={{ "aria-label": "Without label" }}
           >
             {tenChuongTrinh.length === 0 ? (
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
+              <>
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+              </>
             ) : (
               tenChuongTrinh.map((chuongtrinh, index) => (
                 <MenuItem key={index} value={chuongtrinh}>
@@ -169,7 +177,11 @@ const ChuongtrinhDT_CNTT = () => {
           </Select>
         </FormControl>
         {selectedChuongTrinh && (
-          <FormControl variant="standard" className="formControl2">
+          <FormControl
+            variant="standard"
+            className="formControl2"
+            sx={{ m: 1, minWidth: 120 }}
+          >
             <InputLabel id="hocki-select-label" className="inputLabel">
               Tên Học Kỳ
             </InputLabel>
@@ -180,6 +192,7 @@ const ChuongtrinhDT_CNTT = () => {
               onChange={handleHockiChange}
               label="Tên Học Kỳ"
               disabled={!selectedChuongTrinh}
+              inputProps={{ "aria-label": "Without label" }}
             >
               {tenHocki.length === 0 ? (
                 <MenuItem value="">
@@ -237,7 +250,7 @@ const ChuongtrinhDT_CNTT = () => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="center" colSpan={3} className="tableHeaderCell">
+              <TableCell align="center" colSpan={2} className="tableHeaderCell">
                 Học Phần Bắt Buộc
               </TableCell>
             </TableRow>
@@ -273,7 +286,7 @@ const ChuongtrinhDT_CNTT = () => {
               ))}
           </TableBody>
           <TableRow>
-            <TableCell align="center" colSpan={3} className="tableHeaderCell">
+            <TableCell align="center" colSpan={2} className="tableHeaderCell">
               Học Phần Tự Chọn
             </TableCell>
           </TableRow>
