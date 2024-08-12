@@ -161,7 +161,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     setTacGiaList(newList);
   };
   const handleSelectGiangVien = (index, giangVien) => {
-    console.log("gv ", giangVien);
+    console.log("gv " + index, giangVien);
     const newTacGiaList = [...tacGiaList];
     newTacGiaList[index] = {
       ...newTacGiaList[index],
@@ -257,7 +257,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
           const response = await CookiesAxios.post(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
             {
-              EMAIL: searchTerm,
+              TENGV: searchTerm,
             }
           );
           console.log("check search", response.data);
@@ -541,13 +541,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                               {" "}
                               {/* Đặt position: relative */}
                               <TextField
-                                label={`Email Giảng Viên`}
-                                value={tacGia.emailGV}
+                                label={`Tên Giảng Viên`}
+                                value={tacGia.tenGV}
                                 onChange={(e) => {
                                   setSearchTerm(e.target.value);
                                   handleTacGiaChangeEmail(
                                     index,
-                                    "emailGV",
+                                    "tenGV",
                                     e.target.value
                                   );
                                 }}
@@ -555,7 +555,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                 margin="normal"
                               />
                               {currentEmail &&
-                                currentEmail === tacGia.emailGV &&
+                                currentEmail === tacGia.tenGV &&
                                 emailSuggestions.length > 0 && (
                                   <div
                                     className="suggestions-list"
@@ -569,13 +569,11 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                             index,
                                             suggestion
                                           );
-                                          setCurrentEmail(
-                                            suggestion.TENDANGNHAP
-                                          ); // Cập nhật giá trị email hiện tại
+                                          setCurrentEmail(suggestion.tengv); // Cập nhật giá trị email hiện tại
                                           setEmailSuggestions([]); // Xóa gợi ý sau khi chọn
                                         }}
                                       >
-                                        {suggestion.TENDANGNHAP}
+                                        {suggestion.tengv} ({suggestion.magv} )
                                       </div>
                                     ))}
                                   </div>

@@ -122,15 +122,21 @@ ORDER BY
   }
 };
 
-const timkiem_email_taikhoan = async (email) => {
+const timkiem_email_taikhoan = async (TENGV) => {
+  console.log("check", TENGV);
   try {
-    //làm ơn viết THƯỜNG TABLE NHÉ !!! QUỐC BẢO
     const connection = await pool.getConnection();
     const query =
-      "SELECT khoa.TENKHOA,bomon.TENBOMON,giangvien.MAGV,giangvien.TENGV,taikhoan.TENDANGNHAP FROM taikhoan, giangvien,khoa,bomon WHERE khoa.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and giangvien.MAGV = taikhoan.MAGV and taikhoan.TENDANGNHAP LIKE ? LIMIT 5";
-    const [rows] = await connection.execute(query, [`%${email}%`]);
+      "SELECT khoa.tenkhoa, bomon.tenbomon, giangvien.magv, giangvien.tengv, taikhoan.tendangnhap " +
+      "FROM taikhoan " +
+      "JOIN giangvien ON giangvien.magv = taikhoan.magv " +
+      "JOIN bomon ON bomon.mabomon = giangvien.mabomon " +
+      "JOIN khoa ON khoa.makhoa = bomon.makhoa " +
+      "WHERE giangvien.tengv LIKE ? " +
+      "LIMIT 5";
+    const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
-
+    console.log(rows);
     if (rows.length > 0) {
       return {
         EM: "Tìm thấy các email gần đúng",
