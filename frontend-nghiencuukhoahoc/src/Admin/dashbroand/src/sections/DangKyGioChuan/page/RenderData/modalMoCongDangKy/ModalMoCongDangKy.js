@@ -79,7 +79,7 @@ const ModalMoCongDangKy = ({
         try {
           const response = await CookiesAxios.post(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xoa/thoigianxacnhan`,
-            { TENKHOA: TenKhoa }
+            { TENKHOA: TenKhoa, GHICHU: "CHONKHUNG" }
           );
 
           console.log("response.data.DT", response.data.DT);
@@ -116,6 +116,7 @@ const ModalMoCongDangKy = ({
             THOIGIANBATDAU: StartTime,
             THOIGIANKETTHUC: EndTime,
             TENKHOA: TenKhoa,
+            GHICHU: "CHONKHUNG",
           }
         );
 

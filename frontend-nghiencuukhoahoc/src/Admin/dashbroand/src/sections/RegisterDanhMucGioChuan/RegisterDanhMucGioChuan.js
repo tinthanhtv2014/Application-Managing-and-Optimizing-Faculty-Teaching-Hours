@@ -29,6 +29,7 @@ import { jwtDecode } from "jwt-decode";
 import CookiesAxios from "../CookiesAxios";
 import ModalDanhMuc from "./modals/ModalselectDanhMuc.js";
 import Cookies from "js-cookie";
+import XemLichSuChonDanhMuc from "./XemLichSuChonDanhMuc.js";
 const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [IsOpenSelectOption, setIsOpenSelectOption] =
     useState("Đăng Ký Danh Mục");
@@ -788,7 +789,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
           ) : (
             <Row>
               {" "}
-              <p> Xem lịch sử chọn</p>
+              <XemLichSuChonDanhMuc />
             </Row>
           )}
         </Row>

@@ -252,8 +252,81 @@ const Sevicel_TyLe_Excel = async (dataTyLe) => {
     }
 };
 
+const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
+    try {
+        // Kiểm tra tất cả các mục trước khi thêm
+        for (let i = 0; i < dataCoTyLe.length; i++) {
+            let [LoaiTacGai, fields0] = await pool.execute(
+                `SELECT * FROM loai_tac_gia WHERE TEN_LOAI_TAC_GIA = ?`,
+                [dataCoTyLe[i].TEN_LOAI_TAC_GIA]
+            );
+            let [TyLe, fields1] = await pool.execute(
+                `SELECT * FROM ty_le_quy_doi_gio_chuan WHERE TEN_QUY_DOI = ? AND GHI_CHU_QUY_DOI = ?`,
+                [dataCoTyLe[i].TEN_QUY_DOI, dataCoTyLe[i].GHI_CHU_QUY_DOI]
+            );
+            let [LoaiDanhmuc, fields2] = await pool.execute(
+                `SELECT * FROM loai_danh_muc WHERE TEN_LOAI_DANH_MUC = ?`,
+                [dataCoTyLe[i].TEN_LOAI_DANH_MUC]
+            );
+            if (LoaiTacGai.length === 0 || TyLe.length === 0 || LoaiDanhmuc.length === 0) {
+                console.log("Dữ liệu này không tồn tại: " + dataCoTyLe[i]);
+                return {
+                    EM: "Dữ liệu này không tồn tại: " + dataCoTyLe[i],
+                    EC: 0,
+                    DT: [],
+                };
+            }
+        }
+
+        let results = [];
+        console.log("dataCoTyLe.length: ", dataCoTyLe.length);
+
+        // Thêm tất cả các mục
+        for (let i = 0; i < dataCoTyLe.length; i++) {
+            // Lấy các mã cần thiết từ các bảng
+            let [LoaiTacGai, fields0] = await pool.execute(
+                `SELECT MA_LOAI_TAC_GIA FROM loai_tac_gia WHERE TEN_LOAI_TAC_GIA = ?`,
+                [dataCoTyLe[i].TEN_LOAI_TAC_GIA]
+            );
+            let [TyLe, fields1] = await pool.execute(
+                `SELECT MA_QUY_DOI FROM ty_le_quy_doi_gio_chuan WHERE TEN_QUY_DOI = ? AND GHI_CHU_QUY_DOI = ?`,
+                [dataCoTyLe[i].TEN_QUY_DOI, dataCoTyLe[i].GHI_CHU_QUY_DOI]
+            );
+            let [LoaiDanhmuc, fields2] = await pool.execute(
+                `SELECT MA_LOAI_DANH_MUC FROM loai_danh_muc WHERE TEN_LOAI_DANH_MUC = ?`,
+                [dataCoTyLe[i].TEN_LOAI_DANH_MUC]
+            );
+
+            // Thêm dữ liệu vào bảng CO_TY_LE
+            let [result, fields3] = await pool.execute(
+                `INSERT INTO co_ty_le (MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA_THUOC_LOAI) VALUES (?, ?, ?, ?)`,
+                [
+                    TyLe[0].MA_QUY_DOI,
+                    LoaiDanhmuc[0].MA_LOAI_DANH_MUC,
+                    LoaiTacGai[0].MA_LOAI_TAC_GIA,
+                    dataCoTyLe[i].SO_TAC_GIA_THUOC_LOAI,
+                ]
+            );
+            results.push(result.insertId); // Lưu ID của loại danh mục vào kết quả
+        }
+        return {
+            EM: "Thêm dữ liệu thành công",
+            EC: 1,
+            DT: results,
+        };
+    } catch (error) {
+        console.error("Lỗi trong try-catch: ", error);
+        return {
+            EM: "Đã xảy ra lỗi khi thêm dữ liệu",
+            EC: -1,
+            DT: null,
+        };
+    }
+};
+
 module.exports = {
     Sevicel_LoaiDanhMuc_Excel,
     Sevicel_DanhMuc_Excel,
-    Sevicel_TyLe_Excel
+    Sevicel_TyLe_Excel,
+    Sevicel_CoTyLe_Excel
 };
