@@ -51,6 +51,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       laVienChuc: true,
       duocMien: false,
       soGio: "",
+      soPhanTram: "",
     },
   ]);
   const [emailSuggestions, setEmailSuggestions] = useState([]);
@@ -152,6 +153,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
         laVienChuc: true,
         duocMien: false,
         soGio: "",
+        soPhanTram: "",
       },
     ]);
   };
@@ -718,6 +720,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                           <Row className="mt-2">
                             <Col md={4}>
                               <Typography className="text-open-gate">
+                                Số % nhận được
+                              </Typography>
+                            </Col>
+                            <Col md={7}>
+                              <Typography className="text-open-gate text-info">
+                                {tacGia.soPhanTram}
+                              </Typography>
+                            </Col>
+                          </Row>
+                          <Row className="mt-2">
+                            <Col md={4}>
+                              <Typography className="text-open-gate">
                                 Số giờ nhận được
                               </Typography>
                             </Col>
@@ -738,7 +752,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                         color="primary"
                         onClick={handleTongTacGia}
                       >
-                        Hoàn Tất Tác Giả
+                        Tính số giờ
                       </Button>
                       <Button
                         variant="outlined"
@@ -754,7 +768,18 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       </Button>
                     </Col>
 
-                    <Col md={4}></Col>
+                    <Col
+                      md={4}
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleTongTacGia}
+                      >
+                        Hoàn tất đăng ký
+                      </Button>
+                    </Col>
                   </Row>{" "}
                 </Col>
               </Row>

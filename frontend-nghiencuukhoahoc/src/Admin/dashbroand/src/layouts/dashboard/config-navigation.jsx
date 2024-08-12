@@ -54,13 +54,9 @@ const navConfig = [
     title: 'Đăng Ký Khung Giờ Chuẩn',
     path: '/dang-ky-khung-gio-chuan',
     icon: icon('ic_blog'),
-  }, {
-    title: 'Đăng Ký Danh Mục',
-    path: '/dang-ky-danh-muc',
-    icon: icon('ic_blog'),
   },
   {
-    title: 'Account',
+    title: 'Tài Khoản',
     path: '/account-giangvien',
     icon: icon('ic_blog'),
   },
