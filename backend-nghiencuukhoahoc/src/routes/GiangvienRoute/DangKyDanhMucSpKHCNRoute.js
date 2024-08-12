@@ -7,7 +7,7 @@ const {
 } = require("../../controllers/GiangvienController/danhmucGiangVienCONTROLLER");
 
 const DangKyDanhMucRoute = (app) => {
-    router.post("/dangkydanhmucspkhcn", select_loaitacgia_loaidanhmuc);
+    router.post("/loaidanhmuc/loaitacgia", select_loaitacgia_loaidanhmuc);
 
     return app.use("/api/v1/quyengiangvien/giangvien", router);
 };

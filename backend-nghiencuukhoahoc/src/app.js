@@ -57,7 +57,7 @@ CRUDchuongtrinh_CNTT(app);
 TruongKhoaRoute(app); // Các router cho trưởng khoa sử dụng
 CURDanhMuc(app); // route CRUD bảng taikhoan dành cho admin
 
-DangKyDanhMucRoute(app);
+DangKyDanhMucRoute(app); // route chức năng cho quy đổi giờ chuẩn
 //=====================================================================================================
 
 app.get("/", (req, res) => {
