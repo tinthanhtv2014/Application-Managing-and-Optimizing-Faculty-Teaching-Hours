@@ -94,7 +94,53 @@ const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
   }
 };
 
+const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
+  try {
+    let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
+    if (MANAMHOC === 0) {
+      return {
+        EM: "Không có năm học này",
+        EC: 0,
+        DT: [],
+      };
+    }
+    // console.log("Check MANAMHOC:   ", MANAMHOC);
+    const [results1, fields] = await pool.execute(
+      `select 
+      giangvien.TENGV,
+      ltg.TEN_LOAI_TAC_GIA,
+      namhoc.TENNAMHOC,
+      dkthqd.TEN_NGHIEN_CUU,
+      dkthqd.THOI_GIAN_DANG_KY,
+      dm.* 
+      from 
+      giangvien,
+      namhoc,
+      dang_ky_thuc_hien_quy_doi as dkthqd, 
+      danhmucquydoispkhcn as dm, 
+      loai_tac_gia as ltg
+      where
+      giangvien.MAGV = dkthqd.MAGV
+      and dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
+      and namhoc.MANAMHOC = dkthqd.MANAMHOC
+      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      and giangvien.MAGV = ? and namhoc.MANAMHOC = ?`,
+      [MAGV, MANAMHOC]
+    );
+
+    return {
+      EM: "lấy thông tin thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log("timChucDanh_TENCHUCDANH errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
+  get_thongtin_dangky_giangvien,
 };
