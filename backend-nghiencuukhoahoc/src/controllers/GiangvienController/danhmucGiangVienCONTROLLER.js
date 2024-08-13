@@ -8,8 +8,8 @@ const select_thongtin_danhmuc = async (req, res) => {
   try {
     const TENDANGNHAP = req.body.TENDANGNHAP;
     const TENNAMHOC = req.body.TENNAMHOC;
-    console.log("TENNAMHOC", TENNAMHOC);
-    console.log("TENDANGNHAP", TENDANGNHAP);
+    // console.log("TENNAMHOC", TENNAMHOC);
+    // console.log("TENDANGNHAP", TENDANGNHAP);
     let results = await get_thongtin_danhmuc(TENDANGNHAP, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,

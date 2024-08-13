@@ -62,7 +62,7 @@ const getAllTaiKhoan = async (MABOMON) => {
 
       [MABOMON]
     );
-    console.log("Query Results:", results);
+    // console.log("Query Results:", results);
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,

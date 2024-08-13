@@ -8,7 +8,7 @@ const {
 const LoaiDanhMucExcelController = async (req, res) => {
     try {
         let data = req.body
-        console.log("data: ", data)
+        // console.log("data: ", data)
         let results = await Sevicel_LoaiDanhMuc_Excel(data)
 
         return res.status(200).json({
@@ -29,7 +29,7 @@ const LoaiDanhMucExcelController = async (req, res) => {
 const DanhMucExcelController = async (req, res) => {
     try {
         let dataDanhMuc = req.body
-        console.log("dataDanhMuc: ", dataDanhMuc)
+        // console.log("dataDanhMuc: ", dataDanhMuc)
         let results = await Sevicel_DanhMuc_Excel(dataDanhMuc)
         // let results = {
         //     EM: "Thêm danh mục quy đổi mới thành công",
@@ -54,7 +54,7 @@ const DanhMucExcelController = async (req, res) => {
 const TyLeExcelController = async (req, res) => {
     try {
         let dataTyLe = req.body
-        console.log("dataTyLe: ", dataTyLe)
+        // console.log("dataTyLe: ", dataTyLe)
         let results = await Sevicel_TyLe_Excel(dataTyLe)
         return res.status(200).json({
             EM: results.EM,
@@ -74,7 +74,7 @@ const TyLeExcelController = async (req, res) => {
 const CoTyLeExcelController = async (req, res) => {
     try {
         let dataCoTyLe = req.body
-        console.log("dataCoTyLe: ", dataCoTyLe)
+        // console.log("dataCoTyLe: ", dataCoTyLe)
         let results = await Sevicel_CoTyLe_Excel(dataCoTyLe)
         // let results = {
         //     EM: "Thêm danh mục quy đổi mới thành công",

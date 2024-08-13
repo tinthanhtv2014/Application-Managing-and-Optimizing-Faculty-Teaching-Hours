@@ -138,7 +138,7 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
 //Trả dữ liệu FronEnd
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
   try {
-    console.log(MABOMON + isOpenGetAllApiGV);
+    // console.log(MABOMON + isOpenGetAllApiGV);
     const query = isOpenGetAllApiGV
       ? `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, ccd.THOIGIANNHAN, cv.TENCHUCVU, gcv.TUNGAY,gcv.SOQUYETDINH, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
                 FROM taikhoan AS tk
@@ -189,7 +189,7 @@ const timchuongtrinh_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
       [TENCHUONGTRINH]
     );
 
-    console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
+    // console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
     return results1[0];
   } catch (error) {
     console.log("timchuongtrinh_TENCHUONGTRINH errr >>>", error);
@@ -203,7 +203,7 @@ const timmonhoc_TENMONHOC = async (TENMONHOC) => {
       "SELECT * FROM monhoc WHERE TENMONHOC = ?",
       [TENMONHOC]
     );
-    console.log("Check timmonhoc_TENMONHOC:   ", results1[0]);
+    // console.log("Check timmonhoc_TENMONHOC:   ", results1[0]);
     return results1[0];
   } catch (error) {
     console.log("timmonhoc_TENMONHOC errr >>>", error);

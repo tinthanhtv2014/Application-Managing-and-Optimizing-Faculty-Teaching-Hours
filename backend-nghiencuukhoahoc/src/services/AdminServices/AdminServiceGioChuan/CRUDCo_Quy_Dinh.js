@@ -76,7 +76,7 @@ const create_Co_Quy_Dinh = async (
     );
 
     const results_Data = await select_Co_Quy_Dinh();
-    console.log("check select_Co_Quy_Dinh", results_Data);
+    // console.log("check select_Co_Quy_Dinh", results_Data);
     return {
       EM: "Thêm có quy định thành công ",
       EC: 1,

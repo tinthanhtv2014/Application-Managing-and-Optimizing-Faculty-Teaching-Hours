@@ -61,7 +61,7 @@ const getAllQuyDinh = async (req, res) => {
 const getOnlyDanhMucQuyDoi = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("check id", id);
+    // console.log("check id", id);
     const results = await selectOnlyDanhMucQuyDoi(id);
     return res.status(200).json({
       EM: results.EM,
@@ -477,7 +477,7 @@ const editLoaiTacGia = async (req, res) => {
 
 const removeLoaiTacGia = async (req, res) => {
   const { id } = req.params;
-  console.log("id", id);
+  // console.log("id", id);
   try {
     const results = await deleteLoaiTacGia(id);
     return res.status(200).json({
@@ -643,11 +643,11 @@ const add_Co_Quy_Dinh_excel = async (req, res) => {
 const addCoQuyDinh = async (req, res) => {
   const { MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA } =
     req.body;
-  console.log("check data MA_QUY_DOI =>", MA_QUY_DOI);
-  console.log("check data MA_LOAI_DANH_MUC =>", MA_LOAI_DANH_MUC);
+  // console.log("check data MA_QUY_DOI =>", MA_QUY_DOI);
+  // console.log("check data MA_LOAI_DANH_MUC =>", MA_LOAI_DANH_MUC);
 
-  console.log("check data MA_LOAI_TAC_GIA =>", MA_LOAI_TAC_GIA);
-  console.log("check data SO_TAC_GIA =>", SO_TAC_GIA);
+  // console.log("check data MA_LOAI_TAC_GIA =>", MA_LOAI_TAC_GIA);
+  // console.log("check data SO_TAC_GIA =>", SO_TAC_GIA);
   try {
     let results = await create_Co_Quy_Dinh(
       MA_QUY_DOI,
