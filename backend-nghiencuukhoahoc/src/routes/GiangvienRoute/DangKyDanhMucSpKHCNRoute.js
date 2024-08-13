@@ -8,12 +8,17 @@ const {
   dangky_danhmuc_Controller,
   select_thongtin_dangkydanhmuc_giangvien,
 } = require("../../controllers/GiangvienController/danhmucGiangVienCONTROLLER");
-
+const { checkUserJWT } = require("../../middlewares/JWTAction");
 const DangKyDanhMucRoute = (app) => {
-  router.post("/loaidanhmuc/loaitacgia", select_loaitacgia_loaidanhmuc);
-  router.post("/dangky/danhmuc", dangky_danhmuc_Controller);
+  router.post(
+    "/loaidanhmuc/loaitacgia",
+    checkUserJWT,
+    select_loaitacgia_loaidanhmuc
+  );
+  router.post("/dangky/danhmuc", checkUserJWT, dangky_danhmuc_Controller);
   router.post(
     "/dangky/danhmuc/thongtin",
+    checkUserJWT,
     select_thongtin_dangkydanhmuc_giangvien
   );
 

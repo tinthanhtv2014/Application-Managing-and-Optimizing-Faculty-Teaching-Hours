@@ -13,7 +13,7 @@ const CRUDchuongtrinh_CNTT = (app) => {
   //route cho khoa
   router.post("/xem", checkUserJWT, get_chuongtrinhdaotao);
   router.post("/xem/bomon", checkUserJWT, get_chuongtrinhdaotao_tenbomon);
-  router.post("/xem/hocki", getOnlyChuongtrinhdaotao_withHOCKI);
+  router.post("/xem/hocki", checkUserJWT, getOnlyChuongtrinhdaotao_withHOCKI);
   //   router.post("/tao", createNAMHOC);
   //   router.put("/sua/:MANAMHOC", updateNAMHOC);
   //   router.delete("/xoa", deleteNAMHOC);
