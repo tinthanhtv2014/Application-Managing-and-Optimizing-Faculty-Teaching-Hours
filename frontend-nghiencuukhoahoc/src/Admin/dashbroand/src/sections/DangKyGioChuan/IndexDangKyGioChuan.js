@@ -64,7 +64,9 @@ const DangKyGioChuan = () => {
       ) {
         // Tìm phần tử có TEN_KHOA trùng khớp
         const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
-          (item) => item.TEN_KHOA === response.data.DT.TENKHOA
+          (item) =>
+            item.TEN_KHOA === response.data.DT.TENKHOA &&
+            item.GHICHU === "CHONKHUNG"
         );
 
         if (matchedKhoa) {

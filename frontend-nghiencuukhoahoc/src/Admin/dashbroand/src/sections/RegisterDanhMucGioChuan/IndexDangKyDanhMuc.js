@@ -52,12 +52,17 @@ const IndexDangKyDanhmuc = () => {
       ) {
         // Tìm phần tử có TEN_KHOA trùng khớp với TENKHOA của giảng viên
         const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
-          (item) => item.TEN_KHOA === response.data.DT.TENKHOA
+          (item) =>
+            item.TEN_KHOA === response.data.DT.TENKHOA &&
+            item.GHICHU === "NGHIENCUU"
         );
 
+        console.log("check true", matchedKhoa);
         if (matchedKhoa) {
           const formattedStartDate = formatDate(matchedKhoa.THOIGIANBATDAU);
           const formattedEndDate = formatDate(matchedKhoa.THOIGIANKETTHUC);
+
+          console.log("GHICHU", matchedKhoa.GHICHU);
           const currentDate = formatDate(moment().format());
           setStartTimeGate(formattedStartDate);
           setEndTimeGate(formattedEndDate);

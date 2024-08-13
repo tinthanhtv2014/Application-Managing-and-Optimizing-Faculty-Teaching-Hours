@@ -57,30 +57,32 @@ const RenderData = ({
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
           );
 
-          if (response.data.EC === 1) {
-            if (response.data.DT && response.data.DT.length > 0) {
-              // Kiểm tra dữ liệu có tồn tại không
-              setStartTime(response.data.DT[0].THOIGIANBATDAU);
-              setEndTime(response.data.DT[0].THOIGIANKETTHUC);
+          if (response.data.EC === 1 && response.data.DT) {
+            // Tìm phần tử có GHICHU là "CHONKHUNG"
+            const matchedItem = response.data.DT.find(
+              (item) => item.GHICHU === "CHONKHUNG"
+            );
+
+            if (matchedItem) {
+              // Nếu tìm thấy, cập nhật các giá trị cần thiết
+              setStartTime(matchedItem.THOIGIANBATDAU);
+              setEndTime(matchedItem.THOIGIANKETTHUC);
               setTimeDangKyKhungGioChuan(
-                ` ${formatDate(
-                  response.data.DT[0].THOIGIANBATDAU
-                )} đến ${formatDate(response.data.DT[0].THOIGIANKETTHUC)}`
+                ` ${formatDate(matchedItem.THOIGIANBATDAU)} đến ${formatDate(
+                  matchedItem.THOIGIANKETTHUC
+                )}`
               );
             } else {
-              // Xử lý trường hợp không có dữ liệu
-              // toast.warn("Không có dữ liệu thời gian khung giờ chuẩn.");
+              // Nếu không tìm thấy, xử lý trường hợp không có dữ liệu phù hợp
               setStartTime("");
               setEndTime("");
             }
-          } else {
-            toast.error(
-              "Đã xảy ra lỗi khi lấy dữ liệu thời gian khung giờ chuẩn."
-            );
           }
         } catch (error) {
-          console.error("Lỗi khi gọi API:", error);
-          toast.error("Lỗi khi gọi API để lấy dữ liệu.");
+          console.error(
+            "Lỗi khi lấy dữ liệu thời gian khung giờ chuẩn:",
+            error
+          );
         } finally {
           setLoading(false);
         }
