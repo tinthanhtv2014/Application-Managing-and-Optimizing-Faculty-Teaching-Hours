@@ -109,8 +109,10 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
       `select 
       giangvien.TENGV,
       ltg.TEN_LOAI_TAC_GIA,
+
       namhoc.TENNAMHOC,
       dkthqd.TEN_NGHIEN_CUU,
+      dkthqd.SOGIOQUYDOI,
       dkthqd.THOI_GIAN_DANG_KY,
       dm.* 
       from 
