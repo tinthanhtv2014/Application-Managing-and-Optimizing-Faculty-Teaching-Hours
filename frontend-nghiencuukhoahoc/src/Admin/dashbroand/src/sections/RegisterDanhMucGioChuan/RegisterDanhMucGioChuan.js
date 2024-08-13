@@ -638,12 +638,13 @@ const DangKyDanhMucGioChuan = ({
                           ) : (
                             <Col
                               xs={12}
-                              md={7}
+                              md={6}
                               className="mt-4 responsive-thongtingiangvien-searchtengv "
-                              style={{ position: "relative" }}
                             >
+                              {" "}
                               <TextField
                                 label="Tên Giảng Viên"
+                                className="fixed-width "
                                 value={tacGia.tenGV}
                                 onChange={(e) => {
                                   setSearchTerm(e.target.value);
@@ -697,11 +698,13 @@ const DangKyDanhMucGioChuan = ({
                                   label="Là tác giả thứ nhất nhưng được miễn giờ chuẩn"
                                 />
                               )}
+                              <div className="fix-width"></div>
                             </Col>
                           )}
                           <Col
                             xs={12}
-                            md={4}
+                            md={6}
+                            sm={12}
                             className="responsive-thongtingiangvien-loaitacgia"
                           >
                             <FormControl fullWidth margin="normal">
@@ -727,7 +730,7 @@ const DangKyDanhMucGioChuan = ({
                               </Select>
                             </FormControl>
                           </Col>
-                          <div className="position-ab-button d-flex flex-column flex-md-row">
+                          <div className="responsive-isVienChuc position-ab-button d-flex flex-column flex-md-row">
                             <Button
                               variant={tacGia.laVienChuc ? "text" : "outlined"}
                               onClick={() => handleButtonClick(index, true)}

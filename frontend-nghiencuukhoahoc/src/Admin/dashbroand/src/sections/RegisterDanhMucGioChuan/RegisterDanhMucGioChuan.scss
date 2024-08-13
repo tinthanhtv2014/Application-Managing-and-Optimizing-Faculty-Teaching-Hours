@@ -148,11 +148,41 @@ padding-top: 20px;
     background-color: #f9fafb; /* Đổi màu nền khi di chuột qua mục */
   }
   
-  @media (max-width: 800px) {
-    /* Smaller Resolution Desktops and Laptops */
+  @media (min-width: 768px) {
+    /* Medium devices (laptop size M and up) */
+    .fixed-width {
+     /* Thay đổi chiều rộng theo ý muốn */
+    
+      
+    }
+    .fix-width{
+      width: 320px;
+      height: 80px;
+      
+    }
+    .responsive-thongtingiangvien-khoa{
+      padding-top: 10px;
+    }
+    .responsive-thongtingiangvien-searchtengv{
+      padding-top: 10px;
+     
+    }
+    .responsive-hoantatdangky{
+      margin-top: 30px;
+    }
+    .responsive-isVienChuc{
+     padding-top: 0px;
+    width: auto;
 
-   
-}
+    }
+    .responsive-thongtingiangvien-loaitacgia{
+padding-top: 35px;
+    }
+    .responsive-hoantatdangky{
+      margin-top: 0px;
+    }
+  }
+  
 @media (max-width: 650px) {
     /* Smaller devices */
 
@@ -172,7 +202,8 @@ padding-top: 20px;
   .responsive-thongtingiangvien-khoa{
     padding-top: 60px;}
   .responsive-thongtingiangvien-searchtengv{
-    padding-top: 60px;
+    padding-top: 75px;  
+
    
   }
   .responsive-hoantatdangky{
