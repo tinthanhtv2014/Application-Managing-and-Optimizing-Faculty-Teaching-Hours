@@ -94,6 +94,8 @@
     top: 0;
     z-index: 1;
    margin-top: 10px;
+   width: auto;
+   height: auto;
 
 // padding-top: 15px;
 padding-right: 10px;
@@ -103,9 +105,9 @@ padding-right: 10px;
     left: 0;
     top: 0;
     z-index: 1;
-   margin-top: 10px;
+   margin-top: 20px;
 
-margin-left: 20px;
+padding-top: 20px;
 
 
   }
@@ -116,7 +118,9 @@ margin-left: 20px;
 
 
 
-
+.background-color{
+  background-color: rgba(6, 81, 50, 0.495);
+}
 
 
 
@@ -151,12 +155,31 @@ margin-left: 20px;
 }
 @media (max-width: 650px) {
     /* Smaller devices */
+
+    .responsive-tendetai{
+      display: none;
+    }
+  .custom-col {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 10px;
+  }
+  
   .responsive-namhoc{
 
   margin-top: 10px;
   }
-.responsive-thongtingiangvien{
-  padding-top: 30px;
+  .responsive-thongtingiangvien-khoa{
+    padding-top: 60px;}
+  .responsive-thongtingiangvien-searchtengv{
+    padding-top: 60px;
+   
+  }
+  .responsive-hoantatdangky{
+    margin-top: 30px;
+  }
+.responsive-thongtingiangvien-loaitacgia{
+
 }
 }
 @media (max-width: 450px) {
