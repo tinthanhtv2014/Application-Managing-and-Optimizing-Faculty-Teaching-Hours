@@ -65,25 +65,30 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
   const [SoGioNghienCuuChuan, setSoGioNghienCuuChuan] = useState(null);
   const [SoGioDanhMucDaChon, setSoGioDanhMucDaChon] = useState(null);
   const [MaLoaiDanhMuc, setMaLoaiDanhMuc] = useState(null);
+  const [ListNamHoc, setListNamHoc] = useState(null);
+  const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const fectData = async () => {
       try {
-        const response_NAMHOC = await CookiesAxios.get(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
-        );
-
-        const response_LoaiTacGia = await CookiesAxios.get(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaitacgia`
-        );
-        const response_Khoa = await CookiesAxios.get(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
-        );
+        const [response_NAMHOC, response_LoaiTacGia, response_Khoa] =
+          await Promise.all([
+            CookiesAxios.get(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+            ),
+            CookiesAxios.get(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/loaitacgia`
+            ),
+            CookiesAxios.get(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+            ),
+          ]);
 
         setData_Khoa(response_Khoa.data.DT);
         setLoaiTacGia(response_LoaiTacGia.data.DT);
-
-        setSelectNamHoc(response_NAMHOC.data.DT[0]);
+        setListNamHoc(response_NAMHOC.data.DT);
+        setSelectNamHoc(response_NAMHOC.data.DT[0].TENNAMHOC);
+        console.log("check nam hoc =>", response_NAMHOC.data);
       } catch (error) {
         console.log("error UseEffect call api Data ", error);
       }
@@ -113,6 +118,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
       fectDataThongTinGioNghienCuu();
     }
   }, [selectNamHoc]);
+  useEffect(() => {
+    if (IsOpenSelectOption === "Đăng Ký Danh Mục") {
+      setIsDisableNamHoc(true);
+    } else {
+      setIsDisableNamHoc(false);
+    }
+  }, [IsOpenSelectOption]);
   useEffect(() => {
     tacGiaList.forEach((tacGia, index) => {
       if (tacGia.khoa) {
@@ -334,8 +346,8 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
             </Col>
           </Row>{" "}
           <Row className="mt-4">
-            <Col md={7}>
-              <Col md={6}>
+            <Col md={4}>
+              <Col md={12}>
                 {" "}
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
@@ -357,7 +369,37 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                   </Select>
                 </FormControl>
               </Col>
-            </Col>{" "}
+            </Col>
+            <Col md={3} className=" ml-4">
+              <Box sx={{ maxWidth: 220 }}>
+                <FormControl fullWidth className="profile-email-input">
+                  <InputLabel id="select-label-trang-thai">Năm học</InputLabel>
+                  <Select
+                    labelId="select-label-trang-thai"
+                    id="trang-thai-select"
+                    name="TENCHUCDANH"
+                    label="Chức danh"
+                    value={selectNamHoc}
+                    defaultValue={selectNamHoc}
+                    disabled={isDisableNamHoc}
+                    onChange={(e) => setSelectNamHoc(e.target.value)}
+                    variant="outlined"
+                  >
+                    {ListNamHoc && ListNamHoc.length > 0 ? (
+                      ListNamHoc.map((namhoc, index) => (
+                        <MenuItem key={index} value={namhoc.TENNAMHOC}>
+                          {namhoc.TENNAMHOC}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="" disabled>
+                        Không có năm học nào
+                      </MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Col>
             <Col md={4} className="mt-2 ml-4">
               {" "}
               <Typography>
@@ -519,19 +561,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                                   ))}
                                 </Select>
                               </FormControl>
-                              <TextField
-                                label={`Mã Số GV`}
-                                value={tacGia.maSoGV}
-                                onChange={(e) =>
-                                  handleTacGiaChange(
-                                    index,
-                                    "maSoGV",
-                                    e.target.value
-                                  )
-                                }
-                                fullWidth
-                                margin="normal"
-                              />
+
                               <TextField
                                 label={`Tên Giảng Viên`}
                                 value={tacGia.tenGV}
@@ -814,10 +844,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
               {/* END----------------Danh Sách Tác Giả--------------------------- */}
             </>
           ) : (
-            <Row>
+            <>
               {" "}
-              <XemLichSuChonDanhMuc />
-            </Row>
+              <Row>
+                {" "}
+                <XemLichSuChonDanhMuc />
+              </Row>
+            </>
           )}
         </Row>
       </Container>
