@@ -73,13 +73,13 @@ const ChuongtrinhDT_CNTT = () => {
           },
         }
       );
-      console.log("check", chuongtrinh_chitiet_Response);
+
       let hockiData = chuongtrinh_chitiet_Response.data.DT.map(
         (item) => item.SOTHUTUHOCKI
       );
 
       hockiData = [...new Set(hockiData)];
-      console.log("check hockiData", hockiData);
+
       setTenHocki(hockiData);
 
       // Lưu trữ dữ liệu môn học từ API trả về
@@ -140,7 +140,7 @@ const ChuongtrinhDT_CNTT = () => {
     (acc, mon) => acc + mon.SOTINCHITHUCHANH + mon.SOTINCHITHUCHANH,
     0
   );
-  console.log("check");
+
   return (
     <div className="containerchuongtrinhdaotao-truongbomon">
       <h1>DANH SÁCH CHƯƠNG TRÌNH ĐÀO TẠO </h1>
