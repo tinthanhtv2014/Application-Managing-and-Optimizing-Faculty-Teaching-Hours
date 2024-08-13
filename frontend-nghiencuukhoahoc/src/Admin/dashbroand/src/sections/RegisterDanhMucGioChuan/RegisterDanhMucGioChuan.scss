@@ -1,4 +1,20 @@
 
+.row-with-border-danhmuc-gate{
+  margin-top: 10px;
+
+
+  display: flex;
+  justify-content:center;
+  align-items: center;
+
+
+
+  outline: 0.2px solid rgba(48, 54, 61, 0.2); /* Màu nhạt hơn với độ trong suốt */
+
+  border-radius: 9px;
+
+  padding: 15px 10px 0px 0px;/* Ghi gọn các thuộc tính padding */
+}
 .row-with-border-danhmuc {
     margin-top: 10px;
     margin-bottom: 5px;
@@ -128,3 +144,26 @@ margin-left: 20px;
     background-color: #f9fafb; /* Đổi màu nền khi di chuột qua mục */
   }
   
+  @media (max-width: 800px) {
+    /* Smaller Resolution Desktops and Laptops */
+
+   
+}
+@media (max-width: 650px) {
+    /* Smaller devices */
+  .responsive-namhoc{
+
+  margin-top: 10px;
+  }
+.responsive-thongtingiangvien{
+  padding-top: 30px;
+}
+}
+@media (max-width: 450px) {
+    /* Even Smaller devices */
+
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    /* Even Smaller devices */
+
+}

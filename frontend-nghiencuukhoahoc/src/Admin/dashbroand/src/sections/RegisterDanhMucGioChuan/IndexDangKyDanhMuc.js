@@ -16,6 +16,8 @@ const IndexDangKyDanhmuc = () => {
     useState({ XemKhungGioChuan: null, ChonKhungGio: null });
 
   const [MaGV, setMaGV] = useState(null);
+  const [startTimeGate, setStartTimeGate] = useState(null);
+  const [endTimeGate, setEndTimeGate] = useState(null);
 
   useEffect(() => {
     const auth = Cookies.get("accessToken");
@@ -30,7 +32,7 @@ const IndexDangKyDanhmuc = () => {
     const date = moment(dateString);
     if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
 
-    return date.format("YYYY-MM-DD"); // Định dạng ngày theo yêu cầu
+    return date.format("DD-MM-YYYY"); // Định dạng ngày theo yêu cầu
   };
 
   const fetchDataGV = async (taikhoan) => {
@@ -57,7 +59,8 @@ const IndexDangKyDanhmuc = () => {
           const formattedStartDate = formatDate(matchedKhoa.THOIGIANBATDAU);
           const formattedEndDate = formatDate(matchedKhoa.THOIGIANKETTHUC);
           const currentDate = formatDate(moment().format());
-
+          setStartTimeGate(formattedStartDate);
+          setEndTimeGate(formattedEndDate);
           if (
             moment(currentDate, "YYYY-MM-DD").isBetween(
               moment(formattedStartDate, "YYYY-MM-DD"),
@@ -102,6 +105,8 @@ const IndexDangKyDanhmuc = () => {
       IsOpenCheckKhoa={IsOpenCheckKhoa}
       OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
       MaGV={MaGV}
+      startTimeGate={startTimeGate}
+      endTimeGate={endTimeGate}
     />
   );
 };
