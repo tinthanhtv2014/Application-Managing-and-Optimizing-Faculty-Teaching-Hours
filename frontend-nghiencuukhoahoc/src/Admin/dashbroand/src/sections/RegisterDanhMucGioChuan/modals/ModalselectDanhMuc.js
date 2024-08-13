@@ -23,6 +23,7 @@ const ModalDanhMuc = ({
   onClose,
   handleSelectDanhMuc,
   setMaLoaiDanhMuc,
+  setLoaiTacGia,
 }) => {
   const [dataOptions, setDataOptions] = useState([]);
   const [selectedLoaiDanhMuc, setSelectedLoaiDanhMuc] = useState("");
@@ -49,13 +50,28 @@ const ModalDanhMuc = ({
 
   const handleSelectChange = async (event) => {
     const value = event.target.value;
+    console.log("check value", value);
     setSelectedLoaiDanhMuc(value);
     setMaLoaiDanhMuc(value);
     try {
+      //Chọn Loại Danh Mục Để Xác Định Có  Loại Tác Giả Nào
+      const response_LoaiTacGia = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/loaidanhmuc/loaitacgia`,
+        {
+          MA_LOAI_DANH_MUC: value,
+        }
+      );
+
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/danhmucquydoi/${value}`
       );
-      setDataDanhMuc(response.data.DT);
+      if (response_LoaiTacGia.data.EC == 1) {
+        setLoaiTacGia(response_LoaiTacGia.data.DT);
+        console.log(response_LoaiTacGia.data.DT);
+      }
+      if (response.data.EC == 1) {
+        setDataDanhMuc(response.data.DT);
+      }
       console.log("check dataa danh muc ", response.data.DT);
     } catch (error) {
       console.error("Error fetching data:", error);

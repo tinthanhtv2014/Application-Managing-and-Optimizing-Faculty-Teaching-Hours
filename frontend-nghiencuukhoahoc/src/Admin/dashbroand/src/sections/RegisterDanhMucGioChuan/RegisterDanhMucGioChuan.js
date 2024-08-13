@@ -320,6 +320,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     //   console.error("Error fetching email suggestions:", error);
     // }
   };
+  console.log("check state", LoaiTacGia);
   return (
     <>
       <Container>
@@ -432,6 +433,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                       onClose={handleClose}
                       handleSelectDanhMuc={handleSelectDanhMuc}
                       setMaLoaiDanhMuc={setMaLoaiDanhMuc}
+                      setLoaiTacGia={setLoaiTacGia}
                     />
                   </div>
                 </Col>

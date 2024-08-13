@@ -36,26 +36,26 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   }
 };
 
-const getLoaiTacGiaByLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
+const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
   try {
     // Truy vấn MA_LOAI_DANH_MUC từ bảng LOAI_DANH_MUC dựa vào TEN_LOAI_DANH_MUC
-    let [LoaiDanhMuc, fields1] = await pool.execute(
-      `SELECT MA_LOAI_DANH_MUC FROM loai_danh_muc WHERE TEN_LOAI_DANH_MUC = ?`,
-      [TEN_LOAI_DANH_MUC]
-    );
+    // let [LoaiDanhMuc, fields1] = await pool.execute(
+    //   `SELECT MA_LOAI_DANH_MUC FROM loai_danh_muc WHERE TEN_LOAI_DANH_MUC = ?`,
+    //   [TEN_LOAI_DANH_MUC]
+    // );
 
-    if (LoaiDanhMuc.length === 0) {
-      return {
-        EM: "Loại danh mục không tồn tại",
-        EC: 0,
-        DT: [],
-      };
-    }
+    // if (LoaiDanhMuc.length === 0) {
+    //   return {
+    //     EM: "Loại danh mục không tồn tại",
+    //     EC: 0,
+    //     DT: [],
+    //   };
+    // }
 
     // Truy vấn MA_LOAI_TAC_GIA từ bảng CO_TY_LE dựa vào MA_LOAI_DANH_MUC
     let [CoTyLe, fields2] = await pool.execute(
       `SELECT DISTINCT MA_LOAI_TAC_GIA FROM co_ty_le WHERE MA_LOAI_DANH_MUC = ?`,
-      [LoaiDanhMuc[0].MA_LOAI_DANH_MUC]
+      [MA_LOAI_DANH_MUC]
     );
 
     if (CoTyLe.length === 0) {
@@ -75,7 +75,7 @@ const getLoaiTacGiaByLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
       );
 
       if (LoaiTacGia.length > 0) {
-        tenLoaiTacGias.push(LoaiTacGia[0].TEN_LOAI_TAC_GIA);
+        tenLoaiTacGias.push(LoaiTacGia[0]);
       }
     }
 
@@ -93,7 +93,6 @@ const getLoaiTacGiaByLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
     };
   }
 };
-
 
 module.exports = {
   get_thongtin_danhmuc,
