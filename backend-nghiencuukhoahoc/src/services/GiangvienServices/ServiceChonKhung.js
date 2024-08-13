@@ -349,7 +349,7 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
     const [results, fields] = await pool.execute(
       "select * from thoigian_xacnhan"
     );
-    console.log("tim_THOIGIAN_CHONKHUNG: ", results);
+    // console.log("tim_THOIGIAN_CHONKHUNG: ", results);
     return {
       EM: "Xem thời gian thành công !",
       EC: 1,
@@ -371,7 +371,7 @@ const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa, GHICHU) => {
       "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU= ?",
       [tenKhoa, GHICHU]
     );
-    console.log("tim_THOIGIAN_CHONKHUNG: ", results);
+    // console.log("tim_THOIGIAN_CHONKHUNG: ", results);
     return {
       EM: "Xem thời gian thành công !",
       EC: 1,
