@@ -30,9 +30,14 @@ import CookiesAxios from "../CookiesAxios";
 import ModalDanhMuc from "./modals/ModalselectDanhMuc.js";
 import Cookies from "js-cookie";
 import XemLichSuChonDanhMuc from "./XemLichSuChonDanhMuc.js";
-const DangKyDanhMucGioChuan = ({ MaGV }) => {
-  const [IsOpenSelectOption, setIsOpenSelectOption] =
-    useState("Đăng Ký Danh Mục");
+const DangKyDanhMucGioChuan = ({
+  IsOpenCheckKhoa,
+  OpenChucNangtheokhungthoigian,
+  MaGV,
+}) => {
+  const [IsOpenSelectOption, setIsOpenSelectOption] = useState(
+    "Xem Lịch Sử Đăng Ký Danh Mục"
+  );
   const [TenDeTaiNghienCuu, setTenDeTaiNghienCuu] = useState("");
   const navigate = useNavigate();
   const [isGiangVienNgoaiTruong, setIsGiangVienNgoaiTruong] = useState(false);
@@ -332,7 +337,7 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
     //   console.error("Error fetching email suggestions:", error);
     // }
   };
-  console.log("check state", LoaiTacGia);
+
   return (
     <>
       <Container>
@@ -360,12 +365,13 @@ const DangKyDanhMucGioChuan = ({ MaGV }) => {
                     label="Chức Năng"
                     onChange={(e) => setIsOpenSelectOption(e.target.value)}
                   >
-                    <MenuItem value="Đăng Ký Danh Mục">
-                      Đăng Ký Danh Mục
-                    </MenuItem>
-                    <MenuItem value="Xem Lịch Sử Đăng Ký Danh Mục">
-                      Xem Lịch Sử Đăng Ký Danh Mục
-                    </MenuItem>
+                    {Object.entries(OpenChucNangtheokhungthoigian).map(
+                      ([key, value]) => (
+                        <MenuItem key={key} value={value}>
+                          {value}
+                        </MenuItem>
+                      )
+                    )}
                   </Select>
                 </FormControl>
               </Col>

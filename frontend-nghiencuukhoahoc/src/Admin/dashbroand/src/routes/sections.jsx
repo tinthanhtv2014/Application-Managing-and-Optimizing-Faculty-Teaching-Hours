@@ -10,6 +10,7 @@ import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
 
 
 
+const IndexDangKyDanhmuc = lazy(() => import('../sections/RegisterDanhMucGioChuan/IndexDangKyDanhMuc'));
 const DangKyDanhMucGioChuan = lazy(() => import('../sections/RegisterDanhMucGioChuan/RegisterDanhMucGioChuan'));
 const DanhMucGioChuan = lazy(() => import('../sections/DanhMucGioChuan/DanhMucGioChuan'));
 const AdminCreate = lazy(() => import('../sections/Admincreate/AdminCreate'));
@@ -223,7 +224,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <DangKyDanhMucGioChuan />
+            <IndexDangKyDanhmuc />
           </Suspense>
         </DashboardLayout>
       )
