@@ -123,7 +123,7 @@ ORDER BY
 };
 
 const timkiem_email_taikhoan = async (TENGV) => {
-  console.log("check", TENGV);
+  // console.log("check", TENGV);
   try {
     const connection = await pool.getConnection();
     const query =
@@ -136,7 +136,7 @@ const timkiem_email_taikhoan = async (TENGV) => {
       "LIMIT 5";
     const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
-    console.log(rows);
+    // console.log(rows);
     if (rows.length > 0) {
       return {
         EM: "Tìm thấy các email gần đúng",

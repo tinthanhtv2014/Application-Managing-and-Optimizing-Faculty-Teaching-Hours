@@ -2,6 +2,7 @@ const {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
+  dangky_danhmuc_giangvien
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
 
 const select_thongtin_danhmuc = async (req, res) => {
@@ -49,27 +50,15 @@ const select_loaitacgia_loaidanhmuc = async (req, res) => {
 
 const dangky_danhmuc_Controller = async (req, res) => {
   try {
-    //Tặng ông nếu ông có xài
-
-    // const soTacGiaThuNhat = vaiTro.filter(
-    //   (role) => role === "Tác giả thứ nhất"
-    // ).length; // Đếm số tác giả thứ nhất
-    // const soTacGiaChiuTrachNhiem = vaiTro.filter(
-    //   (role) => role === "Tác giả chịu trách nhiệm"
-    // ).length; // Đếm số tác giả chịu trách nhiệm
-    // const soTacGiaKhac =
-    //   vaiTro.length - soTacGiaThuNhat - soTacGiaChiuTrachNhiem; // Số tác giả khác
-
-    // const tacGiaThuNhat = tacGiaList.find(
-    //   (tacGia) => tacGia.loai === "Tác giả thứ nhất"
-    // ); // Tìm tác giả thứ nhất
-
-    console.log("req.body dangky_danhmuc_Controller: ", req.body);
-    let results = {
-      EM: "ok",
-      EC: 1,
-      DT: "ok",
-    };
+    // console.log("req.body dangky_danhmuc_Controller: ", req.body);
+    let dataDangKyDanhMuc = req.body
+    // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+    let results = await dangky_danhmuc_giangvien(dataDangKyDanhMuc)
+    // let results = {
+    //   EM: "ok",
+    //   EC: 1,
+    //   DT: "ok",
+    // };
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
