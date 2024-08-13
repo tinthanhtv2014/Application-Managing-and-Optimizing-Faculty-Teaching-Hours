@@ -212,13 +212,15 @@ const Sevicel_TyLe_Excel = async (dataTyLe) => {
             let result = await pool.execute(
                 `
                 INSERT INTO ty_le_quy_doi_gio_chuan 
-                (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) 
-                VALUES (?, ?, ?, ?, ?)
+                (MA_QUY_DINH, TEN_QUY_DOI, TY_LE, VIEN_CHUC_TRUONG, THUC_HIEN_CHUAN, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 `,
                 [
                     dataTyLe[i].MA_QUY_DINH,
                     dataTyLe[i].TEN_QUY_DOI,
                     dataTyLe[i].TY_LE,
+                    dataTyLe[i].VIEN_CHUC_TRUONG,
+                    dataTyLe[i].THUC_HIEN_CHUAN,
                     dataTyLe[i].TRANG_THAI_QUY_DOI,
                     dataTyLe[i].GHI_CHU_QUY_DOI
                 ]
@@ -234,7 +236,7 @@ const Sevicel_TyLe_Excel = async (dataTyLe) => {
                 };
             }
 
-            results.push(result.DT); // Lưu ID của loại danh mục vào kết quả
+            results.push(result[0].insertId); // Lưu ID của tỷ lệ vào kết quả
         }
 
         return {
@@ -269,9 +271,11 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
                 [dataCoTyLe[i].TEN_LOAI_DANH_MUC]
             );
             if (LoaiTacGai.length === 0 || TyLe.length === 0 || LoaiDanhmuc.length === 0) {
-                console.log("Dữ liệu này không tồn tại: " + dataCoTyLe[i]);
+                if (LoaiTacGai.length === 0) console.log("Không có LoaiTacGai: ", dataCoTyLe[i].TEN_LOAI_TAC_GIA);
+                if (TyLe.length === 0) console.log("Không có TyLe: ", dataCoTyLe[i].TEN_QUY_DOI);
+                if (LoaiDanhmuc.length === 0) console.log("Không có LoaiDanhmuc: ", dataCoTyLe[i].TEN_LOAI_DANH_MUC);
                 return {
-                    EM: "Dữ liệu này không tồn tại: " + dataCoTyLe[i],
+                    EM: "Dữ liệu này không tồn tại: " + JSON.stringify(dataCoTyLe[i]),
                     EC: 0,
                     DT: [],
                 };
@@ -299,12 +303,13 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
 
             // Thêm dữ liệu vào bảng CO_TY_LE
             let [result, fields3] = await pool.execute(
-                `INSERT INTO co_ty_le (MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA_THUOC_LOAI) VALUES (?, ?, ?, ?)`,
+                `INSERT INTO co_ty_le (MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA_THUOC_LOAI, DA_LOAI_TAC_GIA) VALUES (?, ?, ?, ?, ?)`,
                 [
                     TyLe[0].MA_QUY_DOI,
                     LoaiDanhmuc[0].MA_LOAI_DANH_MUC,
                     LoaiTacGai[0].MA_LOAI_TAC_GIA,
                     dataCoTyLe[i].SO_TAC_GIA_THUOC_LOAI,
+                    dataCoTyLe[i].DA_LOAI_TAC_GIA
                 ]
             );
             results.push(result.insertId); // Lưu ID của loại danh mục vào kết quả

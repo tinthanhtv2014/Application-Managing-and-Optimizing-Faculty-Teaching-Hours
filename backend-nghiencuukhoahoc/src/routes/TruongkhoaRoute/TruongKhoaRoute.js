@@ -20,7 +20,7 @@ const TruongKhoaRoute = (app) => {
     router.get("/xem", GiangVien_thuoc_KhoaController);
     router.post("/timkiem/email", timkiem_email_taikhoanController);
 
-    router.post("/test/tao/excel", CoTyLeExcelController);
+    router.post("/test/tao/excel", CoTyLeExcelController); // Chạy CSDL bằng excel
 
     return app.use("/api/v1/truongkhoa", router);
 };
