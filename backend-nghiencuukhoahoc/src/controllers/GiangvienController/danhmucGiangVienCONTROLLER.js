@@ -49,6 +49,21 @@ const select_loaitacgia_loaidanhmuc = async (req, res) => {
 
 const dangky_danhmuc_Controller = async (req, res) => {
   try {
+    //Tặng ông nếu ông có xài
+
+    // const soTacGiaThuNhat = vaiTro.filter(
+    //   (role) => role === "Tác giả thứ nhất"
+    // ).length; // Đếm số tác giả thứ nhất
+    // const soTacGiaChiuTrachNhiem = vaiTro.filter(
+    //   (role) => role === "Tác giả chịu trách nhiệm"
+    // ).length; // Đếm số tác giả chịu trách nhiệm
+    // const soTacGiaKhac =
+    //   vaiTro.length - soTacGiaThuNhat - soTacGiaChiuTrachNhiem; // Số tác giả khác
+
+    // const tacGiaThuNhat = tacGiaList.find(
+    //   (tacGia) => tacGia.loai === "Tác giả thứ nhất"
+    // ); // Tìm tác giả thứ nhất
+
     console.log("req.body dangky_danhmuc_Controller: ", req.body);
     let results = {
       EM: "ok",

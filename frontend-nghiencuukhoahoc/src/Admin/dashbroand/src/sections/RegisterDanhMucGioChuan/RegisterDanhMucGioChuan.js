@@ -315,28 +315,32 @@ const DangKyDanhMucGioChuan = ({
     }
   };
   const handleTinhSoGio = async () => {
-    console.log(
-      "check DATA TO BACK =>",
+    if (!selectedDanhMuc) {
+      toast.error("Bạn cần chọn danh mục đăng ký");
+    }
+    if (tacGiaList.length == 0) {
+      toast.error("Bạn cần điền thông tin tác giả");
+    }
+    console.log("tong so tac gia", tacGiaList.length);
+    console.log("MaLoaiDanhMuc", MaLoaiDanhMuc);
+    console.log("tacGiaList", tacGiaList);
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc`,
+        {
+          LISTGIANGVIEN: tacGiaList,
+          TONGSOTACGIA: tacGiaList.length,
+          MALOAIDANHMUC: MaLoaiDanhMuc,
+          MADANHMUC: selectedDanhMuc.MA_DANH_MUC,
+        }
+      );
 
-      tacGiaList,
-      SoGioDanhMucDaChon,
-      MaLoaiDanhMuc
-    );
-    // try {
-    //   const response = await CookiesAxios.post(
-    //     `${process.env.REACT_APP_URL_SERVER}/api/v1/`,
-    //     {
-    //       LISTGIANGVIEN: tacGiaList,
-    //       SOGIO: SoGioDanhMucDaChon,
-    //     }
-    //   );
-
-    //   if (response.data.EC === 1) {
-    //     setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching email suggestions:", error);
-    // }
+      if (response.data.EC === 1) {
+        setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+      }
+    } catch (error) {
+      console.error("Error fetching email suggestions:", error);
+    }
   };
 
   return (
