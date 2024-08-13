@@ -143,7 +143,7 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
 
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   try {
-    console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+    // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
 
     // Khởi tạo một object để đếm các giá trị 'loai'
     const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce((acc, giangVien) => {
@@ -160,12 +160,12 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       Stt: index + 1 // Thêm thứ tự vào mỗi đối tượng
     }));
 
-    console.log("dataDangKy: ", dataDangKy);
+    // console.log("dataDangKy: ", dataDangKy);
 
     // Lấy phần tử có loại là "Tác giả thứ nhất"
     const DaiDien = dataDangKy.find(giangVien => giangVien.loai === 'Tác giả thứ nhất');
 
-    console.log("DaiDien: ", DaiDien);
+    // console.log("DaiDien: ", DaiDien);
 
     // Vòng lặp kiểm tra dữ liệu loại tác giả
     for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
@@ -221,7 +221,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         DaiDien.soLuongLoai,
       ]
     );
-    console.log("TacGiaDaiDien: ", TacGiaDaiDien)
+    // console.log("TacGiaDaiDien: ", TacGiaDaiDien)
 
     for (let i = 0; i < dataDangKy.length; i++) {
       let [DataTyLeTraVe, DataTyLeTraVe_fields] = await pool.execute(
@@ -260,7 +260,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       );
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 }); // Thêm đối tượng vào obj với Stt
     }
-    console.log("obj: ", obj)
+    // console.log("obj: ", obj)
 
     let results1 = 0;
 
