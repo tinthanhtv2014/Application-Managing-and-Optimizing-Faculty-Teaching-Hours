@@ -1,6 +1,11 @@
 const pool = require("../../config/database");
-
-const { timnamhoc_TENNAMHOC } = require("../../services/AdminServices/helpers");
+const moment = require("moment");
+const {
+  timnamhoc_TENNAMHOC,
+  timtacgia_TEN_LOAI_TAC_GIA,
+  timGiangVien_TENGV,
+  selectBomon_TENBOMON,
+} = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
@@ -420,9 +425,136 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   }
 };
 
+const get_thongtin_dangky_giangvien_hoptac = async (TEN_NGHIEN_CUU) => {
+  try {
+    console.log("check TEN_NGHIEN_CUU", TEN_NGHIEN_CUU);
+    const [results1, fields] = await pool.execute(
+      `SELECT giangvien.TENGV,
+      dkthqd.TEN_NGHIEN_CUU,
+      ltg.TEN_LOAI_TAC_GIA 
+      from 
+      dang_ky_thuc_hien_quy_doi as dkthqd,
+      loai_tac_gia as ltg,
+      giangvien
+      where giangvien.MAGV = dkthqd.MAGV 
+      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      and dkthqd.TEN_NGHIEN_CUU = ?
+     `,
+      [TEN_NGHIEN_CUU]
+    );
+
+    return {
+      EM: "Lấy thông tin thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log("get_thongtin_dangky_giangvien error >>>", error);
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
+  }
+};
+
+//tìm mã ngẫu nhiên
+function getRandomNumber() {
+  return Math.floor(Math.random() * 100000) + 1;
+}
+
+const dangky_thongtin_giangvien = async (dataDangKy) => {
+  try {
+    const time = moment().format("YYYY-MM-DD");
+    const timNAMHOC = await timnamhoc_TENNAMHOC(dataDangKy.MANAMHOC);
+    if (!timNAMHOC) {
+      return {
+        EM: "không có năm học",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    for (var i = 0; i < dataDangKy.LISTGIANGVIEN.length; i++) {
+      console.log(dataDangKy.LISTGIANGVIEN[i]);
+      const timtacgia = await timtacgia_TEN_LOAI_TAC_GIA(
+        dataDangKy.LISTGIANGVIEN[i].loai
+      );
+      const timbomon = await selectBomon_TENBOMON(
+        dataDangKy.LISTGIANGVIEN[i].boMon
+      );
+      const timgiangvien = await timGiangVien_TENGV(
+        dataDangKy.LISTGIANGVIEN[i].tenGV
+      );
+
+      if (timgiangvien === undefined) {
+        const randomMAGV = getRandomNumber();
+        await pool.execute(
+          `insert into giangvien (MAGV,MABOMON,TENGV,EMAIL) values (?,?,?,?)
+       `,
+          [
+            randomMAGV,
+            timbomon[0].MABOMON,
+            dataDangKy.LISTGIANGVIEN[i].tenGV,
+            dataDangKy.LISTGIANGVIEN[i].emailGV,
+          ]
+        );
+      }
+      const selectMAGV = await timGiangVien_TENGV(
+        dataDangKy.LISTGIANGVIEN[i].tenGV
+      );
+      console.log("check select MAGV = : ", selectMAGV);
+      await pool.execute(
+        `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,?,N'Đã đăng ký')
+       `,
+        [
+          dataDangKy.MADANHMUC,
+          selectMAGV.MAGV,
+          timNAMHOC,
+          timtacgia,
+          dataDangKy.LISTGIANGVIEN[i].soGio,
+          dataDangKy.TENDETAI,
+          time,
+        ]
+      );
+    }
+
+    const [results1, fields] = await pool.execute(
+      `SELECT giangvien.TENGV,
+      dkthqd.TEN_NGHIEN_CUU,
+      dkthqd.SOGIOQUYDOI,
+      ltg.TEN_LOAI_TAC_GIA 
+      from 
+      dang_ky_thuc_hien_quy_doi as dkthqd,
+      loai_tac_gia as ltg,
+      giangvien
+      where giangvien.MAGV = dkthqd.MAGV 
+      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      and dkthqd.TEN_NGHIEN_CUU = ?
+     `,
+      [dataDangKy.TENDETAI]
+    );
+
+    return {
+      EM: "đăng ký đề tài thành công",
+      EC: 0,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log("get_thongtin_dangky_giangvien error >>>", error);
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
   dangky_danhmuc_giangvien,
+  get_thongtin_dangky_giangvien_hoptac,
+  dangky_thongtin_giangvien,
 };

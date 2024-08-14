@@ -242,34 +242,6 @@ const DangKyDanhMucGioChuan = ({
     setTacGiaList(updatedTacGiaList);
   };
 
-  const handleTongTacGia = async () => {
-    console.log("check datalist", tacGiaList);
-    const tongGio = SoGioDanhMucDaChon;
-
-    // Tính toán giờ cho các tác giả
-    const authorHours = await calculateAuthorHours(tongGio, tacGiaList);
-
-    // Cập nhật tacGiaList với giờ phù hợp
-    const updatedTacGiaList = tacGiaList.map((tacGia) => {
-      let soGio = 0;
-
-      if (tacGia.loai === "Tác giả thứ nhất") {
-        soGio = authorHours.gioTacGiaThuNhat;
-      } else if (tacGia.loai === "Tác giả chịu trách nhiệm") {
-        soGio = authorHours.gioTacGiaChiuTrachNhiem;
-      } else {
-        soGio = authorHours.gioTacGiaThongThuong;
-      }
-
-      return { ...tacGia, soGio };
-    });
-
-    setTacGiaList(updatedTacGiaList);
-
-    console.log(authorHours);
-    console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
-  };
-
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
@@ -343,6 +315,8 @@ const DangKyDanhMucGioChuan = ({
       setEmailSuggestions([]); // Ẩn gợi ý khi click bên ngoài
     }
   };
+
+  // ---------------TÍNH SỐ GIỜ ---------------------------------
   const handleTinhSoGio = async () => {
     if (!selectedDanhMuc) {
       toast.error("Bạn cần chọn danh mục đăng ký");
@@ -368,10 +342,13 @@ const DangKyDanhMucGioChuan = ({
 
       if (response.data.EC === 1) {
         const dtList = response.data.DT; // Dữ liệu từ backend
-
+        const soTacGiaThuNhat = dtList.filter(
+          (role) => role.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
+        ).length; // Đếm số tác giả thứ nhất
+        // console.log(" số tác giả thứ nhất", soTacGiaThuNhat);
         // Cập nhật số giờ cho từng giảng viên trong tacGiaList
         const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
-          const correspondingData = dtList[index]; // Lấy dữ liệu tương ứng
+          const correspondingData = dtList[index];
 
           if (correspondingData) {
             let soGio = 0;
@@ -379,13 +356,30 @@ const DangKyDanhMucGioChuan = ({
             // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
             switch (tacGia.loai) {
               case "Tác giả thứ nhất":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tính theo tổng số giờ đã chọn
-                break;
               case "Tác giả chịu trách nhiệm":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
-                break;
               case "Tác giả còn lại":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
+                // console.log("soGio", soGio);
+                // console.log("correspondingData", correspondingData);
+                // Nếu `DA_LOAI_TAC_GIA` là "Có", nhân thêm tỷ lệ với các tác giả khác có `DA_LOAI_TAC_GIA` là "Có"
+                if (correspondingData.DA_LOAI_TAC_GIA === "Có") {
+                  const additionalTyLe = dtList
+                    .filter((item) => item.DA_LOAI_TAC_GIA === "Có")
+                    .reduce((acc, item) => acc * item.TY_LE, 1);
+                  console.log("check additionalTyLe", additionalTyLe);
+                  soGio = additionalTyLe * SoGioDanhMucDaChon; // Nhân thêm tỷ lệ tích lũy từ các tác giả khác
+                }
+
+                if (
+                  correspondingData.DA_LOAI_TAC_GIA === "Không" &&
+                  correspondingData.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
+                ) {
+                  soGio =
+                    (correspondingData.TY_LE * SoGioDanhMucDaChon) /
+                    soTacGiaThuNhat;
+                } else if (correspondingData.DA_LOAI_TAC_GIA === "Không") {
+                  soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
+                }
                 break;
               default:
                 soGio = 0; // Không có loại tác giả phù hợp
@@ -400,6 +394,47 @@ const DangKyDanhMucGioChuan = ({
         // Cập nhật danh sách giảng viên với số giờ đã tính
         setTacGiaList(updatedTacGiaList);
         console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
+      }
+    } catch (error) {
+      console.error("Error fetching email suggestions:", error);
+    }
+  };
+
+  // ----------------ĐĂNG KÝ DANH MỤC VÀO CSDL -----------------------------
+  const handleDangKyDanhMuc = async () => {
+    // Kiểm tra dữ liệu có hợp lệ không
+    if (
+      !tacGiaList ||
+      !TenDeTaiNghienCuu ||
+      !selectedDanhMuc?.MA_DANH_MUC ||
+      !selectNamHoc
+    ) {
+      toast.error("Thiếu thông tin đăng ký");
+      console.error("Dữ liệu không hợp lệ:", {
+        tacGiaList,
+        TenDeTaiNghienCuu,
+        selectedDanhMuc: selectedDanhMuc?.MA_DANH_MUC,
+        selectNamHoc,
+      });
+      return; // Dừng hàm nếu dữ liệu không hợp lệ
+    }
+
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin/luu`,
+        {
+          LISTGIANGVIEN: tacGiaList,
+          TENDETAI: TenDeTaiNghienCuu,
+          MADANHMUC: selectedDanhMuc.MA_DANH_MUC,
+          MANAMHOC: selectNamHoc,
+        }
+      );
+      console.log("data", response.data);
+      if (response.data.EC === 1) {
+        // Xử lý nếu thành công
+      } else {
+        // Xử lý nếu có lỗi từ server
+        console.error("Lỗi từ server:", response.data);
       }
     } catch (error) {
       console.error("Error fetching email suggestions:", error);
@@ -951,7 +986,7 @@ const DangKyDanhMucGioChuan = ({
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleTongTacGia}
+                        onClick={handleTinhSoGio}
                       >
                         Tính số giờ
                       </Button>
@@ -976,7 +1011,7 @@ const DangKyDanhMucGioChuan = ({
                         variant="contained"
                         color="primary"
                         className="responsive-hoantatdangky"
-                        onClick={handleTinhSoGio}
+                        onClick={handleDangKyDanhMuc}
                       >
                         Hoàn tất đăng ký
                       </Button>

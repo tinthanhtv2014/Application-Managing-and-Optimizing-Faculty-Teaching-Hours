@@ -6,6 +6,7 @@ const router = express.Router();
 const {
   GiangVien_thuoc_KhoaController,
   timkiem_email_taikhoanController,
+  timkiem_email_taikhoan_ngoaitruongController,
 } = require("../../controllers/TruongkhoaController/TruongKhoaController");
 
 const {
@@ -18,7 +19,11 @@ const { checkUserJWT } = require("../../middlewares/JWTAction");
 const TruongKhoaRoute = (app) => {
   router.get("/xem", checkUserJWT, GiangVien_thuoc_KhoaController);
   router.post("/timkiem/email", checkUserJWT, timkiem_email_taikhoanController);
-
+  router.post(
+    "/timkiem/ngoaitruong/email",
+    checkUserJWT,
+    timkiem_email_taikhoan_ngoaitruongController
+  );
   router.post("/test/tao/excel", checkUserJWT, CoTyLeExcelController); // Chạy CSDL bằng excel
 
   return app.use("/api/v1/truongkhoa", router);
