@@ -146,24 +146,31 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
 
     // Khởi tạo một object để đếm các giá trị 'loai'
-    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce((acc, giangVien) => {
-      acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
-      return acc;
-    }, {});
+    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
+      (acc, giangVien) => {
+        acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
+        return acc;
+      },
+      {}
+    );
 
     // Chuyển đổi giá trị true/false và thêm số lượng 'loai' giống nhau vào dataDangKy
-    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map((giangVien, index) => ({
-      ...giangVien,
-      laVienChuc: giangVien.laVienChuc ? 'Có' : 'Không',
-      duocMien: giangVien.duocMien ? 'Không' : 'Có', //true = Không và false = Có
-      soLuongLoai: loaiCountObj[giangVien.loai], // Thêm số lượng loại giống nhau
-      Stt: index + 1 // Thêm thứ tự vào mỗi đối tượng
-    }));
+    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
+      (giangVien, index) => ({
+        ...giangVien,
+        laVienChuc: giangVien.laVienChuc ? "Có" : "Không",
+        duocMien: giangVien.duocMien ? "Không" : "Có", //true = Không và false = Có
+        soLuongLoai: loaiCountObj[giangVien.loai], // Thêm số lượng loại giống nhau
+        Stt: index + 1, // Thêm thứ tự vào mỗi đối tượng
+      })
+    );
 
     console.log("dataDangKy: ", dataDangKy);
 
     // Lấy phần tử có loại là "Tác giả thứ nhất"
-    const DaiDien = dataDangKy.find(giangVien => giangVien.loai === 'Tác giả thứ nhất');
+    const DaiDien = dataDangKy.find(
+      (giangVien) => giangVien.loai === "Tác giả thứ nhất"
+    );
 
     console.log("DaiDien: ", DaiDien);
 
@@ -221,7 +228,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         DaiDien.soLuongLoai,
       ]
     );
-    console.log("TacGiaDaiDien: ", TacGiaDaiDien)
+    console.log("TacGiaDaiDien: ", TacGiaDaiDien);
 
     for (let i = 0; i < dataDangKy.length; i++) {
       let [DataTyLeTraVe, DataTyLeTraVe_fields] = await pool.execute(
@@ -260,14 +267,14 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       );
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 }); // Thêm đối tượng vào obj với Stt
     }
-    console.log("obj: ", obj)
+    console.log("obj: ", obj);
 
     let results1 = 0;
 
     return {
       EM: "Đăng ký danh mục thành công",
       EC: 1,
-      DT: obj
+      DT: obj,
     };
   } catch (error) {
     console.log("dangky_danhmuc_giangvien errr >>>", error);
@@ -275,11 +282,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   }
 };
 
-
-
 module.exports = {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
-  dangky_danhmuc_giangvien
+  dangky_danhmuc_giangvien,
 };
