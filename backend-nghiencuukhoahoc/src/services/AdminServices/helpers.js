@@ -227,6 +227,7 @@ const timnamhoc_MANAMHOC = async (MANAMHOC) => {
 
 const timnamhoc_TENNAMHOC = async (TENNAMHOC) => {
   try {
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     const [results1, fields] = await pool.execute(
       "SELECT * FROM namhoc WHERE namhoc.TENNAMHOC = ?",
       [TENNAMHOC]

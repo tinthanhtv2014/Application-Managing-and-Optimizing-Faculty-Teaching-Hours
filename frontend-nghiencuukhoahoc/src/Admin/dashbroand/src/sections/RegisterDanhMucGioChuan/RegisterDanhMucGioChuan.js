@@ -20,7 +20,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { calculateAuthorHours } from "./test1.js";
+import { calculateAuthorHours } from "./test2.js";
 import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import "./RegisterDanhMucGioChuan.scss";
@@ -75,6 +75,8 @@ const DangKyDanhMucGioChuan = ({
   const [ListNamHoc, setListNamHoc] = useState(null);
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dataDang_ky_thuc_hien_quy_doiGV, setDataDang_ky_thuc_hien_quy_doiGV] =
+    useState([]);
   useEffect(() => {
     const fectData = async () => {
       try {
@@ -109,28 +111,55 @@ const DangKyDanhMucGioChuan = ({
     const decoded = jwtDecode(token);
     // console.log("check decoded", decoded.taikhoan);
 
-    if (selectNamHoc && token) {
+    if (selectNamHoc && decoded) {
       const fectDataThongTinGioNghienCuu = async () => {
-        const response_Data = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
-          { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
-        );
-        if (response_Data.data.EC === 1) {
-          setSoGioNghienCuuChuan(
-            response_Data.data.DT.GIONGHIENCUUKHOAHOC_CHUAN
+        try {
+          const response_Data = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
+            { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc }
           );
+          if (response_Data.data.EC === 1) {
+            setSoGioNghienCuuChuan(
+              response_Data.data.DT.GIONGHIENCUUKHOAHOC_CHUAN
+            );
+          } else {
+            console.error("Lỗi từ server:", response_Data.data.EM);
+          }
+        } catch (error) {
+          console.error("Lỗi khi gọi API:", error);
         }
       };
       fectDataThongTinGioNghienCuu();
     }
   }, [selectNamHoc]);
+
   useEffect(() => {
     if (IsOpenSelectOption === "Đăng Ký Danh Mục") {
       setIsDisableNamHoc(true);
-    } else {
+    } else if (IsOpenSelectOption === "Xem Lịch Sử Đăng Ký Danh Mục") {
       setIsDisableNamHoc(false);
+      if (selectNamHoc) {
+        const DataThongTinDangKyGiangVien = async () => {
+          try {
+            const response_Data = await CookiesAxios.post(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin`,
+              { MAGV: MaGV, TENNAMHOC: selectNamHoc }
+            );
+            console.log("check", response_Data.data.DT);
+            if (response_Data.data.EC === 1) {
+              setDataDang_ky_thuc_hien_quy_doiGV(response_Data.data.DT);
+            } else {
+              console.error("Lỗi từ server:", response_Data.data.EM);
+            }
+          } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+          }
+        };
+        DataThongTinDangKyGiangVien();
+      }
     }
-  }, [IsOpenSelectOption]);
+  }, [IsOpenSelectOption, selectNamHoc]);
+
   useEffect(() => {
     tacGiaList.forEach((tacGia, index) => {
       if (tacGia.khoa) {
@@ -335,8 +364,42 @@ const DangKyDanhMucGioChuan = ({
         }
       );
 
+      console.log(response.data.DT);
+
       if (response.data.EC === 1) {
-        setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+        const dtList = response.data.DT; // Dữ liệu từ backend
+
+        // Cập nhật số giờ cho từng giảng viên trong tacGiaList
+        const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
+          const correspondingData = dtList[index]; // Lấy dữ liệu tương ứng
+
+          if (correspondingData) {
+            let soGio = 0;
+
+            // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
+            switch (tacGia.loai) {
+              case "Tác giả thứ nhất":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tính theo tổng số giờ đã chọn
+                break;
+              case "Tác giả chịu trách nhiệm":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+                break;
+              case "Tác giả còn lại":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+                break;
+              default:
+                soGio = 0; // Không có loại tác giả phù hợp
+            }
+
+            return { ...tacGia, soGio }; // Cập nhật số giờ cho giảng viên
+          }
+
+          return tacGia; // Trả về giảng viên không thay đổi nếu không tìm thấy dữ liệu
+        });
+
+        // Cập nhật danh sách giảng viên với số giờ đã tính
+        setTacGiaList(updatedTacGiaList);
+        console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
       }
     } catch (error) {
       console.error("Error fetching email suggestions:", error);
@@ -549,162 +612,192 @@ const DangKyDanhMucGioChuan = ({
                         className="row-with-border-danhmuc-nodisplay-flex custom-col d-flex position-re "
                       >
                         <Row>
-                          {!tacGia.laVienChuc ? (
-                            <Col
-                              sm={12}
-                              md={6}
-                              xs={12}
-                              className="mt-4 responsive-thongtingiangvien-khoa "
-                            >
-                              <FormControl fullWidth margin="normal">
-                                <InputLabel id={`khoa-label-${index}`}>
-                                  Khoa
-                                </InputLabel>
-                                <Select
-                                  labelId={`khoa-label-${index}`}
-                                  value={tacGia.khoa}
-                                  label="Khoa"
-                                  onChange={(e) =>
-                                    handleTacGiaChange(
-                                      index,
-                                      "khoa",
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  {data_Khoa.map((loai) => (
-                                    <MenuItem
-                                      key={loai.MAKHOA}
-                                      value={loai.MAKHOA}
-                                    >
-                                      {loai.TENKHOA}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
-                              <FormControl fullWidth margin="normal">
-                                <InputLabel id={`boMon-label-${index}`}>
-                                  Bộ Môn
-                                </InputLabel>
-                                <Select
-                                  labelId={`boMon-label-${index}`}
-                                  value={tacGia.boMon}
-                                  label="Bộ Môn"
-                                  onChange={(e) =>
-                                    handleTacGiaChange(
-                                      index,
-                                      "boMon",
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  {(data_BoMon[index] || []).map((loai) => (
-                                    <MenuItem
-                                      key={loai.MABOMON}
-                                      value={loai.TENBOMON}
-                                    >
-                                      {loai.TENBOMON}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
-                              <TextField
-                                label="Tên Giảng Viên"
-                                value={tacGia.tenGV}
-                                onChange={(e) =>
-                                  handleTacGiaChange(
-                                    index,
-                                    "tenGV",
-                                    e.target.value
-                                  )
-                                }
-                                fullWidth
-                                margin="normal"
-                              />
-                              <TextField
-                                label="Email Giảng Viên"
-                                value={tacGia.emailGV}
-                                onChange={(e) =>
-                                  handleTacGiaChange(
-                                    index,
-                                    "emailGV",
-                                    e.target.value
-                                  )
-                                }
-                                fullWidth
-                                margin="normal"
-                              />
-                            </Col>
-                          ) : (
-                            <Col
-                              xs={12}
-                              md={7}
-                              className="mt-4 responsive-thongtingiangvien-searchtengv "
-                              style={{ position: "relative" }}
-                            >
-                              <TextField
-                                label="Tên Giảng Viên"
-                                value={tacGia.tenGV}
-                                onChange={(e) => {
-                                  setSearchTerm(e.target.value);
-                                  handleTacGiaChangeEmail(
-                                    index,
-                                    "tenGV",
-                                    e.target.value
-                                  );
-                                }}
-                                fullWidth
-                                margin="normal"
-                              />
-                              {currentEmail &&
-                                currentEmail === tacGia.tenGV &&
-                                emailSuggestions.length > 0 && (
-                                  <div
-                                    className="suggestions-list"
-                                    ref={suggestionsRef}
+                          <Col
+                            sm={12}
+                            md={6}
+                            xs={12}
+                            className="mt-4 responsive-thongtingiangvien-khoa "
+                          >
+                            {!tacGia.laVienChuc ? (
+                              <>
+                                <FormControl fullWidth margin="normal">
+                                  <InputLabel id={`khoa-label-${index}`}>
+                                    Khoa
+                                  </InputLabel>
+                                  <Select
+                                    labelId={`khoa-label-${index}`}
+                                    value={tacGia.khoa}
+                                    label="Khoa"
+                                    onChange={(e) =>
+                                      handleTacGiaChange(
+                                        index,
+                                        "khoa",
+                                        e.target.value
+                                      )
+                                    }
                                   >
-                                    {emailSuggestions.map((suggestion) => (
-                                      <div
-                                        key={suggestion.id}
-                                        onClick={() => {
-                                          handleSelectGiangVien(
-                                            index,
-                                            suggestion
-                                          );
-                                          setCurrentEmail(suggestion.tengv);
-                                          setEmailSuggestions([]);
-                                        }}
+                                    {data_Khoa.map((loai) => (
+                                      <MenuItem
+                                        key={loai.MAKHOA}
+                                        value={loai.MAKHOA}
                                       >
-                                        {suggestion.TENGV} ({suggestion.MAGV})
-                                      </div>
+                                        {loai.TENKHOA}
+                                      </MenuItem>
                                     ))}
-                                  </div>
-                                )}
-                              {tacGia.loai === "Tác giả thứ nhất" && (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={tacGia.duocMien}
-                                      onChange={(e) =>
-                                        handleCheckboxChange(
-                                          index,
-                                          "duocMien",
-                                          e.target.checked
-                                        )
-                                      }
-                                    />
+                                  </Select>
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                  <InputLabel id={`boMon-label-${index}`}>
+                                    Bộ Môn
+                                  </InputLabel>
+                                  <Select
+                                    labelId={`boMon-label-${index}`}
+                                    value={tacGia.boMon}
+                                    label="Bộ Môn"
+                                    onChange={(e) =>
+                                      handleTacGiaChange(
+                                        index,
+                                        "boMon",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    {(data_BoMon[index] || []).map((loai) => (
+                                      <MenuItem
+                                        key={loai.MABOMON}
+                                        value={loai.TENBOMON}
+                                      >
+                                        {loai.TENBOMON}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                                <TextField
+                                  label="Tên Giảng Viên"
+                                  value={tacGia.tenGV}
+                                  onChange={(e) =>
+                                    handleTacGiaChange(
+                                      index,
+                                      "tenGV",
+                                      e.target.value
+                                    )
                                   }
-                                  label="Là tác giả thứ nhất nhưng được miễn giờ chuẩn"
+                                  fullWidth
+                                  margin="normal"
                                 />
-                              )}
-                            </Col>
-                          )}
+                                <TextField
+                                  label="Email Giảng Viên"
+                                  value={tacGia.emailGV}
+                                  onChange={(e) =>
+                                    handleTacGiaChange(
+                                      index,
+                                      "emailGV",
+                                      e.target.value
+                                    )
+                                  }
+                                  fullWidth
+                                  margin="normal"
+                                />
+                              </>
+                            ) : (
+                              <>
+                                {" "}
+                                <TextField
+                                  sx={{
+                                    width: {
+                                      xs: "230px", // Kích thước cho điện thoại
+                                      md: "300px", // Kích thước cho màn hình lớn hơn
+                                    },
+                                  }}
+                                  label="Tên Giảng Viên"
+                                  className="responsive-thongtingiangvien-searchtengv "
+                                  value={tacGia.tenGV}
+                                  onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    handleTacGiaChangeEmail(
+                                      index,
+                                      "tenGV",
+                                      e.target.value
+                                    );
+                                  }}
+                                  fullWidth
+                                  margin="normal"
+                                />
+                                {currentEmail &&
+                                  currentEmail === tacGia.tenGV &&
+                                  emailSuggestions.length > 0 && (
+                                    <div
+                                      className="suggestions-list"
+                                      ref={suggestionsRef}
+                                    >
+                                      {emailSuggestions.map((suggestion) => (
+                                        <div
+                                          key={suggestion.id}
+                                          onClick={() => {
+                                            handleSelectGiangVien(
+                                              index,
+                                              suggestion
+                                            );
+                                            setCurrentEmail(suggestion.tengv);
+                                            setEmailSuggestions([]);
+                                          }}
+                                        >
+                                          {suggestion.TENGV} ({suggestion.MAGV})
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                <div>
+                                  {" "}
+                                  {tacGia.loai === "Tác giả thứ nhất" && (
+                                    <FormControlLabel
+                                      className="responsive-thongtingiangvien-formcheckbox"
+                                      sx={{
+                                        width: {
+                                          xs: "235px", // Kích thước cho điện thoại
+                                          md: "250px", // Kích thước cho màn hình lớn hơn
+                                        },
+                                        fontSize: {
+                                          xs: "10px", // Kích thước chữ cho điện thoại
+                                          md: "14px", // Kích thước chữ cho màn hình lớn hơn
+                                        },
+                                      }}
+                                      control={
+                                        <Checkbox
+                                          checked={tacGia.duocMien}
+                                          onChange={(e) =>
+                                            handleCheckboxChange(
+                                              index,
+                                              "duocMien",
+                                              e.target.checked
+                                            )
+                                          }
+                                        />
+                                      }
+                                      label="Là tác giả thứ nhất nhưng được miễn giờ chuẩn"
+                                    />
+                                  )}{" "}
+                                </div>
+                              </>
+                            )}
+                          </Col>
                           <Col
                             xs={12}
                             md={4}
+                            sm={12}
                             className="responsive-thongtingiangvien-loaitacgia"
                           >
-                            <FormControl fullWidth margin="normal">
+                            <FormControl
+                              fullWidth
+                              sx={{
+                                width: {
+                                  xs: "230px", // Kích thước cho điện thoại
+                                  md: "250px", // Kích thước cho màn hình lớn hơn
+                                },
+                              }}
+                              margin="normal"
+                              className="responsive-loaitacgia"
+                            >
                               <InputLabel id={`loai-tac-gia-label-${index}`}>
                                 Loại Tác Giả {index + 1}
                               </InputLabel>
@@ -727,7 +820,7 @@ const DangKyDanhMucGioChuan = ({
                               </Select>
                             </FormControl>
                           </Col>
-                          <div className="position-ab-button d-flex flex-column flex-md-row">
+                          <div className="responsive-isVienChuc position-ab-button d-flex flex-column flex-md-row">
                             <Button
                               variant={tacGia.laVienChuc ? "text" : "outlined"}
                               onClick={() => handleButtonClick(index, true)}
@@ -772,7 +865,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate resposive-text-thongtintacgia">
                                 {tacGia.loai}
                               </Typography>
                             </Col>
@@ -784,7 +877,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate resposive-text-thongtintacgia">
                                 {tacGia.boMon}
                               </Typography>
                             </Col>
@@ -796,19 +889,19 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate resposive-text-thongtintacgia">
                                 {tacGia.maSoGV}
                               </Typography>
                             </Col>
                           </Row>
                           <Row className="mt-2">
                             <Col md={4}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate ">
                                 Tên Giảng Viên:
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate resposive-text-thongtintacgia">
                                 {tacGia.tenGV}
                               </Typography>
                             </Col>
@@ -820,7 +913,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate">
+                              <Typography className="text-open-gate resposive-text-thongtintacgia">
                                 {tacGia.emailGV}
                               </Typography>
                             </Col>
@@ -832,7 +925,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate text-info">
+                              <Typography className="text-open-gate text-info resposive-text-thongtintacgia">
                                 {tacGia.soPhanTram}
                               </Typography>
                             </Col>
@@ -844,7 +937,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate text-info">
+                              <Typography className="text-open-gate text-info resposive-text-thongtintacgia">
                                 {tacGia.soGio}
                               </Typography>
                             </Col>
@@ -898,7 +991,11 @@ const DangKyDanhMucGioChuan = ({
               {" "}
               <Row>
                 {" "}
-                <XemLichSuChonDanhMuc />
+                <XemLichSuChonDanhMuc
+                  dataDang_ky_thuc_hien_quy_doiGV={
+                    dataDang_ky_thuc_hien_quy_doiGV
+                  }
+                />
               </Row>
             </>
           )}

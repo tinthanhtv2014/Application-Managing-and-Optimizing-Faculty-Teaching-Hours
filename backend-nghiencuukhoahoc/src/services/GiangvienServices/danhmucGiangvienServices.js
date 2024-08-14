@@ -4,14 +4,25 @@ const { timnamhoc_TENNAMHOC } = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
+    console.log("TENDANGNHAP: ", TENDANGNHAP);
+    console.log("TENNAMHOC: ", TENNAMHOC);
     let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
-    const [results_MAGV, fields__MAGV] = await pool.execute(
+
+    const [results_MAGV] = await pool.execute(
       "SELECT MAGV FROM taikhoan WHERE TENDANGNHAP =? ",
       [TENDANGNHAP]
     );
 
+    if (results_MAGV.length === 0) {
+      return {
+        EM: "Không tìm thấy mã giảng viên",
+        EC: 0,
+        DT: [],
+      };
+    }
+
     const MAGV = results_MAGV[0].MAGV;
-    // console.log("check results_MAGV=>", MAGV);
+
     if (MANAMHOC === 0) {
       return {
         EM: "Không có năm học này",
@@ -19,20 +30,30 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
         DT: [],
       };
     }
-    // console.log("Check MANAMHOC:   ", MANAMHOC);
-    const [results1, fields] = await pool.execute(
-      "select gv.MAGV,gv.TENGV,nh.*,kgc.GIONGHIENCUUKHOAHOC_CHUAN from giangvien as gv, namhoc as nh,chon_khung as ck,khunggiochuan as kgc where gv.MAGV = ck.MAGV and nh.MANAMHOC = ck.MANAMHOC and kgc.MAKHUNG = ck.MAKHUNG and gv.MAGV = ? and nh.MANAMHOC = ?",
+
+    // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
+    const [results1] = await pool.execute(
+      "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
+      "FROM giangvien AS gv " +
+      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
     return {
-      EM: "lấy thông tin thành công",
+      EM: "Lấy thông tin thành công",
       EC: 1,
-      DT: results1[0],
+      DT: results1[0] || {}, // Trả về đối tượng rỗng nếu không có kết quả
     };
   } catch (error) {
     console.log("timChucDanh_TENCHUCDANH errr >>>", error);
-    return [];
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
   }
 };
 
@@ -95,49 +116,66 @@ const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
 };
 
 const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
+  console.log("MAGV", MAGV);
+  console.log("TENNAMHOC", TENNAMHOC);
+
+  if (!MAGV || !TENNAMHOC) {
+    return {
+      EM: "Mã giảng viên hoặc tên năm học bị thiếu",
+      EC: 0,
+      DT: [],
+    };
+  }
+
   try {
-    let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
-    if (MANAMHOC === 0) {
+    const [results1_NAMHOC, fields_NAMHOC] = await pool.execute(
+      `SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC = ?`,
+      [TENNAMHOC]
+    );
+
+    if (results1_NAMHOC.length === 0) {
       return {
         EM: "Không có năm học này",
         EC: 0,
         DT: [],
       };
     }
-    // console.log("Check MANAMHOC:   ", MANAMHOC);
+
+    const MANAMHOC = results1_NAMHOC[0].MANAMHOC; // Now safe to access
+    console.log("check MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
-      `select 
+      `SELECT 
       giangvien.TENGV,
       ltg.TEN_LOAI_TAC_GIA,
-
       namhoc.TENNAMHOC,
       dkthqd.TEN_NGHIEN_CUU,
       dkthqd.SOGIOQUYDOI,
       dkthqd.THOI_GIAN_DANG_KY,
       dm.* 
-      from 
-      giangvien,
-      namhoc,
-      dang_ky_thuc_hien_quy_doi as dkthqd, 
-      danhmucquydoispkhcn as dm, 
-      loai_tac_gia as ltg
-      where
-      giangvien.MAGV = dkthqd.MAGV
-      and dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
-      and namhoc.MANAMHOC = dkthqd.MANAMHOC
-      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
-      and giangvien.MAGV = ? and namhoc.MANAMHOC = ?`,
+      FROM 
+      giangvien
+      JOIN dang_ky_thuc_hien_quy_doi AS dkthqd ON giangvien.MAGV = dkthqd.MAGV
+      JOIN namhoc ON namhoc.MANAMHOC = dkthqd.MANAMHOC
+      JOIN danhmucquydoispkhcn AS dm ON dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
+      JOIN loai_tac_gia AS ltg ON ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      WHERE
+      giangvien.MAGV = ? 
+      AND namhoc.MANAMHOC = ?`,
       [MAGV, MANAMHOC]
     );
 
     return {
-      EM: "lấy thông tin thành công",
+      EM: "Lấy thông tin thành công",
       EC: 1,
-      DT: results1,
+      DT: results1[0],
     };
   } catch (error) {
-    console.log("timChucDanh_TENCHUCDANH errr >>>", error);
-    return [];
+    console.log("get_thongtin_dangky_giangvien error >>>", error);
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
   }
 };
 
@@ -145,7 +183,11 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   try {
     console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
 
+<<<<<<< HEAD
     // Khởi tạo một object để đếm các giá trị 'loai'
+=======
+    // Tính toán số lượng từng loại giảng viên
+>>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
     const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
       (acc, giangVien) => {
         acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
@@ -154,34 +196,55 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       {}
     );
 
+<<<<<<< HEAD
     // Chuyển đổi giá trị true/false và thêm số lượng 'loai' giống nhau vào dataDangKy
+=======
+    // Chuyển đổi dữ liệu giảng viên
+>>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
     const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
       (giangVien, index) => ({
         ...giangVien,
         laVienChuc: giangVien.laVienChuc ? "Có" : "Không",
+<<<<<<< HEAD
         duocMien: giangVien.duocMien ? "Không" : "Có", //true = Không và false = Có
         soLuongLoai: loaiCountObj[giangVien.loai], // Thêm số lượng loại giống nhau
         Stt: index + 1, // Thêm thứ tự vào mỗi đối tượng
+=======
+        duocMien: giangVien.duocMien ? "Không" : "Có",
+        soLuongLoai: loaiCountObj[giangVien.loai],
+        Stt: index + 1,
+>>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
       })
     );
 
-    console.log("dataDangKy: ", dataDangKy);
+    // Ưu tiên lấy giảng viên loại "Tác giả thứ nhất" với các điều kiện ưu tiên
+    let DaiDien = dataDangKy.find(
+      (giangVien) =>
+        giangVien.loai === "Tác giả thứ nhất" &&
+        giangVien.laVienChuc === "Không" &&
+        giangVien.duocMien === "Không"
+    );
 
+<<<<<<< HEAD
     // Lấy phần tử có loại là "Tác giả thứ nhất"
     const DaiDien = dataDangKy.find(
       (giangVien) => giangVien.loai === "Tác giả thứ nhất"
     );
+=======
+    // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
+    if (!DaiDien) {
+      DaiDien = dataDangKy.find(
+        (giangVien) => giangVien.loai === "Tác giả thứ nhất"
+      );
+    }
+>>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
 
-    console.log("DaiDien: ", DaiDien);
-
-    // Vòng lặp kiểm tra dữ liệu loại tác giả
     for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
-      let [LoaiTacGia, LoaiTacGia_fields] = await pool.execute(
+      let [LoaiTacGia] = await pool.execute(
         `SELECT * FROM loai_tac_gia WHERE TEN_LOAI_TAC_GIA = ?`,
         [Object.keys(loaiCountObj)[i]]
       );
       if (LoaiTacGia.length === 0) {
-        console.log("Không có LoaiTacGia: ", Object.keys(loaiCountObj)[i]);
         return {
           EM: "Dữ liệu loại tác giả này không tồn tại",
           EC: 0,
@@ -190,11 +253,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       }
     }
 
-    // Tạo biến obj để lưu kết quả trả về
     const obj = [];
 
-    // Vòng lặp thực hiện truy vấn DataTyLeTraVe và lưu kết quả vào obj
-    let [TacGiaDaiDien, DataTyLeTraVe_fields] = await pool.execute(
+    let [TacGiaDaiDien] = await pool.execute(
       `
       SELECT 
           ctl.MA_QUY_DOI, 
@@ -208,26 +269,25 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
           tqd.VIEN_CHUC_TRUONG, 
           tqd.THUC_HIEN_CHUAN
       FROM 
-          CO_TY_LE ctl
+          co_ty_le ctl
       JOIN 
-          TY_LE_QUY_DOI_GIO_CHUAN tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+          ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
       JOIN 
-          LOAI_TAC_GIA ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+          loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
       WHERE 
           ctl.MA_LOAI_DANH_MUC = ?
           AND ltg.TEN_LOAI_TAC_GIA = ?
           AND tqd.VIEN_CHUC_TRUONG = ?
           AND tqd.THUC_HIEN_CHUAN = ?
-          AND ctl.SO_TAC_GIA_THUOC_LOAI = ?;
       `,
       [
         dataDangKyDanhMuc.MALOAIDANHMUC,
         DaiDien.loai,
         DaiDien.laVienChuc,
         DaiDien.duocMien,
-        DaiDien.soLuongLoai,
       ]
     );
+<<<<<<< HEAD
     console.log("TacGiaDaiDien: ", TacGiaDaiDien);
 
     for (let i = 0; i < dataDangKy.length; i++) {
@@ -268,8 +328,98 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 }); // Thêm đối tượng vào obj với Stt
     }
     console.log("obj: ", obj);
+=======
 
-    let results1 = 0;
+    console.log("DaiDien: ", DaiDien);
+    console.log("TacGiaDaiDien: ", TacGiaDaiDien);
+    console.log("dataDangKy: ", dataDangKy);
+
+    for (let i = 0; i < dataDangKy.length; i++) {
+      let DataTyLeTraVe; // Khai báo biến DataTyLeTraVe trước vòng lặp
+>>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
+
+      if (
+        dataDangKy[i].loai === 'Tác giả chịu trách nhiệm'
+        && (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2)
+        && TacGiaDaiDien[0].VIEN_CHUC_TRUONG === 'Không'
+      ) {
+        [DataTyLeTraVe] = await pool.execute(
+          `
+          SELECT 
+              ctl.MA_QUY_DOI, 
+              ctl.MA_LOAI_DANH_MUC, 
+              ctl.MA_LOAI_TAC_GIA, 
+              ltg.TEN_LOAI_TAC_GIA,
+              ctl.DA_LOAI_TAC_GIA, 
+              ctl.SO_TAC_GIA_THUOC_LOAI, 
+              tqd.TEN_QUY_DOI, 
+              tqd.TY_LE, 
+              tqd.VIEN_CHUC_TRUONG, 
+              tqd.THUC_HIEN_CHUAN
+          FROM 
+              co_ty_le ctl
+          JOIN 
+              ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+          JOIN 
+              loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+          WHERE 
+              ctl.MA_LOAI_DANH_MUC = ?
+              AND ctl.SO_TAC_GIA_THUOC_LOAI = ?
+              AND ltg.TEN_LOAI_TAC_GIA = ?
+              AND tqd.TEN_QUY_DOI = ?
+              AND tqd.VIEN_CHUC_TRUONG = ?
+              AND tqd.THUC_HIEN_CHUAN = ?
+        `,
+          [
+            dataDangKyDanhMuc.MALOAIDANHMUC,
+            dataDangKy[i].soLuongLoai,
+            dataDangKy[i].loai,
+            TacGiaDaiDien[0].TEN_QUY_DOI,
+            dataDangKy[i].laVienChuc,
+            dataDangKy[i].duocMien,
+          ]
+        );
+      } else {
+        [DataTyLeTraVe] = await pool.execute(
+          `
+          SELECT 
+              ctl.MA_QUY_DOI, 
+              ctl.MA_LOAI_DANH_MUC, 
+              ctl.MA_LOAI_TAC_GIA, 
+              ltg.TEN_LOAI_TAC_GIA,
+              ctl.DA_LOAI_TAC_GIA, 
+              ctl.SO_TAC_GIA_THUOC_LOAI, 
+              tqd.TEN_QUY_DOI, 
+              tqd.TY_LE, 
+              tqd.VIEN_CHUC_TRUONG, 
+              tqd.THUC_HIEN_CHUAN
+          FROM 
+              co_ty_le ctl
+          JOIN 
+              ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+          JOIN 
+              loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+          WHERE 
+              ctl.MA_LOAI_DANH_MUC = ?
+              AND ltg.TEN_LOAI_TAC_GIA = ?
+              AND tqd.TEN_QUY_DOI = ?
+              AND tqd.VIEN_CHUC_TRUONG = ?
+              AND tqd.THUC_HIEN_CHUAN = ?
+        `,
+          [
+            dataDangKyDanhMuc.MALOAIDANHMUC,
+            dataDangKy[i].loai,
+            TacGiaDaiDien[0].TEN_QUY_DOI,
+            dataDangKy[i].laVienChuc,
+            dataDangKy[i].duocMien,
+          ]
+        );
+      }
+
+      obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 });
+    }
+
+    console.log("obj: ", obj);
 
     return {
       EM: "Đăng ký danh mục thành công",
