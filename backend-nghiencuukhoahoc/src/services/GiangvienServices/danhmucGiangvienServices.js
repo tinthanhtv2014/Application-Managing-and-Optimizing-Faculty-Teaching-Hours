@@ -143,45 +143,27 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
 
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   try {
-    // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce((acc, giangVien) => {
+      acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
+      return acc;
+    }, {});
 
-    // Khởi tạo một object để đếm các giá trị 'loai'
-    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
-      (acc, giangVien) => {
-        acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
-        return acc;
-      },
-      {}
-    );
+    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map((giangVien, index) => ({
+      ...giangVien,
+      laVienChuc: giangVien.laVienChuc ? 'Có' : 'Không',
+      duocMien: giangVien.duocMien ? 'Không' : 'Có',
+      soLuongLoai: loaiCountObj[giangVien.loai],
+      Stt: index + 1
+    }));
 
-    // Chuyển đổi giá trị true/false và thêm số lượng 'loai' giống nhau vào dataDangKy
-    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
-      (giangVien, index) => ({
-        ...giangVien,
-        laVienChuc: giangVien.laVienChuc ? "Có" : "Không",
-        duocMien: giangVien.duocMien ? "Không" : "Có", //true = Không và false = Có
-        soLuongLoai: loaiCountObj[giangVien.loai], // Thêm số lượng loại giống nhau
-        Stt: index + 1, // Thêm thứ tự vào mỗi đối tượng
-      })
-    );
+    const DaiDien = dataDangKy.find(giangVien => giangVien.loai === 'Tác giả thứ nhất');
 
-    // console.log("dataDangKy: ", dataDangKy);
-
-    // Lấy phần tử có loại là "Tác giả thứ nhất"
-    const DaiDien = dataDangKy.find(
-      (giangVien) => giangVien.loai === "Tác giả thứ nhất"
-    );
-
-    // console.log("DaiDien: ", DaiDien);
-
-    // Vòng lặp kiểm tra dữ liệu loại tác giả
     for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
-      let [LoaiTacGia, LoaiTacGia_fields] = await pool.execute(
+      let [LoaiTacGia] = await pool.execute(
         `SELECT * FROM loai_tac_gia WHERE TEN_LOAI_TAC_GIA = ?`,
         [Object.keys(loaiCountObj)[i]]
       );
       if (LoaiTacGia.length === 0) {
-        console.log("Không có LoaiTacGia: ", Object.keys(loaiCountObj)[i]);
         return {
           EM: "Dữ liệu loại tác giả này không tồn tại",
           EC: 0,
@@ -190,11 +172,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       }
     }
 
-    // Tạo biến obj để lưu kết quả trả về
     const obj = [];
 
-    // Vòng lặp thực hiện truy vấn DataTyLeTraVe và lưu kết quả vào obj
-    let [TacGiaDaiDien, DataTyLeTraVe_fields] = await pool.execute(
+    let [TacGiaDaiDien] = await pool.execute(
       `
       SELECT 
           ctl.MA_QUY_DOI, 
@@ -208,11 +188,11 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
           tqd.VIEN_CHUC_TRUONG, 
           tqd.THUC_HIEN_CHUAN
       FROM 
-          CO_TY_LE ctl
+          co_ty_le ctl
       JOIN 
-          TY_LE_QUY_DOI_GIO_CHUAN tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+          ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
       JOIN 
-          LOAI_TAC_GIA ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+          loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
       WHERE 
           ctl.MA_LOAI_DANH_MUC = ?
           AND ltg.TEN_LOAI_TAC_GIA = ?
@@ -228,10 +208,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         DaiDien.soLuongLoai,
       ]
     );
-    // console.log("TacGiaDaiDien: ", TacGiaDaiDien)
 
     for (let i = 0; i < dataDangKy.length; i++) {
-      let [DataTyLeTraVe, DataTyLeTraVe_fields] = await pool.execute(
+      let [DataTyLeTraVe] = await pool.execute(
         `
         SELECT 
             ctl.MA_QUY_DOI, 
@@ -245,11 +224,11 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             tqd.VIEN_CHUC_TRUONG, 
             tqd.THUC_HIEN_CHUAN
         FROM 
-            CO_TY_LE ctl
+            co_ty_le ctl
         JOIN 
-            TY_LE_QUY_DOI_GIO_CHUAN tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+            ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
         JOIN 
-            LOAI_TAC_GIA ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+            loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
         WHERE 
             ctl.MA_LOAI_DANH_MUC = ?
             AND ltg.TEN_LOAI_TAC_GIA = ?
@@ -265,22 +244,20 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
           dataDangKy[i].duocMien,
         ]
       );
-      obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 }); // Thêm đối tượng vào obj với Stt
+      obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 });
     }
-    // console.log("obj: ", obj)
-
-    let results1 = 0;
 
     return {
       EM: "Đăng ký danh mục thành công",
       EC: 1,
-      DT: obj,
+      DT: obj
     };
   } catch (error) {
     console.log("dangky_danhmuc_giangvien errr >>>", error);
     return [];
   }
 };
+
 
 module.exports = {
   get_thongtin_danhmuc,
