@@ -379,13 +379,18 @@ const DangKyDanhMucGioChuan = ({
             // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
             switch (tacGia.loai) {
               case "Tác giả thứ nhất":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tính theo tổng số giờ đã chọn
-                break;
               case "Tác giả chịu trách nhiệm":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
-                break;
               case "Tác giả còn lại":
                 soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+
+                // Nếu `DA_LOAI_TAC_GIA` là "Có", nhân thêm tỷ lệ với các tác giả khác có `DA_LOAI_TAC_GIA` là "Có"
+                if (correspondingData.DA_LOAI_TAC_GIA === "Có") {
+                  const additionalTyLe = dtList
+                    .filter((item) => item.DA_LOAI_TAC_GIA === "Có")
+                    .reduce((acc, item) => acc * item.TY_LE, 1);
+                  console.log("check additionalTyLe", additionalTyLe);
+                  soGio = additionalTyLe * SoGioDanhMucDaChon; // Nhân thêm tỷ lệ tích lũy từ các tác giả khác
+                }
                 break;
               default:
                 soGio = 0; // Không có loại tác giả phù hợp
