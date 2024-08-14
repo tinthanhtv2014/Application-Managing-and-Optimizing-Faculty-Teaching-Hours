@@ -36,6 +36,19 @@ const timGiangVien_MAGV = async (MAGV) => {
   }
 };
 
+const timGiangVien_TENGV = async (TENGV) => {
+  try {
+    const [results, fields] = await pool.execute(
+      "SELECT * FROM giangvien WHERE TENGV = ? ",
+      [TENGV]
+    );
+    return results[0];
+  } catch (error) {
+    console.log("timGiangVien errr >>>", error);
+    return [];
+  }
+};
+
 const selectBomon_TENBOMON = async (TENBOMON) => {
   try {
     const [results, fields] = await pool.execute(
@@ -240,6 +253,21 @@ const timnamhoc_TENNAMHOC = async (TENNAMHOC) => {
   }
 };
 
+const timtacgia_TEN_LOAI_TAC_GIA = async (TEN_LOAI_TAC_GIA) => {
+  try {
+    // console.log("TENNAMHOC: ", TENNAMHOC)
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM loai_tac_gia WHERE loai_tac_gia.TEN_LOAI_TAC_GIA = ?",
+      [TEN_LOAI_TAC_GIA]
+    );
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    return results1[0].MA_LOAI_TAC_GIA;
+  } catch (error) {
+    console.log("timnamhoc_TENNAMHOC errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -256,4 +284,6 @@ module.exports = {
   timmonhoc_TENMONHOC,
   timnamhoc_MANAMHOC,
   timnamhoc_TENNAMHOC,
+  timtacgia_TEN_LOAI_TAC_GIA,
+  timGiangVien_TENGV,
 };

@@ -160,7 +160,46 @@ const timkiem_email_taikhoan = async (TENGV) => {
   }
 };
 
+const timkiem_email_taikhoan_ngoaitruong = async (TENGV) => {
+  // console.log("check", TENGV);
+  try {
+    const connection = await pool.getConnection();
+    const query =
+      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV, taikhoan.TENDANGNHAP " +
+      "FROM taikhoan " +
+      "JOIN giangvien ON giangvien.MAGV = taikhoan.MAGV " +
+      "JOIN bomon ON bomon.MABOMON = giangvien.MABOMON " +
+      "JOIN khoa ON khoa.MAKHOA = bomon.MAKHOA " +
+      "WHERE bomon.TENBOMON = N'Ngoài trường' and giangvien.TENGV LIKE ? " +
+      "LIMIT 5";
+    const [rows] = await connection.execute(query, [`%${TENGV}%`]);
+    connection.release();
+    // console.log(rows);
+    if (rows.length > 0) {
+      return {
+        EM: "Tìm thấy các email gần đúng",
+        EC: 1,
+        DT: rows, // Trả về danh sách tối đa 5 tài khoản tìm được
+      };
+    } else {
+      return {
+        EM: "Không tìm thấy email gần đúng",
+        EC: 0,
+        DT: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      EM: "Đã xảy ra lỗi tìm kiếm email",
+      EC: -1,
+      DT: null,
+    };
+  }
+};
+
 module.exports = {
   xem_giangvien_khoa,
   timkiem_email_taikhoan,
+  timkiem_email_taikhoan_ngoaitruong,
 };

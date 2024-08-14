@@ -4,6 +4,7 @@ const {
   get_thongtin_dangky_giangvien,
   dangky_danhmuc_giangvien,
   get_thongtin_dangky_giangvien_hoptac,
+  dangky_thongtin_giangvien,
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
 
 const select_thongtin_danhmuc = async (req, res) => {
@@ -78,12 +79,8 @@ const dangky_danhmuc_Controller = async (req, res) => {
 const luu_data_dangky_danhmuc_Controller = async (req, res) => {
   try {
     console.log("req.body: ", req.body);
-
-    let results = {
-      EM: "ok",
-      EC: 1,
-      DT: "ok",
-    };
+    const datadangky = req.body;
+    let results = await dangky_thongtin_giangvien(datadangky);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
