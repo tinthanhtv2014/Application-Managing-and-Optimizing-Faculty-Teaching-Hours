@@ -4,8 +4,8 @@ const { timnamhoc_TENNAMHOC } = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
-    console.log("TENDANGNHAP: ", TENDANGNHAP)
-    console.log("TENNAMHOC: ", TENNAMHOC)
+    // console.log("TENDANGNHAP: ", TENDANGNHAP)
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
 
     const [results_MAGV] = await pool.execute(
