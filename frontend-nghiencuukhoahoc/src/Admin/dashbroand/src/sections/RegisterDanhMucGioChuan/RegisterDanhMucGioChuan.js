@@ -242,34 +242,6 @@ const DangKyDanhMucGioChuan = ({
     setTacGiaList(updatedTacGiaList);
   };
 
-  const handleTongTacGia = async () => {
-    console.log("check datalist", tacGiaList);
-    const tongGio = SoGioDanhMucDaChon;
-
-    // Tính toán giờ cho các tác giả
-    const authorHours = await calculateAuthorHours(tongGio, tacGiaList);
-
-    // Cập nhật tacGiaList với giờ phù hợp
-    const updatedTacGiaList = tacGiaList.map((tacGia) => {
-      let soGio = 0;
-
-      if (tacGia.loai === "Tác giả thứ nhất") {
-        soGio = authorHours.gioTacGiaThuNhat;
-      } else if (tacGia.loai === "Tác giả chịu trách nhiệm") {
-        soGio = authorHours.gioTacGiaChiuTrachNhiem;
-      } else {
-        soGio = authorHours.gioTacGiaThongThuong;
-      }
-
-      return { ...tacGia, soGio };
-    });
-
-    setTacGiaList(updatedTacGiaList);
-
-    console.log(authorHours);
-    console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
-  };
-
   const handleback = () => {
     navigate("/admin/dang-ky-khung-gio-chuan");
   };
@@ -343,6 +315,8 @@ const DangKyDanhMucGioChuan = ({
       setEmailSuggestions([]); // Ẩn gợi ý khi click bên ngoài
     }
   };
+
+  // ---------------TÍNH SỐ GIỜ ---------------------------------
   const handleTinhSoGio = async () => {
     if (!selectedDanhMuc) {
       toast.error("Bạn cần chọn danh mục đăng ký");
@@ -411,6 +385,17 @@ const DangKyDanhMucGioChuan = ({
     }
   };
 
+  // ----------------ĐĂNG KÝ DANH MỤC VÀO CSDL -----------------------------
+  const handleDangKyDanhMuc = async () => {
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien`,
+        {}
+      );
+    } catch (error) {
+      console.error("Error fetching email suggestions:", error);
+    }
+  };
   return (
     <>
       <Container>
@@ -956,7 +941,7 @@ const DangKyDanhMucGioChuan = ({
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleTongTacGia}
+                        onClick={handleTinhSoGio}
                       >
                         Tính số giờ
                       </Button>
@@ -981,7 +966,7 @@ const DangKyDanhMucGioChuan = ({
                         variant="contained"
                         color="primary"
                         className="responsive-hoantatdangky"
-                        onClick={handleTinhSoGio}
+                        onClick={handleDangKyDanhMuc}
                       >
                         Hoàn tất đăng ký
                       </Button>
