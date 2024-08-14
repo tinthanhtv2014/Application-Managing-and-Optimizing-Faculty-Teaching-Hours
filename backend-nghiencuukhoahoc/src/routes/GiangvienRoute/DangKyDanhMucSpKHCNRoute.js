@@ -3,8 +3,10 @@ const app = express();
 const router = express.Router();
 
 const {
+  select_thongtin_danhmuc,
   select_loaitacgia_loaidanhmuc,
   dangky_danhmuc_Controller,
+  luu_data_dangky_danhmuc_Controller,
   select_thongtin_dangkydanhmuc_giangvien,
   select_thongtin_dangkydanhmuc__danhsach_giangvien,
 } = require("../../controllers/GiangvienController/danhmucGiangVienCONTROLLER");
@@ -18,6 +20,7 @@ const DangKyDanhMucRoute = (app) => {
     select_loaitacgia_loaidanhmuc
   );
   router.post("/dangky/danhmuc", checkUserJWT, dangky_danhmuc_Controller);
+<<<<<<< HEAD
   router.post(
     "/dangky/danhmuc/thongtin",
     select_thongtin_dangkydanhmuc_giangvien
@@ -26,6 +29,11 @@ const DangKyDanhMucRoute = (app) => {
     "/dangky/danhmuc/thongtindanhsach",
     select_thongtin_dangkydanhmuc__danhsach_giangvien
   );
+=======
+  router.post("/dangky/danhmuc/thongtin", select_thongtin_dangkydanhmuc_giangvien);
+  router.post("/dangky/danhmuc/thongtin/luu", luu_data_dangky_danhmuc_Controller);
+
+>>>>>>> 99f98aa68dc7808d4af6f9ffb4d15d9141b539e3
   return app.use("/api/v1/quyengiangvien/giangvien", router);
 };
 
