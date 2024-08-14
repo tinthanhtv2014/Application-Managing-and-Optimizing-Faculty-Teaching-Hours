@@ -401,10 +401,44 @@ const get_thongtin_dangky_giangvien_hoptac = async (TEN_NGHIEN_CUU) => {
   }
 };
 
+const dangky_thongtin_giangvien_ = async (dataDangKy) => {
+  try {
+    console.log("check TEN_NGHIEN_CUU", TEN_NGHIEN_CUU);
+    const [results1, fields] = await pool.execute(
+      `SELECT giangvien.TENGV,
+      dkthqd.TEN_NGHIEN_CUU,
+      ltg.TEN_LOAI_TAC_GIA 
+      from 
+      dang_ky_thuc_hien_quy_doi as dkthqd,
+      loai_tac_gia as ltg,
+      giangvien
+      where giangvien.MAGV = dkthqd.MAGV 
+      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      and dkthqd.TEN_NGHIEN_CUU = ?
+     `,
+      [TEN_NGHIEN_CUU]
+    );
+
+    return {
+      EM: "Lấy thông tin thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log("get_thongtin_dangky_giangvien error >>>", error);
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
   dangky_danhmuc_giangvien,
   get_thongtin_dangky_giangvien_hoptac,
+  dangky_thongtin_giangvien_,
 };
