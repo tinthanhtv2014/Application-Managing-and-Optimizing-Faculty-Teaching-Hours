@@ -3,6 +3,7 @@ const {
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
   dangky_danhmuc_giangvien,
+  get_thongtin_dangky_giangvien_hoptac,
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
 
 const select_thongtin_danhmuc = async (req, res) => {
@@ -95,9 +96,29 @@ const select_thongtin_dangkydanhmuc_giangvien = async (req, res) => {
   }
 };
 
+const select_thongtin_dangkydanhmuc__danhsach_giangvien = async (req, res) => {
+  try {
+    const TEN_NGHIEN_CUU = req.body.TEN_NGHIEN_CUU;
+    let results = await get_thongtin_dangky_giangvien_hoptac(TEN_NGHIEN_CUU);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: "Đã xảy ra lỗi máy chủ",
+      EC: 500,
+      DT: null,
+    });
+  }
+};
+
 module.exports = {
   select_thongtin_danhmuc,
   select_loaitacgia_loaidanhmuc,
   dangky_danhmuc_Controller,
   select_thongtin_dangkydanhmuc_giangvien,
+  select_thongtin_dangkydanhmuc__danhsach_giangvien,
 };
