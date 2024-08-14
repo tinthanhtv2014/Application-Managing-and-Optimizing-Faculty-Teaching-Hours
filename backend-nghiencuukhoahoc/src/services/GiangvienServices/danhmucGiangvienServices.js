@@ -274,7 +274,11 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     for (let i = 0; i < dataDangKy.length; i++) {
       let DataTyLeTraVe; // Khai báo biến DataTyLeTraVe trước vòng lặp
 
-      if (dataDangKy[i].loai === 'Tác giả chịu trách nhiệm' && dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2) {
+      if (
+        dataDangKy[i].loai === 'Tác giả chịu trách nhiệm'
+        && (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2)
+        && TacGiaDaiDien[0].VIEN_CHUC_TRUONG === 'Không'
+      ) {
         [DataTyLeTraVe] = await pool.execute(
           `
           SELECT 
