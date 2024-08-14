@@ -77,12 +77,12 @@ const dangky_danhmuc_Controller = async (req, res) => {
 
 const luu_data_dangky_danhmuc_Controller = async (req, res) => {
   try {
-    console.log("req.body: ", req.body)
+    console.log("req.body: ", req.body);
 
     let results = {
-      EM: 'ok',
+      EM: "ok",
       EC: 1,
-      DT: 'ok',
+      DT: "ok",
     };
     return res.status(200).json({
       EM: results.EM,

@@ -373,5 +373,4 @@ module.exports = {
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
   dangky_danhmuc_giangvien,
-  get_thongtin_dangky_giangvien_hoptac,
 };
