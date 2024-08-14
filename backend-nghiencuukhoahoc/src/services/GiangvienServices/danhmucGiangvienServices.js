@@ -4,8 +4,8 @@ const { timnamhoc_TENNAMHOC } = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
-    console.log("TENDANGNHAP: ", TENDANGNHAP)
-    console.log("TENNAMHOC: ", TENNAMHOC)
+    console.log("TENDANGNHAP: ", TENDANGNHAP);
+    console.log("TENNAMHOC: ", TENNAMHOC);
     let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
 
     const [results_MAGV] = await pool.execute(
@@ -34,11 +34,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-      "FROM giangvien AS gv " +
-      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -181,21 +181,28 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
 
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   try {
-    console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc)
-    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce((acc, giangVien) => {
-      acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
-      return acc;
-    }, {});
+    console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+    const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
+      (acc, giangVien) => {
+        acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
+        return acc;
+      },
+      {}
+    );
 
-    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map((giangVien, index) => ({
-      ...giangVien,
-      laVienChuc: giangVien.laVienChuc ? 'Có' : 'Không',
-      duocMien: giangVien.duocMien ? 'Không' : 'Có',
-      soLuongLoai: loaiCountObj[giangVien.loai],
-      Stt: index + 1
-    }));
+    const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
+      (giangVien, index) => ({
+        ...giangVien,
+        laVienChuc: giangVien.laVienChuc ? "Có" : "Không",
+        duocMien: giangVien.duocMien ? "Không" : "Có",
+        soLuongLoai: loaiCountObj[giangVien.loai],
+        Stt: index + 1,
+      })
+    );
 
-    const DaiDien = dataDangKy.find(giangVien => giangVien.loai === 'Tác giả thứ nhất');
+    const DaiDien = dataDangKy.find(
+      (giangVien) => giangVien.loai === "Tác giả thứ nhất"
+    );
 
     for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
       let [LoaiTacGia] = await pool.execute(
@@ -246,8 +253,8 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       ]
     );
 
-    console.log("DaiDien: ", DaiDien)
-    console.log("TacGiaDaiDien: ", TacGiaDaiDien)
+    console.log("DaiDien: ", DaiDien);
+    console.log("TacGiaDaiDien: ", TacGiaDaiDien);
 
     for (let i = 0; i < dataDangKy.length; i++) {
       let [DataTyLeTraVe] = await pool.execute(
@@ -287,19 +294,18 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 });
     }
 
-    console.log("obj: ", obj)
+    console.log("obj: ", obj);
 
     return {
       EM: "Đăng ký danh mục thành công",
       EC: 1,
-      DT: obj
+      DT: obj,
     };
   } catch (error) {
     console.log("dangky_danhmuc_giangvien errr >>>", error);
     return [];
   }
 };
-
 
 module.exports = {
   get_thongtin_danhmuc,

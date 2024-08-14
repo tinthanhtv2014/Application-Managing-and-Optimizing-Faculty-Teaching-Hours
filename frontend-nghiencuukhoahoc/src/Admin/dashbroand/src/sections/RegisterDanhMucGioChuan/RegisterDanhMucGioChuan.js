@@ -20,7 +20,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { calculateAuthorHours } from "./test1.js";
+import { calculateAuthorHours } from "./test2.js";
 import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import "./RegisterDanhMucGioChuan.scss";
@@ -111,12 +111,12 @@ const DangKyDanhMucGioChuan = ({
     const decoded = jwtDecode(token);
     // console.log("check decoded", decoded.taikhoan);
 
-    if (selectNamHoc && token) {
+    if (selectNamHoc && decoded) {
       const fectDataThongTinGioNghienCuu = async () => {
         try {
           const response_Data = await CookiesAxios.post(
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
-            { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
+            { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc }
           );
           if (response_Data.data.EC === 1) {
             setSoGioNghienCuuChuan(
@@ -363,8 +363,43 @@ const DangKyDanhMucGioChuan = ({
           MADANHMUC: selectedDanhMuc.MA_DANH_MUC,
         }
       );
-      console.log(response.data);
+
+      console.log(response.data.DT);
+
       if (response.data.EC === 1) {
+        const dtList = response.data.DT; // Dữ liệu từ backend
+
+        // Cập nhật số giờ cho từng giảng viên trong tacGiaList
+        const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
+          const correspondingData = dtList[index]; // Lấy dữ liệu tương ứng
+
+          if (correspondingData) {
+            let soGio = 0;
+
+            // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
+            switch (tacGia.loai) {
+              case "Tác giả thứ nhất":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tính theo tổng số giờ đã chọn
+                break;
+              case "Tác giả chịu trách nhiệm":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+                break;
+              case "Tác giả còn lại":
+                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon; // Tỷ lệ tương ứng
+                break;
+              default:
+                soGio = 0; // Không có loại tác giả phù hợp
+            }
+
+            return { ...tacGia, soGio }; // Cập nhật số giờ cho giảng viên
+          }
+
+          return tacGia; // Trả về giảng viên không thay đổi nếu không tìm thấy dữ liệu
+        });
+
+        // Cập nhật danh sách giảng viên với số giờ đã tính
+        setTacGiaList(updatedTacGiaList);
+        console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
       }
     } catch (error) {
       console.error("Error fetching email suggestions:", error);
