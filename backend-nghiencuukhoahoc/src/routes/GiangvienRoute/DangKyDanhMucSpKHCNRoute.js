@@ -3,7 +3,6 @@ const app = express();
 const router = express.Router();
 
 const {
-  select_thongtin_danhmuc,
   select_loaitacgia_loaidanhmuc,
   dangky_danhmuc_Controller,
   select_thongtin_dangkydanhmuc_giangvien,
