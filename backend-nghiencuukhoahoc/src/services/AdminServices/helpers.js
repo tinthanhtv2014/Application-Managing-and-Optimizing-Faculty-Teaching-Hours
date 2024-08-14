@@ -36,11 +36,11 @@ const timGiangVien_MAGV = async (MAGV) => {
   }
 };
 
-const timGiangVien_TENGV = async (TENGV) => {
+const timGiangVien_TENGV = async (TENGV, EMAIL) => {
   try {
     const [results, fields] = await pool.execute(
-      "SELECT * FROM giangvien WHERE TENGV = ? ",
-      [TENGV]
+      "SELECT * FROM giangvien WHERE TENGV = ? and EMAIL = ? ",
+      [TENGV, EMAIL]
     );
     return results[0];
   } catch (error) {

@@ -432,7 +432,8 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
         dataDangKy.LISTGIANGVIEN[i].boMon
       );
       const timgiangvien = await timGiangVien_TENGV(
-        dataDangKy.LISTGIANGVIEN[i].tenGV
+        dataDangKy.LISTGIANGVIEN[i].tenGV,
+        dataDangKy.LISTGIANGVIEN[i].emailGV
       );
 
       if (timgiangvien === undefined) {
@@ -449,7 +450,8 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
         );
       }
       const selectMAGV = await timGiangVien_TENGV(
-        dataDangKy.LISTGIANGVIEN[i].tenGV
+        dataDangKy.LISTGIANGVIEN[i].tenGV,
+        dataDangKy.LISTGIANGVIEN[i].emailGV
       );
       console.log("check select MAGV = : ", selectMAGV);
       await pool.execute(

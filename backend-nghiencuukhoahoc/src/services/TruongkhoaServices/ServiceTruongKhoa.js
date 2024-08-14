@@ -127,7 +127,7 @@ const timkiem_email_taikhoan = async (TENGV) => {
   try {
     const connection = await pool.getConnection();
     const query =
-      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV, taikhoan.TENDANGNHAP " +
+      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,giangvien.EMAIL, taikhoan.TENDANGNHAP " +
       "FROM taikhoan " +
       "JOIN giangvien ON giangvien.MAGV = taikhoan.MAGV " +
       "JOIN bomon ON bomon.MABOMON = giangvien.MABOMON " +
@@ -165,7 +165,7 @@ const timkiem_email_taikhoan_ngoaitruong = async (TENGV) => {
   try {
     const connection = await pool.getConnection();
     const query =
-      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV, taikhoan.TENDANGNHAP " +
+      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,giangvien.EMAIL, taikhoan.TENDANGNHAP " +
       "FROM taikhoan " +
       "JOIN giangvien ON giangvien.MAGV = taikhoan.MAGV " +
       "JOIN bomon ON bomon.MABOMON = giangvien.MABOMON " +
