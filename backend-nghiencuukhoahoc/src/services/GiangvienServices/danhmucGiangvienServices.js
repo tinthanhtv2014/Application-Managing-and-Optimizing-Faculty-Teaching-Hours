@@ -34,11 +34,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-      "FROM giangvien AS gv " +
-      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -275,9 +275,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       let DataTyLeTraVe; // Khai báo biến DataTyLeTraVe trước vòng lặp
 
       if (
-        dataDangKy[i].loai === 'Tác giả chịu trách nhiệm'
-        && (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2)
-        && TacGiaDaiDien[0].VIEN_CHUC_TRUONG === 'Không'
+        dataDangKy[i].loai === "Tác giả chịu trách nhiệm" &&
+        (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2) &&
+        TacGiaDaiDien[0].VIEN_CHUC_TRUONG === "Không"
       ) {
         [DataTyLeTraVe] = await pool.execute(
           `
@@ -367,8 +367,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     return [];
   }
 };
-
-
 
 module.exports = {
   get_thongtin_danhmuc,
