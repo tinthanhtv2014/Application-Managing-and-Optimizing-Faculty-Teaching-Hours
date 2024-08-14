@@ -5,13 +5,22 @@ const { timnamhoc_TENNAMHOC } = require("../../services/AdminServices/helpers");
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
     let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
-    const [results_MAGV, fields__MAGV] = await pool.execute(
+
+    const [results_MAGV] = await pool.execute(
       "SELECT MAGV FROM taikhoan WHERE TENDANGNHAP =? ",
       [TENDANGNHAP]
     );
 
+    if (results_MAGV.length === 0) {
+      return {
+        EM: "Không tìm thấy mã giảng viên",
+        EC: 0,
+        DT: [],
+      };
+    }
+
     const MAGV = results_MAGV[0].MAGV;
-    // console.log("check results_MAGV=>", MAGV);
+
     if (MANAMHOC === 0) {
       return {
         EM: "Không có năm học này",
@@ -19,20 +28,30 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
         DT: [],
       };
     }
-    // console.log("Check MANAMHOC:   ", MANAMHOC);
-    const [results1, fields] = await pool.execute(
-      "select gv.MAGV,gv.TENGV,nh.*,kgc.GIONGHIENCUUKHOAHOC_CHUAN from giangvien as gv, namhoc as nh,chon_khung as ck,khunggiochuan as kgc where gv.MAGV = ck.MAGV and nh.MANAMHOC = ck.MANAMHOC and kgc.MAKHUNG = ck.MAKHUNG and gv.MAGV = ? and nh.MANAMHOC = ?",
+
+    // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
+    const [results1] = await pool.execute(
+      "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
     return {
-      EM: "lấy thông tin thành công",
+      EM: "Lấy thông tin thành công",
       EC: 1,
-      DT: results1[0],
+      DT: results1[0] || {}, // Trả về đối tượng rỗng nếu không có kết quả
     };
   } catch (error) {
     console.log("timChucDanh_TENCHUCDANH errr >>>", error);
-    return [];
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
   }
 };
 
@@ -95,49 +114,66 @@ const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
 };
 
 const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
+  console.log("MAGV", MAGV);
+  console.log("TENNAMHOC", TENNAMHOC);
+
+  if (!MAGV || !TENNAMHOC) {
+    return {
+      EM: "Mã giảng viên hoặc tên năm học bị thiếu",
+      EC: 0,
+      DT: [],
+    };
+  }
+
   try {
-    let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
-    if (MANAMHOC === 0) {
+    const [results1_NAMHOC, fields_NAMHOC] = await pool.execute(
+      `SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC = ?`,
+      [TENNAMHOC]
+    );
+
+    if (results1_NAMHOC.length === 0) {
       return {
         EM: "Không có năm học này",
         EC: 0,
         DT: [],
       };
     }
-    // console.log("Check MANAMHOC:   ", MANAMHOC);
+
+    const MANAMHOC = results1_NAMHOC[0].MANAMHOC; // Now safe to access
+    console.log("check MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
-      `select 
+      `SELECT 
       giangvien.TENGV,
       ltg.TEN_LOAI_TAC_GIA,
-
       namhoc.TENNAMHOC,
       dkthqd.TEN_NGHIEN_CUU,
       dkthqd.SOGIOQUYDOI,
       dkthqd.THOI_GIAN_DANG_KY,
       dm.* 
-      from 
-      giangvien,
-      namhoc,
-      dang_ky_thuc_hien_quy_doi as dkthqd, 
-      danhmucquydoispkhcn as dm, 
-      loai_tac_gia as ltg
-      where
-      giangvien.MAGV = dkthqd.MAGV
-      and dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
-      and namhoc.MANAMHOC = dkthqd.MANAMHOC
-      and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
-      and giangvien.MAGV = ? and namhoc.MANAMHOC = ?`,
+      FROM 
+      giangvien
+      JOIN dang_ky_thuc_hien_quy_doi AS dkthqd ON giangvien.MAGV = dkthqd.MAGV
+      JOIN namhoc ON namhoc.MANAMHOC = dkthqd.MANAMHOC
+      JOIN danhmucquydoispkhcn AS dm ON dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
+      JOIN loai_tac_gia AS ltg ON ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
+      WHERE
+      giangvien.MAGV = ? 
+      AND namhoc.MANAMHOC = ?`,
       [MAGV, MANAMHOC]
     );
 
     return {
-      EM: "lấy thông tin thành công",
+      EM: "Lấy thông tin thành công",
       EC: 1,
-      DT: results1,
+      DT: results1[0],
     };
   } catch (error) {
-    console.log("timChucDanh_TENCHUCDANH errr >>>", error);
-    return [];
+    console.log("get_thongtin_dangky_giangvien error >>>", error);
+    return {
+      EM: "Đã xảy ra lỗi trong quá trình lấy thông tin",
+      EC: 0,
+      DT: [],
+    };
   }
 };
 

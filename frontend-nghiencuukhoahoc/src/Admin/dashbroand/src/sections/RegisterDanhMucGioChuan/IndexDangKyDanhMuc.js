@@ -56,8 +56,8 @@ const IndexDangKyDanhmuc = () => {
             item.TEN_KHOA === response.data.DT.TENKHOA &&
             item.GHICHU === "NGHIENCUU"
         );
-
-        console.log("check true", matchedKhoa);
+        setMaGV(response.data.DT.MAGV);
+        // console.log("check true", matchedKhoa);
         if (matchedKhoa) {
           const formattedStartDate = formatDate(matchedKhoa.THOIGIANBATDAU);
           const formattedEndDate = formatDate(matchedKhoa.THOIGIANKETTHUC);

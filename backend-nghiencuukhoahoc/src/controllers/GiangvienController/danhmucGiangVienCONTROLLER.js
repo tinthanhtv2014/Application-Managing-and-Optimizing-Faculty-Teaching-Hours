@@ -2,7 +2,7 @@ const {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
-  dangky_danhmuc_giangvien
+  dangky_danhmuc_giangvien,
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
 
 const select_thongtin_danhmuc = async (req, res) => {
@@ -51,9 +51,9 @@ const select_loaitacgia_loaidanhmuc = async (req, res) => {
 const dangky_danhmuc_Controller = async (req, res) => {
   try {
     // console.log("req.body dangky_danhmuc_Controller: ", req.body);
-    let dataDangKyDanhMuc = req.body
+    let dataDangKyDanhMuc = req.body;
     // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
-    let results = await dangky_danhmuc_giangvien(dataDangKyDanhMuc)
+    let results = await dangky_danhmuc_giangvien(dataDangKyDanhMuc);
     // let results = {
     //   EM: "ok",
     //   EC: 1,
@@ -78,6 +78,7 @@ const select_thongtin_dangkydanhmuc_giangvien = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
+    console.log("MAGV", MAGV);
     let results = await get_thongtin_dangky_giangvien(MAGV, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,

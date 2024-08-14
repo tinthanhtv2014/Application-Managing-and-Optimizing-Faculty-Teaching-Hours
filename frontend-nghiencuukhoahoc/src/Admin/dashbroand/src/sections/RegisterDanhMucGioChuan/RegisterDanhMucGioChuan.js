@@ -75,6 +75,8 @@ const DangKyDanhMucGioChuan = ({
   const [ListNamHoc, setListNamHoc] = useState(null);
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dataDang_ky_thuc_hien_quy_doiGV, setDataDang_ky_thuc_hien_quy_doiGV] =
+    useState([]);
   useEffect(() => {
     const fectData = async () => {
       try {
@@ -111,26 +113,53 @@ const DangKyDanhMucGioChuan = ({
 
     if (selectNamHoc && token) {
       const fectDataThongTinGioNghienCuu = async () => {
-        const response_Data = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
-          { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
-        );
-        if (response_Data.data.EC === 1) {
-          setSoGioNghienCuuChuan(
-            response_Data.data.DT.GIONGHIENCUUKHOAHOC_CHUAN
+        try {
+          const response_Data = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/thongtinkhung`,
+            { TENDANGNHAP: decoded.taikhoan, TENNAMHOC: selectNamHoc.TENNAMHOC }
           );
+          if (response_Data.data.EC === 1) {
+            setSoGioNghienCuuChuan(
+              response_Data.data.DT.GIONGHIENCUUKHOAHOC_CHUAN
+            );
+          } else {
+            console.error("Lỗi từ server:", response_Data.data.EM);
+          }
+        } catch (error) {
+          console.error("Lỗi khi gọi API:", error);
         }
       };
       fectDataThongTinGioNghienCuu();
     }
   }, [selectNamHoc]);
+
   useEffect(() => {
     if (IsOpenSelectOption === "Đăng Ký Danh Mục") {
       setIsDisableNamHoc(true);
-    } else {
+    } else if (IsOpenSelectOption === "Xem Lịch Sử Đăng Ký Danh Mục") {
       setIsDisableNamHoc(false);
+      if (selectNamHoc) {
+        const DataThongTinDangKyGiangVien = async () => {
+          try {
+            const response_Data = await CookiesAxios.post(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin`,
+              { MAGV: MaGV, TENNAMHOC: selectNamHoc }
+            );
+            console.log("check", response_Data.data.DT);
+            if (response_Data.data.EC === 1) {
+              setDataDang_ky_thuc_hien_quy_doiGV(response_Data.data.DT);
+            } else {
+              console.error("Lỗi từ server:", response_Data.data.EM);
+            }
+          } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+          }
+        };
+        DataThongTinDangKyGiangVien();
+      }
     }
-  }, [IsOpenSelectOption]);
+  }, [IsOpenSelectOption, selectNamHoc]);
+
   useEffect(() => {
     tacGiaList.forEach((tacGia, index) => {
       if (tacGia.khoa) {
@@ -927,7 +956,11 @@ const DangKyDanhMucGioChuan = ({
               {" "}
               <Row>
                 {" "}
-                <XemLichSuChonDanhMuc />
+                <XemLichSuChonDanhMuc
+                  dataDang_ky_thuc_hien_quy_doiGV={
+                    dataDang_ky_thuc_hien_quy_doiGV
+                  }
+                />
               </Row>
             </>
           )}
