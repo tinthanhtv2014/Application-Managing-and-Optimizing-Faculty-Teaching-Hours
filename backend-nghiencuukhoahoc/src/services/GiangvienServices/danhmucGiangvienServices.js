@@ -34,11 +34,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-      "FROM giangvien AS gv " +
-      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -183,11 +183,10 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
   try {
     console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
 
-<<<<<<< HEAD
     // Khởi tạo một object để đếm các giá trị 'loai'
-=======
+
     // Tính toán số lượng từng loại giảng viên
->>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
+
     const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
       (acc, giangVien) => {
         acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
@@ -196,24 +195,20 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       {}
     );
 
-<<<<<<< HEAD
     // Chuyển đổi giá trị true/false và thêm số lượng 'loai' giống nhau vào dataDangKy
-=======
+
     // Chuyển đổi dữ liệu giảng viên
->>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
+
     const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
       (giangVien, index) => ({
         ...giangVien,
         laVienChuc: giangVien.laVienChuc ? "Có" : "Không",
-<<<<<<< HEAD
         duocMien: giangVien.duocMien ? "Không" : "Có", //true = Không và false = Có
         soLuongLoai: loaiCountObj[giangVien.loai], // Thêm số lượng loại giống nhau
         Stt: index + 1, // Thêm thứ tự vào mỗi đối tượng
-=======
         duocMien: giangVien.duocMien ? "Không" : "Có",
         soLuongLoai: loaiCountObj[giangVien.loai],
         Stt: index + 1,
->>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
       })
     );
 
@@ -225,19 +220,14 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         giangVien.duocMien === "Không"
     );
 
-<<<<<<< HEAD
     // Lấy phần tử có loại là "Tác giả thứ nhất"
-    const DaiDien = dataDangKy.find(
-      (giangVien) => giangVien.loai === "Tác giả thứ nhất"
-    );
-=======
+
     // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
     if (!DaiDien) {
       DaiDien = dataDangKy.find(
         (giangVien) => giangVien.loai === "Tác giả thứ nhất"
       );
     }
->>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
 
     for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
       let [LoaiTacGia] = await pool.execute(
@@ -287,7 +277,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         DaiDien.duocMien,
       ]
     );
-<<<<<<< HEAD
+
     console.log("TacGiaDaiDien: ", TacGiaDaiDien);
 
     for (let i = 0; i < dataDangKy.length; i++) {
@@ -328,7 +318,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 }); // Thêm đối tượng vào obj với Stt
     }
     console.log("obj: ", obj);
-=======
 
     console.log("DaiDien: ", DaiDien);
     console.log("TacGiaDaiDien: ", TacGiaDaiDien);
@@ -336,12 +325,11 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
 
     for (let i = 0; i < dataDangKy.length; i++) {
       let DataTyLeTraVe; // Khai báo biến DataTyLeTraVe trước vòng lặp
->>>>>>> 0931cb3576867432972061ff3b99c0a1cde21063
 
       if (
-        dataDangKy[i].loai === 'Tác giả chịu trách nhiệm'
-        && (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2)
-        && TacGiaDaiDien[0].VIEN_CHUC_TRUONG === 'Không'
+        dataDangKy[i].loai === "Tác giả chịu trách nhiệm" &&
+        (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2) &&
+        TacGiaDaiDien[0].VIEN_CHUC_TRUONG === "Không"
       ) {
         [DataTyLeTraVe] = await pool.execute(
           `
