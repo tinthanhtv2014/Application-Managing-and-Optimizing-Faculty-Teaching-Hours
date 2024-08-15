@@ -39,11 +39,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-        "FROM giangvien AS gv " +
-        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+      "FROM giangvien AS gv " +
+      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -355,6 +355,21 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             dataDangKy[i].duocMien,
           ]
         );
+      }
+
+      if (DataTyLeTraVe.length === 0) {
+        DataTyLeTraVe.push({
+          MA_QUY_DOI: null,
+          MA_LOAI_DANH_MUC: dataDangKyDanhMuc.MALOAIDANHMUC,
+          MA_LOAI_TAC_GIA: null,
+          TEN_LOAI_TAC_GIA: dataDangKy[i].loai,
+          DA_LOAI_TAC_GIA: 'Không có dữ liệu',
+          SO_TAC_GIA_THUOC_LOAI: dataDangKy[i].soLuongLoai,
+          TEN_QUY_DOI: 'Không có dữ liệu',
+          TY_LE: null,
+          VIEN_CHUC_TRUONG: dataDangKy[i].laVienChuc,
+          THUC_HIEN_CHUAN: dataDangKy[i].duocMien,
+        });
       }
 
       obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 });
