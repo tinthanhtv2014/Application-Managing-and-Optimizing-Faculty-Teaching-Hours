@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  lazy,
+  Suspense,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
   MenuItem,
   Box,
@@ -14,22 +15,21 @@ import {
   InputLabel,
   Select,
   Button,
-  Modal,
   Typography,
   TextField,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { calculateAuthorHours } from "./test2.js";
+
 import { Col, Container, Row } from "react-bootstrap";
-import axios from "axios";
+
 import "./RegisterDanhMucGioChuan.scss";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import CookiesAxios from "../CookiesAxios";
-import ModalDanhMuc from "./modals/ModalselectDanhMuc.js";
 import Cookies from "js-cookie";
-import XemLichSuChonDanhMuc from "./XemLichSuChonDanhMuc.js";
+const ModalDanhMuc = lazy(() => import("./modals/ModalselectDanhMuc.js"));
+const XemLichSuChonDanhMuc = lazy(() => import("./XemLichSuChonDanhMuc.js"));
 const DangKyDanhMucGioChuan = ({
   IsOpenCheckKhoa,
   OpenChucNangtheokhungthoigian,
@@ -331,7 +331,7 @@ const DangKyDanhMucGioChuan = ({
 
     const delayDebounceFn = setTimeout(() => {
       fetchEmailSuggestionsTrongTruong();
-    }, 300);
+    }, 777);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
@@ -364,7 +364,7 @@ const DangKyDanhMucGioChuan = ({
 
     const delayDebounceFn = setTimeout(() => {
       fetchEmailSuggestionsNgoaiTruong();
-    }, 300);
+    }, 777);
 
     return () => clearTimeout(delayDebounceFn);
   }, [SearchTermNgoaiTruong]);
@@ -392,9 +392,7 @@ const DangKyDanhMucGioChuan = ({
     if (tacGiaList.length == 0) {
       toast.error("Bạn cần điền thông tin tác giả");
     }
-    // console.log("tong so tac gia", tacGiaList.length);
-    // console.log("MaLoaiDanhMuc", MaLoaiDanhMuc);
-    // console.log("tacGiaList", tacGiaList);
+
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc`,
@@ -414,8 +412,7 @@ const DangKyDanhMucGioChuan = ({
         const soTacGiaThuNhat = dtList.filter(
           (role) => role.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
         ).length; // Đếm số tác giả thứ nhất
-        // console.log(" số tác giả thứ nhất", soTacGiaThuNhat);
-        // Cập nhật số giờ cho từng giảng viên trong tacGiaList
+
         const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
           const correspondingData = dtList[index];
 
@@ -428,14 +425,12 @@ const DangKyDanhMucGioChuan = ({
               case "Tác giả chịu trách nhiệm":
               case "Tác giả còn lại":
                 soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
-                // console.log("soGio", soGio);
-                // console.log("correspondingData", correspondingData);
-                // Nếu `DA_LOAI_TAC_GIA` là "Có", nhân thêm tỷ lệ với các tác giả khác có `DA_LOAI_TAC_GIA` là "Có"
+
                 if (correspondingData.DA_LOAI_TAC_GIA === "Có") {
                   const additionalTyLe = dtList
                     .filter((item) => item.DA_LOAI_TAC_GIA === "Có")
                     .reduce((acc, item) => acc * item.TY_LE, 1);
-                  // console.log("check additionalTyLe", additionalTyLe);
+
                   soGio = additionalTyLe * SoGioDanhMucDaChon; // Nhân thêm tỷ lệ tích lũy từ các tác giả khác
                   soPhanTram = additionalTyLe;
                 }
@@ -696,14 +691,15 @@ const DangKyDanhMucGioChuan = ({
                   </Col>
 
                   <div>
-                    {" "}
-                    <ModalDanhMuc
-                      open={open}
-                      onClose={handleClose}
-                      handleSelectDanhMuc={handleSelectDanhMuc}
-                      setMaLoaiDanhMuc={setMaLoaiDanhMuc}
-                      setLoaiTacGia={setLoaiTacGia}
-                    />
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <ModalDanhMuc
+                        open={open}
+                        onClose={handleClose}
+                        handleSelectDanhMuc={handleSelectDanhMuc}
+                        setMaLoaiDanhMuc={setMaLoaiDanhMuc}
+                        setLoaiTacGia={setLoaiTacGia}
+                      />{" "}
+                    </Suspense>
                   </div>
                 </Col>
                 <Col md={4} className="row-with-border-danhmuc ">
@@ -800,19 +796,7 @@ const DangKyDanhMucGioChuan = ({
                                     ))}
                                   </Select>
                                 </FormControl>
-                                {/* <TextField
-                                  label="Tên Giảng Viên"
-                                  value={tacGia.tenGV}
-                                  onChange={(e) =>
-                                    handleTacGiaChange(
-                                      index,
-                                      "tenGV",
-                                      e.target.value
-                                    )
-                                  }
-                                  fullWidth
-                                  margin="normal"
-                                /> */}
+
                                 <TextField
                                   sx={{
                                     width: {
@@ -1184,11 +1168,13 @@ const DangKyDanhMucGioChuan = ({
               {" "}
               <Row>
                 {" "}
-                <XemLichSuChonDanhMuc
-                  dataDang_ky_thuc_hien_quy_doiGV={
-                    dataDang_ky_thuc_hien_quy_doiGV
-                  }
-                />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <XemLichSuChonDanhMuc
+                    dataDang_ky_thuc_hien_quy_doiGV={
+                      dataDang_ky_thuc_hien_quy_doiGV
+                    }
+                  />
+                </Suspense>
               </Row>
             </>
           )}
