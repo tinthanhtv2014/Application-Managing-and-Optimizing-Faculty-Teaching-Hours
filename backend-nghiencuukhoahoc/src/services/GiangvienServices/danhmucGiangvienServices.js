@@ -213,7 +213,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     let DaiDien = dataDangKy.find(
       (giangVien) =>
         giangVien.loai === "Tác giả thứ nhất" &&
-        giangVien.laVienChuc === "Không" &&
+        giangVien.laVienChuc === "Không" ||
         giangVien.duocMien === "Không"
     );
 
