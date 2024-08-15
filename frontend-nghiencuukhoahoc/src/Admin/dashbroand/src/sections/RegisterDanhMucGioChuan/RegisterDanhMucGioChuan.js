@@ -48,7 +48,6 @@ const DangKyDanhMucGioChuan = ({
 
   const [tacGiaList, setTacGiaList] = useState([
     {
-      ten: "",
       loai: "",
       khoa: "",
       boMon: "",
@@ -76,6 +75,8 @@ const DangKyDanhMucGioChuan = ({
   const [ListNamHoc, setListNamHoc] = useState(null);
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [open, setOpen] = useState(false);
+  const [IsOptionSearchTrongTruong, setIsOptionSearchTrongTruong] =
+    useState(true);
   const [dataDang_ky_thuc_hien_quy_doiGV, setDataDang_ky_thuc_hien_quy_doiGV] =
     useState([]);
   useEffect(() => {
@@ -192,7 +193,6 @@ const DangKyDanhMucGioChuan = ({
     setTacGiaList([
       ...tacGiaList,
       {
-        ten: "",
         loai: "",
         khoa: "",
         boMon: "",
@@ -230,17 +230,31 @@ const DangKyDanhMucGioChuan = ({
     setTacGiaList(newList);
   };
   const handleSelectGiangVien = (index, giangVien) => {
-    const newTacGiaList = [...tacGiaList];
-    newTacGiaList[index] = {
-      ...newTacGiaList[index],
-      maSoGV: giangVien.MAGV,
-      tenGV: giangVien.TENGV,
-      emailGV: giangVien.TENDANGNHAP,
-      boMon: giangVien.TENBOMON,
-      khoa: giangVien.TENKHOA,
-    };
-    console.log("check ", newTacGiaList[index]);
-    setTacGiaList(newTacGiaList);
+    if (IsOptionSearchTrongTruong === true) {
+      const newTacGiaList = [...tacGiaList];
+      newTacGiaList[index] = {
+        ...newTacGiaList[index],
+        maSoGV: giangVien.MAGV,
+        tenGV: giangVien.TENGV,
+        emailGV: giangVien.TENDANGNHAP,
+        boMon: giangVien.TENBOMON,
+        khoa: giangVien.TENKHOA,
+      };
+      console.log("check ", newTacGiaList[index]);
+      setTacGiaList(newTacGiaList);
+    } else {
+      const newTacGiaList = [...tacGiaList];
+      newTacGiaList[index] = {
+        ...newTacGiaList[index],
+        maSoGV: giangVien.MAGV,
+        tenGV: giangVien.TENGV,
+        emailGV: giangVien.EMAIL,
+        boMon: giangVien.TENBOMON,
+        khoa: giangVien.TENKHOA,
+      };
+      console.log("check ", newTacGiaList[index]);
+      setTacGiaList(newTacGiaList);
+    }
   };
   const handleTacGiaChange = (index, field, value) => {
     const newTacGiaList = [...tacGiaList];
@@ -270,7 +284,6 @@ const DangKyDanhMucGioChuan = ({
         (tacGia, i) =>
           i === index
             ? {
-                ten: "",
                 loai: "",
                 khoa: "",
                 boMon: "",
@@ -287,6 +300,7 @@ const DangKyDanhMucGioChuan = ({
       )
     );
     setEmailSuggestions("");
+    setIsOptionSearchTrongTruong(!IsOptionSearchTrongTruong);
   };
 
   const handleOpen = () => {
@@ -303,28 +317,37 @@ const DangKyDanhMucGioChuan = ({
   // -------------SEARCH EMAIL---------------------------------
   useEffect(() => {
     const fetchEmailSuggestions = async () => {
-      if (searchTerm) {
-        if (searchTerm.trim() === "") {
-          setEmailSuggestions([]); // Nếu từ khóa rỗng, xóa gợi ý
-          return;
-        }
-
-        try {
-          const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
-            {
-              TENGV: searchTerm,
-            }
-          );
-          console.log("check search", response.data);
-          if (response.data.EC === 1) {
-            setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+      if (IsOptionSearchTrongTruong === true) {
+        console.log(
+          "chức năng đang search trong trường ",
+          IsOptionSearchTrongTruong
+        );
+        if (searchTerm) {
+          if (searchTerm.trim() === "") {
+            setEmailSuggestions([]); // Nếu từ khóa rỗng, xóa gợi ý
+            return;
           }
-        } catch (error) {
-          console.error("Error fetching email suggestions:", error);
+
+          try {
+            const response = await CookiesAxios.post(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
+              {
+                TENGV: searchTerm,
+              }
+            );
+            console.log("check search api 1", response.data);
+            if (response.data.EC === 1) {
+              setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
+            }
+          } catch (error) {
+            console.error("Error fetching email suggestions:", error);
+          }
         }
-      }
-      if (SearchTermNgoaiTruong) {
+      } else if (SearchTermNgoaiTruong) {
+        console.log(
+          "chức năng đang search NGOÀI trường  =>",
+          IsOptionSearchTrongTruong
+        );
         if (SearchTermNgoaiTruong.trim() === "") {
           setEmailSuggestions([]); // Nếu từ khóa rỗng, xóa gợi ý
           return;
@@ -337,7 +360,7 @@ const DangKyDanhMucGioChuan = ({
               TENGV: SearchTermNgoaiTruong,
             }
           );
-          console.log("check search", response.data);
+          console.log("check search api 2", response.data);
           if (response.data.EC === 1) {
             setEmailSuggestions(response.data.DT); // Giả sử DT chứa danh sách gợi ý
           }
@@ -476,6 +499,26 @@ const DangKyDanhMucGioChuan = ({
         selectNamHoc,
       });
       return; // Dừng hàm nếu dữ liệu không hợp lệ
+    }
+
+    // Kiểm tra từng đối tượng trong tacGiaList
+    const isValidTacGiaList = tacGiaList.every((tacGia) => {
+      return (
+        tacGia.loai !== null &&
+        tacGia.khoa !== null &&
+        tacGia.boMon !== null &&
+        tacGia.maSoGV !== null &&
+        tacGia.tenGV !== null &&
+        tacGia.emailGV !== null &&
+        tacGia.soGio !== null &&
+        tacGia.soPhanTram !== null
+      );
+    });
+
+    if (!isValidTacGiaList) {
+      toast.error("Dữ liệu giảng viên không hợp lệ");
+      console.error("Một hoặc nhiều giảng viên có giá trị null:", tacGiaList);
+      return; // Dừng hàm nếu có giảng viên không hợp lệ
     }
 
     try {
@@ -787,7 +830,7 @@ const DangKyDanhMucGioChuan = ({
                                     },
                                   }}
                                   label="Tên Giảng Viên"
-                                  className="responsive-thongtingiangvien-searchtengv "
+                                  className="responsive-thongtingiangvien-searchtengv"
                                   value={tacGia.tenGV}
                                   onChange={(e) => {
                                     setSearchTermNgoaiTruong(e.target.value);
@@ -800,15 +843,27 @@ const DangKyDanhMucGioChuan = ({
                                   fullWidth
                                   margin="normal"
                                 />
+
                                 {currentEmail &&
                                   currentEmail === tacGia.tenGV &&
                                   emailSuggestions.length > 0 && (
-                                    <div
-                                      className="suggestions-list"
+                                    <Paper
+                                      sx={{
+                                        width: {
+                                          xs: "230px", // Kích thước cho điện thoại
+                                          md: "300px", // Kích thước cho màn hình lớn hơn
+                                        },
+                                        position: "absolute", // Đặt Paper ở vị trí gợi ý bên dưới TextField
+                                        zIndex: 10,
+                                        maxHeight: "200px", // Giới hạn chiều cao cho danh sách gợi ý
+                                        overflowY: "auto", // Thêm thanh cuộn nếu danh sách quá dài
+                                        boxShadow:
+                                          "0 2px 5px rgba(0, 0, 0, 0.1)", // Thêm bóng đổ nhẹ
+                                      }}
                                       ref={suggestionsRef}
                                     >
                                       {emailSuggestions.map((suggestion) => (
-                                        <div
+                                        <MenuItem
                                           key={suggestion.id}
                                           onClick={() => {
                                             handleSelectGiangVien(
@@ -819,10 +874,11 @@ const DangKyDanhMucGioChuan = ({
                                             setEmailSuggestions([]);
                                           }}
                                         >
-                                          {suggestion.TENGV} ({suggestion.MAGV})
-                                        </div>
+                                          {suggestion.TENGV} ({suggestion.EMAIL}
+                                          )
+                                        </MenuItem>
                                       ))}
-                                    </div>
+                                    </Paper>
                                   )}
                                 <TextField
                                   label="Email Giảng Viên"
@@ -849,7 +905,7 @@ const DangKyDanhMucGioChuan = ({
                                     },
                                   }}
                                   label="Tên Giảng Viên"
-                                  className="responsive-thongtingiangvien-searchtengv "
+                                  className="responsive-thongtingiangvien-searchtengv"
                                   value={tacGia.tenGV}
                                   onChange={(e) => {
                                     setSearchTerm(e.target.value);
@@ -865,12 +921,23 @@ const DangKyDanhMucGioChuan = ({
                                 {currentEmail &&
                                   currentEmail === tacGia.tenGV &&
                                   emailSuggestions.length > 0 && (
-                                    <div
-                                      className="suggestions-list"
+                                    <Paper
+                                      sx={{
+                                        width: {
+                                          xs: "230px", // Kích thước cho điện thoại
+                                          md: "300px", // Kích thước cho màn hình lớn hơn
+                                        },
+                                        position: "absolute", // Đặt Paper ở vị trí gợi ý bên dưới TextField
+                                        zIndex: 10,
+                                        maxHeight: "200px", // Giới hạn chiều cao cho danh sách gợi ý
+                                        overflowY: "auto", // Thêm thanh cuộn nếu danh sách quá dài
+                                        boxShadow:
+                                          "0 2px 5px rgba(0, 0, 0, 0.2)", // Thêm bóng đổ nhẹ
+                                      }}
                                       ref={suggestionsRef}
                                     >
                                       {emailSuggestions.map((suggestion) => (
-                                        <div
+                                        <MenuItem
                                           key={suggestion.id}
                                           onClick={() => {
                                             handleSelectGiangVien(
@@ -882,9 +949,9 @@ const DangKyDanhMucGioChuan = ({
                                           }}
                                         >
                                           {suggestion.TENGV} ({suggestion.MAGV})
-                                        </div>
+                                        </MenuItem>
                                       ))}
-                                    </div>
+                                    </Paper>
                                   )}
                                 <div>
                                   {" "}
