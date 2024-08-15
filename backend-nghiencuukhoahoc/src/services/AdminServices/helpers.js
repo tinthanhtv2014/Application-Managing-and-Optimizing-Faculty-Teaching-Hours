@@ -49,6 +49,19 @@ const timGiangVien_TENGV = async (TENGV, EMAIL) => {
   }
 };
 
+const timGiangVien_TENGV_TENDANGNHAP = async (TENGV, EMAIL) => {
+  try {
+    const [results, fields] = await pool.execute(
+      "SELECT giangvien.*,taikhoan.* FROM giangvien,taikhoan WHERE giangvien.MAGV = taikhoan.MAGV and giangvien.TENGV = ? and taikhoan.TENDANGNHAP = ? ",
+      [TENGV, EMAIL]
+    );
+    return results[0];
+  } catch (error) {
+    console.log("timGiangVien errr >>>", error);
+    return [];
+  }
+};
+
 const selectBomon_TENBOMON = async (TENBOMON) => {
   try {
     const [results, fields] = await pool.execute(
@@ -286,4 +299,5 @@ module.exports = {
   timnamhoc_TENNAMHOC,
   timtacgia_TEN_LOAI_TAC_GIA,
   timGiangVien_TENGV,
+  timGiangVien_TENGV_TENDANGNHAP,
 };

@@ -5,6 +5,7 @@ const {
   timtacgia_TEN_LOAI_TAC_GIA,
   timGiangVien_TENGV,
   selectBomon_TENBOMON,
+  timGiangVien_TENGV_TENDANGNHAP,
 } = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
@@ -39,11 +40,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-      "FROM giangvien AS gv " +
-      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -363,9 +364,9 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
           MA_LOAI_DANH_MUC: dataDangKyDanhMuc.MALOAIDANHMUC,
           MA_LOAI_TAC_GIA: null,
           TEN_LOAI_TAC_GIA: dataDangKy[i].loai,
-          DA_LOAI_TAC_GIA: 'Không có dữ liệu',
+          DA_LOAI_TAC_GIA: "Không có dữ liệu",
           SO_TAC_GIA_THUOC_LOAI: dataDangKy[i].soLuongLoai,
-          TEN_QUY_DOI: 'Không có dữ liệu',
+          TEN_QUY_DOI: "Không có dữ liệu",
           TY_LE: null,
           VIEN_CHUC_TRUONG: dataDangKy[i].laVienChuc,
           THUC_HIEN_CHUAN: dataDangKy[i].duocMien,
@@ -444,6 +445,7 @@ async function callbackMAGV(pool) {
   return randomMAGV;
 }
 
+//đăng ký giảng viên
 const dangky_thongtin_giangvien = async (dataDangKy) => {
   try {
     const time = moment().format("YYYY-MM-DD");
@@ -464,11 +466,20 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
       const timbomon = await selectBomon_TENBOMON(
         dataDangKy.LISTGIANGVIEN[i].boMon
       );
-      const timgiangvien = await timGiangVien_TENGV(
-        dataDangKy.LISTGIANGVIEN[i].tenGV,
-        dataDangKy.LISTGIANGVIEN[i].emailGV
-      );
-
+      let timgiangvien = [];
+      let selectgiangvien = [];
+      if (dataDangKy.LISTGIANGVIEN[i].laVienChuc === true) {
+        timgiangvien = await timGiangVien_TENGV_TENDANGNHAP(
+          dataDangKy.LISTGIANGVIEN[i].tenGV,
+          dataDangKy.LISTGIANGVIEN[i].emailGV
+        );
+      } else {
+        timgiangvien = await timGiangVien_TENGV(
+          dataDangKy.LISTGIANGVIEN[i].tenGV,
+          dataDangKy.LISTGIANGVIEN[i].emailGV
+        );
+      }
+      console.log("check timgv:", timgiangvien);
       if (timgiangvien === undefined) {
         const randomMAGV = await callbackMAGV(pool);
 
@@ -483,17 +494,25 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
           ]
         );
       }
-      const selectMAGV = await timGiangVien_TENGV(
-        dataDangKy.LISTGIANGVIEN[i].tenGV,
-        dataDangKy.LISTGIANGVIEN[i].emailGV
-      );
-      console.log("check select MAGV = : ", selectMAGV);
+
+      if (dataDangKy.LISTGIANGVIEN[i].laVienChuc === true) {
+        selectgiangvien = await timGiangVien_TENGV_TENDANGNHAP(
+          dataDangKy.LISTGIANGVIEN[i].tenGV,
+          dataDangKy.LISTGIANGVIEN[i].emailGV
+        );
+      } else {
+        selectgiangvien = await timGiangVien_TENGV(
+          dataDangKy.LISTGIANGVIEN[i].tenGV,
+          dataDangKy.LISTGIANGVIEN[i].emailGV
+        );
+      }
+
       await pool.execute(
         `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,?,N'Đã đăng ký')
        `,
         [
           dataDangKy.MADANHMUC,
-          selectMAGV.MAGV,
+          selectgiangvien.MAGV,
           timNAMHOC,
           timtacgia,
           dataDangKy.LISTGIANGVIEN[i].soGio,
