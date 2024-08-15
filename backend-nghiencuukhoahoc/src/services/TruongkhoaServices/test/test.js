@@ -256,6 +256,7 @@ const Sevicel_TyLe_Excel = async (dataTyLe) => {
 
 const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
     try {
+        console.log("dataCoTyLe: ", dataCoTyLe)
         // Kiểm tra tất cả các mục trước khi thêm
         for (let i = 0; i < dataCoTyLe.length; i++) {
             let [LoaiTacGai, fields0] = await pool.execute(
@@ -314,6 +315,8 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
             );
             results.push(result.insertId); // Lưu ID của loại danh mục vào kết quả
         }
+
+        console.log("results: ", results)
         return {
             EM: "Thêm dữ liệu thành công",
             EC: 1,
