@@ -821,7 +821,7 @@ const DangKyDanhMucGioChuan = ({
                                     },
                                   }}
                                   label="Tên Giảng Viên Ngoài Trường"
-                                  value={SearchTermNgoaiTruong}
+                                  value={tacGia.tenGV}
                                   onChange={(e) => {
                                     setSearchTermNgoaiTruong(e.target.value);
                                     handleTacGiaChangeEmail(
@@ -893,7 +893,7 @@ const DangKyDanhMucGioChuan = ({
                                     },
                                   }}
                                   label="Tên Giảng Viên Trong Trường"
-                                  value={searchTerm}
+                                  value={tacGia.tenGV}
                                   onChange={(e) => {
                                     setSearchTerm(e.target.value);
                                     handleTacGiaChangeEmail(
