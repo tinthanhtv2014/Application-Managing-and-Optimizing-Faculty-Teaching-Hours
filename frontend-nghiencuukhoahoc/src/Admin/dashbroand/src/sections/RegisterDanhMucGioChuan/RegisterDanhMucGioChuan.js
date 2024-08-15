@@ -502,11 +502,22 @@ const DangKyDanhMucGioChuan = ({
     });
 
     if (!isValidTacGiaList) {
-      toast.error("Dữ liệu giảng viên không hợp lệ");
+      toast.error("Dữ liệu giảng viên không hợp lệ hihi!");
       console.error("Một hoặc nhiều giảng viên có giá trị null:", tacGiaList);
+
       return; // Dừng hàm nếu có giảng viên không hợp lệ
     }
-
+    const isValidTacGiaListMAGV = tacGiaList.some((tacGia) => {
+      return tacGia.maSoGV == MaGV;
+    });
+    if (!isValidTacGiaListMAGV) {
+      toast.error(
+        "Thông tin đăng ký danh mục quy đổi không có tài khoản của bạn!"
+      );
+      console.error("Bạn phải đăng ký thông tin của chính mình", tacGiaList);
+      console.log("MAGV bản thân =>", MaGV);
+      return; // Dừng hàm nếu có giảng viên không hợp lệ
+    }
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin/luu`,
