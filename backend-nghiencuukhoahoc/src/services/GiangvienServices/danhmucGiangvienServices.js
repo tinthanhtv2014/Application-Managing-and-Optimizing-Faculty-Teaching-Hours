@@ -487,7 +487,7 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
 
     return {
       EM: "đăng ký đề tài thành công",
-      EC: 0,
+      EC: 1,
       DT: results1,
     };
   } catch (error) {
