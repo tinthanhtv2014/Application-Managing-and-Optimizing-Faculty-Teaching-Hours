@@ -411,6 +411,24 @@ function getRandomNumber() {
   return Math.floor(Math.random() * 100000) + 1;
 }
 
+async function callbackMAGV(pool) {
+  let randomMAGV = "GVNT" + getRandomNumber();
+
+  // Kiểm tra mã MAGV trong cơ sở dữ liệu
+  let [checkkq] = await pool.execute(
+    `SELECT MAGV FROM giangvien WHERE MAGV = ?`,
+    [randomMAGV]
+  );
+  console.log("Mã bị trùng1: ", checkkq);
+  // Nếu mã bị trùng, tạo lại mã mới
+  if (checkkq.length > 0 && checkkq[0].MAGV === randomMAGV) {
+    console.log("Mã bị trùng: ", randomMAGV);
+    randomMAGV = "GVNT" + getRandomNumber();
+    console.log("Mã mới: ", randomMAGV);
+  }
+  return randomMAGV;
+}
+
 const dangky_thongtin_giangvien = async (dataDangKy) => {
   try {
     const time = moment().format("YYYY-MM-DD");
@@ -437,7 +455,8 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
       );
 
       if (timgiangvien === undefined) {
-        const randomMAGV = getRandomNumber();
+        const randomMAGV = await callbackMAGV(pool);
+
         await pool.execute(
           `insert into giangvien (MAGV,MABOMON,TENGV,EMAIL) values (?,?,?,?)
        `,

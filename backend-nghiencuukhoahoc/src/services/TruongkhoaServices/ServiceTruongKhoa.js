@@ -165,13 +165,7 @@ const timkiem_email_taikhoan_ngoaitruong = async (TENGV) => {
   try {
     const connection = await pool.getConnection();
     const query =
-      "SELECT khoa.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,giangvien.EMAIL, taikhoan.TENDANGNHAP " +
-      "FROM taikhoan " +
-      "JOIN giangvien ON giangvien.MAGV = taikhoan.MAGV " +
-      "JOIN bomon ON bomon.MABOMON = giangvien.MABOMON " +
-      "JOIN khoa ON khoa.MAKHOA = bomon.MAKHOA " +
-      "WHERE bomon.TENBOMON = N'Ngoài trường' and giangvien.TENGV LIKE ? " +
-      "LIMIT 5";
+      "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,giangvien.EMAIL FROM giangvien , khoa as k , bomon WHERE k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and bomon.TENBOMON = N'Ngoài trường' and giangvien.TENGV LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
     // console.log(rows);
