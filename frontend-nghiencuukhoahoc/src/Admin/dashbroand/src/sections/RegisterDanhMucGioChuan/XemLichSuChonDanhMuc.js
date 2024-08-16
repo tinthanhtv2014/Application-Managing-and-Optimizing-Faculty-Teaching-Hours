@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,12 +9,45 @@ import {
   Paper,
   Collapse,
 } from "@mui/material";
-
+import CookiesAxios from "../CookiesAxios";
 const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
   const [expandedRow, setExpandedRow] = useState(null);
-
-  const handleRowClick = (index) => {
+  const [dataListTacGia, setDataListTacGia] = useState([]);
+  const [SoTacGia, setSoTaGia] = useState(null);
+  useEffect(() => {
+    if (dataDang_ky_thuc_hien_quy_doiGV) {
+      handleRowClick(dataDang_ky_thuc_hien_quy_doiGV?.TEN_NGHIEN_CUU);
+    } else {
+      setDataListTacGia("");
+      setSoTaGia("");
+    }
+  }, [dataDang_ky_thuc_hien_quy_doiGV]);
+  const handleRowClick = async (index, TEN_NGHIEN_CUU) => {
     setExpandedRow(expandedRow === index ? null : index);
+    if (TEN_NGHIEN_CUU) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtindanhsach`,
+          {
+            TEN_NGHIEN_CUU: TEN_NGHIEN_CUU,
+          }
+        );
+        // console.log(response.data);
+        if (response.data.EC === 1) {
+          setDataListTacGia(response.data.DT);
+          setSoTaGia(response.data.DT.length);
+        } else {
+          // console.error(response.data);
+          setDataListTacGia("");
+          setSoTaGia("");
+        }
+      } catch (error) {
+        console.error("Error fetching email suggestions:", error);
+      }
+    } else {
+      setDataListTacGia("");
+      setSoTaGia("");
+    }
   };
 
   return (
@@ -30,7 +63,9 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
         </TableHead>
         <TableBody>
           <TableRow
-            onClick={() => handleRowClick(0)}
+            onClick={() =>
+              handleRowClick(0, dataDang_ky_thuc_hien_quy_doiGV?.TEN_NGHIEN_CUU)
+            }
             style={{ cursor: "pointer" }}
           >
             <TableCell>
@@ -51,6 +86,43 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
               <Collapse in={expandedRow === 0} timeout="auto" unmountOnExit>
                 <Table size="small" aria-label="details">
                   <TableBody>
+                    <TableRow>
+                      <TableCell>Số tác giả thực hiện</TableCell>
+                      <TableCell>{SoTacGia || "N/A"}</TableCell>
+                    </TableRow>
+                    {dataListTacGia && dataListTacGia.length > 0 ? (
+                      dataListTacGia.map((tacGia, index) => (
+                        <TableRow key={index}>
+                          <TableCell
+                            className={
+                              tacGia.TENGV ===
+                              dataDang_ky_thuc_hien_quy_doiGV?.TENGV
+                                ? "text-info"
+                                : ""
+                            }
+                          >
+                            {tacGia.TENGV || "N/A"}
+                          </TableCell>
+                          <TableCell
+                            className={
+                              tacGia.TENGV ===
+                              dataDang_ky_thuc_hien_quy_doiGV?.TENGV
+                                ? "text-info"
+                                : ""
+                            }
+                          >
+                            {tacGia.TEN_LOAI_TAC_GIA || "N/A"}
+                          </TableCell>
+                          {/* Các cột khác nếu có */}
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={2} align="center">
+                          Không có dữ liệu
+                        </TableCell>
+                      </TableRow>
+                    )}
                     <TableRow>
                       <TableCell>Thời gian đăng ký</TableCell>
                       <TableCell>
