@@ -3,24 +3,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
-const BoMonList = ({ dataListBoMon, activeRowBM, handleChoseRowBM }) => {
+const HocKiList = ({ dataHocKi, activeRowBM, handleChoseRowBM }) => {
+  console.log("dataHocKi", dataHocKi);
   return (
     <div className="custom-select-container">
       <Box sx={{ maxWidth: 300 }}>
         <FormControl fullWidth>
-          <InputLabel id="bomon-select-label">Chọn Bộ Môn</InputLabel>
+          <InputLabel id="bomon-select-label">Chọn học kì</InputLabel>
           <Select
             className="height-selectGV"
             labelId="bomon-select-label"
             id="bomon-select"
             value={activeRowBM}
-            label="Chọn Bộ Môn"
+            label="Chọn học kì"
             onChange={(e) => handleChoseRowBM(e.target.value)}
           >
-            {dataListBoMon && dataListBoMon.length > 0 ? (
-              dataListBoMon.map((bomon, index) => (
-                <MenuItem key={index} value={bomon.MABOMON}>
-                  {bomon.TENBOMON}
+            {dataHocKi && dataHocKi.length > 0 ? (
+              dataHocKi.map((hocki, index) => (
+                <MenuItem key={index} value={hocki.value}>
+                  {hocki.label}
                 </MenuItem>
               ))
             ) : (
@@ -35,4 +36,4 @@ const BoMonList = ({ dataListBoMon, activeRowBM, handleChoseRowBM }) => {
   );
 };
 
-export default BoMonList;
+export default HocKiList;

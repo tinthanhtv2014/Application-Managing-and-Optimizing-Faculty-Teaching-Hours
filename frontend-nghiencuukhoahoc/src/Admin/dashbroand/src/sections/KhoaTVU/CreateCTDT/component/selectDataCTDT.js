@@ -23,7 +23,7 @@ const ComponentSelectCTDT = ({ dataListCTDT, activeRow, handleChose }) => {
           >
             {dataListCTDT && dataListCTDT.length > 0 ? (
               dataListCTDT.map((khoa, index) => (
-                <MenuItem key={index} value={khoa.MACHUONGTRINH}>
+                <MenuItem key={index} value={khoa.TENCHUONGTRINH}>
                   {khoa.TENCHUONGTRINH}
                 </MenuItem>
               ))

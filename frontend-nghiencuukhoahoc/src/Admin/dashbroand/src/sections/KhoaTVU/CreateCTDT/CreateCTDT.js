@@ -7,9 +7,8 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CookiesAxios from "../../CookiesAxios.js";
-import KhoaList from "./component/KhoaList.js";
 
-import BoMonList from "./component/BoMonList.js";
+import BoMonList from "./component/HocKiList.js";
 import GiangVienList from "./component/GiangVienList.js";
 import CreateGiangVienForm from "./component/CreateGiangVienForm.js";
 import "../CreateKhoa/CreateKhoa.scss";
@@ -27,6 +26,8 @@ import {
 } from "@mui/material";
 import UpdateGiangVienModal from "./modal/updateGiangVienModal.js";
 import ComponentExcelCTDT from "./component/ComponentExcel.js";
+import HocKiList from "./component/HocKiList.js";
+import ComponentSelectCTDT from "./component/selectDataCTDT.js";
 const ComponenCreateGiangVien = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
@@ -34,12 +35,15 @@ const ComponenCreateGiangVien = () => {
   const [tenCTDT, settTenCTDT] = useState("");
   const [HocKi, setHocKi] = useState("");
   const [MaCTDT, setMaCTDT] = useState();
+  const [dataHocKi, setDataHocKi] = useState();
+
   const [MaBoMon, setMaBoMon] = useState();
   const [MaGV, setMaGV] = useState();
   const [TenGV, setTenGV] = useState();
   const [TenDangNhapGV, setTenDangNhapGV] = useState();
   const [QuyenGiangVien, setQuyenGiangVien] = useState();
   const [TrangThaiGV, setTrangThaiGV] = useState();
+
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
 
   const auth = Cookies.get("accessToken");
@@ -79,16 +83,16 @@ const ComponenCreateGiangVien = () => {
     setdataListKhoa(response.data.DT);
   };
 
-  const getMonHocbyCTDT = async (MaCTDT) => {
+  const getHocKibyCTDT = async (TenChuongTrinhDaoTao) => {
     try {
       const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/sohocki/xem`,
         {
-          MAKHOA: MaKhoa,
+          TENCHUONGTRINH: TenChuongTrinhDaoTao,
         }
       );
-      console.log("Dữ liệu bộ môn theo mã bộ:", response.data.DT);
-      setdataListBoMon(response.data.DT);
+      console.log("Dữ liệu học kì", response.data);
+      setDataHocKi(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
@@ -127,13 +131,13 @@ const ComponenCreateGiangVien = () => {
 
   // KHOA
 
-  const handleChose = (id) => {
+  const handleChose = (TENCHUONGTRINH) => {
     //console.log("check id create khoa =>", id);
     //console.log(id);
-    setActiveRow(id);
+    setActiveRow(TENCHUONGTRINH);
     setDisableBM(false);
-    setMaCTDT(id);
-    // getBoMonByMaKhoa(id);
+    setMaCTDT(TENCHUONGTRINH);
+    getHocKibyCTDT(TENCHUONGTRINH);
   };
 
   const handleDelete = async (MaKhoa) => {
@@ -397,7 +401,7 @@ const ComponenCreateGiangVien = () => {
       <h4>Quản lý thông tin giảng viên </h4>
       <Row className="mt-4">
         <Col md={2}>
-          <KhoaList
+          <ComponentSelectCTDT
             dataListCTDT={dataListCTDT}
             activeRow={activeRow}
             handleChose={handleChose}
@@ -406,39 +410,14 @@ const ComponenCreateGiangVien = () => {
           />
         </Col>{" "}
         <Col md={2}>
-          <BoMonList
-            dataListBoMon={dataListBoMon}
+          <HocKiList
+            dataHocKi={dataHocKi}
             activeRowBM={activeRowBM}
             handleChoseRowBM={handleChoseRowBM}
             handleChoseEditBM={handleChoseEditBM}
           />
         </Col>{" "}
-        <Col md={2}>
-          <Box sx={{ maxWidth: 300 }}>
-            <FormControl fullWidth>
-              <InputLabel id="select-label-trang-thai">
-                Chương Trình Đào Tạo
-              </InputLabel>
-              <Select
-                labelId="select-label-trang-thai"
-                id="trang-thai-select"
-                className={`height-selectGV`}
-                value={TenChuongTrinhDaoTao}
-                label="Chương Trình Đào Tạo"
-                onChange={handleStatusChange}
-              >
-                <MenuItem value="All">Hiển thị tất cả</MenuItem>
-
-                {Array.isArray(dataListCTDT) &&
-                  dataListCTDT.map((chuongTrinh, index) => (
-                    <MenuItem key={index} value={chuongTrinh.TENCHUONGTRINH}>
-                      {chuongTrinh.TENCHUONGTRINH}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          </Box>
-        </Col>
+        <Col md={2}></Col>
         <Col md={4}>
           <div className="mb-3">
             <input
