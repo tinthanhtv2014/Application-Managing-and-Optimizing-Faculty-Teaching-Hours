@@ -88,6 +88,7 @@ const createLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
 
 const Sevicel_DanhMuc_Excel = async (dataDanhMuc) => {
     try {
+        console.log("Bắt đầu thêm danh mục bằng excel ========================================");
         // Kiểm tra tất cả các mục trước khi thêm
         for (let i = 0; i < dataDanhMuc.length; i++) {
             let checkDanhMuc = await selectDanhMucQuyDoi_NOI_DUNG_DANH_MUC(dataDanhMuc[i].NOI_DUNG_DANH_MUC);
