@@ -215,7 +215,7 @@ const timchuongtrinh_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
       [TENCHUONGTRINH]
     );
 
-    // console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
+    console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
     return results1[0];
   } catch (error) {
     console.log("timchuongtrinh_TENCHUONGTRINH errr >>>", error);
@@ -281,6 +281,21 @@ const timtacgia_TEN_LOAI_TAC_GIA = async (TEN_LOAI_TAC_GIA) => {
   }
 };
 
+const timlop_MALOP = async (MALOP) => {
+  try {
+    // console.log("TENNAMHOC: ", TENNAMHOC)
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM lop WHERE MALOP = ?",
+      [MALOP]
+    );
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    return results1;
+  } catch (error) {
+    console.log("timnamhoc_TENNAMHOC errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -300,4 +315,5 @@ module.exports = {
   timtacgia_TEN_LOAI_TAC_GIA,
   timGiangVien_TENGV,
   timGiangVien_TENGV_TENDANGNHAP,
+  timlop_MALOP,
 };

@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 
 const router = express.Router();
+
+//môn học
 const {
   getAllMONHOC,
   createMONHOC,
@@ -9,6 +11,7 @@ const {
   deleteMONHOC,
 } = require("../../controllers/AdminController/monhocAdminController");
 
+//chương trình đào tạo
 const {
   getOnlyChuongtrinhdaotao,
   getAllChuongtrinhdaotao,
@@ -19,6 +22,15 @@ const {
   getOnlyChuongtrinhdaotao_withHOCKI,
   getOnlyChuongtrinhdaotao_SoHocKi,
 } = require("../../controllers/AdminController/chuongtrinhdaotaoAdminCONTROLLER");
+
+//lớp
+const {
+  getAllLopcontroller,
+  creatNEWLopcontroller,
+  updateLOPcontroller,
+  deleteLOPcontroller,
+} = require("../../controllers/AdminController/lopAdminCONTROLLER.js");
+
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDMonHoc = (app) => {
   // Route cho môn học, yêu cầu xác thực JWT
@@ -27,6 +39,7 @@ const CRUDMonHoc = (app) => {
   router.put("/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
   router.delete("/xoa", checkUserJWT, deleteMONHOC);
 
+  /////////////////////////////////////////////////////
   // Router cho chương trình đào tạo, yêu cầu xác thực JWT
   router.get("/chuongtrinh/xem", getAllChuongtrinhdaotao);
   router.post("/chuongtrinh/only/xem", getOnlyChuongtrinhdaotao);
@@ -52,6 +65,14 @@ const CRUDMonHoc = (app) => {
     checkUserJWT,
     deleteChuongtrinhdaotaoController
   );
+
+  //////////////////////////////////////////////////////
+
+  //router cho lớp thuộc chương trình đào tạo
+  router.get("/lop/xem", getAllLopcontroller);
+  router.post("/lop/tao", creatNEWLopcontroller);
+  router.put("/lop/update/:MALOP", updateLOPcontroller);
+  router.delete("/lop/xoa", deleteLOPcontroller);
   return app.use("/api/v1/admin/monhoc", router);
 };
 
