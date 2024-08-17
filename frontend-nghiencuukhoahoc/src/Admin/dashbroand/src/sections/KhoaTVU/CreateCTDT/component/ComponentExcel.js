@@ -74,7 +74,7 @@ const ComponentExcelCTDT = () => {
         onClick={handleAddUser}
         className="btn btn-success ml-4"
       >
-        Thêm Tài Khoản
+        Thêm Chương Trình Đào Tạo
       </button>
       {data && data.length > 0 && (
         <button

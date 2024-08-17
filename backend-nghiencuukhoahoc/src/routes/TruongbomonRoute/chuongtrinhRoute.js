@@ -11,7 +11,7 @@ const {
 const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDchuongtrinh_CNTT = (app) => {
   //route cho khoa
-  router.post("/xem", checkUserJWT, get_chuongtrinhdaotao);
+  router.post("/xem", get_chuongtrinhdaotao);
   router.post("/xem/bomon", checkUserJWT, get_chuongtrinhdaotao_tenbomon);
   router.post("/xem/hocki", checkUserJWT, getOnlyChuongtrinhdaotao_withHOCKI);
   //   router.post("/tao", createNAMHOC);

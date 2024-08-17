@@ -31,9 +31,9 @@ const ComponenCreateGiangVien = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState({});
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
-  const [tenKhoa, setTenKhoa] = useState("");
-  const [TenBoMon, setTenBoMon] = useState("");
-  const [MaKhoa, setMaKhoa] = useState();
+  const [tenCTDT, settTenCTDT] = useState("");
+  const [HocKi, setHocKi] = useState("");
+  const [MaCTDT, setMaCTDT] = useState();
   const [MaBoMon, setMaBoMon] = useState();
   const [MaGV, setMaGV] = useState();
   const [TenGV, setTenGV] = useState();
@@ -79,7 +79,7 @@ const ComponenCreateGiangVien = () => {
     setdataListKhoa(response.data.DT);
   };
 
-  const getBoMonByMaKhoa = async (MaKhoa) => {
+  const getMonHocbyCTDT = async (MaCTDT) => {
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
@@ -132,8 +132,8 @@ const ComponenCreateGiangVien = () => {
     //console.log(id);
     setActiveRow(id);
     setDisableBM(false);
-    setMaKhoa(id);
-    getBoMonByMaKhoa(id);
+    setMaCTDT(id);
+    // getBoMonByMaKhoa(id);
   };
 
   const handleDelete = async (MaKhoa) => {
@@ -156,10 +156,10 @@ const ComponenCreateGiangVien = () => {
     }
   };
 
-  const handleChoseEditKhoa = (khoa) => {
-    setTenKhoa(khoa.TENKHOA);
-    setMaKhoa(khoa.MAKHOA);
-    setIsOpenEditButton(true);
+  const handleChoseSelectCTDT = (ctdt) => {
+    settTenCTDT(ctdt.TENCHUONGTRINH);
+    setMaCTDT(ctdt.MACHUONGTRINH);
+    // setIsOpenEditButton(true);
   };
 
   // BỘ MÔN
@@ -181,8 +181,8 @@ const ComponenCreateGiangVien = () => {
   };
 
   const handleChoseEditBM = (bomon) => {
-    setTenBoMon(bomon.TENBOMON);
-    setMaBoMon(bomon.MABOMON);
+    // setTenBoMon(bomon.TENBOMON);
+    // setMaBoMon(bomon.MABOMON);
     // setIsOpenEditButtonBM(true);
   };
 
@@ -311,11 +311,11 @@ const ComponenCreateGiangVien = () => {
   const handleGetAllGiangVien = () => {
     setisOpenGetAllApiGV(!isOpenGetAllApiGV);
   };
-  const handleIsOpenEditButtonGV = () => {
-    setIsOpenEditButtonGV(false);
-    setTenBoMon("");
-    setMaBoMon(null);
-  };
+  // const handleIsOpenEditButtonGV = () => {
+  //   setIsOpenEditButtonGV(false);
+  //   setTenBoMon("");
+  //   setMaBoMon(null);
+  // };
 
   const handleSumitEditGV = async (event) => {};
   // -----------------------IS OPEN EXCEL-----------------------------------
@@ -398,11 +398,11 @@ const ComponenCreateGiangVien = () => {
       <Row className="mt-4">
         <Col md={2}>
           <KhoaList
-            dataListKhoa={dataListKhoa}
+            dataListCTDT={dataListCTDT}
             activeRow={activeRow}
             handleChose={handleChose}
             handleDelete={handleDelete}
-            handleChoseEditKhoa={handleChoseEditKhoa}
+            handleChoseSelectCTDT={handleChoseSelectCTDT}
           />
         </Col>{" "}
         <Col md={2}>
@@ -509,7 +509,7 @@ const ComponenCreateGiangVien = () => {
             </>
           ) : (
             <Col md={6}>
-              <CreateGiangVienForm
+              {/* <CreateGiangVienForm
                 QuyenGiangVien={QuyenGiangVien}
                 TrangThaiGV={TrangThaiGV}
                 setTrangThaiGV={setTrangThaiGV}
@@ -523,7 +523,7 @@ const ComponenCreateGiangVien = () => {
                 isOpenEditButtonGV={isOpenEditButtonGV}
                 handleSumitEditGV={handleSumitEditGV}
                 handleIsOpenEditButtonGV={handleIsOpenEditButtonGV}
-              />
+              /> */}
             </Col>
           ))}
         <Col md={6}></Col>

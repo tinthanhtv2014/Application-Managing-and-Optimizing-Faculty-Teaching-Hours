@@ -35,7 +35,36 @@ const selectChuongtrinhdaotao = async () => {
     };
   }
 };
+const selectTongSoHocKi = async (TENCHUONGTRINH) => {
+  try {
+    let [results_ctdt_bomon, fields1] = await pool.execute(
+      `SELECT ctdt.*,mh.*,t.SOTHUTUHOCKI FROM chuongtrinhdaotao as ctdt,thuoc as t, monhoc as mh WHERE ctdt.MACHUONGTRINH = t.MACHUONGTRINH and t.MAMONHOC = mh.MAMONHOC and ctdt.TENCHUONGTRINH = ?`,
+      [TENCHUONGTRINH]
+    );
+    let hocKyList = results_ctdt_bomon.map((item) => item.SOTHUTUHOCKI);
 
+    // Loại bỏ các giá trị trùng lặp
+    hocKyList = [...new Set(hocKyList)];
+
+    // Sắp xếp danh sách học kỳ theo thứ tự tăng dần
+    hocKyList.sort((a, b) => a - b);
+
+    // Tạo mảng các tên học kỳ
+    hocKyList = hocKyList.map((soHocKy) => `Học kì ${soHocKy}`);
+    console.log("", hocKyList);
+    return {
+      EM: "Xem thông tin số học kì chương trình đào tạo thành công",
+      EC: 1,
+      DT: hocKyList,
+    };
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectOnlyChuongtrinhdaotao",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const selectOnlyChuongtrinhdaotao = async (TENCHUONGTRINH) => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
@@ -360,4 +389,5 @@ module.exports = {
   selectOnlyChuongtrinhdaotao,
   selectChuongtrinhdaotao,
   selectOnlyChuongtrinhdaotao_withHOCKI,
+  selectTongSoHocKi,
 };

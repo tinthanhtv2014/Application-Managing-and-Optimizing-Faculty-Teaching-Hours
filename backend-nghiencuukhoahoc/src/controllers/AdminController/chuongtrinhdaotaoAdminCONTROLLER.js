@@ -7,6 +7,7 @@ const {
   xoaChuongtrinh,
   createChuongtrinhdaotaoExcel,
   selectOnlyChuongtrinhdaotao_withHOCKI,
+  selectTongSoHocKi,
 } = require("../../services/AdminServices/CRUDChuongtrinhdaotao");
 
 const getAllChuongtrinhdaotao = async (req, res) => {
@@ -52,6 +53,25 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
   }
 };
 
+const getOnlyChuongtrinhdaotao_SoHocKi = async (req, res) => {
+  const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+  try {
+    let results = await selectTongSoHocKi(TENCHUONGTRINH);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
 const getOnlyChuongtrinhdaotao = async (req, res) => {
   const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
   try {
@@ -165,4 +185,5 @@ module.exports = {
   createCHUONGTRINHDAOTAOExcelController,
   getOnlyChuongtrinhdaotao,
   getOnlyChuongtrinhdaotao_withHOCKI,
+  getOnlyChuongtrinhdaotao_SoHocKi,
 };

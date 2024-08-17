@@ -3,26 +3,28 @@ import "../../CreateKhoa/CreateKhoa.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
-const KhoaList = ({ dataListKhoa, activeRow, handleChose }) => {
+const ComponentSelectCTDT = ({ dataListCTDT, activeRow, handleChose }) => {
   console.log("check Active Row", activeRow);
 
   return (
     <>
       <Box sx={{ maxWidth: 300 }}>
         <FormControl fullWidth>
-          <InputLabel id="khoa-select-label">Chọn Khoa</InputLabel>
+          <InputLabel id="select-label-trang-thai">
+            Chương Trình Đào Tạo
+          </InputLabel>
           <Select
-            labelId="khoa-select-label"
-            id="khoa-select"
+            labelId="select-label-trang-thai"
+            id="trang-thai-select"
             className="height-selectGV"
             value={activeRow}
-            label="Chọn Khoa"
+            label="Chương Trình Đào Tạo"
             onChange={(e) => handleChose(e.target.value)}
           >
-            {dataListKhoa && dataListKhoa.length > 0 ? (
-              dataListKhoa.map((khoa, index) => (
-                <MenuItem key={index} value={khoa.MAKHOA}>
-                  {khoa.TENKHOA}
+            {dataListCTDT && dataListCTDT.length > 0 ? (
+              dataListCTDT.map((khoa, index) => (
+                <MenuItem key={index} value={khoa.MACHUONGTRINH}>
+                  {khoa.TENCHUONGTRINH}
                 </MenuItem>
               ))
             ) : (
@@ -35,4 +37,4 @@ const KhoaList = ({ dataListKhoa, activeRow, handleChose }) => {
   );
 };
 
-export default KhoaList;
+export default ComponentSelectCTDT;
