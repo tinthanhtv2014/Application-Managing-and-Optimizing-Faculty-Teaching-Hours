@@ -1,12 +1,13 @@
 const {
   selectLop,
   CreateLop,
+  updateLop,
+  deleteLop,
 } = require("../../services/AdminServices/CRUDLop");
 
-const getAllLop = async (req, res) => {
+const getAllLopcontroller = async (req, res) => {
   try {
     let results = await selectLop(selectLop);
-
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
@@ -15,14 +16,14 @@ const getAllLop = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getAllLop",
+      EC: -1,
+      DT: [],
     });
   }
 };
 
-const creatNEWLop = async (req, res) => {
+const creatNEWLopcontroller = async (req, res) => {
   try {
     const datalop = req.body;
     const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
@@ -44,4 +45,52 @@ const creatNEWLop = async (req, res) => {
   }
 };
 
-module.exports = { getAllLop, creatNEWLop };
+const updateLOPcontroller = async (req, res) => {
+  try {
+    const MALOP = req.params.MALOP;
+    const datalop = req.body;
+
+    let results = await updateLop(MALOP, datalop);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller updateLOP",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+const deleteLOPcontroller = async (req, res) => {
+  try {
+    const MALOP = req.query.MALOP;
+
+    let results = await deleteLop(MALOP);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller updateLOP",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+module.exports = {
+  getAllLopcontroller,
+  creatNEWLopcontroller,
+  updateLOPcontroller,
+  deleteLOPcontroller,
+};
