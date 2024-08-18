@@ -33,16 +33,13 @@ const ComponenCreateGiangVien = () => {
   const [selectedLecturer, setSelectedLecturer] = useState({});
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenCTDT, settTenCTDT] = useState("");
-  const [HocKi, setHocKi] = useState("");
+  const [selectHocKi, setSelectHocKi] = useState(null);
   const [MaCTDT, setMaCTDT] = useState();
   const [dataHocKi, setDataHocKi] = useState();
 
   const [MaBoMon, setMaBoMon] = useState();
   const [MaGV, setMaGV] = useState();
   const [TenGV, setTenGV] = useState();
-  const [TenDangNhapGV, setTenDangNhapGV] = useState();
-  const [QuyenGiangVien, setQuyenGiangVien] = useState();
-  const [TrangThaiGV, setTrangThaiGV] = useState();
 
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
 
@@ -50,11 +47,7 @@ const ComponenCreateGiangVien = () => {
   const navigate = useNavigate();
   //----------------------------ISOPEN--------------------------------------
   const [activeRow, setActiveRow] = useState(null); //biến đổi màu table KHOA
-  const [disabledBM, setDisableBM] = useState(true);
-  const [isOpenEditButton, setIsOpenEditButton] = useState(false);
-  const [isOpenEditButtonBM, setIsOpenEditButtonBM] = useState(false);
-  const [activeRowBM, setActiveRowBM] = useState(null);
-  const [isOpenEditButtonGV, setIsOpenEditButtonGV] = useState(false);
+
   const [activeRowGV, setActiveRowGV] = useState(null);
   const [disabledGV, setDisableGV] = useState(true);
   const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(true);
@@ -66,7 +59,7 @@ const ComponenCreateGiangVien = () => {
   const [dataListKhoa, setdataListKhoa] = useState();
   const [dataListCTDT, setdatListCTDT] = useState(null);
   const [dataListBoMon, setdataListBoMon] = useState(null);
-  const [dataListGiangVien, setdataListGiangVien] = useState(null);
+  const [dataMonHoc, setDataMonHoc] = useState(null);
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
 
   const fetchData = async () => {
@@ -84,6 +77,7 @@ const ComponenCreateGiangVien = () => {
   };
 
   const getHocKibyCTDT = async (TenChuongTrinhDaoTao) => {
+    setTenChuongTrinhDaoTao(TenChuongTrinhDaoTao);
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/sohocki/xem`,
@@ -97,23 +91,7 @@ const ComponenCreateGiangVien = () => {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
-  useEffect(() => {
-    if (MaBoMon && TenChuongTrinhDaoTao) {
-      const fetchDataAllGV = async () => {
-        try {
-          const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/only/xem`,
-            { MABOMON: MaBoMon, TENCHUONGTRINHDAOTAO: TenChuongTrinhDaoTao }
-          );
-          console.log("setdatListCTDT", response.data.D);
-          setdatListCTDT(response.data.DT);
-        } catch (error) {
-          console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
-        }
-      };
-      fetchDataAllGV();
-    }
-  }, [MaBoMon, TenChuongTrinhDaoTao]);
+
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -132,32 +110,10 @@ const ComponenCreateGiangVien = () => {
   // KHOA
 
   const handleChose = (TENCHUONGTRINH) => {
-    //console.log("check id create khoa =>", id);
-    //console.log(id);
     setActiveRow(TENCHUONGTRINH);
-    setDisableBM(false);
+
     setMaCTDT(TENCHUONGTRINH);
     getHocKibyCTDT(TENCHUONGTRINH);
-  };
-
-  const handleDelete = async (MaKhoa) => {
-    if (MaKhoa) {
-      try {
-        const response = await CookiesAxios.delete(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xoa`,
-          {
-            params: {
-              makhoa: MaKhoa,
-            },
-          }
-        );
-        setActiveRow(null);
-        setDisableBM(true);
-        fetchData();
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
-    }
   };
 
   const handleChoseSelectCTDT = (ctdt) => {
@@ -168,147 +124,20 @@ const ComponenCreateGiangVien = () => {
 
   // BỘ MÔN
 
-  const handleChoseRowBM = async (bomon) => {
-    setDisableGV(false);
-    setMaBoMon(bomon);
-    setActiveRowBM(bomon);
+  const handleChoseHocKi = async (hocki) => {
+    console.log("hoc ki =>", hocki);
+    console.log("TenChuongTrinhDaoTao", TenChuongTrinhDaoTao);
+    setSelectHocKi(hocki);
 
     try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${bomon}`
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/only/hocki/xem`,
+        { TENCHUONGTRINH: TenChuongTrinhDaoTao, SOTHUTUHOCKI: hocki }
       );
-      // console.log("Danh sách tài khoản:", response.data);
-      setdataListGiangVien(response.data.DT);
+      console.log("Danh sách tài khoản:", response.data);
+      setDataMonHoc(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
-    }
-  };
-
-  const handleChoseEditBM = (bomon) => {
-    // setTenBoMon(bomon.TENBOMON);
-    // setMaBoMon(bomon.MABOMON);
-    // setIsOpenEditButtonBM(true);
-  };
-
-  // GiangVien
-
-  //tên đăng nhập, trạng thái hoạt động, phân quyền, mã GV, MABOMON
-  const handleSumitAddGV = async (event) => {
-    event.preventDefault();
-    if (
-      QuyenGiangVien === "Admin" ||
-      QuyenGiangVien === "Giảng viên" ||
-      QuyenGiangVien === "Trưởng Bộ Môn" ||
-      QuyenGiangVien === "Trưởng Khoa"
-    ) {
-      try {
-        const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/only/tao`,
-          {
-            TENDANGNHAP: TenDangNhapGV,
-            MAGV: MaGV,
-            PHANQUYEN: QuyenGiangVien,
-            TRANGTHAITAIKHOAN: TrangThaiGV,
-            MABOMON: MaBoMon,
-          }
-        );
-        //    console.log(response.data.EC);
-
-        if (response.data.EC == 1) {
-          setdataListGiangVien(response.data.DT);
-          toast.success("Thêm tài khoản giảng viên thành công !!");
-        } else {
-          toast.error(response.data.EM);
-        }
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
-    } else {
-      toast.error("Phá web là không tốt !!");
-    }
-  };
-
-  const handleChoseRowGV = (giangvien) => {
-    setActiveRowGV(giangvien.MAGV);
-    setMaGV(giangvien.MAGV);
-  };
-
-  const handleDeleteGiangVien = async (giangvien) => {
-    // console.log("CHECK MAGV = >", giangvien.MAGV);
-    // console.log("check Mabomon", giangvien.MABOMON);
-
-    if (giangvien.MAGV) {
-      try {
-        const response = await CookiesAxios.delete(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoa`,
-          {
-            params: {
-              MAGV: giangvien.MAGV,
-              MABOMON: giangvien.MABOMON,
-              isOpenGetAllApiGV: isOpenGetAllApiGV,
-            },
-          }
-        );
-        console.log(response.data);
-        setdataListGiangVien(response.data.DT);
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
-    } else {
-      toast.error("Chưa chọn tài khoản giảng viên");
-    }
-  };
-
-  const handleChoseEditGiangVien = async (giangvien) => {
-    // console.log("check");
-    // setMaGV(giangvien.MAGV);
-    let Trangthai;
-
-    if (giangvien.TRANGTHAITAIKHOAN === "Đang hoạt động") {
-      Trangthai = "Ngưng hoạt động";
-    } else {
-      Trangthai = "Đang hoạt động";
-    }
-
-    await functionUpdateTrangThaiGV(
-      giangvien.MAGV,
-      Trangthai,
-      giangvien.MABOMON
-    );
-  };
-
-  const functionUpdateTrangThaiGV = async (MaGV, TrangThai, MABOMON) => {
-    // console.log("check disable tai khoan =>", MaGV);
-    if (isOpenGetAllApiGV) {
-      try {
-        const response = await CookiesAxios.put(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
-          {
-            TRANGTHAITAIKHOAN: TrangThai,
-            MABOMON: MABOMON,
-            isOpenGetAllApiGV: isOpenGetAllApiGV,
-          }
-        );
-        setdataListGiangVien(response.data.DT);
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
-    } else {
-      try {
-        const response = await CookiesAxios.put(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/trangthai/${MaGV}`,
-          {
-            TRANGTHAITAIKHOAN: TrangThai,
-            MABOMON: MABOMON,
-            isOpenGetAllApiGV: isOpenGetAllApiGV,
-          }
-        );
-        console.log(response.data);
-
-        setdataListGiangVien(response.data.DT);
-      } catch (error) {
-        console.error("Lỗi khi gửi yêu cầu đến backend:", error);
-      }
     }
   };
 
@@ -321,7 +150,6 @@ const ComponenCreateGiangVien = () => {
   //   setMaBoMon(null);
   // };
 
-  const handleSumitEditGV = async (event) => {};
   // -----------------------IS OPEN EXCEL-----------------------------------
   const [searchEmail, setSearchEmail] = useState("");
   const [searchStatus, setSearchStatus] = useState("All");
@@ -335,9 +163,6 @@ const ComponenCreateGiangVien = () => {
   };
   const handleStatusChange = (e) => {
     setTenChuongTrinhDaoTao(e.target.value);
-    // console.log("check=>", searchStatus);
-    // setSearchStatus(e.target.value);
-    // setCurrentPage(0);
   };
 
   const [dataListChucVuGiangVien, setdataListChucVuGiangVien] = useState();
@@ -368,32 +193,7 @@ const ComponenCreateGiangVien = () => {
   const handleCloseUpdateModal = () => {
     setShowUpdateModal(false);
   };
-  const updateLecturer = async (updatedLecturer) => {
-    // console.log("check tendangnhap", updatedLecturer.TENDANGNHAP);
-    if (updatedLecturer.TENDANGNHAP) {
-      try {
-        const response = await CookiesAxios.put(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/sua/thongtin/${updatedLecturer.TENDANGNHAP}`,
-          updatedLecturer
-        );
-        console.log(response.data);
 
-        if (response.data.EC === 1) {
-          toast.success("Cập nhật thành công");
-          setdataListGiangVien(response.data.DT);
-        } else {
-          toast.error("Đã xảy ra lỗi !");
-        }
-
-        handleCloseUpdateModal();
-      } catch (error) {
-        console.error("Đã xảy ra lỗi !", error);
-        toast.error("Đã xảy ra lỗi !");
-      }
-    } else {
-      toast.error("Email bị lỗi");
-    }
-  };
   // console.log("check API ALL +> ", isOpenGetAllApiGV);
   return (
     <Container>
@@ -405,16 +205,14 @@ const ComponenCreateGiangVien = () => {
             dataListCTDT={dataListCTDT}
             activeRow={activeRow}
             handleChose={handleChose}
-            handleDelete={handleDelete}
             handleChoseSelectCTDT={handleChoseSelectCTDT}
           />
         </Col>{" "}
         <Col md={2}>
           <HocKiList
             dataHocKi={dataHocKi}
-            activeRowBM={activeRowBM}
-            handleChoseRowBM={handleChoseRowBM}
-            handleChoseEditBM={handleChoseEditBM}
+            selectHocKi={selectHocKi}
+            handleChoseHocKi={handleChoseHocKi}
           />
         </Col>{" "}
         <Col md={2}></Col>
@@ -516,11 +314,8 @@ const ComponenCreateGiangVien = () => {
             searchEmail={searchEmail}
             isOpenGetAllApiGV={isOpenGetAllApiGV}
             handleGetAllGiangVien={handleGetAllGiangVien}
-            dataListGiangVien={dataListGiangVien}
+            dataMonHoc={dataMonHoc}
             activeRowGV={activeRowGV}
-            handleChoseRowGV={handleChoseRowGV}
-            handleDeleteGiangVien={handleDeleteGiangVien}
-            handleChoseEditGiangVien={handleChoseEditGiangVien}
             handleShowUpdateModal={handleShowUpdateModal}
           />
         </Col>{" "}
@@ -532,7 +327,6 @@ const ComponenCreateGiangVien = () => {
               show={showUpdateModal}
               handleClose={handleCloseUpdateModal}
               lecturerData={selectedLecturer}
-              updateLecturer={updateLecturer}
               isOpenGetAllApiGV={isOpenGetAllApiGV}
             />
           </Col>

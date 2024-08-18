@@ -3,8 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
-const HocKiList = ({ dataHocKi, activeRowBM, handleChoseRowBM }) => {
-  console.log("dataHocKi", dataHocKi);
+const HocKiList = ({ dataHocKi, selectHocKi, handleChoseHocKi }) => {
+  // console.log("dataHocKi", dataHocKi);
   return (
     <div className="custom-select-container">
       <Box sx={{ maxWidth: 300 }}>
@@ -14,9 +14,9 @@ const HocKiList = ({ dataHocKi, activeRowBM, handleChoseRowBM }) => {
             className="height-selectGV"
             labelId="bomon-select-label"
             id="bomon-select"
-            value={activeRowBM}
+            value={selectHocKi}
             label="Chọn học kì"
-            onChange={(e) => handleChoseRowBM(e.target.value)}
+            onChange={(e) => handleChoseHocKi(e.target.value)}
           >
             {dataHocKi && dataHocKi.length > 0 ? (
               dataHocKi.map((hocki, index) => (
