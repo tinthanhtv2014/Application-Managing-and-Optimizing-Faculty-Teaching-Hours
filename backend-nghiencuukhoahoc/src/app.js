@@ -21,7 +21,7 @@ const CRUDchuongtrinh_CNTT = require("./routes/TruongbomonRoute/chuongtrinhRoute
 const QuyenGiangVienRouter = require("./routes/GiangvienRoute/QuyenGiangVienRouter");
 const CURDanhMuc = require("./routes/AdminRoute/DanhMucRoute");
 const TruongKhoaRoute = require("./routes/TruongkhoaRoute/TruongKhoaRoute");
-
+const CRUDHockinienkhoa = require("./routes/AdminRoute/hockinienkhoaRoute");
 const DangKyDanhMucRoute = require("./routes/GiangvienRoute/DangKyDanhMucSpKHCNRoute");
 
 //=================================================================================
@@ -56,7 +56,7 @@ QuyenGiangVienRouter(app); // Api cho quyền giảng viên
 CRUDchuongtrinh_CNTT(app);
 TruongKhoaRoute(app); // Các router cho trưởng khoa sử dụng
 CURDanhMuc(app); // route CRUD bảng taikhoan dành cho admin
-
+CRUDHockinienkhoa(app); // route CRUD
 DangKyDanhMucRoute(app); // route chức năng cho quy đổi giờ chuẩn
 //=====================================================================================================
 
