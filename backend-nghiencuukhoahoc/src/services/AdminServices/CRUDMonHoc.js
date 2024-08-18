@@ -20,6 +20,7 @@ const timMonHoc_TENMONHOC = async (TENMONHOC) => {
 
 const selectMonHoc = async () => {
   try {
+    console.log("OKE");
     let [results1, fields1] = await pool.execute(`select * from monhoc`);
     return {
       EM: " xem thông tin môn học thành công",
