@@ -30,6 +30,7 @@ const ComponentSelectCTDT = ({ dataListCTDT, activeRow, handleChose }) => {
             ) : (
               <MenuItem disabled>Không có khoa nào</MenuItem>
             )}
+            <MenuItem value="Hiển Thị Tất Cả">Hiển Thị Tất Cả</MenuItem>
           </Select>
         </FormControl>
       </Box>

@@ -76,22 +76,6 @@ const ComponenCreateGiangVien = () => {
     setdataListKhoa(response.data.DT);
   };
 
-  const getHocKibyCTDT = async (TenChuongTrinhDaoTao) => {
-    setTenChuongTrinhDaoTao(TenChuongTrinhDaoTao);
-    try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/sohocki/xem`,
-        {
-          TENCHUONGTRINH: TenChuongTrinhDaoTao,
-        }
-      );
-      console.log("Dữ liệu học kì", response.data);
-      setDataHocKi(response.data.DT);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
-    }
-  };
-
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -109,21 +93,41 @@ const ComponenCreateGiangVien = () => {
 
   // KHOA
 
-  const handleChose = (TENCHUONGTRINH) => {
+  const handleChose = async (TENCHUONGTRINH) => {
     setActiveRow(TENCHUONGTRINH);
 
     setMaCTDT(TENCHUONGTRINH);
-    getHocKibyCTDT(TENCHUONGTRINH);
+    console.log("TENCHUONGTRINH", TENCHUONGTRINH);
+    if (TENCHUONGTRINH == "Hiển Thị Tất Cả") {
+      try {
+        const response = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/xem`
+        );
+        console.log("Danh sách tài khoản:", response.data);
+        setDataMonHoc(response.data.DT);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+      }
+    } else {
+      getHocKibyCTDT(TENCHUONGTRINH);
+    }
   };
-
-  const handleChoseSelectCTDT = (ctdt) => {
-    settTenCTDT(ctdt.TENCHUONGTRINH);
-    setMaCTDT(ctdt.MACHUONGTRINH);
-    // setIsOpenEditButton(true);
+  const getHocKibyCTDT = async (TENCHUONGTRINH) => {
+    console.log("check TenChuongTrinhDaoTao", TENCHUONGTRINH);
+    setTenChuongTrinhDaoTao(TENCHUONGTRINH);
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/sohocki/xem`,
+        {
+          TENCHUONGTRINH: TENCHUONGTRINH,
+        }
+      );
+      console.log("Dữ liệu học kì", response.data);
+      setDataHocKi(response.data.DT);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+    }
   };
-
-  // BỘ MÔN
-
   const handleChoseHocKi = async (hocki) => {
     console.log("hoc ki =>", hocki);
     console.log("TenChuongTrinhDaoTao", TenChuongTrinhDaoTao);
@@ -134,21 +138,12 @@ const ComponenCreateGiangVien = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/only/hocki/xem`,
         { TENCHUONGTRINH: TenChuongTrinhDaoTao, SOTHUTUHOCKI: hocki }
       );
-      console.log("Danh sách tài khoản:", response.data);
+      console.log("Danh sách handleChoseHocKi", response.data);
       setDataMonHoc(response.data.DT);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
-
-  const handleGetAllGiangVien = () => {
-    setisOpenGetAllApiGV(!isOpenGetAllApiGV);
-  };
-  // const handleIsOpenEditButtonGV = () => {
-  //   setIsOpenEditButtonGV(false);
-  //   setTenBoMon("");
-  //   setMaBoMon(null);
-  // };
 
   // -----------------------IS OPEN EXCEL-----------------------------------
   const [searchEmail, setSearchEmail] = useState("");
@@ -198,14 +193,13 @@ const ComponenCreateGiangVien = () => {
   return (
     <Container>
       {" "}
-      <h4>Quản lý thông tin giảng viên </h4>
+      <h4>Quản lý chương trình đào tạo </h4>
       <Row className="mt-4">
-        <Col md={2}>
+        <Col md={3}>
           <ComponentSelectCTDT
             dataListCTDT={dataListCTDT}
             activeRow={activeRow}
             handleChose={handleChose}
-            handleChoseSelectCTDT={handleChoseSelectCTDT}
           />
         </Col>{" "}
         <Col md={2}>
@@ -215,45 +209,29 @@ const ComponenCreateGiangVien = () => {
             handleChoseHocKi={handleChoseHocKi}
           />
         </Col>{" "}
-        <Col md={2}></Col>
         <Col md={4}>
           <div className="mb-3">
             <input
               type="text"
               className="form-control height-selectGV"
-              placeholder="Nhập email đăng nhập"
+              placeholder="Nhập môn học muốn tìm kiếm"
               value={searchEmail}
               onChange={handleSearch}
             />
           </div>
-        </Col>
+        </Col>{" "}
+        <Col md={1}> </Col>{" "}
         <Col md={2}>
-          {" "}
-          <button
-            variant="contained"
-            type="button"
-            className={`height-selectGV ${
-              isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-primary"
-            }`}
-            placeholder="Nhập email đăng nhập"
-            value={isOpenGetAllApiGV}
-            onClick={handleGetAllGiangVien}
-            title={
-              isOpenGetAllApiGV === true
-                ? "Xem Tất Cả Giảng Viên Ở Bộ Môn"
-                : "Xem Tất Cả Giảng Viên"
-            }
-          >
-            {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
-          </button>{" "}
+          <Button variant="contained">Quản Lý Lớp Học</Button>
         </Col>
       </Row>
       <Row>
         <Col md={6}>
           {" "}
-          <h5 className="active mt-4">Thêm Tài Khoản Giảng Viên</h5>
+          <h5 className="active mt-4">Thêm chương trình đào tạo</h5>
           <p className="opacity-7">
-            Bạn có thể thêm giảng viên bằng chức năng excel hoặc thủ công.
+            Bạn có thể thêm gchương trình đào tạo bằng chức năng excel <br></br>
+            hoặc thủ công.
           </p>
           <Box sx={{ maxWidth: 300 }}>
             <FormControl fullWidth>
@@ -313,7 +291,6 @@ const ComponenCreateGiangVien = () => {
             setCurrentPage={setCurrentPage}
             searchEmail={searchEmail}
             isOpenGetAllApiGV={isOpenGetAllApiGV}
-            handleGetAllGiangVien={handleGetAllGiangVien}
             dataMonHoc={dataMonHoc}
             activeRowGV={activeRowGV}
             handleShowUpdateModal={handleShowUpdateModal}

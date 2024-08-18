@@ -28,12 +28,10 @@ const GiangVienList = ({
   dataMonHoc,
   activeRowGV,
   handleChoseRowGV,
-  handleDeleteGiangVien,
-  handleChoseEditGiangVien,
+
   searchEmail,
   searchStatus,
   setCurrentPage,
-  handleShowUpdateModal,
 }) => {
   const pageSize = 10;
   const totalGiangVien = dataMonHoc ? dataMonHoc.length : 0;
