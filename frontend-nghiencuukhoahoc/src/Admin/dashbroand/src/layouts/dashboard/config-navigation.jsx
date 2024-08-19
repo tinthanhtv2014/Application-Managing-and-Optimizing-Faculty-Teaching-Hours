@@ -43,7 +43,7 @@ const navConfig = [
     icon: icon('ic_blog'),
   }, {
     title: 'Chương Trình Học',
-    path: '/nhap-chuong-trinh-tu-file',
+    path: '/chuong-trinh-dao-tao',
     icon: icon('ic_blog'),
   }, {
     title: 'Quản Lý Môn Học',

@@ -36,7 +36,7 @@ const AdminCreate = () => {
     navigate("/admin/create-chucvu-gv");
   };
   const handleToCreateCTDT = () => {
-    navigate("/admin/create-chuong-trinh-dao-tao");
+    navigate("/admin/chuong-trinh-dao-tao");
   };
   return (
     <>

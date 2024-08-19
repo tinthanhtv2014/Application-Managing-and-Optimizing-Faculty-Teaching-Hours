@@ -52,17 +52,7 @@ export default function Router() {
         </DashboardLayout>
       )
     },
-    // {
-    //   path: '/giangvien',
-    //   element: (
-    //     <DashboardLayout>
-    //       <Suspense fallback={<div>Loading...</div>}>
-    //         <CreateGV />
 
-    //       </Suspense>
-    //     </DashboardLayout>
-    //   )
-    // },
     {
       path: '/quan-ly-chuc-vu', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
@@ -154,7 +144,7 @@ export default function Router() {
       )
     },
     {
-      path: '/create-chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
@@ -193,7 +183,7 @@ export default function Router() {
         </DashboardLayout>
       )
     }, {
-      path: '/create-chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
