@@ -324,17 +324,6 @@ const createChuongtrinhdaotaoExcel = async (
         DT: [],
       };
     }
-
-    let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
-      dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
-    );
-    if (kiemtra_tenmonhoc) {
-      return {
-        EM: `ten mon hoc da ton tai`,
-        EC: 0,
-        DT: [],
-      }; // Tiếp tục thực hiện các lệnh khác
-    }
   }
 
   // Bắt đầu tạo tài khoản
@@ -342,27 +331,43 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
       dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
     );
-    // console.log("check 2", kiemtra_tenchuongtrinh);
-    await pool.execute(
-      `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH) VALUES (?, ?,?)`,
-      [
-        dataChuongtrinhdaotaoExcelArray[i].TENMONHOC,
-        dataChuongtrinhdaotaoExcelArray[i].SOTINCHILYTHUYET,
-        dataChuongtrinhdaotaoExcelArray[i].SOTINCHITHUCHANH,
-      ]
-    );
+
     let kiemtra_tenmonhoc = await timmonhoc_TENMONHOC(
       dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
     );
-    // console.log("check 1", kiemtra_tenmonhoc);
-    await pool.execute(
-      `INSERT INTO thuoc (MACHUONGTRINH,MAMONHOC,SOTHUTUHOCKI) VALUES (?, ?,?)`,
-      [
-        kiemtra_tenchuongtrinh.MACHUONGTRINH,
-        kiemtra_tenmonhoc.MAMONHOC,
-        dataChuongtrinhdaotaoExcelArray[i].SOTHUTUHOCKI,
-      ]
+
+    console.log("check kiemtratenmonhoc", kiemtra_tenmonhoc);
+
+    if (kiemtra_tenmonhoc === undefined) {
+      await pool.execute(
+        `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH) VALUES (?, ?,?)`,
+        [
+          dataChuongtrinhdaotaoExcelArray[i].TENMONHOC,
+          dataChuongtrinhdaotaoExcelArray[i].SOTINCHILYTHUYET,
+          dataChuongtrinhdaotaoExcelArray[i].SOTINCHITHUCHANH,
+        ]
+      );
+    }
+
+    let select_tenmonhoc = await timmonhoc_TENMONHOC(
+      dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
     );
+    const [kiemtra_bangthuoc, fields_kiemtrathhuoc] = await pool.execute(
+      `select * from thuoc where MACHUONGTRINH = ? and MAMONHOC = ?`,
+      [kiemtra_tenchuongtrinh.MACHUONGTRINH, select_tenmonhoc.MAMONHOC]
+    );
+    console.log("check kiemtra_bangthuoc", kiemtra_bangthuoc);
+    if (kiemtra_bangthuoc[0] === undefined) {
+      await pool.execute(
+        `INSERT INTO thuoc (MACHUONGTRINH,MAMONHOC,SOTHUTUHOCKI) VALUES (?, ?,?)`,
+        [
+          kiemtra_tenchuongtrinh.MACHUONGTRINH,
+          select_tenmonhoc.MAMONHOC,
+          dataChuongtrinhdaotaoExcelArray[i].SOTHUTUHOCKI,
+        ]
+      );
+    }
+
     results.push({
       EM: `Tạo tài khoản ${dataChuongtrinhdaotaoExcelArray[i].TENDANGNHAP} thành công`,
       EC: 0,

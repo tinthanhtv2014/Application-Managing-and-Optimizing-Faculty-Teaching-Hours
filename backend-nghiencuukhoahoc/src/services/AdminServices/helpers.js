@@ -215,7 +215,6 @@ const timchuongtrinh_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
       [TENCHUONGTRINH]
     );
 
-    console.log("Check timchuongtrinh_TENCHUONGTRINH:   ", results1);
     return results1[0];
   } catch (error) {
     console.log("timchuongtrinh_TENCHUONGTRINH errr >>>", error);
