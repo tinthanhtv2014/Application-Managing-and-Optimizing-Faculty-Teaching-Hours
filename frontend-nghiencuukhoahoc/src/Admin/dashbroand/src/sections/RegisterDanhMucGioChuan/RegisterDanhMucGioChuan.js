@@ -771,14 +771,19 @@ const DangKyDanhMucGioChuan = ({
                                       )
                                     }
                                   >
-                                    {data_Khoa.map((loai) => (
-                                      <MenuItem
-                                        key={loai.MAKHOA}
-                                        value={loai.MAKHOA}
-                                      >
-                                        {loai.TENKHOA}
-                                      </MenuItem>
-                                    ))}
+                                    {data_Khoa
+                                      .filter(
+                                        (loai) =>
+                                          loai.TENKHOA === "Ngoài trường"
+                                      ) // Lọc chỉ lấy TENKHOA == "Ngoài Trường"
+                                      .map((loai) => (
+                                        <MenuItem
+                                          key={loai.MAKHOA}
+                                          value={loai.MAKHOA}
+                                        >
+                                          {loai.TENKHOA}
+                                        </MenuItem>
+                                      ))}
                                   </Select>
                                 </FormControl>
                                 <FormControl fullWidth margin="normal">

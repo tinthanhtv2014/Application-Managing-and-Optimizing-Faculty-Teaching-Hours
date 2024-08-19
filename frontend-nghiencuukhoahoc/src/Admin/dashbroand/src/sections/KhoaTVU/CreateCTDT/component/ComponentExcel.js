@@ -13,8 +13,6 @@ const ComponentExcelCTDT = () => {
   const [showModal, setShowModal] = useState(false);
   const auth = Cookies.get("accessToken");
 
-  const navigate = useNavigate();
-
   const handleAddUser = async () => {
     if (data.length > 0) {
       try {
@@ -28,7 +26,7 @@ const ComponentExcelCTDT = () => {
           }
         );
         if (response.data.EC === 1) {
-          toast.success(response.data.EM);
+          toast.success("Thêm dữ liệu thành công");
         } else {
           toast.error(response.data.EM);
         }
