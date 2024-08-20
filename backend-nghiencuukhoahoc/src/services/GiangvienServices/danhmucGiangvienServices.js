@@ -212,8 +212,8 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     // Ưu tiên lấy giảng viên loại "Tác giả thứ nhất" với các điều kiện ưu tiên
     let DaiDien = dataDangKy.find(
       (giangVien) =>
-        giangVien.loai === "Tác giả thứ nhất" &&
-        giangVien.laVienChuc === "Không" ||
+        (giangVien.loai === "Tác giả thứ nhất" &&
+          giangVien.laVienChuc === "Không") ||
         giangVien.duocMien === "Không"
     );
 

@@ -143,8 +143,8 @@ const DangKyDanhMucGioChuan = ({
       setIsDisableNamHoc(true);
     } else if (IsOpenSelectOption === "Xem Lịch Sử Đăng Ký Danh Mục") {
       setIsDisableNamHoc(false);
-      if (selectNamHoc) {
-        const DataThongTinDangKyGiangVien = async () => {
+      const DataThongTinDangKyGiangVien = async () => {
+        if (selectNamHoc && MaGV) {
           try {
             const response_Data = await CookiesAxios.post(
               `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin`,
@@ -159,9 +159,11 @@ const DangKyDanhMucGioChuan = ({
           } catch (error) {
             console.error("Lỗi khi gọi API:", error);
           }
-        };
-        DataThongTinDangKyGiangVien();
-      }
+        } else {
+          return;
+        }
+      };
+      DataThongTinDangKyGiangVien();
     }
   }, [IsOpenSelectOption, selectNamHoc]);
 
