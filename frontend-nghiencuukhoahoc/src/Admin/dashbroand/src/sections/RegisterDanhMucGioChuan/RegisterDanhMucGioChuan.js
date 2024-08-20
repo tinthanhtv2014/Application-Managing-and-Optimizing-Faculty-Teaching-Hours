@@ -116,7 +116,7 @@ const DangKyDanhMucGioChuan = ({
     const decoded = jwtDecode(token);
     // console.log("check decoded", decoded.taikhoan);
 
-    if (selectNamHoc && decoded) {
+    if (selectNamHoc.length && decoded) {
       const fectDataThongTinGioNghienCuu = async () => {
         try {
           const response_Data = await CookiesAxios.post(
@@ -144,7 +144,8 @@ const DangKyDanhMucGioChuan = ({
     } else if (IsOpenSelectOption === "Xem Lịch Sử Đăng Ký Danh Mục") {
       setIsDisableNamHoc(false);
       const DataThongTinDangKyGiangVien = async () => {
-        if (selectNamHoc && MaGV) {
+        if (selectNamHoc.length > 0 && MaGV) {
+          console.log("check selectNamHoc", selectNamHoc);
           try {
             const response_Data = await CookiesAxios.post(
               `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin`,
@@ -160,7 +161,7 @@ const DangKyDanhMucGioChuan = ({
             console.error("Lỗi khi gọi API:", error);
           }
         } else {
-          return;
+          console.log("rỗng r", selectNamHoc);
         }
       };
       DataThongTinDangKyGiangVien();
