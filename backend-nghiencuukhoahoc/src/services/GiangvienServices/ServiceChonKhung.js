@@ -161,26 +161,41 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
 
 const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
-    const [results_MANAMHOC, fields__MANAMHOC] = await pool.execute(
-      "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC =? ",
+    console.log("MAGV:", MAGV);
+    console.log("TENNAMHOC:", TENNAMHOC);
+
+    const [results_MANAMHOC] = await pool.execute(
+      "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC = ?",
       [TENNAMHOC]
     );
 
+    if (results_MANAMHOC.length === 0) {
+      return {
+        EM: "Không tìm thấy MANAMHOC cho TENNAMHOC đã cho",
+        EC: -1,
+        DT: [],
+      };
+    }
+
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
-    // console.log(MAGV);
-    // console.log("MANAMHOC", MANAMHOC);
-    const [results1, fields] = await pool.execute(
-      "select giangvien.*,khunggiochuan.*,namhoc.TENNAMHOC from chon_khung, giangvien,khunggiochuan,namhoc where giangvien.MAGV = chon_khung.MAGV and namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and giangvien.MAGV = ? and namhoc.MANAMHOC = ?",
+    const [results1] = await pool.execute(
+      "SELECT giangvien.*, khunggiochuan.*, namhoc.TENNAMHOC " +
+        "FROM chon_khung " +
+        "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
+        "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
+        "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
+        "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
-    // console.log(results1);
+
+    console.log(results1);
     return {
-      EM: "xem thông tin khung hiện tại thành công",
+      EM: "Xem thông tin khung hiện tại thành công",
       EC: 1,
       DT: results1,
     };
   } catch (error) {
-    console.log(error);
+    console.log("có lỗi ở xem_CHONKHUNG_cho_GIANGVIEN", error);
     return {
       EM: "lỗi services xem_CHONKHUNG_cho_GIANGVIEN",
       EC: -1,
