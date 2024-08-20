@@ -100,7 +100,7 @@ const select_thongtin_dangkydanhmuc_giangvien = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
-    console.log("MAGV", MAGV);
+    console.log("MAGV select_thongtin_dangkydanhmuc_giangvien: ", MAGV);
     let results = await get_thongtin_dangky_giangvien(MAGV, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,
