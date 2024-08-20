@@ -97,12 +97,14 @@ const RenderData = ({
         if (isOpenOption === "Xem Khung Giờ") {
           setisOpenButtonSelectKhung(false);
           setIsDisableNamHoc(false);
-          const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
-            { MAGV: MaGV, TENNAMHOC: selectNamHoc }
-          );
-          console.log("response.data.DT", response.data.DT);
-          setDataRenderKhungChuan(response.data.DT);
+          if (selectNamHoc && MaGV) {
+            const response = await CookiesAxios.post(
+              `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
+              { MAGV: MaGV, TENNAMHOC: selectNamHoc }
+            );
+            console.log("response.data.DT", response.data.DT);
+            setDataRenderKhungChuan(response.data.DT);
+          }
         } else if (isOpenOption === "Chọn Khung Giờ") {
           setDataRenderKhungChuan(dataKhungChuan);
           setIsDisableNamHoc(true);
