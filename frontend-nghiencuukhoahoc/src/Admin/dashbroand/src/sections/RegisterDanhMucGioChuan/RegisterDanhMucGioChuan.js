@@ -730,7 +730,7 @@ const DangKyDanhMucGioChuan = ({
                     <Typography className="text-open-gate color-text">
                       {selectedDanhMuc
                         ? selectedDanhMuc.GIO_CHUAN
-                        : "Chưa chọn danh mục"}
+                        : "Chưa Chọn Danh Mục"}
                     </Typography>
                   </div>
                 </Col>
@@ -1041,7 +1041,7 @@ const DangKyDanhMucGioChuan = ({
                                   : "#1976d2",
                               }}
                             >
-                              Giảng viên trong trường
+                              Giảng Viên Trong Trường
                             </Button>{" "}
                             <Button
                               variant={tacGia.laVienChuc ? "text" : "outlined"}
@@ -1052,7 +1052,7 @@ const DangKyDanhMucGioChuan = ({
                                   : "#1976d2",
                               }}
                             >
-                              Giảng viên ngoài trường
+                              Giảng Viên Ngoài Trường
                             </Button>
                           </div>{" "}
                           <i

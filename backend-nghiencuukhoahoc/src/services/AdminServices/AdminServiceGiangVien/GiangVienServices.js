@@ -278,7 +278,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
   }
 };
 
-const xem_Khung_Gio_Chuan_Theo_Chuc_Danh = async (MAGV) => { };
+const xem_Khung_Gio_Chuan_Theo_Chuc_Danh = async (MAGV) => {};
 
 module.exports = {
   update_ChucVu_ChucDanh_GiangVien,
