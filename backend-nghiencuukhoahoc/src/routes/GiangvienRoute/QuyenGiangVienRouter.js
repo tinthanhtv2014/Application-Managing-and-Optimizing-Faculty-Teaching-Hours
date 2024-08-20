@@ -52,7 +52,7 @@ const QuyenGiangVienRouter = (app) => {
     checkUserJWT,
     update_THOIGIAN_XACNHAN
   );
-  router.get("/xem/thoigianxacnhan", checkUserJWT, xem_THOIGIAN_XACNHAN);
+  router.get("/xem/thoigianxacnhan", xem_THOIGIAN_XACNHAN);
   router.get(
     "/xem/thoigianxacnhantheokhoa/:tenKhoa",
     checkUserJWT,

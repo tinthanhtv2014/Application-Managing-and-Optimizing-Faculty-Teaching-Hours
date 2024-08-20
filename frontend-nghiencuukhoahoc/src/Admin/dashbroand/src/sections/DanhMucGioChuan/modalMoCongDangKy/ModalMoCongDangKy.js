@@ -23,6 +23,7 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
   const [StartTime, setStartTime] = useState(null);
   const [EndTime, setEndTime] = useState(null);
   const [TimeDangKyKhungGioChuan, setTimeDangKyKhungGioChuan] = useState(null);
+  const [dataThoiGianXacNhan, setDataThoiGianXacNhan] = useState([]);
   useEffect(() => {
     if (StartTime && EndTime) {
       const startTimeMoment = moment(StartTime);
@@ -37,14 +38,36 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
       fetchDataKhoa();
     }
   }, [EndTime, StartTime]);
+  useEffect(() => {
+    fetchDataKhoa();
+    fetchThoiGianXacNhan();
+  }, []);
   const fetchDataKhoa = async () => {
-    const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
-    );
-    console.log("list khoa =>", response.data.DT);
-    setdataListKhoa(response.data.DT);
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+      );
+      console.log("list khoa =>", response.data.DT);
+      setdataListKhoa(response.data.DT);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu khoa:", error);
+    }
   };
-
+  const fetchThoiGianXacNhan = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`,
+        { withCredentials: true } // Nếu bạn cần gửi cookie hoặc JWT trong yêu cầu
+      );
+      console.log("Thời gian xác nhận:", response.data);
+      if (response.data.EC === 1) {
+        setDataThoiGianXacNhan(response.data.DT);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy thời gian xác nhận:", error);
+      throw error;
+    }
+  };
   const formatDateShow = (dateString) => {
     if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
 
@@ -140,7 +163,12 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
 
   // console.log("CHECK THOIGIANBATDAU", StartTime);
   // console.log("CHECK THOIGIANKETTHUC", EndTime);
-
+  const filteredDataChonKhung = dataThoiGianXacNhan.filter(
+    (item) => item.GHICHU === "CHONKHUNG"
+  );
+  const filteredDataNghienCuu = dataThoiGianXacNhan.filter(
+    (item) => item.GHICHU === "NGHIENCUU"
+  );
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -149,14 +177,21 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: "70%",
+          height: "70%",
+          maxWidth: "1100px",
+          maxHeight: "600px",
           bgcolor: "background.paper",
           borderRadius: "13px",
           boxShadow: 24,
           p: 4,
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: { xs: "column", md: "row" }, // Điều chỉnh hướng dựa trên kích thước màn hình
+          alignItems: "center",
         }}
       >
-        <Container>
+        <Container sx={{ width: { xs: "100%", md: "50%" } }}>
           <Row>
             <Typography variant="h6" component="h2">
               Mở Cổng Đăng Ký Nghiên Cứu Khoa Học
@@ -259,6 +294,41 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
             </Typography>
           </Row>{" "}
         </Container>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "50%" },
+            pl: { md: 4 },
+            borderLeft: { md: "1px solid #ccc" },
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Thời Gian Xác Nhận
+          </Typography>
+          <Box>
+            <Typography variant="subtitle1">CHONKHUNG</Typography>
+            {filteredDataChonKhung.map((item, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <Typography>
+                  {item.TEN_KHOA}:{" "}
+                  {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
+                  {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+          <Box mt={4}>
+            <Typography variant="subtitle1">NGHIENCUU</Typography>
+            {filteredDataNghienCuu.map((item, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <Typography>
+                  {item.TEN_KHOA}:{" "}
+                  {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
+                  {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Modal>
   );
