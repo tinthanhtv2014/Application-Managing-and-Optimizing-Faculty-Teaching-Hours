@@ -31,10 +31,6 @@ const DangKyDanhMucRoute = (app) => {
   ); //
 
   router.post(
-    "/dangky/danhmuc/thongtin",
-    select_thongtin_dangkydanhmuc_giangvien
-  );
-  router.post(
     "/dangky/danhmuc/thongtin/luu",
     luu_data_dangky_danhmuc_Controller
   );
