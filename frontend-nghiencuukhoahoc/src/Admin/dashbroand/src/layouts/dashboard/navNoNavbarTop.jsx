@@ -32,20 +32,12 @@ import ComponentLoading from './ComponentLoading/CompnentLoading.tsx';
 export default function NavNoTop
   ({ openNav, onCloseNav }) {
   const pathname = usePathname();
+  const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
 
   const upLg = useResponsive('up', 'lg');
   const [loading, setLoading] = useState(true);
   const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
   const auth = Cookies.get('accessToken');
-  useEffect(() => {
-    if (openNav) {
-      onCloseNav();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
-
-
-
 
   useEffect(() => {
     if (auth) {
@@ -73,6 +65,16 @@ export default function NavNoTop
       setLoading(false);
     }
   }, [auth]);
+
+
+  useEffect(() => {
+    if (openNav) {
+      onCloseNav();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+
 
   if (loading) {
     return <ComponentLoading />
@@ -102,10 +104,16 @@ export default function NavNoTop
     </Box>
   );
 
+
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
       {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
+        <NavItem
+          key={item.title}
+          item={item}
+          isSelected={item.path === selectedPath}
+          onClick={() => setSelectedPath(item.path)} // Cập nhật trạng thái khi click
+        />
       ))}
     </Stack>
   );
@@ -205,15 +213,12 @@ NavNoTop.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item }) {
-  const pathname = usePathname();
-
-  const active = item.path === pathname;
-
+function NavItem({ item, isSelected, onClick }) {
   return (
     <ListItemButton
       component={RouterLink}
       href={"/admin" + item.path}
+      onClick={onClick} // Xử lý sự kiện click
       sx={{
         minHeight: 44,
         borderRadius: 0.75,
@@ -221,13 +226,11 @@ function NavItem({ item }) {
         color: 'text.secondary',
         textTransform: 'capitalize',
         fontWeight: 'fontWeightMedium',
-        ...(active && {
-          color: 'primary.main',
-          fontWeight: 'fontWeightSemiBold',
-          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-          '&:hover': {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
-          },
+        ...(isSelected && {
+          color: 'blue', // Màu chữ khi được chọn
+          // fontWeight: 'fontWeightBold',
+          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23), // Tăng độ đậm của nền
+
         }),
       }}
     >
@@ -235,11 +238,13 @@ function NavItem({ item }) {
         {item.icon}
       </Box>
 
-      <Box component="span">{item.title} </Box>
+      <Box component="span">{item.title}</Box>
     </ListItemButton>
   );
 }
 
 NavItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
