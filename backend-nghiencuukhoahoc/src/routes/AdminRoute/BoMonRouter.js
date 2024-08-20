@@ -8,11 +8,13 @@ const {
   updateBOMON,
   deleteBOMON,
   getOnlyBoMon,
+  getOnlyBoMon_TENKHOA,
 } = require("../../controllers/AdminController/khoaAdminCONTROLLER");
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDBoMon = (app) => {
   // Route cho bộ môn, yêu cầu xác thực JWT
   router.get("/xem", checkUserJWT, getAllBOMON);
+  router.get("/only/xem/:TENKHOA", checkUserJWT, getOnlyBoMon_TENKHOA);
   router.post("/only/xem", checkUserJWT, getOnlyBoMon);
   router.post("/tao", checkUserJWT, createBOMON);
   router.put("/sua/:mabomon", checkUserJWT, updateBOMON);

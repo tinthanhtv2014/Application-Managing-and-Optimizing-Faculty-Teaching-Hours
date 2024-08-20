@@ -8,6 +8,7 @@ const {
 
 const {
   selectBomon_MAKHOA,
+  selectBomon_TENKHOA,
   selectBomon,
   createBomon,
   updateBomon,
@@ -135,9 +136,30 @@ const getAllBOMON = async (req, res) => {
     });
   }
 };
+const getOnlyBoMon_TENKHOA = async (req, res) => {
+  try {
+    const TENKHOA = req.params.TENKHOA;
+
+    let results = await selectBomon_TENKHOA(TENKHOA);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  }
+};
 const getOnlyBoMon = async (req, res) => {
   try {
     const MAKHOA = req.body.MAKHOA;
+
     let results = await selectBomon_MAKHOA(MAKHOA);
 
     return res.status(200).json({
@@ -232,4 +254,5 @@ module.exports = {
   updateBOMON,
   deleteBOMON,
   getOnlyBoMon,
+  getOnlyBoMon_TENKHOA,
 };

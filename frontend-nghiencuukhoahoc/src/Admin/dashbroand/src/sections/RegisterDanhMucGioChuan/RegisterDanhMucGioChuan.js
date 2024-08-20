@@ -79,6 +79,9 @@ const DangKyDanhMucGioChuan = ({
     useState(true);
   const [dataDang_ky_thuc_hien_quy_doiGV, setDataDang_ky_thuc_hien_quy_doiGV] =
     useState([]);
+
+  const [IsOpenRegister, setIsOpenRegister] = useState(false);
+
   useEffect(() => {
     const fectData = async () => {
       try {
@@ -171,10 +174,10 @@ const DangKyDanhMucGioChuan = ({
   }, [tacGiaList]);
   const fetchBoMonData = useCallback(async (khoa, index) => {
     try {
-      const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem`,
-        { MAKHOA: khoa }
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem/${khoa}`
       );
+      console.log("response", response.data);
       setData_BoMon((prevData) => ({
         ...prevData,
         [index]: response.data.DT,
@@ -190,6 +193,7 @@ const DangKyDanhMucGioChuan = ({
     setTacGiaList(newTacGiaList);
   };
   const handleAddTacGia = () => {
+    setIsOpenRegister(false);
     setTacGiaList([
       ...tacGiaList,
       {
@@ -388,9 +392,11 @@ const DangKyDanhMucGioChuan = ({
   const handleTinhSoGio = async () => {
     if (!selectedDanhMuc) {
       toast.error("Bạn cần chọn danh mục đăng ký");
+      return;
     }
     if (tacGiaList.length == 0) {
       toast.error("Bạn cần điền thông tin tác giả");
+      return;
     }
 
     try {
@@ -461,6 +467,7 @@ const DangKyDanhMucGioChuan = ({
 
         // Cập nhật danh sách giảng viên với số giờ đã tính
         setTacGiaList(updatedTacGiaList);
+        setIsOpenRegister(true);
         console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
       }
     } catch (error) {
@@ -637,8 +644,8 @@ const DangKyDanhMucGioChuan = ({
                 {SoGioNghienCuuChuan ? (
                   <p className="text-open-gate">
                     {" "}
-                    Số Giờ Nghiên Cứu Khoa Học Chuẩn Của Bạn Là{" "}
-                    <span className="text-info ">{SoGioNghienCuuChuan}</span>
+                    Số Giờ Nghiên Cứu Khoa Học Chuẩn Của Bạn Là:{" "}
+                    <span className=" color-text">{SoGioNghienCuuChuan}</span>
                   </p>
                 ) : (
                   <p className="text-open-gate text-center">
@@ -720,7 +727,7 @@ const DangKyDanhMucGioChuan = ({
                     </Typography>
                   </div>
                   <div className="d-flex justify-content-between w-100">
-                    <Typography className="text-open-gate text-info">
+                    <Typography className="text-open-gate color-text">
                       {selectedDanhMuc
                         ? selectedDanhMuc.GIO_CHUAN
                         : "Chưa chọn danh mục"}
@@ -771,6 +778,7 @@ const DangKyDanhMucGioChuan = ({
                                       )
                                     }
                                   >
+                                    {" "}
                                     {data_Khoa
                                       .filter(
                                         (loai) =>
@@ -779,7 +787,7 @@ const DangKyDanhMucGioChuan = ({
                                       .map((loai) => (
                                         <MenuItem
                                           key={loai.MAKHOA}
-                                          value={loai.MAKHOA}
+                                          value={loai.TENKHOA}
                                         >
                                           {loai.TENKHOA}
                                         </MenuItem>
@@ -802,14 +810,24 @@ const DangKyDanhMucGioChuan = ({
                                       )
                                     }
                                   >
-                                    {(data_BoMon[index] || []).map((loai) => (
-                                      <MenuItem
-                                        key={loai.MABOMON}
-                                        value={loai.TENBOMON}
-                                      >
-                                        {loai.TENBOMON}
-                                      </MenuItem>
-                                    ))}
+                                    {data_BoMon[index] &&
+                                    data_BoMon[index].length > 0 ? (
+                                      (data_BoMon[index] || []).map((loai) => (
+                                        <MenuItem
+                                          key={loai.MABOMON}
+                                          value={loai.TENBOMON}
+                                        >
+                                          {loai.TENBOMON}
+                                        </MenuItem>
+                                      ))
+                                    ) : (
+                                      <>
+                                        {" "}
+                                        <MenuItem value="">
+                                          <em>Vui Lòng Chọn Khoa</em>
+                                        </MenuItem>
+                                      </>
+                                    )}
                                   </Select>
                                 </FormControl>
 
@@ -1015,17 +1033,6 @@ const DangKyDanhMucGioChuan = ({
                           </Col>
                           <div className="responsive-isVienChuc position-ab-button d-flex flex-column flex-md-row">
                             <Button
-                              variant={tacGia.laVienChuc ? "text" : "outlined"}
-                              onClick={() => handleButtonClick(index, true)}
-                              sx={{
-                                color: tacGia.laVienChuc
-                                  ? "#9e9e9e"
-                                  : "#1976d2",
-                              }}
-                            >
-                              Giảng viên ngoài trường
-                            </Button>
-                            <Button
                               variant={!tacGia.laVienChuc ? "text" : "outlined"}
                               onClick={() => handleButtonClick(index, false)}
                               sx={{
@@ -1035,6 +1042,17 @@ const DangKyDanhMucGioChuan = ({
                               }}
                             >
                               Giảng viên trong trường
+                            </Button>{" "}
+                            <Button
+                              variant={tacGia.laVienChuc ? "text" : "outlined"}
+                              onClick={() => handleButtonClick(index, true)}
+                              sx={{
+                                color: tacGia.laVienChuc
+                                  ? "#9e9e9e"
+                                  : "#1976d2",
+                              }}
+                            >
+                              Giảng viên ngoài trường
                             </Button>
                           </div>{" "}
                           <i
@@ -1118,7 +1136,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate text-info resposive-text-thongtintacgia">
+                              <Typography className="text-open-gate color-text resposive-text-thongtintacgia">
                                 {tacGia.soPhanTram}
                               </Typography>
                             </Col>
@@ -1130,7 +1148,7 @@ const DangKyDanhMucGioChuan = ({
                               </Typography>
                             </Col>
                             <Col md={7}>
-                              <Typography className="text-open-gate text-info resposive-text-thongtintacgia">
+                              <Typography className="text-open-gate color-text resposive-text-thongtintacgia">
                                 {tacGia.soGio}
                               </Typography>
                             </Col>
@@ -1170,6 +1188,11 @@ const DangKyDanhMucGioChuan = ({
                         color="primary"
                         className="responsive-hoantatdangky"
                         onClick={handleDangKyDanhMuc}
+                        disabled={!IsOpenRegister} // Button is disabled when IsOpenRegister is false
+                        sx={{
+                          opacity: IsOpenRegister ? 1 : 0.5, // Fade effect when disabled
+                          pointerEvents: IsOpenRegister ? "auto" : "none", // Prevent clicking when disabled
+                        }}
                       >
                         Hoàn tất đăng ký
                       </Button>

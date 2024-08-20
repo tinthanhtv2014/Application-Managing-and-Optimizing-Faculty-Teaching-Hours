@@ -37,6 +37,34 @@ const selectBomon_MAKHOA = async (MAKHOA) => {
     };
   }
 };
+const selectBomon_TENKHOA = async (TENKHOA) => {
+  try {
+    const [results, fields] = await pool.execute(
+      `SELECT MAKHOA FROM khoa WHERE TENKHOA = ?`,
+      [TENKHOA]
+    );
+
+    if (results.length > 0) {
+      const [results1, fields1] = await pool.execute(
+        `SELECT * FROM bomon WHERE MAKHOA = ?`,
+        [results[0].MAKHOA]
+      );
+
+      return {
+        EM: "Xem thông tin bộ môn thành công",
+        EC: 1,
+        DT: results1,
+      };
+    }
+  } catch (error) {
+    console.log("check eror =>", error);
+    return {
+      EM: "Lỗi services selectBomon",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 
 //Hàm tìm bộ môn theo TENBOMON
 const selectBomon_TENBOMON = async (TENBOMON) => {
@@ -208,7 +236,7 @@ module.exports = {
   createBomon,
   updateBomon,
   deleteBomon,
-
+  selectBomon_TENKHOA,
   selectBomon_MAKHOA,
   selectBomon_TENBOMON,
   selectBomon_MABOMON,
