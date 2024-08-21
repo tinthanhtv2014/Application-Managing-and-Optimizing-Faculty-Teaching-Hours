@@ -8,8 +8,7 @@ import DashboardLayout from '../layouts/dashboard';
 
 import Skeleton from '@mui/material/Skeleton';
 
-
-
+const IndexQuanLyLopHoc = lazy(() => import('../sections/QLLopHoc/IndexQuanLyLopHoc'));
 const IndexDangKyDanhmuc = lazy(() => import('../sections/RegisterDanhMucGioChuan/IndexDangKyDanhMuc'));
 const DangKyDanhMucGioChuan = lazy(() => import('../sections/RegisterDanhMucGioChuan/RegisterDanhMucGioChuan'));
 const DanhMucGioChuan = lazy(() => import('../sections/DanhMucGioChuan/DanhMucGioChuan'));
@@ -135,7 +134,7 @@ export default function Router() {
     }
     ,
     {
-      path: '/nhap-lop-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly-lop-hoc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense
@@ -148,6 +147,7 @@ export default function Router() {
               />
             }
           >
+            <IndexQuanLyLopHoc />
           </Suspense>
         </DashboardLayout>
       )

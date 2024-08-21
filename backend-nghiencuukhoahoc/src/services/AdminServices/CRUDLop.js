@@ -4,11 +4,12 @@ const selectLop = async () => {
   try {
     let [results1, fields1] = await pool.execute(`select * from lop`);
     return {
-      EM: " xem thông tin lớp thành công",
+      EM: " Xem thông tin lớp thành công",
       EC: 1,
       DT: results1,
     };
   } catch (error) {
+    console.log("error", error);
     return {
       EM: "lỗi services selectMonHoc",
       EC: -1,

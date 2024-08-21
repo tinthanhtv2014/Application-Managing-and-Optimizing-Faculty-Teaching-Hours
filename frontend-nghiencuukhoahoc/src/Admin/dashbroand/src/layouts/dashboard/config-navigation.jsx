@@ -39,7 +39,7 @@ const navConfig = [
   // }, 
   {
     title: 'Quản Lý Lớp Học',
-    path: '/nhap-lop-tu-file',
+    path: '/quan-ly-lop-hoc',
     icon: icon('ic_blog'),
   }, {
     title: 'Chương Trình Học',

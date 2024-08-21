@@ -7,7 +7,7 @@ const {
 
 const getAllLopcontroller = async (req, res) => {
   try {
-    let results = await selectLop(selectLop);
+    let results = await selectLop();
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
