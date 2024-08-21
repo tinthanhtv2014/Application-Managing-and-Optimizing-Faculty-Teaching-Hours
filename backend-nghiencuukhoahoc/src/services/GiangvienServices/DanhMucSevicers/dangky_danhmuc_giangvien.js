@@ -32,33 +32,25 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             })
         );
 
-        // Ưu tiên lấy giảng viên loại "Tác giả thứ nhất" với các điều kiện ưu tiên
+        // Ưu tiên lấy giảng viên loại "Cá nhân" > "Tác giả thứ nhất" với các điều kiện ưu tiên
         let DaiDien = dataDangKy.find(
-            (giangVien) =>
-                (giangVien.loai === "Tác giả thứ nhất" &&
-                    giangVien.laVienChuc === "Không") ||
-                giangVien.duocMien === "Không"
+            (giangVien) => giangVien.loai === "Cá nhân"
         );
+
+        if (!DaiDien) {
+            DaiDien = dataDangKy.find(
+                (giangVien) =>
+                    giangVien.loai === "Tác giả thứ nhất"
+                    &&
+                    giangVien.laVienChuc === "Không" || giangVien.duocMien === "Không"
+            );
+        }
 
         // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
         if (!DaiDien) {
             DaiDien = dataDangKy.find(
                 (giangVien) => giangVien.loai === "Tác giả thứ nhất"
             );
-        }
-
-        for (let i = 0; i < Object.keys(loaiCountObj).length; i++) {
-            let [LoaiTacGia] = await pool.execute(
-                `SELECT * FROM loai_tac_gia WHERE TEN_LOAI_TAC_GIA = ?`,
-                [Object.keys(loaiCountObj)[i]]
-            );
-            if (LoaiTacGia.length === 0) {
-                return {
-                    EM: "Dữ liệu loại tác giả này không tồn tại",
-                    EC: 0,
-                    DT: [],
-                };
-            }
         }
 
         const obj = [];
