@@ -25,6 +25,7 @@ import {
   Box,
   FormControl,
   Button,
+  Typography,
 } from "@mui/material";
 import UpdateGiangVienModal from "./modal/updateGiangVienModal.js";
 const ComponenCreateGiangVien = () => {
@@ -62,7 +63,7 @@ const ComponenCreateGiangVien = () => {
   const [dataListBoMon, setdataListBoMon] = useState(null);
   const [dataListGiangVien, setdataListGiangVien] = useState(null);
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
-
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     const token = Cookies.get("accessToken");
 
@@ -101,7 +102,10 @@ const ComponenCreateGiangVien = () => {
             { isOpenGetAllApiGV: isOpenGetAllApiGV, MABOMON: MaBoMon }
           );
           //     console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
-          setdataListGiangVien(response.data.DT);
+          if (response.data.EC === 1) {
+            setdataListGiangVien(response.data.DT);
+            setLoading(false);
+          }
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
         }
@@ -410,6 +414,10 @@ const ComponenCreateGiangVien = () => {
     }
   };
   // console.log("check API ALL +> ", isOpenGetAllApiGV);
+  if (loading) {
+    return <Typography>Đang tải dữ liệu, vui lòng đợi...</Typography>; // Hiển thị thông báo tải dữ liệu
+  }
+
   return (
     <Container>
       {" "}

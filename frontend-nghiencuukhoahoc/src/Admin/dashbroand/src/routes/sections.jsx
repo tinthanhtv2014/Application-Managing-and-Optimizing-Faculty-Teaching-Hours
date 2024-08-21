@@ -6,7 +6,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
-
+import Skeleton from '@mui/material/Skeleton';
 
 
 
@@ -35,7 +35,16 @@ export default function Router() {
       path: '/',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             {/* <IndexPage /> */}
             <AdminCreate />
           </Suspense>
@@ -45,7 +54,16 @@ export default function Router() {
       path: 'quan-ly-khoa',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             {/* <IndexPage /> */}
             <CreateKhoa />
           </Suspense>
@@ -57,8 +75,16 @@ export default function Router() {
       path: '/quan-ly-chuc-vu', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateChucVuGV />
           </Suspense>
         </DashboardLayout>
@@ -68,7 +94,16 @@ export default function Router() {
       path: '/quan-ly-danh-muc-gio-chuan', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
 
             <DanhMucGioChuan />
 
@@ -81,7 +116,16 @@ export default function Router() {
       path: '/quan-ly-chuc-danh', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
 
             {/* <ListOrdersDaHuy /> */}
 
@@ -94,8 +138,16 @@ export default function Router() {
       path: '/nhap-lop-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
           </Suspense>
         </DashboardLayout>
       )
@@ -104,8 +156,16 @@ export default function Router() {
       path: '/nhap-chuong-trinh-tu-file', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
 
 
           </Suspense>
@@ -116,7 +176,16 @@ export default function Router() {
       path: '/quan-ly-mon-hoc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
 
 
 
@@ -128,7 +197,16 @@ export default function Router() {
       path: '/dang-ky-khung-gio-chuan', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
@@ -137,7 +215,16 @@ export default function Router() {
       path: '/create-khoa', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateKhoa />
           </Suspense>
         </DashboardLayout>
@@ -147,7 +234,16 @@ export default function Router() {
       path: '/chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateCTDT />
           </Suspense>
         </DashboardLayout>
@@ -157,7 +253,16 @@ export default function Router() {
       path: '/create-bm', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateBM />
           </Suspense>
         </DashboardLayout>
@@ -166,18 +271,36 @@ export default function Router() {
     {
       path: '/giangvien', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
-        <DashboardLayoutNoTop>
-          <Suspense fallback={<div>Loading...</div>}>
+        <DashboardLayout>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateGV />
           </Suspense>
-        </DashboardLayoutNoTop>
+        </DashboardLayout>
       )
     },
     {
       path: '/create-chucvu-gv', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateChucVuGV />
           </Suspense>
         </DashboardLayout>
@@ -186,7 +309,16 @@ export default function Router() {
       path: '/chuong-trinh-dao-tao', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <CreateKhoa />
           </Suspense>
         </DashboardLayout>
@@ -195,7 +327,16 @@ export default function Router() {
       path: '/account-giangvien', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <AccountGV />
           </Suspense>
         </DashboardLayout>
@@ -204,7 +345,16 @@ export default function Router() {
       path: '/dang-ky-nghien-cuu-khoa-hoc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
 
           </Suspense>
         </DashboardLayout>
@@ -213,7 +363,16 @@ export default function Router() {
       path: '/dang-ky-danh-muc', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <IndexDangKyDanhmuc />
           </Suspense>
         </DashboardLayout>

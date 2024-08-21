@@ -26,7 +26,8 @@ import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx'
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({ TENGV: '', TENCHUCVU: '' });
+
   const auth = Cookies.get('accessToken');
   const upLg = useResponsive('up', 'lg');
   const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
@@ -64,9 +65,9 @@ export default function Nav({ openNav, onCloseNav }) {
     }
   }, [auth]);
 
-  if (loading) {
-    return <ComponentLoading />;
-  }
+  // if (loading) {
+  //   return <ComponentLoading />;
+  // }
 
   const renderAccount = (
     <Box
@@ -82,18 +83,17 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Avatar src={avatarImage} alt="photoURL" />
-
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
-          {dataProfileGiangvien.TENGV}
+          {dataProfileGiangvien.TENGV || 'Đang tải...'}
         </Typography>
-
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {dataProfileGiangvien.TENCHUCVU}
+          {dataProfileGiangvien.TENCHUCVU || ''}
         </Typography>
       </Box>
     </Box>
   );
+
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
