@@ -180,7 +180,7 @@ const DangKyDanhMucGioChuan = ({
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/bomon/only/xem/${khoa}`
       );
-      console.log("response", response.data);
+
       setData_BoMon((prevData) => ({
         ...prevData,
         [index]: response.data.DT,
@@ -242,9 +242,7 @@ const DangKyDanhMucGioChuan = ({
       ...newTacGiaList[index],
       maSoGV: giangVien.MAGV,
       tenGV: giangVien.TENGV,
-      emailGV: IsOptionSearchTrongTruong
-        ? giangVien.TENDANGNHAP
-        : giangVien.EMAIL,
+      emailGV: giangVien.TENDANGNHAP ? giangVien.TENDANGNHAP : giangVien.EMAIL,
       boMon: giangVien.TENBOMON,
       khoa: giangVien.TENKHOA,
     };
@@ -327,6 +325,7 @@ const DangKyDanhMucGioChuan = ({
               TENGV: searchTerm,
             }
           );
+          console.log(" check re => ", response.data.DT);
           if (response.data.EC === 1) {
             setEmailSuggestions(response.data.DT);
           }
@@ -506,8 +505,7 @@ const DangKyDanhMucGioChuan = ({
         tacGia.maSoGV !== null &&
         tacGia.tenGV !== null &&
         tacGia.emailGV !== null &&
-        tacGia.soGio !== null &&
-        tacGia.soPhanTram !== null
+        tacGia.soGio !== null
       );
     });
 
@@ -884,7 +882,8 @@ const DangKyDanhMucGioChuan = ({
                                             setEmailSuggestions([]);
                                           }}
                                         >
-                                          {suggestion.TENGV} ({suggestion.MAGV})
+                                          {suggestion.TENGV} ({suggestion.EMAIL}
+                                          )
                                         </MenuItem>
                                       ))}
                                     </Paper>

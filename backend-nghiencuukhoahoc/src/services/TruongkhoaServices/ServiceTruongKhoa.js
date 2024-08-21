@@ -130,7 +130,7 @@ const timkiem_email_taikhoan = async (TENGV) => {
       "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,taikhoan.TENDANGNHAP FROM giangvien ,taikhoan, khoa as k , bomon WHERE k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and taikhoan.MAGV = giangvien.MAGV and giangvien.TENGV LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
-    // console.log(rows);
+    console.log(rows);
     if (rows.length > 0) {
       return {
         EM: "Tìm thấy các email gần đúng",
@@ -162,7 +162,7 @@ const timkiem_email_taikhoan_ngoaitruong = async (TENGV) => {
       "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,giangvien.EMAIL FROM giangvien , khoa as k , bomon WHERE k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and bomon.TENBOMON = N'Ngoài trường' and giangvien.TENGV LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
-    // console.log(rows);
+    console.log(rows);
     if (rows.length > 0) {
       return {
         EM: "Tìm thấy các email gần đúng",
