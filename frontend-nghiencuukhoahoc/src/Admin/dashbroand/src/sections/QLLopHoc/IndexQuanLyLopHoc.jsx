@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton } from '@mui/material';
+import {
+    Box,
+    FormControl,
+    InputLabel, MenuItem,
+    Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton
+} from '@mui/material';
+import { Col, Container, Row } from "react-bootstrap";
 import CookiesAxios from '../CookiesAxios';
+import TaoLopHoc from './component/TaoLopHoc';
+import ChuongTrinhDaoTaoButtonList from './component/ChuongTrinhDaoTaoButtonList ';
+import "./IndexQuanLyLopHoc.scss"
 const IndexQuanLyLopHoc = () => {
     const [lopData, setLopData] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [IsOpenSelectOption, setIsOpenSelectOption] = useState("Xem Danh Sách Các Lớp");
+    const [DataListCTDT, setdatListCTDT] = useState([]);
+    const [selectCTDT, setSelectCTDT] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await CookiesAxios.get(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/xem`); // Adjust the API URL as needed
-                console.log('check data ', response.data.DT)
+                const response_ChuongTinhDaoTao = await CookiesAxios.get(
+                    `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
+                );
+
+
+
                 if (response.data.EC === 1) {
                     setLopData(response.data.DT);
+                    setdatListCTDT(response_ChuongTinhDaoTao.data.DT);
+                    setLoading(false);
                 }
-                setLoading(false);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setLoading(false);
@@ -33,30 +51,89 @@ const IndexQuanLyLopHoc = () => {
     }
 
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Mã Lớp</TableCell>
-                        <TableCell>Mã Chương Trình</TableCell>
-                        <TableCell>Tên Lớp</TableCell>
-                        <TableCell>Năm Tuyển Sinh</TableCell>
-                        <TableCell>Sĩ Số</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {lopData.map((row) => (
-                        <TableRow key={row.MALOP}>
-                            <TableCell>{row.MALOP}</TableCell>
-                            <TableCell>{row.MACHUONGTRINH}</TableCell>
-                            <TableCell>{row.TENLOP}</TableCell>
-                            <TableCell>{row.NAMTUYENSINH}</TableCell>
-                            <TableCell>{row.SISO}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <Container>
+                <Row>
+                    <Row>
+                        <Col md={4}>  <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                                Chức Năng
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={IsOpenSelectOption}
+                                label="Chức Năng"
+                                onChange={(e) => setIsOpenSelectOption(e.target.value)}
+                            >
+                                <MenuItem value="Xem Danh Sách Các Lớp">
+                                    Xem Danh Sách Các Lơp
+                                </MenuItem>
+                                <MenuItem value="Thêm Lớp Học Mới">
+                                    Thêm Lớp Học Mới
+                                </MenuItem>
+                            </Select>
+                        </FormControl></Col>
+                    </Row>
+                    {IsOpenSelectOption === "Xem Danh Sách Các Lớp" ? (
+                        <> <Row>
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Mã Lớp</TableCell>
+                                            <TableCell>Mã Chương Trình</TableCell>
+                                            <TableCell>Tên Lớp</TableCell>
+                                            <TableCell>Năm Tuyển Sinh</TableCell>
+                                            <TableCell>Sĩ Số</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {lopData.map((row) => (
+                                            <TableRow key={row.MALOP}>
+                                                <TableCell>{row.MALOP}</TableCell>
+                                                <TableCell>{row.MACHUONGTRINH}</TableCell>
+                                                <TableCell>{row.TENLOP}</TableCell>
+                                                <TableCell>{row.NAMTUYENSINH}</TableCell>
+                                                <TableCell>{row.SISO}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Row>
+                        </>
+                    )
+                        :
+                        (
+                            <>
+                                <Row>
+
+                                    <Col md={4}>
+                                        <div>   <TaoLopHoc selectCTDT={selectCTDT} /></div>
+
+
+                                    </Col>
+                                    <Col md={1}>
+                                        <div className="vertical-divider"></div>
+                                    </Col>
+                                    <Col md={4}>
+                                        <ChuongTrinhDaoTaoButtonList DataListCTDT={DataListCTDT}
+                                            setSelectCTDT={setSelectCTDT} />
+                                    </Col>
+
+
+
+                                </Row>
+
+
+                            </>
+                        )}
+
+                </Row>
+            </Container >
+        </>
+
     );
 };
 
