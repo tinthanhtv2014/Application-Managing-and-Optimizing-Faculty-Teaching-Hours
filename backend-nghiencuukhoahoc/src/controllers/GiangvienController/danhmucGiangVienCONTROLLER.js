@@ -2,10 +2,13 @@ const {
   get_thongtin_danhmuc,
   getLoaiTacGiaByLoaiDanhMuc,
   get_thongtin_dangky_giangvien,
-  dangky_danhmuc_giangvien,
   get_thongtin_dangky_giangvien_hoptac,
   dangky_thongtin_giangvien,
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
+
+const {
+  dangky_danhmuc_giangvien
+} = require("../../services/GiangvienServices/DanhMucSevicers/dangky_danhmuc_giangvien");
 
 const select_thongtin_danhmuc = async (req, res) => {
   try {
