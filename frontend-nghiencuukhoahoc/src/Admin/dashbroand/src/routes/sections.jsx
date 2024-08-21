@@ -5,7 +5,7 @@ import { lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
-import DashboardLayoutNoTop from '../layouts/dashboard/indexNoNavbarTop';
+
 import Skeleton from '@mui/material/Skeleton';
 
 

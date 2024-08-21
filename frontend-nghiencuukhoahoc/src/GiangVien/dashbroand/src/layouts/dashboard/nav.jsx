@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -12,37 +10,33 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { usePathname } from '../../routes/hooks';
 import { RouterLink } from '../../routes/components';
-
 import { useResponsive } from '../../hooks/use-responsive';
-
 import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-
-
+import CookiesAxios from '../../sections/CookiesAxios.js';
 import Logo from '../../components/logo';
 import Scrollbar from '../../components/scrollbar';
-
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
 import Cookies from "js-cookie";
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
-import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx';
-import CookiesAxios from '../../sections/CookiesAxios.js';
+
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const [dataProfileGiangvien, setdataProfileGiangvien] = useState(null);
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({ TENGV: '', TENCHUCVU: '' });
+
   const auth = Cookies.get('accessToken');
   const upLg = useResponsive('up', 'lg');
+  const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
 
   useEffect(() => {
     if (openNav) {
-      onCloseNav();
+      // onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, openNav, onCloseNav]);
+
   useEffect(() => {
     if (auth) {
       const decoded = jwtDecode(auth);
@@ -69,9 +63,11 @@ export default function Nav({ openNav, onCloseNav }) {
       setLoading(false);
     }
   }, [auth]);
-  if (loading) {
-    return <ComponentLoading />;
-  }
+
+  // if (loading) {
+  //   return <ComponentLoading />;
+  // }
+
   const renderAccount = (
     <Box
       sx={{
@@ -86,55 +82,30 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Avatar src={avatarImage} alt="photoURL" />
-
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
-          {dataProfileGiangvien.TENGV}
+          {dataProfileGiangvien.TENGV || 'Đang tải...'}
         </Typography>
-
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {dataProfileGiangvien.TENCHUCVU}
+          {dataProfileGiangvien.TENCHUCVU || ''}
         </Typography>
       </Box>
     </Box>
   );
 
+
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
       {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
+        <NavItem
+          key={item.title}
+          item={item}
+          isSelected={item.path === selectedPath}
+          onClick={() => setSelectedPath(item.path)} // Cập nhật trạng thái khi click
+        />
       ))}
     </Stack>
   );
-
-  // const renderUpgrade = (
-  //   <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-  //     <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
-  //       <Box
-  //         component="img"
-  //         src="/assets/illustrations/illustration_avatar.png"
-  //         sx={{ width: 100, position: 'absolute', top: -50 }}
-  //       />
-
-  //       <Box sx={{ textAlign: 'center' }}>
-  //         <Typography variant="h6">Get more?</Typography>
-
-  //         <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-  //           From only $69
-  //         </Typography>
-  //       </Box>
-
-  //       <Button
-  //         href="https://material-ui.com/store/items/minimal-dashboard/"
-  //         target="_blank"
-  //         variant="contained"
-  //         color="inherit"
-  //       >
-  //         Upgrade to Pro
-  //       </Button>
-  //     </Stack>
-  //   </Box>
-  // );
 
   const renderContent = (
     <Scrollbar
@@ -154,8 +125,6 @@ export default function Nav({ openNav, onCloseNav }) {
       {renderMenu}
 
       <Box sx={{ flexGrow: 1 }} />
-
-      {/* {renderUpgrade} */}
     </Scrollbar>
   );
 
@@ -201,15 +170,12 @@ Nav.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item }) {
-  const pathname = usePathname();
-
-  const active = item.path === pathname;
-
+function NavItem({ item, isSelected, onClick }) {
   return (
     <ListItemButton
       component={RouterLink}
-      href={"/giang-vien" + item.path}
+      href={"/admin" + item.path}
+      onClick={onClick} // Xử lý sự kiện click
       sx={{
         minHeight: 44,
         borderRadius: 0.75,
@@ -217,13 +183,11 @@ function NavItem({ item }) {
         color: 'text.secondary',
         textTransform: 'capitalize',
         fontWeight: 'fontWeightMedium',
-        ...(active && {
-          color: 'primary.main',
-          fontWeight: 'fontWeightSemiBold',
-          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-          '&:hover': {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
-          },
+        ...(isSelected && {
+          color: 'blue', // Màu chữ khi được chọn
+          // fontWeight: 'fontWeightBold',
+          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23), // Tăng độ đậm của nền
+
         }),
       }}
     >
@@ -231,11 +195,13 @@ function NavItem({ item }) {
         {item.icon}
       </Box>
 
-      <Box component="span">{item.title} </Box>
+      <Box component="span">{item.title}</Box>
     </ListItemButton>
   );
 }
 
 NavItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };

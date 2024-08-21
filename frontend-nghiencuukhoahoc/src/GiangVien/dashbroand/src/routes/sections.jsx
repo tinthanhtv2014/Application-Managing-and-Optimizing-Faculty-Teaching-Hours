@@ -1,17 +1,12 @@
-
-
 import { lazy, Suspense } from 'react';
-
 import { Navigate, useRoutes } from 'react-router-dom';
-
+import { Skeleton } from '@mui/material';
 import DashboardLayout from '../layouts/dashboard';
-
 
 const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
 const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
 const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
 
-const ListOrdersPage = lazy(() => import('../pages/ListOrders'));
 const IndexPage = lazy(() => import('../pages/app'));
 const BlogPage = lazy(() => import('../pages/blog'));
 const UserPage = lazy(() => import('../pages/user'));
@@ -21,90 +16,113 @@ const Page404 = lazy(() => import('../pages/page-not-found'));
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/', // thông tin cá nhân giảng viên
+      path: '/',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <AccountGV />
           </Suspense>
         </DashboardLayout>
-      )
+      ),
     },
     {
-      path: '/dang-ky-muc-chuan-gio-giang',  //đăng ký giờ chuẩn
+      path: '/dang-ky-muc-chuan-gio-giang',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <DangKyGioChuan />
           </Suspense>
         </DashboardLayout>
-      )
+      ),
     },
     {
-      path: '/dang-ky-cong-viec-thuc-hien', // Đăng ký công việc thực hiện.
+      path: '/dang-ky-cong-viec-thuc-hien',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
-
-
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
+            {/* Component tương ứng */}
           </Suspense>
         </DashboardLayout>
-      )
-    }
-    , {
-      path: '/phan-cong-cua-toi', //  Xem các môn học và số tiết được phân công giảng dạy.
+      ),
+    },
+    {
+      path: '/phan-cong-cua-toi',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
-
-
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
+            {/* Component tương ứng */}
           </Suspense>
         </DashboardLayout>
-      )
-    }
-
-    , {
-      path: '/excel', // Thêm ký tự '*' vào cuối đường dẫn
+      ),
+    },
+    {
+      path: '/excel',
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: 'grey.300' }}
+              />
+            }
+          >
             <FileExcel />
           </Suspense>
         </DashboardLayout>
-      )
+      ),
     },
-    // {
-    //   path: '/blog',
-    //   element: (
-    //     <DashboardLayout>
-    //       <Suspense fallback={<div>Loading...</div>}>
-    //         <BlogPage />
-    //       </Suspense>
-    //     </DashboardLayout>
-    //   )
-    // },
     {
       path: '/login',
-      element: <LoginPage />
+      element: <LoginPage />,
     },
     {
       path: '/404',
-      element: <Page404 />
+      element: <Page404 />,
     },
     {
       path: '*',
-      element: <Navigate to="/dashboard/404" replace />
-    }
-
+      element: <Navigate to="/404" replace />,
+    },
   ]);
 
   return routes;
 }
-
-
-
-
-
-
