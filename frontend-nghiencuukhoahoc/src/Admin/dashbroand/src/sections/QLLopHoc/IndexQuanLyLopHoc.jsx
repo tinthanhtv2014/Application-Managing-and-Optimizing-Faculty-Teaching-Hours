@@ -16,6 +16,7 @@ const IndexQuanLyLopHoc = () => {
     const [lopData, setLopData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [IsOpenSelectOption, setIsOpenSelectOption] = useState("Xem Danh Sách Các Lớp");
+    const [IsOpenThemLop, setIsOpenThemLop] = useState("Excel");
     const [DataListCTDT, setdatListCTDT] = useState([]);
     const [fullListCTDT, setFullListCTDT] = useState([]);
     const [selectCTDT, setSelectCTDT] = useState(null);
@@ -91,7 +92,7 @@ const IndexQuanLyLopHoc = () => {
                                     onChange={(e) => setIsOpenSelectOption(e.target.value)}
                                 >
                                     <MenuItem value="Xem Danh Sách Các Lớp">
-                                        Xem Danh Sách Các Lơp
+                                        Xem Danh Sách Các Lớp
                                     </MenuItem>
                                     <MenuItem value="Thêm Lớp Học Mới">
                                         Thêm Lớp Học Mới
@@ -99,34 +100,63 @@ const IndexQuanLyLopHoc = () => {
                                 </Select>
                             </FormControl>
                         </Col>
+                        <Col md={1}></Col>
+                        {IsOpenSelectOption === "Thêm Lớp Học Mới" ? (<>
+                            <Col md={4}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">
+                                        Chức Năng
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={IsOpenThemLop}
+                                        label="Chức Năng"
+                                        onChange={(e) => setIsOpenThemLop(e.target.value)}
+                                    >
+                                        <MenuItem value="Thủ Công">
+                                            Thủ Công
+                                        </MenuItem>
+                                        <MenuItem value="Excel">
+                                            Excel
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Col></>) :
+
+
+                            (<></>)
+                        }
+
                     </Row>
                     {IsOpenSelectOption === "Xem Danh Sách Các Lớp" ? (
-                        <> <Row>
-                            <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Mã Lớp</TableCell>
-                                            <TableCell>Mã Chương Trình</TableCell>
-                                            <TableCell>Tên Lớp</TableCell>
-                                            <TableCell>Năm Tuyển Sinh</TableCell>
-                                            <TableCell>Sĩ Số</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {lopData.map((row) => (
-                                            <TableRow key={row.MALOP}>
-                                                <TableCell>{row.MALOP}</TableCell>
-                                                <TableCell>{row.MACHUONGTRINH}</TableCell>
-                                                <TableCell>{row.TENLOP}</TableCell>
-                                                <TableCell>{row.NAMTUYENSINH}</TableCell>
-                                                <TableCell>{row.SISO}</TableCell>
+                        <>
+                            <Row className='mt-2'>
+                                <TableContainer component={Paper}>
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Mã Lớp</TableCell>
+                                                <TableCell>Mã Chương Trình</TableCell>
+                                                <TableCell>Tên Lớp</TableCell>
+                                                <TableCell>Năm Tuyển Sinh</TableCell>
+                                                <TableCell>Sĩ Số</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Row>
+                                        </TableHead>
+                                        <TableBody>
+                                            {lopData.map((row) => (
+                                                <TableRow key={row.MALOP}>
+                                                    <TableCell>{row.MALOP}</TableCell>
+                                                    <TableCell>{row.MACHUONGTRINH}</TableCell>
+                                                    <TableCell>{row.TENLOP}</TableCell>
+                                                    <TableCell>{row.NAMTUYENSINH}</TableCell>
+                                                    <TableCell>{row.SISO}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Row>
                         </>
                     )
                         :
@@ -145,7 +175,12 @@ const IndexQuanLyLopHoc = () => {
                                     </Col>
 
                                     <Col md={4}>
-                                        <div>   <TaoLopHoc selectCTDT={selectCTDT} setLopData={setLopData} /></div>
+                                        <div>
+                                            <TaoLopHoc
+                                                IsOpenThemLop={IsOpenThemLop}
+                                                selectCTDT={selectCTDT}
+                                                setLopData={setLopData} />
+                                        </div>
 
 
                                     </Col>
