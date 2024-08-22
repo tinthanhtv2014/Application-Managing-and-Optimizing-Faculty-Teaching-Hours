@@ -145,6 +145,7 @@ const createLopExcel = async (dataLopExcelArray) => {
     // console.log("check results =>", dataChuongtrinhdaotaoExcelArray);
     // Kiểm tra thông tin trong file excel
     for (var i = 0; i < dataLopExcelArray.length; i++) {
+      console.log("check results =>", dataLopExcelArray);
       if (!dataLopExcelArray[i].TENCHUONGTRINH || !dataLopExcelArray[i].MALOP) {
         return {
           EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
@@ -178,6 +179,7 @@ const createLopExcel = async (dataLopExcelArray) => {
           dataLopExcelArray[i].TENCHUONGTRINH
         );
       }
+      console.log("check results =>", kiemtra_tenchuongtrinh);
       if (kiemtra_tenchuongtrinh.length === 0) {
         return {
           EM: `Không thể tạo chương trình đào tạo`,
@@ -196,7 +198,7 @@ const createLopExcel = async (dataLopExcelArray) => {
       await pool.execute(
         `INSERT INTO lop (MALOP,MACHUONGTRINH,TENLOP,NAMTUYENSINH,SISO) VALUES (?, ?,?,?,?)`,
         [
-          dataLopExcelArray.MALOP,
+          dataLopExcelArray[i].MALOP,
           kiemtra_tenchuongtrinh.MACHUONGTRINH,
           dataLopExcelArray[i].TENLOP,
           dataLopExcelArray[i].NAMTUYENSINH,
