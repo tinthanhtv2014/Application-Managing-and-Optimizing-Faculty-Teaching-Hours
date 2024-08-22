@@ -18,8 +18,9 @@ const selectLop = async () => {
   }
 };
 
-const CreateLop = async (TENCHUONGTRINH, datalop) => {
+const CreateLop = async (datalop, TENCHUONGTRINH) => {
   try {
+    console.log("check ", datalop);
     const MACHUONGTRINH = await timchuongtrinh_TENCHUONGTRINH(TENCHUONGTRINH);
     console.log("check machuongtrinh", MACHUONGTRINH);
     const timlop = await timlop_MALOP(datalop.MALOP);
@@ -41,10 +42,11 @@ const CreateLop = async (TENCHUONGTRINH, datalop) => {
         datalop.SISO,
       ]
     );
+    const data = await selectLop();
     return {
       EM: " tạo lớp thành công",
       EC: 1,
-      DT: results1,
+      DT: data.DT,
     };
   } catch (error) {
     return {

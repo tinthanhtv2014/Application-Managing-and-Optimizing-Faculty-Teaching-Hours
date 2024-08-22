@@ -7,6 +7,7 @@ const {
 const get_chuongtrinhdaotao_tenbomon = async (req, res) => {
   try {
     let TENBOMON = req.body.TENBOMON;
+
     let results = await selectChuongtrinhdaotao_tenbomon(TENBOMON);
 
     return res.status(200).json({

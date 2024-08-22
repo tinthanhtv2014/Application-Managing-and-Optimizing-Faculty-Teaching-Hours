@@ -1,6 +1,14 @@
 .vertical-divider {
-    width: 1px; // Width of the divider
-    background-color: #ccc; // Color of the divider
-    height: 100%; // Span the full height of the row
-    margin: 0 auto; // Center the divider if needed
+    width: 1px;
+    background-color: #ccc;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.vertical-divider-ngang {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+
+    margin: 0 auto;
 }

@@ -11,37 +11,60 @@ import CookiesAxios from '../CookiesAxios';
 import TaoLopHoc from './component/TaoLopHoc';
 import ChuongTrinhDaoTaoButtonList from './component/ChuongTrinhDaoTaoButtonList ';
 import "./IndexQuanLyLopHoc.scss"
+import ListCTDT from './component/listCTDT';
 const IndexQuanLyLopHoc = () => {
     const [lopData, setLopData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [IsOpenSelectOption, setIsOpenSelectOption] = useState("Xem Danh Sách Các Lớp");
     const [DataListCTDT, setdatListCTDT] = useState([]);
+    const [fullListCTDT, setFullListCTDT] = useState([]);
     const [selectCTDT, setSelectCTDT] = useState(null);
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await CookiesAxios.get(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/xem`); // Adjust the API URL as needed
-                const response_ChuongTinhDaoTao = await CookiesAxios.get(
-                    `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
-                );
-
-
-
-                if (response.data.EC === 1) {
-                    setLopData(response.data.DT);
-                    setdatListCTDT(response_ChuongTinhDaoTao.data.DT);
-                    setLoading(false);
-                }
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            }
-        };
 
         fetchData();
-    }, []);
 
+    }, []);
+    useEffect(() => {
+        if (selectCTDT) {
+            getFullChuongTrinhDaoTao()
+        }
+    }, [selectCTDT])
+    const getFullChuongTrinhDaoTao = async () => {
+        if (selectCTDT) {
+            try {
+                const response = await CookiesAxios.post(
+                    `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/only/xem`,
+                    {
+                        TENCHUONGTRINH: selectCTDT,
+                    }
+                );
+                console.log("Dữ liệu học kì", response.data);
+                setFullListCTDT(response.data.DT);
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+            }
+        }
+    };
+    const fetchData = async () => {
+        try {
+            const response = await CookiesAxios.get(`${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/xem`); // Adjust the API URL as needed
+            const response_ChuongTinhDaoTao = await CookiesAxios.get(
+                `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
+            );
+
+
+
+            if (response.data.EC === 1) {
+                setLopData(response.data.DT);
+                setdatListCTDT(response_ChuongTinhDaoTao.data.DT);
+                setLoading(false);
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false);
+        }
+    };
     if (loading) {
         return (
             <Box sx={{ width: '100%' }}>
@@ -55,25 +78,27 @@ const IndexQuanLyLopHoc = () => {
             <Container>
                 <Row>
                     <Row>
-                        <Col md={4}>  <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                                Chức Năng
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={IsOpenSelectOption}
-                                label="Chức Năng"
-                                onChange={(e) => setIsOpenSelectOption(e.target.value)}
-                            >
-                                <MenuItem value="Xem Danh Sách Các Lớp">
-                                    Xem Danh Sách Các Lơp
-                                </MenuItem>
-                                <MenuItem value="Thêm Lớp Học Mới">
-                                    Thêm Lớp Học Mới
-                                </MenuItem>
-                            </Select>
-                        </FormControl></Col>
+                        <Col md={4}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">
+                                    Chức Năng
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={IsOpenSelectOption}
+                                    label="Chức Năng"
+                                    onChange={(e) => setIsOpenSelectOption(e.target.value)}
+                                >
+                                    <MenuItem value="Xem Danh Sách Các Lớp">
+                                        Xem Danh Sách Các Lơp
+                                    </MenuItem>
+                                    <MenuItem value="Thêm Lớp Học Mới">
+                                        Thêm Lớp Học Mới
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Col>
                     </Row>
                     {IsOpenSelectOption === "Xem Danh Sách Các Lớp" ? (
                         <> <Row>
@@ -110,22 +135,34 @@ const IndexQuanLyLopHoc = () => {
                                 <Row>
 
                                     <Col md={4}>
-                                        <div>   <TaoLopHoc selectCTDT={selectCTDT} /></div>
-
-
+                                        <ChuongTrinhDaoTaoButtonList DataListCTDT={DataListCTDT}
+                                            setdatListCTDT={setdatListCTDT}
+                                            setSelectCTDT={setSelectCTDT} />
                                     </Col>
+
                                     <Col md={1}>
                                         <div className="vertical-divider"></div>
                                     </Col>
+
                                     <Col md={4}>
-                                        <ChuongTrinhDaoTaoButtonList DataListCTDT={DataListCTDT}
-                                            setSelectCTDT={setSelectCTDT} />
+                                        <div>   <TaoLopHoc selectCTDT={selectCTDT} setLopData={setLopData} /></div>
+
+
                                     </Col>
+
+                                </Row>
+
+                                <Row> <Col md={12}> <div className="vertical-divider-ngang mt-2 mb-2" ></div></Col></Row>
+                                <Row >
+                                    <ListCTDT
+                                        fullListCTDT={fullListCTDT}
+                                        lopData={lopData}
+
+                                    />
 
 
 
                                 </Row>
-
 
                             </>
                         )}
