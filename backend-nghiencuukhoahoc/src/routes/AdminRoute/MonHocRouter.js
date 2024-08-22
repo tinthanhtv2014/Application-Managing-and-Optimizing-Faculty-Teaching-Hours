@@ -29,6 +29,7 @@ const {
   creatNEWLopcontroller,
   updateLOPcontroller,
   deleteLOPcontroller,
+  createLopcontrollerExcel,
 } = require("../../controllers/AdminController/lopAdminCONTROLLER.js");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
@@ -71,6 +72,7 @@ const CRUDMonHoc = (app) => {
   //router cho lớp thuộc chương trình đào tạo
   router.get("/lop/xem", getAllLopcontroller);
   router.post("/lop/tao", creatNEWLopcontroller);
+  router.post("/lop/tao/excel", createLopcontrollerExcel);
   router.put("/lop/update/:MALOP", updateLOPcontroller);
   router.delete("/lop/xoa", deleteLOPcontroller);
   return app.use("/api/v1/admin/monhoc", router);
