@@ -420,6 +420,9 @@ const DangKyDanhMucGioChuan = ({
         const soTacGiaThuNhat = dtList.filter(
           (role) => role.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
         ).length; // Đếm số tác giả thứ nhất
+        const soTacGiaChiuTrachNhiem = dtList.filter(
+          (role) => role.TEN_LOAI_TAC_GIA === "Tác giả chịu trách nhiệm"
+        ).length; // Đếm số tác giả thứ nhất
 
         const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
           const correspondingData = dtList[index];
@@ -451,6 +454,16 @@ const DangKyDanhMucGioChuan = ({
                     (correspondingData.TY_LE * SoGioDanhMucDaChon) /
                     soTacGiaThuNhat;
                   soPhanTram = correspondingData.TY_LE / soTacGiaThuNhat;
+                } else if (
+                  correspondingData.DA_LOAI_TAC_GIA === "Không" &&
+                  correspondingData.TEN_LOAI_TAC_GIA ===
+                    "Tác giả chịu trách nhiệm"
+                ) {
+                  soGio =
+                    (correspondingData.TY_LE * SoGioDanhMucDaChon) /
+                    soTacGiaChiuTrachNhiem;
+
+                  soPhanTram = correspondingData.TY_LE / soTacGiaChiuTrachNhiem;
                 } else if (correspondingData.DA_LOAI_TAC_GIA === "Không") {
                   soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
                   soPhanTram = correspondingData.TY_LE;
