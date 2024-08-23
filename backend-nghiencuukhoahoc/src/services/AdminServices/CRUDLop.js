@@ -1,5 +1,9 @@
 const pool = require("../../config/database");
-const { timchuongtrinh_TENCHUONGTRINH, timlop_MALOP } = require("./helpers");
+const {
+  timchuongtrinh_TENCHUONGTRINH,
+  timlop_MALOP,
+  selectBomon_TENBOMON,
+} = require("./helpers");
 const selectLop = async () => {
   try {
     let [results1, fields1] = await pool.execute(`select * from lop`);
@@ -170,6 +174,11 @@ const createLopExcel = async (dataLopExcelArray) => {
       let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
         dataLopExcelArray[i].TENCHUONGTRINH
       );
+
+      let kiemtra_tenbomon = await selectBomon_TENBOMON(
+        dataLopExcelArray[i].TENBOMON
+      );
+
       if (!kiemtra_tenchuongtrinh) {
         await pool.execute(
           `INSERT INTO chuongtrinhdaotao (TENCHUONGTRINH, MABOMON) VALUES (?, ?)`,
