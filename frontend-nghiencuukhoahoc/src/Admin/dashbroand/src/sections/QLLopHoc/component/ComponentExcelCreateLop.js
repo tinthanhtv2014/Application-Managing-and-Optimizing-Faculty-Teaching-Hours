@@ -25,6 +25,7 @@ const ComponentExcelLop = () => {
             },
           }
         );
+        console.log("check data ", response.data);
         if (response.data.EC === 1) {
           toast.success("Thêm dữ liệu thành công");
         } else {
