@@ -3,7 +3,12 @@ const pool = require("../../../config/database");
 const selectTyLeQuyDoi = async () => {
   try {
     let [results, fields] = await pool.execute(
-      `SELECT * FROM ty_le_quy_doi_gio_chuan`
+      `SELECT * FROM ty_le_quy_doi_gio_chuan
+       ORDER BY CASE 
+                  WHEN TRANG_THAI_QUY_DOI = 'Đang áp dụng' THEN 1 
+                  WHEN TRANG_THAI_QUY_DOI = 'Ngưng áp dụng' THEN 2 
+                  ELSE 3 
+                END`
     );
     // console.log("check select =>", results);
     return {
@@ -36,7 +41,21 @@ const selectTyLeQuyDoi_TEN_QUY_DOI = async (TEN_QUY_DOI) => {
     };
   }
 };
-
+const selectTyLeQuyDoi_Id = async (Id) => {
+  try {
+    let [results, fields] = await pool.execute(
+      `SELECT * FROM ty_le_quy_doi_gio_chuan WHERE MA_QUY_DOI = ?`,
+      [Id]
+    );
+    return results;
+  } catch (error) {
+    return {
+      EM: "Lỗi services selectTyLeQuyDoi",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const createTyLeQuyDoi = async (
   MA_QUY_DINH,
   TEN_QUY_DOI,
@@ -83,14 +102,11 @@ const createTyLeQuyDoi = async (
 
 const updateTyLeQuyDoi = async (
   id,
-  MA_QUY_DINH,
-  TEN_QUY_DOI,
-  TY_LE,
-  TRANG_THAI_QUY_DOI,
-  GHI_CHU_QUY_DOI
+
+  TRANG_THAI_QUY_DOI
 ) => {
   try {
-    let results1 = await selectTyLeQuyDoi_TEN_QUY_DOI(TEN_QUY_DOI);
+    let results1 = await selectTyLeQuyDoi_Id(id);
     if (results1.length === 0) {
       return {
         EM: "Tỷ lệ quy đổi này không tồn tại",
@@ -100,15 +116,17 @@ const updateTyLeQuyDoi = async (
     }
 
     let [results, fields] = await pool.execute(
-      `UPDATE ty_le_quy_doi_gio_chuan SET MA_QUY_DINH = ?, TEN_QUY_DOI = ?, TY_LE = ?, TRANG_THAI_QUY_DOI = ?, GHI_CHU_QUY_DOI = ? WHERE MA_QUY_DOI = ?`,
-      [MA_QUY_DINH, TEN_QUY_DOI, TY_LE, TRANG_THAI_QUY_DOI, GHI_CHU_QUY_DOI, id]
+      `UPDATE ty_le_quy_doi_gio_chuan SET TRANG_THAI_QUY_DOI = ? WHERE MA_QUY_DOI = ?`,
+      [TRANG_THAI_QUY_DOI, id]
     );
+    const results_data = await selectTyLeQuyDoi();
     return {
       EM: "Cập nhật tỷ lệ quy đổi thành công",
       EC: 1,
-      DT: results,
+      DT: results_data.DT,
     };
   } catch (error) {
+    console.log("check error =>", error);
     return {
       EM: "Lỗi services updateTyLeQuyDoi",
       EC: -1,

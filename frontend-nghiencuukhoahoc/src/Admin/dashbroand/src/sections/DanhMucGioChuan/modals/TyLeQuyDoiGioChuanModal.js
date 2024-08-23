@@ -15,8 +15,10 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import CookiesAxios from "../../CookiesAxios";
+import "./modals.scss";
 const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
   const [quyDinhs, setQuyDinhs] = useState([]);
   const [tyLeQuyDoi, setTyLeQuyDoi] = useState([]);
@@ -25,7 +27,8 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
   const [tyLe, setTyLe] = useState("");
   const [trangThaiQuyDoi, setTrangThaiQuyDoi] = useState("");
   const [ghiChuQuyDoi, setGhiChuQuyDoi] = useState("");
-
+  const [vienChucTruong, setVienChucTruong] = useState("");
+  const [thucHienChuan, setThucHienChuan] = useState("");
   useEffect(() => {
     if (open) {
       fetchQuyDinhs();
@@ -33,26 +36,22 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
     }
   }, [open]);
 
-  // Giả lập dữ liệu quy định
   const fetchQuyDinhs = async () => {
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh`
       );
-      // console.log("check fetch Quy dinh =>", response.data);
       setQuyDinhs(response.data.DT);
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
     }
   };
 
-  // Giả lập dữ liệu tỷ lệ quy đổi
   const fetchTyLeQuyDoi = async () => {
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/tylequydoi`
       );
-      // console.log("check fetch Quy dinh =>", response.data);
       setTyLeQuyDoi(response.data.DT);
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
@@ -69,6 +68,8 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
           TY_LE: tyLe,
           TRANG_THAI_QUY_DOI: trangThaiQuyDoi,
           GHI_CHU_QUY_DOI: ghiChuQuyDoi,
+          VIEN_CHUC_TRUONG: vienChucTruong,
+          THUC_HIEN_CHUAN: thucHienChuan,
         }
       );
       console.log("check fetch setTyLeQuyDoi =>", response.data);
@@ -76,16 +77,31 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
     } catch (error) {
       console.error("Error fetching quy dinhs:", error);
     }
-    // Thêm dữ liệu mới vào danh sách hiện có
   };
-
+  const handleEdiStatusTyLeQuyDoi = async (item) => {
+    const TrangThai =
+      item.TRANG_THAI_QUY_DOI === "Đang áp dụng"
+        ? "Ngưng áp dụng"
+        : "Đang áp dụng";
+    try {
+      const response = await CookiesAxios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/tylequydoi/${item.MA_QUY_DOI}`,
+        { TRANG_THAI_QUY_DOI: TrangThai }
+      );
+      console.log("check fetch setTyLeQuyDoi =>", response.data);
+      if (response.data.EC === 1) {
+        setTyLeQuyDoi(response.data.DT);
+      }
+    } catch (error) {
+      console.error("Error fetching quy dinhs:", error);
+    }
+  };
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
       <DialogTitle>Tỷ lệ quy đổi giờ chuẩn</DialogTitle>
       <DialogContent>
         <DialogContentText>Nội dung Tỷ lệ quy đổi giờ chuẩn.</DialogContentText>
         <Grid container spacing={3}>
-          {/* Form để thêm dữ liệu */}
           <Grid item xs={12} md={6}>
             <FormControl fullWidth margin="normal">
               <InputLabel>Chọn Quy Định</InputLabel>
@@ -115,6 +131,38 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
               value={tyLe}
               onChange={(e) => setTyLe(e.target.value)}
             />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="vien-chuc-truong-label">
+                Viên Chức Trường
+              </InputLabel>
+              <Select
+                labelId="vien-chuc-truong-label"
+                id="vien-chuc-truong-label"
+                label="Viên Chức Trường"
+                value={vienChucTruong}
+                onChange={(e) => setVienChucTruong(e.target.value)}
+              >
+                <MenuItem value="Có">Có</MenuItem>
+                <MenuItem value="Không">Không</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="thuc-hien-chuan-label">
+                Thực Hiện Chuẩn
+              </InputLabel>
+              <Select
+                labelId="thuc-hien-chuan-label"
+                id="thuc-hien-chuan-label"
+                label="Thực Hiện Chuẩn"
+                value={thucHienChuan}
+                onChange={(e) => setThucHienChuan(e.target.value)}
+              >
+                <MenuItem value="Có">Có</MenuItem>
+                <MenuItem value="Không">Không</MenuItem>
+              </Select>
+            </FormControl>
+
             <TextField
               label="Trạng Thái Quy Đổi"
               fullWidth
@@ -131,18 +179,133 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
             />
           </Grid>
 
-          {/* Danh sách các tỷ lệ quy đổi */}
           <Grid item xs={12} md={6}>
-            <List>
-              {tyLeQuyDoi.map((item) => (
-                <ListItem key={item.MA_QUY_DOI}>
-                  <ListItemText
-                    primary={`Tên Quy Đổi: ${item.TEN_QUY_DOI}`}
-                    secondary={`Tỷ Lệ: ${item.TY_LE} - Trạng Thái: ${item.TRANG_THAI_QUY_DOI} - Ghi Chú: ${item.GHI_CHU_QUY_DOI}`}
-                  />
-                </ListItem>
-              ))}
-            </List>
+            {tyLeQuyDoi && tyLeQuyDoi.length > 0 ? (
+              <List>
+                {tyLeQuyDoi.map((item) => (
+                  <ListItem
+                    key={item.MA_QUY_DOI}
+                    sx={{
+                      // Thay đổi kiểu dáng dựa trên TRANG_THAI_QUY_DOI
+                      opacity:
+                        item.TRANG_THAI_QUY_DOI === "Ngưng áp dụng" ? 0.5 : 1,
+                      backgroundColor:
+                        item.TRANG_THAI_QUY_DOI === "Ngưng áp dụng"
+                          ? "#f0f0f0"
+                          : "inherit",
+                      borderBottom: "1px solid #131212", // Gạch ngang cho mỗi item
+                    }}
+                  >
+                    <ListItemText
+                      primary={
+                        <Typography
+                          variant="body2"
+                          color={
+                            item.TRANG_THAI_QUY_DOI === "Ngưng áp dụng"
+                              ? "textDisabled"
+                              : "textSecondary"
+                          }
+                        >
+                          <Typography
+                            component="span"
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            Tên Quy Đổi:
+                          </Typography>
+                          {` ${item.TEN_QUY_DOI}`}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography
+                          variant="body1"
+                          color={
+                            item.TRANG_THAI_QUY_DOI === "Ngưng áp dụng"
+                              ? "textDisabled"
+                              : "textPrimary"
+                          }
+                        >
+                          Tỷ Lệ: &nbsp;
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ color: "red", fontWeight: "bold" }}
+                          >
+                            {` ${item.TY_LE} `}
+                          </Typography>
+                          <br />
+                          Ghi Chú: &nbsp;
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ color: "green", fontWeight: "bold" }}
+                          >
+                            {` ${item.GHI_CHU_QUY_DOI}`}
+                          </Typography>
+                          <br />
+                          Viên Chức Trường: &nbsp;
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ color: "green" }}
+                          >
+                            {` ${item.VIEN_CHUC_TRUONG}`}
+                          </Typography>
+                          <br />
+                          Thực Hiện Chuẩn: &nbsp;
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ color: "green" }}
+                          >
+                            {` ${item.THUC_HIEN_CHUAN}`}
+                          </Typography>
+                          <br />
+                          Trạng Thái Quy Đổi: &nbsp;
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{
+                              color: `${
+                                item.TRANG_THAI_QUY_DOI === "Đang áp dụng"
+                                  ? `green`
+                                  : `red`
+                              }`,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {` ${item.TRANG_THAI_QUY_DOI}`}
+                          </Typography>
+                          &nbsp; &nbsp;
+                          {item.TRANG_THAI_QUY_DOI === "Đang áp dụng" ? (
+                            <i
+                              className="fa-solid fa-arrow-down"
+                              title="Tắt"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleEdiStatusTyLeQuyDoi(item)}
+                            ></i>
+                          ) : (
+                            <i
+                              title="Bật"
+                              className="fa-solid fa-arrow-up"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleEdiStatusTyLeQuyDoi(item)}
+                            ></i>
+                          )}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography
+                variant="body1"
+                component="span"
+                sx={{ color: "green", fontWeight: "bold" }}
+              >
+                Không Có Dữ Liệu
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </DialogContent>

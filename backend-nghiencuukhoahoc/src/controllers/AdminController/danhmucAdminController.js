@@ -549,23 +549,10 @@ const addTyLeQuyDoi = async (req, res) => {
 
 const editTyLeQuyDoi = async (req, res) => {
   const { id } = req.params;
-  const {
-    MA_QUY_DINH,
-    TEN_QUY_DOI,
-    TY_LE,
-    TRANG_THAI_QUY_DOI,
-    GHI_CHU_QUY_DOI,
-  } = req.body;
+  const { TRANG_THAI_QUY_DOI } = req.body;
 
   try {
-    const results = await updateTyLeQuyDoi(
-      id,
-      MA_QUY_DINH,
-      TEN_QUY_DOI,
-      TY_LE,
-      TRANG_THAI_QUY_DOI,
-      GHI_CHU_QUY_DOI
-    );
+    const results = await updateTyLeQuyDoi(id, TRANG_THAI_QUY_DOI);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
