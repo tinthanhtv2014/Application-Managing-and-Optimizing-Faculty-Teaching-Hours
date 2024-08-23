@@ -29,6 +29,9 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
   const [ghiChuQuyDoi, setGhiChuQuyDoi] = useState("");
   const [vienChucTruong, setVienChucTruong] = useState("");
   const [thucHienChuan, setThucHienChuan] = useState("");
+  const [filterStatus, setFilterStatus] = useState("Tất cả");
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     if (open) {
       fetchQuyDinhs();
@@ -96,6 +99,11 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
       console.error("Error fetching quy dinhs:", error);
     }
   };
+  const filteredAndSearchedData = tyLeQuyDoi.filter(
+    (item) =>
+      (filterStatus === "Tất cả" || item.TRANG_THAI_QUY_DOI === filterStatus) &&
+      item.TEN_QUY_DOI.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
       <DialogTitle>Tỷ lệ quy đổi giờ chuẩn</DialogTitle>
@@ -180,9 +188,31 @@ const TyLeQuyDoiGioChuanModal = ({ open, handleClose }) => {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            {tyLeQuyDoi && tyLeQuyDoi.length > 0 ? (
+            {" "}
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="vien-chuc-truong-label">Chức Năng</InputLabel>
+              <Select
+                labelId="vien-chuc-truong-label"
+                id="vien-chuc-truong-label"
+                label="Viên Chức Trường"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
+                <MenuItem value="Tất cả">Tất cả</MenuItem>
+                <MenuItem value="Đang áp dụng">Đang áp dụng</MenuItem>
+                <MenuItem value="Ngưng áp dụng">Ngưng áp dụng</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Tìm Kiếm Tên "
+              fullWidth
+              margin="normal"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {filteredAndSearchedData && filteredAndSearchedData.length > 0 ? (
               <List>
-                {tyLeQuyDoi.map((item) => (
+                {filteredAndSearchedData.map((item) => (
                   <ListItem
                     key={item.MA_QUY_DOI}
                     sx={{
