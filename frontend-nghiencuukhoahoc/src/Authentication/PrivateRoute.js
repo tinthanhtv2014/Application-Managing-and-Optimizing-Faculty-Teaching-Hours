@@ -59,8 +59,10 @@ const PrivateRoute = () => {
         } catch (error) {
           if (error.response && error.response.status === 401) {
             setRedirect(true);
+            navigate("/");
           } else {
             console.error("Lỗi khi tải dữ liệu được bảo vệ:", error);
+            navigate("/");
           }
         } finally {
           setLoading(false);
@@ -72,11 +74,6 @@ const PrivateRoute = () => {
       setRedirect(true);
     }
   }, [auth]);
-
-  // console.log("Phân quyền admin:", phanQuyenAdmin);
-  // console.log("Phân quyền giáo viên:", phanQuyenGV);
-  // console.log("Phân quyền trưởng bộ môn:", phanQuyenTBM);
-  // console.log("Phân quyền thủ kho:", phanQuyenTK);
 
   if (loading) {
     return <Loading />;

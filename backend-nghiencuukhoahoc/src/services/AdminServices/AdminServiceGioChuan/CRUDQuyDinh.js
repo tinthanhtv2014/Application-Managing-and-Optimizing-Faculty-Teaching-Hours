@@ -88,10 +88,11 @@ const updateQuyDinh = async (id, TRANG_THAI_QUY_DINH) => {
       `UPDATE quy_dinh SET TRANG_THAI_QUY_DINH = ? WHERE MA_QUY_DINH = ?`,
       [TRANG_THAI_QUY_DINH, id]
     );
+    const results1 = await selectQuyDinh();
     return {
       EM: "Cập nhật trạng thái quy định thành công",
       EC: 1,
-      DT: results,
+      DT: results1.DT,
     };
   } catch (error) {
     return {

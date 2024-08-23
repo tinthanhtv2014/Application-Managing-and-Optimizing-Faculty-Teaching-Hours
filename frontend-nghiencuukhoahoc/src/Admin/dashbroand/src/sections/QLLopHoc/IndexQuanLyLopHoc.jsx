@@ -20,6 +20,8 @@ const IndexQuanLyLopHoc = () => {
     const [DataListCTDT, setdatListCTDT] = useState([]);
     const [fullListCTDT, setFullListCTDT] = useState([]);
     const [selectCTDT, setSelectCTDT] = useState(null);
+
+
     useEffect(() => {
 
         fetchData();

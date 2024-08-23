@@ -59,17 +59,20 @@ const QuyDinhModal = ({ open, handleClose }) => {
     }
   };
   const handleUpdateStatusQuyDinh = async (qd) => {
-    const TrangThai = "Đang áp dụng";
-    if (qd.TRANG_THAI_QUY_DINH == "Đang áp dụng") {
-      return TrangThai == "Ngưng áp dụng";
-    }
+    const TrangThai =
+      qd.TRANG_THAI_QUY_DINH === "Đang áp dụng"
+        ? "Ngưng áp dụng"
+        : "Đang áp dụng";
+
     try {
       const response = await CookiesAxios.put(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/quydinh/${qd.MA_QUY_DINH}`,
         { TRANG_THAI_QUY_DINH: TrangThai }
       );
       console.log("check handleDeleteQuyDinh", response.data);
-      setQuyDinhs(response.data.DT);
+      if (response.data.EC == 1) {
+        setQuyDinhs(response.data.DT);
+      }
     } catch (error) {
       console.error("Error deleting quy dinh:", error);
     }
@@ -115,34 +118,61 @@ const QuyDinhModal = ({ open, handleClose }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Mã Quy Định</TableCell>
-                    <TableCell>Tên Quy Định</TableCell>
-                    <TableCell>Hành Động</TableCell>
+                    <TableCell>Tên Quy Định</TableCell>{" "}
                     <TableCell>Trạng Thái</TableCell>
+                    <TableCell>Hành Động</TableCell>
+                    <TableCell>Xóa</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {quyDinhs.map((qd) => (
-                    <TableRow key={qd.MA_QUY_DINH}>
-                      <TableCell>{qd.MA_QUY_DINH}</TableCell>
-                      <TableCell>{qd.TEN_QUY_DINH}</TableCell>
-                      <TableCell>
-                        <i
-                          className="fa-solid fa-trash"
-                          aria-label="delete"
-                          onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
-                          style={{ cursor: "pointer" }}
-                        ></i>
-                      </TableCell>
-                      <TableCell>
-                        <i
-                          className="fa-solid fa-trash"
-                          aria-label="delete"
-                          onClick={() => handleUpdateStatusQuyDinh(qd)}
-                          style={{ cursor: "pointer" }}
-                        ></i>
+                  {quyDinhs?.length > 0 ? (
+                    quyDinhs.map((qd) => (
+                      <TableRow key={qd.MA_QUY_DINH}>
+                        <TableCell>{qd.MA_QUY_DINH}</TableCell>
+                        <TableCell>{qd.TEN_QUY_DINH}</TableCell>
+                        <TableCell
+                          className={`${
+                            qd.TRANG_THAI_QUY_DINH === "Đang áp dụng"
+                              ? "text-success"
+                              : "text-danger"
+                          }`}
+                        >
+                          {qd.TRANG_THAI_QUY_DINH}
+                        </TableCell>
+                        <TableCell>
+                          {qd.TRANG_THAI_QUY_DINH === "Đang áp dụng" ? (
+                            <i
+                              className="fa-solid fa-arrow-down"
+                              title="Tắt"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleUpdateStatusQuyDinh(qd)}
+                            ></i>
+                          ) : (
+                            <i
+                              title="Bật"
+                              className="fa-solid fa-arrow-up"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleUpdateStatusQuyDinh(qd)}
+                            ></i>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <i
+                            className="fa-solid fa-trash"
+                            aria-label="delete"
+                            onClick={() => handleDeleteQuyDinh(qd.MA_QUY_DINH)}
+                            style={{ cursor: "pointer" }}
+                          ></i>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        Không có dữ liệu
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

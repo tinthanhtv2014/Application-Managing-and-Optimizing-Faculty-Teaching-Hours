@@ -6,10 +6,6 @@ import { AuthProvider } from "./Authentication/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import LoginAdmin from "../src/Admin/dashbroand/src/pages/login.jsx";
 
-// import DashBoardAdmin from "./Admin/dashbroand/src/main";
-// import DashboardTruongBoMon from "./TruongBoMon/dashbroand/src/main.jsx";
-// import DashboardGiangVien from "./GiangVien/dashbroand/src/main.jsx";
-// import DashboardTruongKhoa from "./TruongKhoa/dashbroand/src/main.jsx";
 import PrivateRoute from "./Authentication/PrivateRoute.js";
 function App() {
   return (
@@ -22,7 +18,6 @@ function App() {
           <Route path="/giang-vien/*" element={<PrivateRoute />} />
           <Route path="/truong-bm/*" element={<PrivateRoute />} />
           <Route path="/truongkhoa/*" element={<PrivateRoute />} />
-          {/* <Route path="/" element={<TruongKhoaLogin />} /> */}
         </Routes>
         <ToastContainer
           position="top-right"
