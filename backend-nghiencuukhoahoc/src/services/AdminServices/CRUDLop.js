@@ -222,15 +222,21 @@ const createLopExcel = async (dataLopExcelArray) => {
       });
     }
 
+    let [results1, fields1] = await pool.execute(
+      `select bomon.TENBOMON,ctdt.TENCHUONGTRINH,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
+    );
+
+    console.log("check lớp =))): ", results1);
+
     return {
       EM: "Tất cả lớp đã được tạo",
       EC: 1,
-      DT: results,
+      DT: results1,
     };
   } catch (error) {
-    console.log("Lỗi services createTaiKhoanExcel", error);
+    console.log("Lỗi services createLopExcel", error);
     return {
-      EM: "Lỗi services createTaiKhoanExcel",
+      EM: "Lỗi services createLopExcel",
       EC: 1,
       DT: [],
     };
