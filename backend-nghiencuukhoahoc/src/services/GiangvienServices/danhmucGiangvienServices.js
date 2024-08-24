@@ -151,19 +151,21 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
     const MANAMHOC = results1_NAMHOC[0].MANAMHOC; // Now safe to access
     // console.log("check MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
-      `SELECT 
+      `
+      SELECT 
       giangvien.TENGV,
       ltg.TEN_LOAI_TAC_GIA,
       namhoc.TENNAMHOC,
-      dkthqd.TEN_NGHIEN_CUU,
+      dkthqd.TEN_DE_TAI,
       dkthqd.SOGIOQUYDOI,
-      dkthqd.THOI_GIAN_DANG_KY,
+      nckh.THOI_GIAN_DANG_KY,
       dm.* 
       FROM 
       giangvien
       JOIN dang_ky_thuc_hien_quy_doi AS dkthqd ON giangvien.MAGV = dkthqd.MAGV
       JOIN namhoc ON namhoc.MANAMHOC = dkthqd.MANAMHOC
       JOIN danhmucquydoispkhcn AS dm ON dm.MA_DANH_MUC = dkthqd.MA_DANH_MUC
+      JOIN nghien_cuu_kh AS nckh ON nckh.TEN_DE_TAI = dkthqd.TEN_DE_TAI
       JOIN loai_tac_gia AS ltg ON ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
       WHERE
       giangvien.MAGV = ? 
