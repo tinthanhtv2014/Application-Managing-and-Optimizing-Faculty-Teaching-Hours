@@ -279,22 +279,6 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
         );
       }
 
-      const timdetai = await timdetai_TENDETAI(dataDangKy.TENDETAI);
-
-      if (timdetai.length > 0) {
-        return {
-          EM: "đăng ký đề tài không thành công, đề tài này đã tồn tại",
-          EC: 0,
-          DT: [],
-        };
-      } else {
-        await pool.execute(
-          `insert into nghien_cuu_kh values (?,?)
-         `,
-          [dataDangKy.TENDETAI, time]
-        );
-      }
-
       console.log("check timgv:", timgiangvien);
       if (timgiangvien === undefined) {
         const randomMAGV = await callbackMAGV(pool);
@@ -323,18 +307,40 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
         );
       }
 
-      await pool.execute(
-        `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,N'Đã đăng ký')
-       `,
-        [
-          dataDangKy.MADANHMUC,
-          selectgiangvien.MAGV,
-          timNAMHOC,
-          timtacgia,
-          dataDangKy.LISTGIANGVIEN[i].soGio,
-          dataDangKy.TENDETAI,
-        ]
-      );
+      const timdetai = await timdetai_TENDETAI(dataDangKy.TENDETAI);
+
+      if (timdetai.length > 0) {
+        await pool.execute(
+          `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,N'Đã đăng ký')
+         `,
+          [
+            dataDangKy.MADANHMUC,
+            selectgiangvien.MAGV,
+            timNAMHOC,
+            timtacgia,
+            dataDangKy.TENDETAI,
+            dataDangKy.LISTGIANGVIEN[i].soGio,
+          ]
+        );
+      } else {
+        await pool.execute(
+          `insert into nghien_cuu_kh values (?,?)
+           `,
+          [dataDangKy.TENDETAI, time]
+        );
+        await pool.execute(
+          `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,N'Đã đăng ký')
+         `,
+          [
+            dataDangKy.MADANHMUC,
+            selectgiangvien.MAGV,
+            timNAMHOC,
+            timtacgia,
+            dataDangKy.TENDETAI,
+            dataDangKy.LISTGIANGVIEN[i].soGio,
+          ]
+        );
+      }
     }
 
     const [results1, fields] = await pool.execute(
