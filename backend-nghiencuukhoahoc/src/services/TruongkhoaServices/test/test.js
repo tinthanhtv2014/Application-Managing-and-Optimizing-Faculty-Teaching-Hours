@@ -305,13 +305,13 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
 
             // Thêm dữ liệu vào bảng CO_TY_LE
             let [result, fields3] = await pool.execute(
-                `INSERT INTO co_ty_le (MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA_THUOC_LOAI, DA_LOAI_TAC_GIA) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO co_ty_le (MA_QUY_DOI, MA_LOAI_DANH_MUC, MA_LOAI_TAC_GIA, SO_TAC_GIA_THUOC_LOAI, NHOM_CHIA_GIO) VALUES (?, ?, ?, ?, ?)`,
                 [
                     TyLe[0].MA_QUY_DOI,
                     LoaiDanhmuc[0].MA_LOAI_DANH_MUC,
                     LoaiTacGai[0].MA_LOAI_TAC_GIA,
                     dataCoTyLe[i].SO_TAC_GIA_THUOC_LOAI,
-                    dataCoTyLe[i].DA_LOAI_TAC_GIA
+                    dataCoTyLe[i].NHOM_CHIA_GIO
                 ]
             );
             results.push(result.insertId); // Lưu ID của loại danh mục vào kết quả
@@ -321,7 +321,7 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
         return {
             EM: "Thêm dữ liệu thành công",
             EC: 1,
-            DT: results,
+            DT: 'ok',
         };
     } catch (error) {
         console.error("Lỗi trong try-catch: ", error);

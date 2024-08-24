@@ -21,7 +21,6 @@ const TruongKhoaRoute = (app) => {
   router.post("/timkiem/email", checkUserJWT, timkiem_email_taikhoanController);
   router.post(
     "/timkiem/ngoaitruong/email",
-
     timkiem_email_taikhoan_ngoaitruongController
   );
   router.post("/test/tao/excel", CoTyLeExcelController); // Chạy CSDL bằng excel
