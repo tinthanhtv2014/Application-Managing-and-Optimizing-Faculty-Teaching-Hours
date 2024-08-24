@@ -9,6 +9,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import CoQuyDinh from "./modals/CoQuyDinh";
 import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
 import HinhThucDanhGia from "./modals/HinhThucDanhGia";
+import ChucDanhGiangVien from "./modals/ChucDanhGV";
+import ModalChucVu from "./modals/ChucVuGV";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -19,6 +21,8 @@ const DanhMucGioChuan = () => {
     coQuyDinh: false,
     moCongDangKyDanhMuc: false,
     hinhThucDanhGia: false,
+    chucDanhGiangVien: false,
+    chucVuGiangVien: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -33,7 +37,7 @@ const DanhMucGioChuan = () => {
     <>
       <Container>
         <Row>
-          <h4> Quản lý danh mục</h4>
+          <h4> Quản lý </h4>
           <p></p>
           <Col md={4} sm={6} xs={12} className="mb-3">
             <Button
@@ -106,6 +110,24 @@ const DanhMucGioChuan = () => {
             >
               Hình Thức Đánh Giá
             </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("chucDanhGiangVien")}
+            >
+              Chức Danh Giảng Viên
+            </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("chucVuGiangVien")}
+            >
+              Chức Vụ Giảng Viên
+            </Button>
           </Col>
         </Row>
 
@@ -137,10 +159,17 @@ const DanhMucGioChuan = () => {
           open={open.moCongDangKyDanhMuc}
           handleClose={() => handleClose("moCongDangKyDanhMuc")}
         />
-
         <HinhThucDanhGia
           open={open.hinhThucDanhGia}
           handleClose={() => handleClose("hinhThucDanhGia")}
+        />
+        <ChucDanhGiangVien
+          open={open.chucDanhGiangVien}
+          handleClose={() => handleClose("chucDanhGiangVien")}
+        />
+        <ModalChucVu
+          open={open.chucVuGiangVien}
+          handleClose={() => handleClose("chucVuGiangVien")}
         />
       </Container>
     </>
