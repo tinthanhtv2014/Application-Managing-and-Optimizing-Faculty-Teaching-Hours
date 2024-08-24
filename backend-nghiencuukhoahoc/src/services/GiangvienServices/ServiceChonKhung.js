@@ -161,8 +161,8 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
 
 const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
-    console.log("MAGV:", MAGV);
-    console.log("TENNAMHOC:", TENNAMHOC);
+    // console.log("xem_CHONKHUNG_cho_GIANGVIEN MAGV:", MAGV);
+    // console.log("xem_CHONKHUNG_cho_GIANGVIEN TENNAMHOC:", TENNAMHOC);
 
     const [results_MANAMHOC] = await pool.execute(
       "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC = ?",
@@ -180,11 +180,11 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results1] = await pool.execute(
       "SELECT giangvien.*, khunggiochuan.*, namhoc.TENNAMHOC " +
-        "FROM chon_khung " +
-        "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
-        "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
-        "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
-        "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
+      "FROM chon_khung " +
+      "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
+      "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
+      "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
+      "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
