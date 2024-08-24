@@ -44,6 +44,7 @@ const create_hinhthucdanhgia = async (TENDANHGIA) => {
       DT: results1,
     };
   } catch (error) {
+    console.log("check erorr", error);
     return {
       EM: "Lỗi services create_hinhthucdanhgia",
       EC: -1,

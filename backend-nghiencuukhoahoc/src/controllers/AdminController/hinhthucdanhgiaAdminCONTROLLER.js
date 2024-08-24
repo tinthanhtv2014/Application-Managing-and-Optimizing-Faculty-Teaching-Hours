@@ -27,6 +27,7 @@ const selectAll_hinhthucdanhgia = async (req, res) => {
 const insert_hinhthucdanhgia = async (req, res) => {
   try {
     let TENDANHGIA = req.body.TENDANHGIA;
+    console.log("check ", TENDANHGIA);
     let results = await create_hinhthucdanhgia(TENDANHGIA);
 
     return res.status(200).json({

@@ -8,6 +8,7 @@ import LoaiTacGiaModal from "./modals/LoaiTacGiaModal";
 import { Col, Container, Row } from "react-bootstrap";
 import CoQuyDinh from "./modals/CoQuyDinh";
 import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
+import HinhThucDanhGia from "./modals/HinhThucDanhGia";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -17,6 +18,7 @@ const DanhMucGioChuan = () => {
     loaiTacGia: false,
     coQuyDinh: false,
     moCongDangKyDanhMuc: false,
+    hinhThucDanhGia: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -96,6 +98,15 @@ const DanhMucGioChuan = () => {
               Mở Cổng Đăng Ký Nghiên Cứu Khoa Học
             </Button>
           </Col>
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("hinhThucDanhGia")}
+            >
+              Hình Thức Đánh Giá
+            </Button>
+          </Col>
         </Row>
 
         <QuyDinhModal
@@ -125,6 +136,11 @@ const DanhMucGioChuan = () => {
         <ModalMoCongDangKy
           open={open.moCongDangKyDanhMuc}
           handleClose={() => handleClose("moCongDangKyDanhMuc")}
+        />
+
+        <HinhThucDanhGia
+          open={open.hinhThucDanhGia}
+          handleClose={() => handleClose("hinhThucDanhGia")}
         />
       </Container>
     </>
