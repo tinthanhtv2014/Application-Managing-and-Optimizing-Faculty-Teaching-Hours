@@ -122,6 +122,7 @@ const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
   }
 };
 
+//xem số lượng đề tài đã đăng ký
 const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
   // console.log("MAGV get_thongtin_dangky_giangvien:", MAGV);
   // console.log("TENNAMHOC get_thongtin_dangky_giangvien:", TENNAMHOC);
