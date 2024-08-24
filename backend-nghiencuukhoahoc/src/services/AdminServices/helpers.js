@@ -295,6 +295,21 @@ const timlop_MALOP = async (MALOP) => {
   }
 };
 
+const timdetai_TENDETAI = async (TEN_DE_TAI) => {
+  try {
+    // console.log("TENNAMHOC: ", TENNAMHOC)
+    const [results1, fields] = await pool.execute(
+      "SELECT * FROM nghien_cuu_kh WHERE TEN_DE_TAI = ?",
+      [TEN_DE_TAI]
+    );
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    return results1;
+  } catch (error) {
+    console.log("timnamhoc_TENNAMHOC errr >>>", error);
+    return [];
+  }
+};
+
 module.exports = {
   timTaiKhoan_TENDANGNHAP,
   timGiangVien_MAGV,
@@ -315,4 +330,5 @@ module.exports = {
   timGiangVien_TENGV,
   timGiangVien_TENGV_TENDANGNHAP,
   timlop_MALOP,
+  timdetai_TENDETAI,
 };

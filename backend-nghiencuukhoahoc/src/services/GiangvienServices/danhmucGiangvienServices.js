@@ -6,6 +6,7 @@ const {
   timGiangVien_TENGV,
   selectBomon_TENBOMON,
   timGiangVien_TENGV_TENDANGNHAP,
+  timdetai_TENDETAI,
 } = require("../../services/AdminServices/helpers");
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
@@ -40,11 +41,11 @@ const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
     // Kiểm tra lại câu truy vấn để đảm bảo không sử dụng trường JSON
     const [results1] = await pool.execute(
       "SELECT gv.MAGV, gv.TENGV, nh.*, kgc.GIONGHIENCUUKHOAHOC_CHUAN " +
-      "FROM giangvien AS gv " +
-      "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
-      "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
-      "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
-      "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
+        "FROM giangvien AS gv " +
+        "LEFT JOIN chon_khung AS ck ON gv.MAGV = ck.MAGV " +
+        "LEFT JOIN namhoc AS nh ON nh.MANAMHOC = ck.MANAMHOC " +
+        "LEFT JOIN khunggiochuan AS kgc ON kgc.MAKHUNG = ck.MAKHUNG " +
+        "WHERE gv.MAGV = ? AND nh.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -275,6 +276,23 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
           dataDangKy.LISTGIANGVIEN[i].emailGV
         );
       }
+
+      const timdetai = await timdetai_TENDETAI(dataDangKy.TENDETAI);
+
+      if (timdetai.length > 0) {
+        return {
+          EM: "đăng ký đề tài không thành công, đề tài này đã tồn tại",
+          EC: 0,
+          DT: [],
+        };
+      } else {
+        await pool.execute(
+          `insert into nghien_cuu_kh values (?,?)
+         `,
+          [dataDangKy.TENDETAI, time]
+        );
+      }
+
       console.log("check timgv:", timgiangvien);
       if (timgiangvien === undefined) {
         const randomMAGV = await callbackMAGV(pool);
@@ -304,7 +322,7 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
       }
 
       await pool.execute(
-        `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,?,N'Đã đăng ký')
+        `insert into dang_ky_thuc_hien_quy_doi values (?,?,?,?,?,?,N'Đã đăng ký')
        `,
         [
           dataDangKy.MADANHMUC,
@@ -313,23 +331,25 @@ const dangky_thongtin_giangvien = async (dataDangKy) => {
           timtacgia,
           dataDangKy.LISTGIANGVIEN[i].soGio,
           dataDangKy.TENDETAI,
-          time,
         ]
       );
     }
 
     const [results1, fields] = await pool.execute(
       `SELECT giangvien.TENGV,
-      dkthqd.TEN_NGHIEN_CUU,
+      nkkh.TEN_DE_TAI,
+      nkkh.THOI_GIAN_DANG_KY,
       dkthqd.SOGIOQUYDOI,
       ltg.TEN_LOAI_TAC_GIA 
       from 
       dang_ky_thuc_hien_quy_doi as dkthqd,
       loai_tac_gia as ltg,
-      giangvien
+      giangvien,
+      nghien_cuu_kh as nkkh
       where giangvien.MAGV = dkthqd.MAGV 
+      and dkthqd.TEN_DE_TAI = nkkh.TEN_DE_TAI
       and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
-      and dkthqd.TEN_NGHIEN_CUU = ?
+      and nkkh.TEN_DE_TAI = ?
      `,
       [dataDangKy.TENDETAI]
     );
