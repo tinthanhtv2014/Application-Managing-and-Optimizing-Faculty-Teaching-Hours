@@ -32,26 +32,41 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             })
         );
 
-        // Ưu tiên lấy giảng viên loại "Cá nhân" > "Tác giả thứ nhất" với các điều kiện ưu tiên
-        let DaiDien = dataDangKy.find(
-            (giangVien) => giangVien.loai === "Cá nhân"
+        let [LoaiTacGia_LoaiDanhMuc] = await pool.execute(
+            `
+            SELECT 
+                ctl.MA_LOAI_TAC_GIA, 
+                ltg.TEN_LOAI_TAC_GIA,
+            FROM 
+                co_ty_le ctl
+            JOIN 
+                loai_tac_gia ltg ON ctl.MALOAIDANHMUC = ltg.MALOAIDANHMUC
+            WHERE 
+                AND ltg.TEN_LOAI_TAC_GIA = ?
+        `,
+            [dataDangKyDanhMuc.MALOAIDANHMUC,]
         );
 
-        if (!DaiDien) {
-            DaiDien = dataDangKy.find(
-                (giangVien) =>
-                    giangVien.loai === "Tác giả thứ nhất"
-                    &&
-                    giangVien.laVienChuc === "Không" || giangVien.duocMien === "Không"
-            );
-        }
+        // // Ưu tiên lấy giảng viên loại "Cá nhân" > "Tác giả thứ nhất" với các điều kiện ưu tiên
+        // let DaiDien = dataDangKy.find(
+        //     (giangVien) => giangVien.loai === "Cá nhân"
+        // );
 
-        // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
-        if (!DaiDien) {
-            DaiDien = dataDangKy.find(
-                (giangVien) => giangVien.loai === "Tác giả thứ nhất"
-            );
-        }
+        // if (!DaiDien) {
+        //     DaiDien = dataDangKy.find(
+        //         (giangVien) =>
+        //             giangVien.loai === "Tác giả thứ nhất"
+        //             &&
+        //             giangVien.laVienChuc === "Không" || giangVien.duocMien === "Không"
+        //     );
+        // }
+
+        // // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
+        // if (!DaiDien) {
+        //     DaiDien = dataDangKy.find(
+        //         (giangVien) => giangVien.loai === "Tác giả thứ nhất"
+        //     );
+        // }
 
         const obj = [];
 
