@@ -8,6 +8,12 @@ const {
   get_giangvien_CNTT_da_chon_khung,
   get_giangvien_CNTT_chua_chon_khung,
 } = require("../../controllers/TruongbomonController/giangvienCONTROLLER");
+
+const {
+  get_giangvien_CNTT_chuachonkhung,
+  get_giangvien_CNTT_dachonkhung,
+} = require("../../controllers/TruongbomonController/phancongCONTROLLER");
+
 const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDgiangvien_CNTT = (app) => {
   //route cho khoa
@@ -26,6 +32,9 @@ const CRUDgiangvien_CNTT = (app) => {
   //   router.put("/sua/:MANAMHOC", updateNAMHOC);
   //   router.delete("/xoa", deleteNAMHOC);
 
+  //route bên phân công
+  router.get("/xem/phancong/chuachonkhung", get_giangvien_CNTT_chuachonkhung);
+  router.get("/xem/phancong/dachonkhung", get_giangvien_CNTT_dachonkhung);
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
 
