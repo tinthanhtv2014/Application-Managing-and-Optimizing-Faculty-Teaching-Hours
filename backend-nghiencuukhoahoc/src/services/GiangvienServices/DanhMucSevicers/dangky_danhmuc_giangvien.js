@@ -27,6 +27,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 Stt: index + 1,
             })
         );
+        console.log("dataDangKyDanhMuc:", dataDangKyDanhMuc)
         console.log("dataDangKy:", dataDangKy)
 
         let [LoaiTacGia_LoaiDanhMuc] = await pool.execute(
