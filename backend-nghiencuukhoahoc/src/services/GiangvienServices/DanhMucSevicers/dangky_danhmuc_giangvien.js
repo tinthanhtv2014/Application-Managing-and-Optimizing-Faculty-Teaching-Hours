@@ -10,9 +10,6 @@ const {
 
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     try {
-        console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
-
-        // Tính toán số lượng từng loại giảng viên
         const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
             (acc, giangVien) => {
                 acc[giangVien.loai] = (acc[giangVien.loai] || 0) + 1;
@@ -21,7 +18,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             {}
         );
 
-        // Chuyển đổi dữ liệu giảng viên
         const dataDangKy = dataDangKyDanhMuc.LISTGIANGVIEN.map(
             (giangVien, index) => ({
                 ...giangVien,
@@ -31,45 +27,56 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 Stt: index + 1,
             })
         );
+        console.log("dataDangKy:", dataDangKy)
 
         let [LoaiTacGia_LoaiDanhMuc] = await pool.execute(
             `
-            SELECT 
-                ctl.MA_LOAI_TAC_GIA, 
-                ltg.TEN_LOAI_TAC_GIA,
-            FROM 
-                co_ty_le ctl
-            JOIN 
-                loai_tac_gia ltg ON ctl.MALOAIDANHMUC = ltg.MALOAIDANHMUC
-            WHERE 
-                AND ltg.TEN_LOAI_TAC_GIA = ?
+        SELECT 
+            ltg.TEN_LOAI_TAC_GIA,
+            ltg.DO_UU_TIEN,
+            GROUP_CONCAT(ldm.TEN_LOAI_DANH_MUC SEPARATOR ', ') AS TEN_LOAI_DANH_MUC
+        FROM 
+            co_ty_le AS ctl
+        JOIN 
+            loai_danh_muc AS ldm ON ctl.MA_LOAI_DANH_MUC = ldm.MA_LOAI_DANH_MUC
+        JOIN 
+            loai_tac_gia AS ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA 
+        WHERE 
+            ldm.MA_LOAI_DANH_MUC = ?
+        GROUP BY 
+            ltg.TEN_LOAI_TAC_GIA, ltg.DO_UU_TIEN
+        ORDER BY 
+            ltg.DO_UU_TIEN ASC;
         `,
-            [dataDangKyDanhMuc.MALOAIDANHMUC,]
+            [dataDangKyDanhMuc.MALOAIDANHMUC]
         );
+        console.log("LoaiTacGia_LoaiDanhMuc:", LoaiTacGia_LoaiDanhMuc)
 
-        // // Ưu tiên lấy giảng viên loại "Cá nhân" > "Tác giả thứ nhất" với các điều kiện ưu tiên
-        // let DaiDien = dataDangKy.find(
-        //     (giangVien) => giangVien.loai === "Cá nhân"
-        // );
+        let DaiDien = null;
 
-        // if (!DaiDien) {
-        //     DaiDien = dataDangKy.find(
-        //         (giangVien) =>
-        //             giangVien.loai === "Tác giả thứ nhất"
-        //             &&
-        //             giangVien.laVienChuc === "Không" || giangVien.duocMien === "Không"
-        //     );
-        // }
+        for (let i = 0; i < LoaiTacGia_LoaiDanhMuc.length; i++) {
+            const candidates = dataDangKy.filter(
+                (giangVien) => giangVien.loai === LoaiTacGia_LoaiDanhMuc[i].TEN_LOAI_TAC_GIA
+            );
 
-        // // Nếu không tìm thấy theo ưu tiên trên, lấy giảng viên loại "Tác giả thứ nhất" đầu tiên
-        // if (!DaiDien) {
-        //     DaiDien = dataDangKy.find(
-        //         (giangVien) => giangVien.loai === "Tác giả thứ nhất"
-        //     );
-        // }
+            DaiDien = candidates.find(
+                (giangVien) =>
+                    giangVien.laVienChuc === "Không" && giangVien.duocMien === "Không"
+            );
+
+            if (!DaiDien) {
+                DaiDien = candidates.find((giangVien) => giangVien.duocMien === "Không");
+            }
+
+            if (!DaiDien) {
+                DaiDien = candidates[0];
+            }
+
+            if (DaiDien) break;
+        }
+        console.log("DaiDien:", DaiDien)
 
         const obj = [];
-
         let [TacGiaDaiDien] = await pool.execute(
             `
         SELECT 
@@ -102,17 +109,14 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 DaiDien.duocMien,
             ]
         );
-
-        console.log("DaiDien: ", DaiDien);
-        console.log("TacGiaDaiDien: ", TacGiaDaiDien);
-        console.log("dataDangKy: ", dataDangKy);
+        console.log("TacGiaDaiDien:", TacGiaDaiDien)
 
         for (let i = 0; i < dataDangKy.length; i++) {
-            let DataTyLeTraVe; // Khai báo biến DataTyLeTraVe trước vòng lặp
+            let DataTyLeTraVe;
 
             if (
                 dataDangKy[i].loai === "Tác giả chịu trách nhiệm" &&
-                (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].loai === 2) &&
+                (dataDangKy[i].soLuongLoai === 1 || dataDangKy[i].soLuongLoai === 2) &&
                 TacGiaDaiDien[0].VIEN_CHUC_TRUONG === "Không"
             ) {
                 [DataTyLeTraVe] = await pool.execute(
@@ -187,7 +191,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                     ]
                 );
             }
-
             if (DataTyLeTraVe.length === 0) {
                 DataTyLeTraVe.push({
                     MA_QUY_DOI: null,
@@ -203,22 +206,42 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 });
             }
 
-            obj.push({ ...DataTyLeTraVe[0], Stt: i + 1 });
+            obj.push(...DataTyLeTraVe);
         }
+        console.log("obj:", obj)
 
-        console.log("obj: ", obj);
+        //===============================================================================================
+        // Tính số lượng phần tử có cùng NHOM_CHIA_GIO
+        const nhomChiaGioCounts = obj.reduce((acc, item) => {
+            acc[item.NHOM_CHIA_GIO] = (acc[item.NHOM_CHIA_GIO] || 0) + 1;
+            return acc;
+        }, {});
 
-        return {
-            EM: "Đăng ký danh mục thành công",
-            EC: 1,
-            DT: obj,
-        };
+        // Tính TY_LE_THUC cho từng phần tử trong obj
+        const result = obj.map(item => {
+            let TY_LE_THUC;
+
+            if (item.NHOM_CHIA_GIO === 'Không') {
+                TY_LE_THUC = item.TY_LE / item.SO_TAC_GIA_THUOC_LOAI;
+            } else {
+                const sameGroupItems = obj.filter(i => i.NHOM_CHIA_GIO === item.NHOM_CHIA_GIO);
+                TY_LE_THUC = item.TY_LE / sameGroupItems.length;
+            }
+
+            return {
+                ...item,
+                TY_LE_THUC
+            };
+        });
+        console.log("result:", result)
+        //===============================================================================================
+
+        return result;
     } catch (error) {
-        console.log("dangky_danhmuc_giangvien errr >>>", error);
-        return [];
+        console.error("Có lỗi xảy ra trong quá trình đăng ký danh mục giảng viên:", error);
+        throw error;
     }
 };
-
 
 module.exports = {
     dangky_danhmuc_giangvien,
