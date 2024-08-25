@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CookiesAxios from "../../../CookiesAxios";
-import { Modal, Button, Table } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./ComponentExcel.scss";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+
 const ComponentExcelCTDT = () => {
   const [data, setData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const auth = Cookies.get("accessToken");
+  const fileInputRef = useRef(null);
 
   const handleAddUser = async () => {
     if (data.length > 0) {
@@ -35,7 +46,6 @@ const ComponentExcelCTDT = () => {
       }
     } else {
       toast.error("Chưa có dữ liệu excel");
-      return;
     }
   };
 
@@ -57,67 +67,86 @@ const ComponentExcelCTDT = () => {
     reader.readAsBinaryString(file);
   };
 
-  const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  const handleFileButtonClick = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <div className="mt-2">
-      <input type="file" onChange={handleFileUpload} id="formFile" />
-      <label htmlFor="formFile" className="btn btn-primary">
+      <input
+        type="file"
+        onChange={handleFileUpload}
+        ref={fileInputRef}
+        style={{ display: "none" }} // Hide the file input element
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleFileButtonClick}
+        sx={{ mb: 2 }}
+      >
         Upload File
-      </label>
+      </Button>
 
-      <button
-        type="button"
+      <Button
+        variant="contained"
+        color="success"
+        sx={{ ml: 2, mb: 2 }}
         onClick={handleAddUser}
-        className="btn btn-success ml-4"
       >
         Thêm Chương Trình Đào Tạo
-      </button>
-      {data && data.length > 0 && (
-        <button
-          type="button"
-          onClick={handleShowModal}
-          className="btn btn-primary ml-2"
+      </Button>
+
+      {data.length > 0 && (
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ ml: 2, mb: 2 }}
+          onClick={handleOpenDialog}
         >
           Xem Dữ Liệu
-        </button>
+        </Button>
       )}
 
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        size="xl"
-        className="modal-Component-excel custom-modal"
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="lg"
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Dữ Liệu Excel Của Bạn</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                {data.length > 0 &&
-                  Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row, index) => (
-                <tr key={index}>
-                  {Object.values(row).map((cell, i) => (
-                    <td key={i}>{cell}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+        <DialogTitle>Dữ Liệu Excel Của Bạn</DialogTitle>
+        <DialogContent>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {data.length > 0 &&
+                    Object.keys(data[0]).map((key) => (
+                      <TableCell key={key}>{key}</TableCell>
+                    ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((row, index) => (
+                  <TableRow key={index}>
+                    {Object.values(row).map((cell, i) => (
+                      <TableCell key={i}>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
             Close
           </Button>
-        </Modal.Footer>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
