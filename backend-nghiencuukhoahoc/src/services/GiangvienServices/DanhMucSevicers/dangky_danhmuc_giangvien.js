@@ -10,7 +10,7 @@ const {
 
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     try {
-        // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+        console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
 
         // Tính toán số lượng từng loại giảng viên
         const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
