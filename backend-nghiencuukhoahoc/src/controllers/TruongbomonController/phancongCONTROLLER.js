@@ -1,6 +1,7 @@
 const {
   select_giangvien_chuachonkhung,
   select_giangvien_dachonkhung,
+  select_lophoc_monhoc,
 } = require("../../services/TruongbomonServices/CRUDphancong");
 const get_giangvien_CNTT_chuachonkhung = async (req, res) => {
   try {
@@ -40,7 +41,29 @@ const get_giangvien_CNTT_dachonkhung = async (req, res) => {
   }
 };
 
+const get_monhoc_lop_hocki = async (req, res) => {
+  try {
+    const MALOP = req.body.MALOP;
+    const SOHOCKI = req.body.SOHOCKI;
+    let results = await select_lophoc_monhoc(MALOP, SOHOCKI);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: "lỗi get_monhoc_lop_hocki",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 module.exports = {
   get_giangvien_CNTT_chuachonkhung,
   get_giangvien_CNTT_dachonkhung,
+  get_monhoc_lop_hocki,
 };
