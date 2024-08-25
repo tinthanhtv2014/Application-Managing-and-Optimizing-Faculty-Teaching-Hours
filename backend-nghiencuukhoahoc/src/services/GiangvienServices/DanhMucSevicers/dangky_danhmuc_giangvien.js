@@ -209,7 +209,34 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
             obj.push(...DataTyLeTraVe);
         }
         console.log("obj:", obj)
-        return obj;
+
+        //===============================================================================================
+        // Tính số lượng phần tử có cùng NHOM_CHIA_GIO
+        const nhomChiaGioCounts = obj.reduce((acc, item) => {
+            acc[item.NHOM_CHIA_GIO] = (acc[item.NHOM_CHIA_GIO] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Tính TY_LE_THUC cho từng phần tử trong obj
+        const result = obj.map(item => {
+            let TY_LE_THUC;
+
+            if (item.NHOM_CHIA_GIO === 'Không') {
+                TY_LE_THUC = item.TY_LE / item.SO_TAC_GIA_THUOC_LOAI;
+            } else {
+                const sameGroupItems = obj.filter(i => i.NHOM_CHIA_GIO === item.NHOM_CHIA_GIO);
+                TY_LE_THUC = item.TY_LE / sameGroupItems.length;
+            }
+
+            return {
+                ...item,
+                TY_LE_THUC
+            };
+        });
+        console.log("result:", result)
+        //===============================================================================================
+
+        return result;
     } catch (error) {
         console.error("Có lỗi xảy ra trong quá trình đăng ký danh mục giảng viên:", error);
         throw error;
