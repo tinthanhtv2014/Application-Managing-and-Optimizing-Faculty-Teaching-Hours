@@ -84,7 +84,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ListOrdersPage />
+            <BlogPage />
           </Suspense>
         </DashboardLayout>
       ),

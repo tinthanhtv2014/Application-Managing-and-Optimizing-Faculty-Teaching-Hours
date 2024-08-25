@@ -1,14 +1,11 @@
-
-import { BlogView } from '../sections/blog/view';
-
+import { BlogView } from "../sections/blog/view";
+import Quanlylophoc from "../sections/LopHoc/Quanlylophoc";
 // ----------------------------------------------------------------------
 
 export default function BlogPage() {
   return (
     <>
-   
-
-      <BlogView />
+      <Quanlylophoc />
     </>
   );
 }
