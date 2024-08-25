@@ -27,6 +27,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 Stt: index + 1,
             })
         );
+        console.log("dataDangKyDanhMuc:", dataDangKyDanhMuc)
         console.log("dataDangKy:", dataDangKy)
 
         let [LoaiTacGia_LoaiDanhMuc] = await pool.execute(
@@ -210,7 +211,14 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         }
         console.log("obj:", obj)
 
-        //===============================================================================================
+        let [DanhMuc] = await pool.execute(
+            `
+            SELECT * FROM danhmucquydoispkhcn WHERE MA_DANH_MUC = ?
+            `,
+            [dataDangKyDanhMuc.MALOAIDANHMUC]
+        );
+        console.log("DanhMuc: ", DanhMuc);
+
         // Tính số lượng phần tử có cùng NHOM_CHIA_GIO
         const nhomChiaGioCounts = obj.reduce((acc, item) => {
             acc[item.NHOM_CHIA_GIO] = (acc[item.NHOM_CHIA_GIO] || 0) + 1;
@@ -230,11 +238,12 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
 
             return {
                 ...item,
-                TY_LE_THUC
+                TY_LE_THUC,
+                SO_GIO: DanhMuc[0].GIO_CHUAN * TY_LE_THUC  // Thêm trường SO_GIO
             };
         });
-        console.log("result:", result)
-        //===============================================================================================
+
+        console.log("result:", result);
 
         return result;
     } catch (error) {
