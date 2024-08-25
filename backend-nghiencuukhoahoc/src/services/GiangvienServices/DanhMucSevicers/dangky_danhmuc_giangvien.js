@@ -27,6 +27,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 Stt: index + 1,
             })
         );
+        console.log("dataDangKy:", dataDangKy)
 
         let [LoaiTacGia_LoaiDanhMuc] = await pool.execute(
             `
@@ -49,6 +50,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         `,
             [dataDangKyDanhMuc.MALOAIDANHMUC]
         );
+        console.log("LoaiTacGia_LoaiDanhMuc:", LoaiTacGia_LoaiDanhMuc)
 
         let DaiDien = null;
 
@@ -72,6 +74,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
 
             if (DaiDien) break;
         }
+        console.log("DaiDien:", DaiDien)
 
         const obj = [];
         let [TacGiaDaiDien] = await pool.execute(
@@ -106,6 +109,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 DaiDien.duocMien,
             ]
         );
+        console.log("TacGiaDaiDien:", TacGiaDaiDien)
 
         for (let i = 0; i < dataDangKy.length; i++) {
             let DataTyLeTraVe;
@@ -204,7 +208,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
 
             obj.push(...DataTyLeTraVe);
         }
-
+        console.log("obj:", obj)
         return obj;
     } catch (error) {
         console.error("Có lỗi xảy ra trong quá trình đăng ký danh mục giảng viên:", error);
