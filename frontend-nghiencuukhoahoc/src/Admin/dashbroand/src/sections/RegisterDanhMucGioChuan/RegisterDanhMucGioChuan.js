@@ -19,6 +19,7 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  tabScrollButtonClasses,
 } from "@mui/material";
 
 import { Col, Container, Row } from "react-bootstrap";
@@ -100,6 +101,7 @@ const DangKyDanhMucGioChuan = ({
 
         setData_Khoa(response_Khoa.data.DT);
         setLoaiTacGia(response_LoaiTacGia.data.DT);
+        console.log("Loai Tac Gia =>", response_LoaiTacGia.data.DT);
         setListNamHoc(response_NAMHOC.data.DT);
         setSelectNamHoc(response_NAMHOC.data.DT[0].TENNAMHOC);
       } catch (error) {
@@ -195,7 +197,7 @@ const DangKyDanhMucGioChuan = ({
     newTacGiaList[index].loai = value;
     setTacGiaList(newTacGiaList);
   };
-  const handleAddTacGia = () => {
+  const handleAddTacGia = async () => {
     setIsOpenRegister(false);
     setTacGiaList([
       ...tacGiaList,
@@ -213,23 +215,23 @@ const DangKyDanhMucGioChuan = ({
         soPhanTram: "",
       },
     ]);
-    if (MaLoaiDanhMuc) {
-      const fetchLoaiTacGia = async (value) => {
-        try {
-          //Chọn Loại Danh Mục Để Xác Định Có  Loại Tác Giả Nào
-          const response_LoaiTacGia = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/loaidanhmuc/loaitacgia`,
-            {
-              MA_LOAI_DANH_MUC: value,
-            }
-          );
-          setLoaiTacGia(response_LoaiTacGia.data.DT);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchLoaiTacGia(MaLoaiDanhMuc);
-    }
+    // if (MaLoaiDanhMuc) {
+    //   const fetchLoaiTacGia = async (value) => {
+    //     try {
+    //       //Chọn Loại Danh Mục Để Xác Định Có  Loại Tác Giả Nào
+    //       const response_LoaiTacGia = await CookiesAxios.post(
+    //         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/loaidanhmuc/loaitacgia`,
+    //         {
+    //           MA_LOAI_DANH_MUC: value,
+    //         }
+    //       );
+    //       setLoaiTacGia(response_LoaiTacGia.data.DT);
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   };
+    //   await fetchLoaiTacGia(MaLoaiDanhMuc);
+    // }
   };
   const handleCheckboxChange = (index, field, value) => {
     const newList = [...tacGiaList];
@@ -414,77 +416,77 @@ const DangKyDanhMucGioChuan = ({
 
       console.log(response.data.DT);
 
-      if (response.data.EC === 1) {
-        const dtList = response.data.DT; // Dữ liệu từ backend
+      // if (response.data.EC === 1) {
+      //   const dtList = response.data.DT; // Dữ liệu từ backend
 
-        const soTacGiaThuNhat = dtList.filter(
-          (role) => role.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
-        ).length; // Đếm số tác giả thứ nhất
-        const soTacGiaChiuTrachNhiem = dtList.filter(
-          (role) => role.TEN_LOAI_TAC_GIA === "Tác giả chịu trách nhiệm"
-        ).length; // Đếm số tác giả thứ nhất
+      //   const soTacGiaThuNhat = dtList.filter(
+      //     (role) => role.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
+      //   ).length; // Đếm số tác giả thứ nhất
+      //   const soTacGiaChiuTrachNhiem = dtList.filter(
+      //     (role) => role.TEN_LOAI_TAC_GIA === "Tác giả chịu trách nhiệm"
+      //   ).length; // Đếm số tác giả thứ nhất
 
-        const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
-          const correspondingData = dtList[index];
+      //   const updatedTacGiaList = tacGiaList.map((tacGia, index) => {
+      //     const correspondingData = dtList[index];
 
-          if (correspondingData) {
-            let soGio = 0;
-            let soPhanTram = correspondingData.TY_LE;
-            // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
-            switch (tacGia.loai) {
-              case "Tác giả thứ nhất":
-              case "Tác giả chịu trách nhiệm":
-              case "Tác giả còn lại":
-                soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
+      //     if (correspondingData) {
+      //       let soGio = 0;
+      //       let soPhanTram = correspondingData.TY_LE;
+      //       // Tính số giờ dựa trên tỷ lệ từ dữ liệu trả về
+      //       switch (tacGia.loai) {
+      //         case "Tác giả thứ nhất":
+      //         case "Tác giả chịu trách nhiệm":
+      //         case "Tác giả còn lại":
+      //           soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
 
-                if (correspondingData.DA_LOAI_TAC_GIA === "Có") {
-                  const additionalTyLe = dtList
-                    .filter((item) => item.DA_LOAI_TAC_GIA === "Có")
-                    .reduce((acc, item) => acc * item.TY_LE, 1);
+      //           if (correspondingData.DA_LOAI_TAC_GIA === "Có") {
+      //             const additionalTyLe = dtList
+      //               .filter((item) => item.DA_LOAI_TAC_GIA === "Có")
+      //               .reduce((acc, item) => acc * item.TY_LE, 1);
 
-                  soGio = additionalTyLe * SoGioDanhMucDaChon; // Nhân thêm tỷ lệ tích lũy từ các tác giả khác
-                  soPhanTram = additionalTyLe;
-                }
+      //             soGio = additionalTyLe * SoGioDanhMucDaChon; // Nhân thêm tỷ lệ tích lũy từ các tác giả khác
+      //             soPhanTram = additionalTyLe;
+      //           }
 
-                if (
-                  correspondingData.DA_LOAI_TAC_GIA === "Không" &&
-                  correspondingData.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
-                ) {
-                  soGio =
-                    (correspondingData.TY_LE * SoGioDanhMucDaChon) /
-                    soTacGiaThuNhat;
-                  soPhanTram = correspondingData.TY_LE / soTacGiaThuNhat;
-                } else if (
-                  correspondingData.DA_LOAI_TAC_GIA === "Không" &&
-                  correspondingData.TEN_LOAI_TAC_GIA ===
-                    "Tác giả chịu trách nhiệm"
-                ) {
-                  soGio =
-                    (correspondingData.TY_LE * SoGioDanhMucDaChon) /
-                    soTacGiaChiuTrachNhiem;
+      //           if (
+      //             correspondingData.DA_LOAI_TAC_GIA === "Không" &&
+      //             correspondingData.TEN_LOAI_TAC_GIA === "Tác giả thứ nhất"
+      //           ) {
+      //             soGio =
+      //               (correspondingData.TY_LE * SoGioDanhMucDaChon) /
+      //               soTacGiaThuNhat;
+      //             soPhanTram = correspondingData.TY_LE / soTacGiaThuNhat;
+      //           } else if (
+      //             correspondingData.DA_LOAI_TAC_GIA === "Không" &&
+      //             correspondingData.TEN_LOAI_TAC_GIA ===
+      //               "Tác giả chịu trách nhiệm"
+      //           ) {
+      //             soGio =
+      //               (correspondingData.TY_LE * SoGioDanhMucDaChon) /
+      //               soTacGiaChiuTrachNhiem;
 
-                  soPhanTram = correspondingData.TY_LE / soTacGiaChiuTrachNhiem;
-                } else if (correspondingData.DA_LOAI_TAC_GIA === "Không") {
-                  soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
-                  soPhanTram = correspondingData.TY_LE;
-                }
-                break;
-              default:
-                soGio = 0; // Không có loại tác giả phù hợp
-                soPhanTram = 0;
-            }
+      //             soPhanTram = correspondingData.TY_LE / soTacGiaChiuTrachNhiem;
+      //           } else if (correspondingData.DA_LOAI_TAC_GIA === "Không") {
+      //             soGio = correspondingData.TY_LE * SoGioDanhMucDaChon;
+      //             soPhanTram = correspondingData.TY_LE;
+      //           }
+      //           break;
+      //         default:
+      //           soGio = 0; // Không có loại tác giả phù hợp
+      //           soPhanTram = 0;
+      //       }
 
-            return { ...tacGia, soGio, soPhanTram }; // Cập nhật số giờ cho giảng viên
-          }
+      //       return { ...tacGia, soGio, soPhanTram }; // Cập nhật số giờ cho giảng viên
+      //     }
 
-          return tacGia; // Trả về giảng viên không thay đổi nếu không tìm thấy dữ liệu
-        });
+      //     return tacGia; // Trả về giảng viên không thay đổi nếu không tìm thấy dữ liệu
+      //   });
 
-        // Cập nhật danh sách giảng viên với số giờ đã tính
-        setTacGiaList(updatedTacGiaList);
-        setIsOpenRegister(true);
-        console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
-      }
+      //   // Cập nhật danh sách giảng viên với số giờ đã tính
+      //   setTacGiaList(updatedTacGiaList);
+      //   setIsOpenRegister(true);
+      //   console.log("Updated TacGiaList", updatedTacGiaList); // Kiểm tra danh sách giảng viên đã cập nhật
+      // }
     } catch (error) {
       console.error("Error fetching email suggestions:", error);
     }
