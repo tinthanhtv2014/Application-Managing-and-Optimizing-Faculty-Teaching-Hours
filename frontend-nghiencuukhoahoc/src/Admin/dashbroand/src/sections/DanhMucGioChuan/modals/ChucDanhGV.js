@@ -22,6 +22,7 @@ import {
   Paper,
 } from "@mui/material";
 import CookiesAxios from "../../CookiesAxios";
+import { toast } from "react-toastify";
 
 const ChucDanhGiangVien = ({ open, handleClose }) => {
   useEffect(() => {
@@ -43,6 +44,14 @@ const ChucDanhGiangVien = ({ open, handleClose }) => {
       { TENCHUCDANH: tenChucdanh }
     );
     console.log(response.data);
+
+    if (response.data.EC == 1) {
+      setDataChucdanh(response.data.DT);
+      toast.success("Tạo chức danh mới thành công");
+    }
+    if (response.data.EC == 0) {
+      toast.warn("Chức danh này tồn tại rồi!!");
+    }
   };
 
   const fetchDataChucdanh = async () => {
@@ -66,6 +75,10 @@ const ChucDanhGiangVien = ({ open, handleClose }) => {
         },
       }
     );
+    if (response.data.EC == 1) {
+      setDataChucdanh(response.data.DT);
+      toast.success("Xóa chức danh mới thành công");
+    }
   };
 
   const handleUPDATEChucdanh = async () => {
@@ -73,6 +86,10 @@ const ChucDanhGiangVien = ({ open, handleClose }) => {
       `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/suachucdanh/${machucdanh}`,
       { TENCHUCDANH: tenChucdanh }
     );
+    if (response.data.EC == 1) {
+      setDataChucdanh(response.data.DT);
+      toast.success("Cập nhật chức danh mới thành công");
+    }
   };
   const handleUpdateChucdanh = async (chucdanh) => {
     setTenchucdanh(chucdanh.TENCHUCDANH);

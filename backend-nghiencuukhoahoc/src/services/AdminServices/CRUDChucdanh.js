@@ -2,15 +2,18 @@ const pool = require("../../config/database");
 
 const selectChucdanh = async () => {
   try {
-    let [results1, fields1] = await pool.execute(`select * from chucdanh`);
+    let [results1, fields1] = await pool.execute(`
+      SELECT * FROM chucdanh
+      ORDER BY MACHUCDANH DESC
+    `);
     return {
-      EM: " xem thông tin chức vụ thành công",
+      EM: "Xem thông tin chức vụ thành công",
       EC: 1,
       DT: results1,
     };
   } catch (error) {
     return {
-      EM: "lỗi services selectChucVu",
+      EM: "Lỗi services selectChucVu",
       EC: -1,
       DT: [],
     };
@@ -64,10 +67,11 @@ const createChucdanh = async (TENCHUCDANH) => {
       `INSERT INTO chucdanh (TENCHUCDANH) VALUES (?)`,
       [TENCHUCDANH]
     );
+    const result_data = await selectChucdanh();
     return {
       EM: "thêm chức danh mới mới thành công",
       EC: 1,
-      DT: results,
+      DT: result_data.DT,
     };
   } catch (error) {
     return {
@@ -90,10 +94,11 @@ const updateChucdanh = async (MACHUCDANH, TENCHUCDANH) => {
               SET TENCHUCDANH = ? where MACHUCDANH = ?;`,
         [TENCHUCDANH, MACHUCDANH]
       );
+      const result_data = await selectChucdanh();
       return {
         EM: "sửa chức danh thành công",
         EC: 1,
-        DT: results,
+        DT: result_data.DT,
       };
     }
     return {
@@ -122,10 +127,11 @@ const xoaChucdanh = async (MACHUCDANH) => {
         `DELETE FROM chucdanh WHERE MACHUCDANH = ?`,
         [MACHUCDANH]
       );
+      const result_data = await selectChucdanh();
       return {
         EM: "xóa chức danh thành công",
         EC: 1,
-        DT: results,
+        DT: result_data.DT,
       };
     }
     return {
