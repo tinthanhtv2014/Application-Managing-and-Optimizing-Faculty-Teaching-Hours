@@ -20,7 +20,9 @@ const timChucVu_TENCHUCVU = async (TENCHUCVU) => {
 
 const selectChucVu = async () => {
   try {
-    let [results1, fields1] = await pool.execute(`select * from chucvu`);
+    let [results1, fields1] = await pool.execute(
+      `select * from chucvu ORDER BY MACHUCVU DESC`
+    );
     return {
       EM: " xem thông tin chức vụ thành công",
       EC: 1,
@@ -65,35 +67,36 @@ const selectChucvu_TENCHUCVU = async (TENCHUCVU) => {
 };
 
 const createChucVu = async (TENCHUCVU) => {
-  // try {
-  let [results1, fields1] = await pool.execute(
-    `select * from chucvu where TENCHUCVU = ?`,
-    [TENCHUCVU]
-  );
-  if (results1.length > 0) {
+  try {
+    let [results1, fields1] = await pool.execute(
+      `select * from chucvu where TENCHUCVU = ?`,
+      [TENCHUCVU]
+    );
+    if (results1.length > 0) {
+      return {
+        EM: "Chức vụ này đã tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let [results, fields] = await pool.execute(
+      `INSERT INTO chucvu (TENCHUCVU) VALUES (?)`,
+      [TENCHUCVU]
+    );
+    const results_data = await selectChucVu();
     return {
-      EM: "Chức vụ này đã tồn tại",
-      EC: 0,
+      EM: "thêm chức vụ mới mới thành công",
+      EC: 1,
+      DT: results_data.DT,
+    };
+  } catch (error) {
+    return {
+      EM: "lỗi services createChucVu",
+      EC: -1,
       DT: [],
     };
   }
-
-  let [results, fields] = await pool.execute(
-    `INSERT INTO chucvu (TENCHUCVU) VALUES (?)`,
-    [TENCHUCVU]
-  );
-  return {
-    EM: "thêm chức vụ mới mới thành công",
-    EC: 1,
-    DT: results,
-  };
-  // } catch (error) {
-  //   return {
-  //     EM: "lỗi services createChucVu",
-  //     EC: -1,
-  //     DT: [],
-  //   };
-  // }
 };
 
 const updateChucVu = async (MACHUCVU, TENCHUCVU) => {

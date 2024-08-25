@@ -90,7 +90,7 @@ export default function Router() {
       )
     }
     , {
-      path: '/quan-ly-danh-muc-gio-chuan', // Thêm ký tự '*' vào cuối đường dẫn
+      path: '/quan-ly', // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense

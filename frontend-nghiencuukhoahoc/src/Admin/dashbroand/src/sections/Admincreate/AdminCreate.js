@@ -32,8 +32,8 @@ const AdminCreate = () => {
     navigate("/admin/giangvien");
   };
 
-  const handleToCreateChucVuGV = () => {
-    navigate("/admin/create-chucvu-gv");
+  const handleQuanLy = () => {
+    navigate("/admin/quan-ly");
   };
   const handleToCreateCTDT = () => {
     navigate("/admin/chuong-trinh-dao-tao");
@@ -108,7 +108,7 @@ const AdminCreate = () => {
             </Card>
           </Col>
           <Col md={4} className="mb-4">
-            <Card className="adminCreate-card" onClick={handleToCreateChucVuGV}>
+            <Card className="adminCreate-card" onClick={handleQuanLy}>
               <div className="adminCreate-center adminCreate-center-CV">
                 {" "}
                 <Card.Img
@@ -119,9 +119,9 @@ const AdminCreate = () => {
               </div>
 
               <Card.Body>
-                <Card.Title>Thêm Chức Vụ Giảng Viên</Card.Title>
+                <Card.Title>Quản Lý Các Chức Năng Nhỏ</Card.Title>
                 <Card.Text>
-                  Bạn có thể tạo thêm một chức vụ giảng viên mới vào hệ thống.
+                  Bạn có thể tạo thêm một số mục mới vào hệ thống.
                 </Card.Text>
                 {/* <Button className="adminCreate-button">Tạo Chức Vụ</Button> */}
               </Card.Body>

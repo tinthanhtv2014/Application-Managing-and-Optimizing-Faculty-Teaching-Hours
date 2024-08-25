@@ -22,14 +22,10 @@ const navConfig = [
     path: '/giangvien',
     icon: icon('ic_user'),
   },
-  {
-    title: 'Chức Vụ Giảng Viên',
-    path: '/quan-ly-chuc-vu',
-    icon: icon('ic_cart'),
-  },
+
   {
     title: 'Danh Mục Giờ Chuẩn',
-    path: '/quan-ly-danh-muc-gio-chuan',
+    path: '/quan-ly',
     icon: icon('ic_blog'),
   },
   // {

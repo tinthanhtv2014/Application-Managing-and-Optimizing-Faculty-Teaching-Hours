@@ -35,47 +35,82 @@ function ModalChucVu({ open, handleClose }) {
   //hàm thêm chức vụ chức danh ==================================
   const handleSubmitchucvu = async (e) => {
     e.preventDefault();
-    console.log("check chức vụ", tenChucvu);
-    // Handle form submission logic here
-    const response = await CookiesAxios.post(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/taochucvu`,
-      { TENCHUCVU: tenChucvu }
-    );
-    console.log("check rrespone: ", response);
-    setDataChucvu((prevData) => [...prevData, response.data]);
-  };
-  const handleDeleteChucvu = async (machucvu) => {
-    const response = await CookiesAxios.delete(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoachucvu`,
-      {
-        params: {
-          MACHUCVU: machucvu,
-        },
+    try {
+      console.log("check chức vụ", tenChucvu);
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/taochucvu`,
+        { TENCHUCVU: tenChucvu }
+      );
+      if (response.data.EC == 1) {
+        setDataChucvu(response.data.DT);
       }
-    );
-  };
-  //hàm fetch data chức vụ chức danh =====================
-  const fetchDataChucvu = async () => {
-    const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucvu`
-    );
-
-    if (response && response.data && response.data.DT) {
-      setDataChucvu(response.data.DT);
+    } catch (error) {
+      console.error("Error creating chức vụ:", error);
+      // Bạn có thể thêm thông báo lỗi hoặc xử lý lỗi khác ở đây
     }
   };
-  //hàm update chức vụ chức danh
-  const handleUpdateChucvu = async (chucvu) => {
-    setTenchucvu(chucvu.TENCHUCVU);
-    setMachucvu(chucvu.MACHUCVU);
+
+  const handleDeleteChucvu = async (machucvu) => {
+    try {
+      const response = await CookiesAxios.delete(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xoachucvu`,
+        {
+          params: {
+            MACHUCVU: machucvu,
+          },
+        }
+      );
+      console.log("Deleted chức vụ: ", machucvu);
+      // Bạn có thể cập nhật lại danh sách chức vụ sau khi xóa thành công
+      setDataChucvu((prevData) =>
+        prevData.filter((chucvu) => chucvu.MACHUCVU !== machucvu)
+      );
+    } catch (error) {
+      console.error("Error deleting chức vụ:", error);
+      // Xử lý lỗi nếu cần
+    }
   };
+
+  const fetchDataChucvu = async () => {
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xemchucvu`
+      );
+
+      if (response && response.data && response.data.DT) {
+        setDataChucvu(response.data.DT);
+      }
+    } catch (error) {
+      console.error("Error fetching data chức vụ:", error);
+      // Xử lý lỗi nếu cần
+    }
+  };
+
+  const handleUpdateChucvu = async (chucvu) => {
+    try {
+      setTenchucvu(chucvu.TENCHUCVU);
+      setMachucvu(chucvu.MACHUCVU);
+    } catch (error) {
+      console.error("Error setting chức vụ for update:", error);
+      // Xử lý lỗi nếu cần
+    }
+  };
+
   const handleUPDATEChucvu = async () => {
-    console.log("cehck tên chức vụ", tenChucvu);
-    console.log("cehck mã chức vụ", machucvu);
-    const response = await CookiesAxios.put(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/suachucvu/${machucvu}`,
-      { TENCHUCVU: tenChucvu }
-    );
+    try {
+      console.log("check tên chức vụ", tenChucvu);
+      console.log("check mã chức vụ", machucvu);
+      const response = await CookiesAxios.put(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/suachucvu/${machucvu}`,
+        { TENCHUCVU: tenChucvu }
+      );
+      console.log("Updated chức vụ:", response);
+      // Bạn có thể cập nhật lại danh sách chức vụ sau khi sửa thành công
+      fetchDataChucvu(); // Fetch lại danh sách chức vụ sau khi update
+    } catch (error) {
+      console.error("Error updating chức vụ:", error);
+      // Xử lý lỗi nếu cần
+    }
   };
 
   return (
