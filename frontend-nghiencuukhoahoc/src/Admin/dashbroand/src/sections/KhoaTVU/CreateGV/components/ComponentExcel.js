@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
-
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CookiesAxios from "../../../CookiesAxios.js";
-import { Modal, Button, Table } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./ComponentExcel.scss";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Paper,
+  Typography,
+} from "@mui/material";
+
 const ComponentExcelGV = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const auth = Cookies.get("accessToken");
-
-  const navigate = useNavigate();
 
   const handleAddUser = async () => {
     if (data.length > 0) {
@@ -63,64 +73,80 @@ const ComponentExcelGV = () => {
   const handleCloseModal = () => setShowModal(false);
 
   return (
-    <div className="mt-2">
-      <input type="file" onChange={handleFileUpload} id="formFile" />
-      <label htmlFor="formFile" className="btn btn-primary">
-        Upload File
+    <Box sx={{ mt: 2 }}>
+      <input
+        type="file"
+        onChange={handleFileUpload}
+        id="formFile"
+        style={{ display: "none" }}
+      />
+      <label htmlFor="formFile">
+        <Button variant="contained" component="span" color="primary">
+          Upload File
+        </Button>
       </label>
 
-      <button
-        type="button"
+      <Button
+        variant="contained"
+        color="success"
         onClick={handleAddUser}
-        className="btn btn-success ml-4"
+        sx={{ ml: 2 }}
       >
         Thêm Tài Khoản
-      </button>
-      {data && data.length > 0 && (
-        <button
-          type="button"
+      </Button>
+
+      {data.length > 0 && (
+        <Button
+          variant="contained"
+          color="primary"
           onClick={handleShowModal}
-          className="btn btn-primary ml-2"
+          sx={{ ml: 2 }}
         >
           Xem Dữ Liệu
-        </button>
+        </Button>
       )}
 
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        size="xl"
-        className="modal-Component-excel custom-modal"
+      <Dialog
+        open={showModal}
+        onClose={handleCloseModal}
+        maxWidth="xl"
+        fullWidth
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Dữ Liệu Excel Của Bạn</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                {data.length > 0 &&
-                  Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row, index) => (
-                <tr key={index}>
-                  {Object.values(row).map((cell, i) => (
-                    <td key={i}>{cell}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+        <DialogTitle>Dữ Liệu Excel Của Bạn</DialogTitle>
+        <DialogContent>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {data.length > 0 &&
+                    Object.keys(data[0]).map((key) => (
+                      <TableCell key={key}>
+                        <Typography variant="body2" fontWeight="bold">
+                          {key}
+                        </Typography>
+                      </TableCell>
+                    ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((row, index) => (
+                  <TableRow key={index}>
+                    {Object.values(row).map((cell, i) => (
+                      <TableCell key={i}>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">
             Close
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

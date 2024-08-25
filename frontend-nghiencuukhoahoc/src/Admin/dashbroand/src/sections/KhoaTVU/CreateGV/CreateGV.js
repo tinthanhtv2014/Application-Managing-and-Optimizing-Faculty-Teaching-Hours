@@ -13,7 +13,7 @@ import BoMonList from "./components/BoMonList.js";
 import GiangVienList from "./components/GiangVienList.js";
 import CreateGiangVienForm from "./components/CreateGiangVienForm.js";
 import "../CreateKhoa/CreateKhoa.scss";
-
+import { alpha } from "@mui/material/styles";
 import ComponentExcelGV from "./components/ComponentExcel.js";
 import { toast } from "react-toastify";
 import {
@@ -482,24 +482,39 @@ const ComponenCreateGiangVien = () => {
           </div>
         </Col>
         <Col md={2}>
-          {" "}
-          <button
-            variant="contained"
-            type="button"
-            className={`height-selectGV ${
-              isOpenGetAllApiGV === true ? "btn btn-dark" : "btn btn-primary"
-            }`}
+          <Button
+            variant={isOpenGetAllApiGV ? "outlined" : "contained"} // Toggle between outlined and contained
+            fullWidth
+            sx={{
+              height: "45px",
+              textTransform: "none",
+              borderRadius: 0.75,
+              typography: "body2",
+              fontWeight: "fontWeightMedium",
+              color: isOpenGetAllApiGV ? "secondary.main" : "white", // Text color
+              bgcolor: isOpenGetAllApiGV
+                ? "transparent" // Transparent background for outlined variant
+                : "primary.main", // Primary color background for contained variant
+              borderColor: isOpenGetAllApiGV
+                ? "secondary.main" // Border color for outlined variant
+                : "transparent", // No border for contained variant
+              "&:hover": {
+                bgcolor: isOpenGetAllApiGV
+                  ? (theme) => alpha(theme.palette.secondary.main, 0.1) // Slight background for outlined variant on hover
+                  : (theme) => alpha(theme.palette.primary.main, 0.8), // Darker primary color on hover for contained variant
+              },
+            }}
             placeholder="Nhập email đăng nhập"
             value={isOpenGetAllApiGV}
             onClick={handleGetAllGiangVien}
             title={
-              isOpenGetAllApiGV === true
-                ? "Xem Tất Cả Giảng Viên Ở Bộ Môn"
-                : "Xem Tất Cả Giảng Viên"
+              isOpenGetAllApiGV
+                ? "Xem Tất Cả Giảng Viên"
+                : "Xem Tất Cả Giảng Viên Ở Bộ Môn"
             }
           >
-            {isOpenGetAllApiGV === true ? "Chỉ Xem Bộ Môn" : "Xem Tất Cả "}
-          </button>{" "}
+            {isOpenGetAllApiGV ? "Xem Tất Cả" : "Chỉ Xem Bộ Môn"}
+          </Button>
         </Col>
       </Row>
       <Row>
