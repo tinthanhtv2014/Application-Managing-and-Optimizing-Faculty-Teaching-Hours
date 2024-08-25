@@ -219,6 +219,20 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         );
         console.log("DanhMuc: ", DanhMuc);
 
+        // Tạo một đối tượng để đếm số lượng TEN_LOAI_TAC_GIA
+        const countMap = obj.reduce((acc, item) => {
+            acc[item.TEN_LOAI_TAC_GIA] = (acc[item.TEN_LOAI_TAC_GIA] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Cập nhật mảng obj với SO_TAC_GIA_CUNG_LOAI
+        const updatedObj = obj.map(item => ({
+            ...item,
+            SO_TAC_GIA_CUNG_LOAI: countMap[item.TEN_LOAI_TAC_GIA]
+        }));
+
+        console.log("updatedObj:", updatedObj);
+
         // Tính số lượng phần tử có cùng NHOM_CHIA_GIO
         const nhomChiaGioCounts = obj.reduce((acc, item) => {
             acc[item.NHOM_CHIA_GIO] = (acc[item.NHOM_CHIA_GIO] || 0) + 1;
@@ -226,13 +240,13 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         }, {});
 
         // Tính TY_LE_THUC cho từng phần tử trong obj
-        const result = obj.map(item => {
+        const result = updatedObj.map(item => {
             let TY_LE_THUC;
 
             if (item.NHOM_CHIA_GIO === 'Không') {
-                TY_LE_THUC = item.TY_LE / item.SO_TAC_GIA_THUOC_LOAI;
+                TY_LE_THUC = item.TY_LE / item.SO_TAC_GIA_CUNG_LOAI;
             } else {
-                const sameGroupItems = obj.filter(i => i.NHOM_CHIA_GIO === item.NHOM_CHIA_GIO);
+                const sameGroupItems = updatedObj.filter(i => i.NHOM_CHIA_GIO === item.NHOM_CHIA_GIO);
                 TY_LE_THUC = item.TY_LE / sameGroupItems.length;
             }
 
