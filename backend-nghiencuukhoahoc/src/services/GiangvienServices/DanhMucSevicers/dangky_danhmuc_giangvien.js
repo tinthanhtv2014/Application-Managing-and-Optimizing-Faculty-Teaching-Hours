@@ -211,7 +211,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         }
         console.log("obj:", obj)
 
-        //===============================================================================================
         let [DanhMuc] = await pool.execute(
             `
             SELECT * FROM danhmucquydoispkhcn WHERE MA_DANH_MUC = ?
@@ -245,7 +244,6 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         });
 
         console.log("result:", result);
-        //===============================================================================================
 
         return result;
     } catch (error) {
