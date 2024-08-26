@@ -6,27 +6,14 @@ import DashboardLayout from "../layouts/dashboard";
 import ProductsPageFake from "../pages/products";
 import AccountGV from "../sections/Account/AccountGV";
 
+const IndexPhanCongGiangVien = lazy(() => import("../sections/PhanCongGiangVien/IndexPhanCongGiangVien"));
+const IndexChiTietPhanCong = lazy(() => import("../sections/ChiTietPhanCong/IndexChiTietPhanCong"));
 const DangKyGioChuan = lazy(() =>
   import("../sections/DangKyGioChuan/IndexDangKyGioChuan")
 );
 const FileExcel = lazy(() => import("../sections/FileExcel/FileExcel"));
-const ChangePassword = lazy(() =>
-  import("../sections/changePassword/changePassword")
-);
-const ChatAdmin = lazy(() => import("../sections/ChatAdmin/ChatAdmin"));
-const OnlyChiTietHoaDon = lazy(() =>
-  import("../sections/ListOrders/ChiTietHoaDon/OnlyChiTietHoaDon")
-);
-const ListOrdersChiTietHoaDon = lazy(() =>
-  import("../sections/ListOrders/ChiTietHoaDon/ListOrdersChiTietHoaDon")
-);
-const ListOrdersDaHuy = lazy(() =>
-  import("../sections/ListOrders/ListOrdersDaHuy/ListOrdersDaHuy")
-);
-const ListOrdersDaGiao = lazy(() =>
-  import("../sections/ListOrders/ListOrdersDaGiao/ListOrdersDaGiao")
-);
-const ListOrdersPage = lazy(() => import("../pages/ListOrders"));
+
+
 const IndexPage = lazy(() => import("../pages/app"));
 const BlogPage = lazy(() => import("../pages/blog"));
 const UserPage = lazy(() => import("../pages/user"));
@@ -67,13 +54,26 @@ export default function Router() {
         </DashboardLayout>
       ),
     },
+
+
+    {
+      path: "/phan-cong-giang-vien", // Quản lý phân công giảng dạy.
+
+      element: (
+        <DashboardLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <IndexPhanCongGiangVien />
+          </Suspense>
+        </DashboardLayout>
+      ),
+    },
     {
       path: "/quan-ly-phan-cong-giang-day", // Quản lý phân công giảng dạy.
 
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ProductsPageFake />
+
           </Suspense>
         </DashboardLayout>
       ),
@@ -95,7 +95,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ListOrdersDaHuy />
+            <IndexChiTietPhanCong />
           </Suspense>
         </DashboardLayout>
       ),
@@ -107,7 +107,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
-            <ListOrdersDaHuy />
+
           </Suspense>
         </DashboardLayout>
       ),

@@ -38,10 +38,11 @@ const create_hinhthucdanhgia = async (TENDANHGIA) => {
       `insert into hinhthucdanhgia (TENDANHGIA) values (?)`,
       [TENDANHGIA]
     );
+    const results_data = await getAll_hinhthucdanhgia();
     return {
       EM: "tạo thông tin hình thức đánh giá thành công",
       EC: 1,
-      DT: results1,
+      DT: results_data.DT,
     };
   } catch (error) {
     console.log("check erorr", error);

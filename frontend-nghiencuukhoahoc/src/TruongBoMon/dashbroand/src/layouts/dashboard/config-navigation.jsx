@@ -24,6 +24,10 @@ const navConfig = [
     title: "Chương Trình Đào Tạo",
     path: "/quan-ly-phan-cong-giang-day",
     icon: icon("ic_cart"),
+  }, {
+    title: "Phân Công Giảng Viên",
+    path: "/phan-cong-giang-vien",
+    icon: icon("ic_blog"),
   },
   {
     title: "Gợi ý phân công giảng viên",

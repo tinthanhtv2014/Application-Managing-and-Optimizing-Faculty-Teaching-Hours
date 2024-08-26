@@ -3,10 +3,10 @@ const moment = require("moment");
 const select_giangvien_chuachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
-      `SELECT GIANGVIEN.*
-        FROM GIANGVIEN
-        LEFT JOIN CHON_KHUNG ON GIANGVIEN.MAGV = CHON_KHUNG.MAGV
-        WHERE CHON_KHUNG.MAGV IS NULL;`
+      `SELECT giangvien.*
+        FROM giangvien
+        LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
+        WHERE chon_khung.MAGV IS NULL;`
     );
     return {
       EM: "Xem thông tin giảng viên chưa chọn khung chuẩn thành công",
@@ -25,9 +25,9 @@ const select_giangvien_chuachonkhung = async () => {
 const select_giangvien_dachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
-      `SELECT DISTINCT GIANGVIEN.*
-        FROM GIANGVIEN
-        INNER JOIN CHON_KHUNG ON GIANGVIEN.MAGV = CHON_KHUNG.MAGV;`
+      `SELECT DISTINCT giangvien.*
+        FROM giangvien
+        INNER JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV;`
     );
     return {
       EM: "Xem thông tin giảng viên đã chọn khung chuẩn thành công",
@@ -35,6 +35,7 @@ const select_giangvien_dachonkhung = async () => {
       DT: results_ctdt_bomon,
     };
   } catch (error) {
+    console.log("error =>", error);
     return {
       EM: "Lỗi services select_giangvien_chuachonkhung",
       EC: -1,
