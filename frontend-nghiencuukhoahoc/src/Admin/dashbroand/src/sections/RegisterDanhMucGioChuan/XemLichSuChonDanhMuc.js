@@ -32,7 +32,7 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
             TEN_NGHIEN_CUU: TEN_NGHIEN_CUU,
           }
         );
-        // console.log(response.data);
+        console.log("handleRowClick", response.data);
         if (response.data.EC === 1) {
           setDataListTacGia(response.data.DT);
           setSoTaGia(response.data.DT.length);
