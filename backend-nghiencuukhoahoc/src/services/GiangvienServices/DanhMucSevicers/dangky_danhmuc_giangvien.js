@@ -247,7 +247,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
         }, {});
 
         // Tính TY_LE_THUC cho từng phần tử trong obj
-        const result = updatedObj.map((item) => {
+        const result1 = updatedObj.map((item) => {
             let TY_LE_THUC;
 
             if (item.NHOM_CHIA_GIO === "Không") {
@@ -265,6 +265,15 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                 SO_GIO: DanhMuc[0].GIO_CHUAN * TY_LE_THUC, // Thêm trường SO_GIO
             };
         });
+
+        let result = []; // Khởi tạo result là một mảng trống
+
+        for (let i = 0; i < dataDangKy.length; i++) {
+            result[i] = {
+                ...result1[i],   // Trộn các thuộc tính từ result1[i]
+                ...dataDangKy[i] // Trộn các thuộc tính từ dataDangKy[i]
+            };
+        }
 
         console.log("result:", result);
         //Chỗ này ông phải return về cho tôi như này thì frontend mới nhận được
