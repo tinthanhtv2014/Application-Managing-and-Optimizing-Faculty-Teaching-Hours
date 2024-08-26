@@ -14,6 +14,9 @@ const {
   get_giangvien_CNTT_dachonkhung,
   get_monhoc_lop_hocki,
   get_giangvien_CNTT_dachonkhung_chitietonly,
+
+  get_listgiangvien_phancong,
+  create_onlylistgiangvien_phancong,
 } = require("../../controllers/TruongbomonController/phancongCONTROLLER");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction");
@@ -42,6 +45,10 @@ const CRUDgiangvien_CNTT = (app) => {
     "/xem/phancong/dachonkhung/chitiet",
     get_giangvien_CNTT_dachonkhung_chitietonly
   );
+
+  //bảng phân công
+  router.get("/xem/phancong/listgiangvien", get_listgiangvien_phancong);
+  router.post("/tao/phancong/giangvien", create_onlylistgiangvien_phancong);
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
 
