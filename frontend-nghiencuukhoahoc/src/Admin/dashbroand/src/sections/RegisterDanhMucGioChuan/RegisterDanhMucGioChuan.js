@@ -402,15 +402,21 @@ const DangKyDanhMucGioChuan = ({
       toast.error("Bạn cần điền thông tin tác giả");
       return;
     }
+    const resetTacGiaList = tacGiaList.map((tacGia) => ({
+      ...tacGia,
+      soGio: "",
+      soPhanTram: "",
+    }));
 
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc`,
         {
-          LISTGIANGVIEN: tacGiaList,
+          LISTGIANGVIEN: resetTacGiaList,
           TONGSOTACGIA: tacGiaList.length,
           MALOAIDANHMUC: MaLoaiDanhMuc,
           MADANHMUC: selectedDanhMuc.MA_DANH_MUC,
+          SOGIODANHMUCDACHO: SoGioDanhMucDaChon,
         }
       );
 

@@ -263,7 +263,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     });
 
     console.log("result:", result);
-
+    //Chỗ này ông phải return về cho tôi như này thì frontend mới nhận được
     return {
       EM: "Lấy thông tin thành công",
       EC: 1,
