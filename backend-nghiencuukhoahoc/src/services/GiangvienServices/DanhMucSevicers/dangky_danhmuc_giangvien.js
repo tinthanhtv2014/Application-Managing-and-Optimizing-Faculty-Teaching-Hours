@@ -159,6 +159,43 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                         dataDangKy[i].duocMien,
                     ]
                 );
+                console.log("Tường hợp Tác giả chịu trách nhiệm đặt biệt DataTyLeTraVe: ", DataTyLeTraVe);
+                if (DataTyLeTraVe) {
+                    [DataTyLeTraVe] = await pool.execute(
+                        `
+                SELECT 
+                    ctl.MA_QUY_DOI, 
+                    ctl.MA_LOAI_DANH_MUC, 
+                    ctl.MA_LOAI_TAC_GIA, 
+                    ltg.TEN_LOAI_TAC_GIA,
+                    ctl.NHOM_CHIA_GIO, 
+                    ctl.SO_TAC_GIA_THUOC_LOAI, 
+                    tqd.TEN_QUY_DOI, 
+                    tqd.TY_LE, 
+                    tqd.VIEN_CHUC_TRUONG, 
+                    tqd.THUC_HIEN_CHUAN
+                FROM 
+                    co_ty_le ctl
+                JOIN 
+                    ty_le_quy_doi_gio_chuan tqd ON ctl.MA_QUY_DOI = tqd.MA_QUY_DOI
+                JOIN 
+                    loai_tac_gia ltg ON ctl.MA_LOAI_TAC_GIA = ltg.MA_LOAI_TAC_GIA
+                WHERE 
+                    ctl.MA_LOAI_DANH_MUC = ?
+                    AND ltg.TEN_LOAI_TAC_GIA = ?
+                    AND tqd.TEN_QUY_DOI = ?
+                    AND tqd.VIEN_CHUC_TRUONG = ?
+                    AND tqd.THUC_HIEN_CHUAN = ?
+              `,
+                        [
+                            dataDangKyDanhMuc.MALOAIDANHMUC,
+                            dataDangKy[i].loai,
+                            TacGiaDaiDien[0].TEN_QUY_DOI,
+                            dataDangKy[i].laVienChuc,
+                            dataDangKy[i].duocMien,
+                        ]
+                    );
+                }
             } else {
                 [DataTyLeTraVe] = await pool.execute(
                     `
