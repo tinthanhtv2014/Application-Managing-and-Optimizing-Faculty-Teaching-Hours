@@ -1,11 +1,28 @@
 import { useEffect, useState } from "react";
 import CookiesAxios from "../CookiesAxios";
-import { Button, Box } from "@mui/material";
+import {
+  Box,
+  Paper,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  Button,
+  Typography,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
+  const [data_NamHoc, setData_NamHoc] = useState([]);
+  const [ListNamHoc, setListNamHoc] = useState(null);
+  const [selectNamHoc, setSelectNamHoc] = useState([]);
+  // ---------------------------------------------------------------
+  const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
     useState(true);
 
@@ -41,9 +58,14 @@ const IndexPhanCongGiangVien = () => {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung`
       );
-      console.log("da chon khung =>", response.data);
+      const response_NamHoc = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+      );
+
       if (response.data.EC === 1) {
         setData_ListGVDaChonKhung(response.data.DT);
+        setListNamHoc(response_NamHoc.data.DT);
+        setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
       }
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
@@ -59,6 +81,34 @@ const IndexPhanCongGiangVien = () => {
         gap: 2,
       }}
     >
+      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+        <FormControl fullWidth className="profile-email-input">
+          <InputLabel id="select-label-trang-thai">Năm học</InputLabel>
+          <Select
+            labelId="select-label-trang-thai"
+            id="trang-thai-select"
+            name="TENCHUCDANH"
+            label="Chức danh"
+            value={selectNamHoc}
+            defaultValue={selectNamHoc}
+            disabled={isDisableNamHoc}
+            onChange={(e) => setSelectNamHoc(e.target.value)}
+            variant="outlined"
+          >
+            {ListNamHoc && ListNamHoc.length > 0 ? (
+              ListNamHoc.map((namhoc, index) => (
+                <MenuItem key={index} value={namhoc.TENNAMHOC}>
+                  {namhoc.TENNAMHOC}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem value="" disabled>
+                Không có năm học nào
+              </MenuItem>
+            )}
+          </Select>
+        </FormControl>
+      </Box>
       <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <Button
           variant={isOpenXemGiangVienChonKhung ? "outlined" : "text"}
@@ -85,9 +135,15 @@ const IndexPhanCongGiangVien = () => {
       </Box>
       <Box sx={{ width: "100%", maxWidth: "1200px" }}>
         {isOpenXemGiangVienChonKhung ? (
-          <GVTableDaChonKhung data={data_ListGVDaChonKhung} />
+          <GVTableDaChonKhung
+            data={data_ListGVDaChonKhung}
+            selectNamHoc={selectNamHoc}
+          />
         ) : (
-          <GVTableDaChonKhung data={data_ListGVChuaChonKhung} />
+          <GVTableDaChonKhung
+            data={data_ListGVChuaChonKhung}
+            selectNamHoc={selectNamHoc}
+          />
         )}
       </Box>
     </Box>
