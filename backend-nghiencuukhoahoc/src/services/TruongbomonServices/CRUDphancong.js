@@ -1,5 +1,7 @@
 const pool = require("../../config/database");
 const moment = require("moment");
+
+const { timnamhoc_TENNAMHOC } = require("../AdminServices/helpers");
 const select_giangvien_chuachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
@@ -45,7 +47,35 @@ const select_giangvien_dachonkhung = async () => {
   } catch (error) {
     console.log("error =>", error);
     return {
-      EM: "Lỗi services select_giangvien_chuachonkhung",
+      EM: "Lỗi services select_giangvien_dachonkhung",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const select_giangvien_dachonkhung_chitiet = async (TENNAMHOC, MAGV) => {
+  try {
+    let [results_ctdt_bomon, fields1] = await pool.execute(
+      `SELECT gv.*,nh.TENNAMHOC,kgc.*
+      FROM giangvien gv
+      JOIN chon_khung ck ON gv.MAGV = ck.MAGV
+      JOIN khunggiochuan kgc ON kgc.MAKHUNG = ck.MAKHUNG
+      JOIN namhoc nh ON nh.MANAMHOC = ck.MANAMHOC
+      JOIN taikhoan tk ON gv.MAGV = tk.MAGV
+      WHERE tk.TENDANGNHAP IS NOT NULL 
+      and gv.MAGV = ? and nh.TENNAMHOC = ?; `,
+      [MAGV, TENNAMHOC]
+    );
+    return {
+      EM: "Xem thông tin giảng viên đã chọn khung chuẩn thành công",
+      EC: 1,
+      DT: results_ctdt_bomon,
+    };
+  } catch (error) {
+    console.log("error =>", error);
+    return {
+      EM: "Lỗi services select_giangvien_dachonkhung_chitiet",
       EC: -1,
       DT: [],
     };
@@ -106,4 +136,5 @@ module.exports = {
   select_giangvien_chuachonkhung,
   select_giangvien_dachonkhung,
   select_lophoc_monhoc,
+  select_giangvien_dachonkhung_chitiet,
 };
