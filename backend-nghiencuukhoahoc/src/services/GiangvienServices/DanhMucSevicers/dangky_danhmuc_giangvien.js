@@ -159,8 +159,8 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                         dataDangKy[i].duocMien,
                     ]
                 );
-                console.log("Tường hợp Tác giả chịu trách nhiệm đặt biệt DataTyLeTraVe: ", DataTyLeTraVe);
-                if (DataTyLeTraVe) {
+                console.log("Trường hợp Tác giả chịu trách nhiệm đặt biệt DataTyLeTraVe: ", DataTyLeTraVe);
+                if (DataTyLeTraVe.length === 0) {
                     [DataTyLeTraVe] = await pool.execute(
                         `
                 SELECT 
@@ -195,6 +195,7 @@ const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
                             dataDangKy[i].duocMien,
                         ]
                     );
+                    console.log("Trường hợp Tác giả chịu trách nhiệm dự phòng DataTyLeTraVe: ", DataTyLeTraVe);
                 }
             } else {
                 [DataTyLeTraVe] = await pool.execute(
