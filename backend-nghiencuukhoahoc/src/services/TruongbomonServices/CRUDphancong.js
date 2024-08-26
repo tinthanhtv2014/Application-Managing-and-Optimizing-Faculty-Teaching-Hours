@@ -3,10 +3,16 @@ const moment = require("moment");
 const select_giangvien_chuachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
-      `SELECT giangvien.*
-        FROM giangvien
-        LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
-        WHERE chon_khung.MAGV IS NULL;`
+      `SELECT gv.*
+      FROM giangvien gv
+      LEFT JOIN chon_khung ck ON gv.MAGV = ck.MAGV
+      WHERE ck.MAGV IS NULL
+      AND EXISTS (
+      SELECT 1 
+      FROM taikhoan tk 
+      WHERE tk.MAGV = gv.MAGV
+      AND tk.TENDANGNHAP IS NOT NULL
+);`
     );
     return {
       EM: "Xem thông tin giảng viên chưa chọn khung chuẩn thành công",
@@ -25,9 +31,11 @@ const select_giangvien_chuachonkhung = async () => {
 const select_giangvien_dachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
-      `SELECT DISTINCT giangvien.*
-        FROM giangvien
-        INNER JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV;`
+      `SELECT gv.*
+      FROM giangvien gv
+      JOIN chon_khung ck ON gv.MAGV = ck.MAGV
+      JOIN taikhoan tk ON gv.MAGV = tk.MAGV
+      WHERE tk.TENDANGNHAP IS NOT NULL;`
     );
     return {
       EM: "Xem thông tin giảng viên đã chọn khung chuẩn thành công",
