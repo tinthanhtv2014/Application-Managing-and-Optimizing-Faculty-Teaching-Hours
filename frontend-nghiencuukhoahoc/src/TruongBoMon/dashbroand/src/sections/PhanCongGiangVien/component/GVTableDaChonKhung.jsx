@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -24,6 +24,11 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
   const [selectedGV, setSelectedGV] = useState(null); // Trạng thái để lưu giảng viên đã chọn
   const [details, setDetails] = useState(null); // Trạng thái để lưu thông tin chi tiết của giảng viên
 
+  useEffect(() => {
+    if (selectNamHoc && selectedGV) {
+      fetchDetails(selectedGV);
+    }
+  }, [selectNamHoc]);
   const rowsPerPage = 5;
 
   const handleChangePage = (event, newPage) => {

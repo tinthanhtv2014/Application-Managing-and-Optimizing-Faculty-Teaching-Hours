@@ -73,14 +73,7 @@ const IndexPhanCongGiangVien = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 2,
-      }}
-    >
+    <>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
         <FormControl fullWidth className="profile-email-input">
           <InputLabel id="select-label-trang-thai">Năm học</InputLabel>
@@ -109,7 +102,7 @@ const IndexPhanCongGiangVien = () => {
           </Select>
         </FormControl>
       </Box>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, mt: 2 }}>
         <Button
           variant={isOpenXemGiangVienChonKhung ? "outlined" : "text"}
           onClick={() => setIsOpenXemGiangVienChonKhung(true)}
@@ -133,20 +126,29 @@ const IndexPhanCongGiangVien = () => {
           Danh Sách Giảng Viên Chưa Chọn Khung
         </Button>
       </Box>
-      <Box sx={{ width: "100%", maxWidth: "1200px" }}>
-        {isOpenXemGiangVienChonKhung ? (
-          <GVTableDaChonKhung
-            data={data_ListGVDaChonKhung}
-            selectNamHoc={selectNamHoc}
-          />
-        ) : (
-          <GVTableDaChonKhung
-            data={data_ListGVChuaChonKhung}
-            selectNamHoc={selectNamHoc}
-          />
-        )}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Box sx={{ width: "100%", maxWidth: "1200px" }}>
+          {isOpenXemGiangVienChonKhung ? (
+            <GVTableDaChonKhung
+              data={data_ListGVDaChonKhung}
+              selectNamHoc={selectNamHoc}
+            />
+          ) : (
+            <GVTableDaChonKhung
+              data={data_ListGVChuaChonKhung}
+              selectNamHoc={selectNamHoc}
+            />
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
