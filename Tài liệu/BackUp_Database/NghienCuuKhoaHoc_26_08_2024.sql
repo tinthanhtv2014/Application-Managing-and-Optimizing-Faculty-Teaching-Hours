@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 26, 2024 lúc 04:12 PM
+-- Thời gian đã tạo: Th8 26, 2024 lúc 04:37 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -211,35 +211,36 @@ CREATE TABLE `co_ty_le` (
 --
 
 INSERT INTO `co_ty_le` (`MA_QUY_DOI`, `MA_LOAI_DANH_MUC`, `MA_LOAI_TAC_GIA`, `SO_TAC_GIA_THUOC_LOAI`, `NHOM_CHIA_GIO`) VALUES
-(16, 1, 1, 2, 'Không'),
-(16, 2, 1, 2, 'Không'),
-(17, 1, 2, 0, '1'),
-(17, 1, 3, 0, '1'),
-(17, 2, 2, 0, '1'),
-(17, 2, 3, 0, '1'),
-(18, 1, 1, 2, 'Không'),
-(18, 2, 1, 2, 'Không'),
-(19, 1, 2, 2, 'Không'),
-(19, 2, 2, 2, 'Không'),
-(20, 1, 2, 1, 'Không'),
-(20, 2, 2, 1, 'Không'),
-(21, 1, 1, 1, '1'),
-(21, 1, 3, 0, '1'),
-(21, 2, 1, 1, '1'),
-(21, 2, 3, 0, '1'),
-(22, 1, 1, 1, 'Không'),
-(22, 2, 1, 1, 'Không'),
-(23, 1, 1, 1, '1'),
-(23, 1, 2, 0, '1'),
-(23, 1, 3, 0, '1'),
-(23, 2, 1, 1, '1'),
-(23, 2, 2, 0, '1'),
-(23, 2, 3, 0, '1'),
-(24, 3, 8, 1, 'Không'),
-(25, 3, 1, 1, 'Không'),
-(26, 3, 1, 1, 'Không'),
-(27, 3, 2, 2, '1'),
-(27, 3, 3, 2, '1');
+(1, 1, 1, 0, 'Không'),
+(1, 2, 1, 2, 'Không'),
+(2, 1, 2, 0, '1'),
+(2, 1, 3, 0, '1'),
+(2, 2, 2, 0, '1'),
+(2, 2, 3, 0, '1'),
+(3, 1, 1, 0, 'Không'),
+(3, 2, 1, 2, 'Không'),
+(4, 1, 2, 2, 'Không'),
+(4, 2, 2, 2, 'Không'),
+(5, 1, 2, 1, 'Không'),
+(5, 2, 2, 1, 'Không'),
+(6, 1, 1, 0, '1'),
+(6, 1, 3, 0, '1'),
+(6, 2, 1, 1, '1'),
+(6, 2, 3, 0, '1'),
+(7, 1, 1, 0, 'Không'),
+(7, 2, 1, 1, 'Không'),
+(8, 1, 1, 0, '1'),
+(8, 1, 2, 0, '1'),
+(8, 1, 3, 0, '1'),
+(8, 2, 1, 1, '1'),
+(8, 2, 2, 0, '1'),
+(8, 2, 3, 0, '1'),
+(9, 3, 8, 0, 'Không'),
+(10, 3, 1, 0, 'Không'),
+(11, 3, 1, 0, 'Không'),
+(12, 3, 1, 0, 'Không'),
+(13, 3, 2, 0, '1'),
+(13, 3, 3, 0, '1');
 
 -- --------------------------------------------------------
 
@@ -714,18 +715,19 @@ CREATE TABLE `ty_le_quy_doi_gio_chuan` (
 --
 
 INSERT INTO `ty_le_quy_doi_gio_chuan` (`MA_QUY_DOI`, `MA_QUY_DINH`, `TEN_QUY_DOI`, `TY_LE`, `VIEN_CHUC_TRUONG`, `THUC_HIEN_CHUAN`, `TRANG_THAI_QUY_DOI`, `GHI_CHU_QUY_DOI`) VALUES
-(16, 1, '16.2.b.Tác giả thứ nhất (bài có nhiều tác giả) là viên chức Trường ĐHTV: 50% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18, trường hợp đồng tác giả thứ nhất thì chia đều 50% cho đồng tác giả thứ nhất; 50% còn lại được chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có); tác giả độc lập hưởng 50% như tác giả thứ nhất;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các Tác giả thứ nhất'),
-(17, 1, '16.2.b.Tác giả thứ nhất (bài có nhiều tác giả) là viên chức Trường ĐHTV: 50% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18, trường hợp đồng tác giả thứ nhất thì chia đều 50% cho đồng tác giả thứ nhất; 50% còn lại được chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có); tác giả độc lập hưởng 50% như tác giả thứ nhất;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có). Trừ tác giả thứ nhất'),
-(18, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0, 'Không', 'Có', 'Đang áp dụng', 'Tác giả thứ nhất không thuộc trường'),
-(19, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia cho 2 tác giả chịu trách nhiệm, chia đều'),
-(20, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.3, 'Có', 'Có', 'Đang áp dụng', 'Chia cho 1  tác giả chịu trách nhiệm'),
-(21, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Các đồng tác giả còn lại (trừ tác giả chịu trách nhiệm) được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất ngoài trường);'),
-(22, 1, '16.2.dTrường hợp tác giả thứ nhất là viên chức của Trường ĐHTV nhưng không phải thực hiện chuẩn thì các tác giả còn lại hưởng 50% chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Tác giả thứ nhất được thưởng giờ dư theo quy định.', 0, 'Có', 'Không', 'Đang áp dụng', 'Tác giả thứ nhất không thực hiện chuẩn'),
-(23, 1, '16.2.dTrường hợp tác giả thứ nhất là viên chức của Trường ĐHTV nhưng không phải thực hiện chuẩn thì các tác giả còn lại hưởng 50% chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Tác giả thứ nhất được thưởng giờ dư theo quy định.', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Trừ tác giả thứ nhất'),
-(24, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 1, 'Có', 'Có', 'Đang áp dụng', 'Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi;'),
-(25, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0, 'Không', 'Có', 'Đang áp dụng', 'Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV'),
-(26, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV)'),
-(27, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;');
+(1, 1, '16.2.b.Tác giả thứ nhất (bài có nhiều tác giả) là viên chức Trường ĐHTV: 50% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18, trường hợp đồng tác giả thứ nhất thì chia đều 50% cho đồng tác giả thứ nhất; 50% còn lại được chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có); tác giả độc lập hưởng 50% như tác giả thứ nhất;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các Tác giả thứ nhất'),
+(2, 1, '16.2.b.Tác giả thứ nhất (bài có nhiều tác giả) là viên chức Trường ĐHTV: 50% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18, trường hợp đồng tác giả thứ nhất thì chia đều 50% cho đồng tác giả thứ nhất; 50% còn lại được chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có); tác giả độc lập hưởng 50% như tác giả thứ nhất;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các đồng tác giả còn lại bao gồm tác giả chịu trách nhiệm (nếu có). Trừ tác giả thứ nhất'),
+(3, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0, 'Không', 'Có', 'Đang áp dụng', 'Tác giả thứ nhất không thuộc trường'),
+(4, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia cho 2 tác giả chịu trách nhiệm, chia đều'),
+(5, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.3, 'Có', 'Có', 'Đang áp dụng', 'Chia cho 1  tác giả chịu trách nhiệm'),
+(6, 1, '16.2.c.Trường hợp tác giả thứ nhất không phải là viên chức của trường thì xét đến tác giả chịu trách nhiệm: nếu có hai tác giả chịu trách nhiệm thì chia đều 50% cho đồng tác giả này, nếu có một tác giả chịu trách nhiệm thì hưởng 30% định mức sản phẩm KH&CN tương ứng quy định tại Điều 17, Điều 18; các đồng tác giả còn lại được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất);', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Các đồng tác giả còn lại (trừ tác giả chịu trách nhiệm) được chia đều từ 50% định mức quy định cho tổng số tác giả (bao gồm tác giả thứ nhất ngoài trường);'),
+(7, 1, '16.2.dTrường hợp tác giả thứ nhất là viên chức của Trường ĐHTV nhưng không phải thực hiện chuẩn thì các tác giả còn lại hưởng 50% chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Tác giả thứ nhất được thưởng giờ dư theo quy định.', 0, 'Có', 'Không', 'Đang áp dụng', 'Tác giả thứ nhất không thực hiện chuẩn'),
+(8, 1, '16.2.dTrường hợp tác giả thứ nhất là viên chức của Trường ĐHTV nhưng không phải thực hiện chuẩn thì các tác giả còn lại hưởng 50% chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Tác giả thứ nhất được thưởng giờ dư theo quy định.', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Chia đều cho các đồng tác giả (kể cả tác giả chịu trách nhiệm). Trừ tác giả thứ nhất'),
+(9, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 1, 'Có', 'Có', 'Đang áp dụng', 'Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi;'),
+(10, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0, 'Không', 'Có', 'Đang áp dụng', 'Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV'),
+(11, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0, 'Có', 'Không', 'Đang áp dụng', 'Trường hợp tác giả thứ nhất không thực hiện chuẩn (Không được luật nhắc đến)'),
+(12, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV)'),
+(13, 1, '16.3.a. Đối với bằng SHTT, chỉ xem xét sản phẩm SHTT do Trường ĐHTV làm chủ đơn hoặc đồng chủ đơn. Tác giả thứ nhất tài sản trí tuệ (TSTT) liên quan quyết định tỷ lệ hưởng giờ quy chuẩn NCKH trên cơ sở đồng thuận đối với TSTT có nhiều tác giả (trường hợp tác giả thứ nhất là viên chức của Trường ĐHTV); Trường hợp cá nhân thực hiện thì hưởng 100% mức quy đổi; Trường hợp tác giả thứ nhất không phải là viên chức Trường ĐHTV và viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;', 0.5, 'Có', 'Có', 'Đang áp dụng', 'Viên chức Trường ĐHTV là tác giả khác thì hưởng bằng 50% định mức chia đều cho tổng số tác giả;');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -1040,7 +1042,7 @@ ALTER TABLE `thoigian_xacnhan`
 -- AUTO_INCREMENT cho bảng `ty_le_quy_doi_gio_chuan`
 --
 ALTER TABLE `ty_le_quy_doi_gio_chuan`
-  MODIFY `MA_QUY_DOI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `MA_QUY_DOI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
