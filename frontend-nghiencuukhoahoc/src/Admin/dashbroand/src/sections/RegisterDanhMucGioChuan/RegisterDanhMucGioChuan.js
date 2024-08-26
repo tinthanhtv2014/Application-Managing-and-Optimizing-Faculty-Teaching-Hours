@@ -153,7 +153,7 @@ const DangKyDanhMucGioChuan = ({
               `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtin`,
               { MAGV: MaGV, TENNAMHOC: selectNamHoc }
             );
-            // console.log("check", response_Data.data.DT);
+            console.log("check LS Đăng Ký Danh Mục =>", response_Data.data);
             if (response_Data.data.EC === 1) {
               setDataDang_ky_thuc_hien_quy_doiGV(response_Data.data.DT);
             } else {
@@ -426,9 +426,11 @@ const DangKyDanhMucGioChuan = ({
         const dtList = response.data.DT; // Dữ liệu từ backend
 
         const updatedTacGiaList = tacGiaList.map((tacGia) => {
-          // Tìm dữ liệu tương ứng từ dtList
+          // Tìm dữ liệu tương ứng từ dtList dựa vào `maSoGV` và `loai`
           const correspondingData = dtList.find(
-            (role) => role.TEN_LOAI_TAC_GIA === tacGia.loai
+            (role) =>
+              role.TEN_LOAI_TAC_GIA === tacGia.loai &&
+              tacGia.maSoGV === role.maSoGV
           );
 
           if (correspondingData) {
