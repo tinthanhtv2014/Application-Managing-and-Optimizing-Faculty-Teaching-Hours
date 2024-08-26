@@ -177,7 +177,7 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
     return {
       EM: "Lấy thông tin thành công",
       EC: 1,
-      DT: results1[0],
+      DT: results1,
     };
   } catch (error) {
     console.log("get_thongtin_dangky_giangvien error >>>", error);
@@ -194,7 +194,7 @@ const get_thongtin_dangky_giangvien_hoptac = async (TEN_NGHIEN_CUU) => {
     console.log("check TEN_NGHIEN_CUU", TEN_NGHIEN_CUU);
     const [results1, fields] = await pool.execute(
       `SELECT giangvien.TENGV,
-      dkthqd.TEN_NGHIEN_CUU,
+      dkthqd.TEN_DE_TAI,
       ltg.TEN_LOAI_TAC_GIA 
       from 
       dang_ky_thuc_hien_quy_doi as dkthqd,
@@ -202,7 +202,7 @@ const get_thongtin_dangky_giangvien_hoptac = async (TEN_NGHIEN_CUU) => {
       giangvien
       where giangvien.MAGV = dkthqd.MAGV 
       and ltg.MA_LOAI_TAC_GIA = dkthqd.MA_LOAI_TAC_GIA
-      and dkthqd.TEN_NGHIEN_CUU = ?
+      and dkthqd.TEN_DE_TAI = ?
      `,
       [TEN_NGHIEN_CUU]
     );
