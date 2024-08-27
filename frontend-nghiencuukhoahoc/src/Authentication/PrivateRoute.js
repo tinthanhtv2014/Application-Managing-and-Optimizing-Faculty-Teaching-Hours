@@ -9,7 +9,6 @@ import DashboardTruongKhoa from "../TruongKhoa/dashbroand/src/main.jsx";
 import DashboardTruongBoMon from "../TruongBoMon/dashbroand/src/main.jsx";
 import DashboardGiangVien from "../GiangVien/dashbroand/src/main.jsx";
 import DashboardGiangVien_NgoaiTruong from "../GV_NgoaiTruong/dashbroand/src/main.jsx";
-import { toast } from "react-toastify";
 
 const PrivateRoute = () => {
   const [loading, setLoading] = useState(true);
@@ -57,7 +56,6 @@ const PrivateRoute = () => {
             } else if (
               response.data.user.phanquyen === "Giảng Viên Ngoài Trường"
             ) {
-              toast.success("oke");
               setPhanQuyenGV_NgoaiTruong(true);
             }
             setRedirect(false);

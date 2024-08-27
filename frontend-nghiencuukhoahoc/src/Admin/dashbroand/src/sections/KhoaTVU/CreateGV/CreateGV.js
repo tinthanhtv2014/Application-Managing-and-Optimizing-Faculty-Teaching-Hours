@@ -34,13 +34,13 @@ const ComponenCreateGiangVien = () => {
   //----------------------KHAI BÁO BIẾN INPUT DATA----------------------------
   const [tenKhoa, setTenKhoa] = useState("");
   const [TenBoMon, setTenBoMon] = useState("");
-  const [MaKhoa, setMaKhoa] = useState();
-  const [MaBoMon, setMaBoMon] = useState();
-  const [MaGV, setMaGV] = useState();
-  const [TenGV, setTenGV] = useState();
-  const [TenDangNhapGV, setTenDangNhapGV] = useState();
-  const [QuyenGiangVien, setQuyenGiangVien] = useState();
-  const [TrangThaiGV, setTrangThaiGV] = useState();
+  const [MaKhoa, setMaKhoa] = useState(null);
+  const [MaBoMon, setMaBoMon] = useState(null);
+  const [MaGV, setMaGV] = useState(null);
+  const [TenGV, setTenGV] = useState(null);
+  const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
+  const [QuyenGiangVien, setQuyenGiangVien] = useState(null);
+  const [TrangThaiGV, setTrangThaiGV] = useState(null);
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
 
   const auth = Cookies.get("accessToken");
@@ -219,7 +219,8 @@ const ComponenCreateGiangVien = () => {
       QuyenGiangVien === "Admin" ||
       QuyenGiangVien === "Giảng Viên" ||
       QuyenGiangVien === "Trưởng Bộ Môn" ||
-      QuyenGiangVien === "Trưởng Khoa"
+      QuyenGiangVien === "Trưởng Khoa" ||
+      QuyenGiangVien === "Giảng Viên Ngoài Trường"
     ) {
       try {
         const response = await CookiesAxios.post(
@@ -546,7 +547,7 @@ const ComponenCreateGiangVien = () => {
       <Row className="">
         {" "}
         {ValueExcel &&
-          (ValueExcel == "Excel" ? (
+          (ValueExcel === "Excel" ? (
             <>
               <Col md={6}>
                 {" "}
@@ -554,23 +555,26 @@ const ComponenCreateGiangVien = () => {
               </Col>
             </>
           ) : (
-            <Col md={6}>
-              <CreateGiangVienForm
-                QuyenGiangVien={QuyenGiangVien}
-                TrangThaiGV={TrangThaiGV}
-                setTrangThaiGV={setTrangThaiGV}
-                setQuyenGiangVien={setQuyenGiangVien}
-                setTenDangNhapGV={setTenDangNhapGV}
-                TenGV={TenGV}
-                setMaGV={setMaGV}
-                setTenGV={setTenGV}
-                disabledGV={disabledGV}
-                handleSumitAddGV={handleSumitAddGV}
-                isOpenEditButtonGV={isOpenEditButtonGV}
-                handleSumitEditGV={handleSumitEditGV}
-                handleIsOpenEditButtonGV={handleIsOpenEditButtonGV}
-              />
-            </Col>
+            <>
+              {" "}
+              <Col md={6}>
+                <CreateGiangVienForm
+                  QuyenGiangVien={QuyenGiangVien}
+                  TrangThaiGV={TrangThaiGV}
+                  setTrangThaiGV={setTrangThaiGV}
+                  setQuyenGiangVien={setQuyenGiangVien}
+                  setTenDangNhapGV={setTenDangNhapGV}
+                  TenGV={TenGV}
+                  setMaGV={setMaGV}
+                  setTenGV={setTenGV}
+                  disabledGV={disabledGV}
+                  handleSumitAddGV={handleSumitAddGV}
+                  isOpenEditButtonGV={isOpenEditButtonGV}
+                  handleSumitEditGV={handleSumitEditGV}
+                  handleIsOpenEditButtonGV={handleIsOpenEditButtonGV}
+                />
+              </Col>
+            </>
           ))}
         <Col md={6}></Col>
       </Row>{" "}
