@@ -10,26 +10,20 @@ import {
   Collapse,
 } from "@mui/material";
 import CookiesAxios from "../CookiesAxios";
+
 const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [dataListTacGia, setDataListTacGia] = useState([]);
   const [SoTacGia, setSoTaGia] = useState(null);
-  useEffect(() => {
-    if (dataDang_ky_thuc_hien_quy_doiGV) {
-      handleRowClick(dataDang_ky_thuc_hien_quy_doiGV?.TEN_NGHIEN_CUU);
-    } else {
-      setDataListTacGia("");
-      setSoTaGia("");
-    }
-  }, [dataDang_ky_thuc_hien_quy_doiGV]);
-  const handleRowClick = async (index, TEN_NGHIEN_CUU) => {
+
+  const handleRowClick = async (index, TEN_DE_TAI) => {
     setExpandedRow(expandedRow === index ? null : index);
-    if (TEN_NGHIEN_CUU) {
+    if (TEN_DE_TAI) {
       try {
         const response = await CookiesAxios.post(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/dangky/danhmuc/thongtindanhsach`,
           {
-            TEN_NGHIEN_CUU: TEN_NGHIEN_CUU,
+            TEN_NGHIEN_CUU: TEN_DE_TAI,
           }
         );
         console.log("handleRowClick", response.data);
@@ -37,7 +31,6 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
           setDataListTacGia(response.data.DT);
           setSoTaGia(response.data.DT.length);
         } else {
-          // console.error(response.data);
           setDataListTacGia("");
           setSoTaGia("");
         }
@@ -62,151 +55,127 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow
-            onClick={() =>
-              handleRowClick(0, dataDang_ky_thuc_hien_quy_doiGV?.TEN_NGHIEN_CUU)
-            }
-            style={{ cursor: "pointer" }}
-          >
-            <TableCell>
-              {dataDang_ky_thuc_hien_quy_doiGV?.TENGV || "N/A"}
-            </TableCell>
-            <TableCell>
-              {dataDang_ky_thuc_hien_quy_doiGV?.TEN_LOAI_TAC_GIA || "N/A"}
-            </TableCell>
-            <TableCell>
-              {dataDang_ky_thuc_hien_quy_doiGV?.TEN_NGHIEN_CUU || "N/A"}
-            </TableCell>
-            <TableCell>
-              {dataDang_ky_thuc_hien_quy_doiGV?.SOGIOQUYDOI || "N/A"}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
-              <Collapse in={expandedRow === 0} timeout="auto" unmountOnExit>
-                <Table size="small" aria-label="details">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>Số tác giả thực hiện</TableCell>
-                      <TableCell>{SoTacGia || "N/A"}</TableCell>
-                    </TableRow>
-                    {dataListTacGia && dataListTacGia.length > 0 ? (
-                      dataListTacGia.map((tacGia, index) => (
-                        <TableRow key={index}>
-                          <TableCell
-                            className={
-                              tacGia.TENGV ===
-                              dataDang_ky_thuc_hien_quy_doiGV?.TENGV
-                                ? "text-info"
-                                : ""
-                            }
-                          >
-                            {tacGia.TENGV || "N/A"}
-                          </TableCell>
-                          <TableCell
-                            className={
-                              tacGia.TENGV ===
-                              dataDang_ky_thuc_hien_quy_doiGV?.TENGV
-                                ? "text-info"
-                                : ""
-                            }
-                          >
-                            {tacGia.TEN_LOAI_TAC_GIA || "N/A"}
-                          </TableCell>
-                          {/* Các cột khác nếu có */}
+          {dataDang_ky_thuc_hien_quy_doiGV.map((item, index) => (
+            <React.Fragment key={index}>
+              <TableRow
+                onClick={() => handleRowClick(index, item.TEN_DE_TAI)}
+                style={{ cursor: "pointer" }}
+              >
+                <TableCell>{item.TENGV || "N/A"}</TableCell>
+                <TableCell>{item.TEN_LOAI_TAC_GIA || "N/A"}</TableCell>
+                <TableCell>{item.TEN_DE_TAI || "N/A"}</TableCell>
+                <TableCell>{item.SOGIOQUYDOI || "N/A"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  style={{ paddingBottom: 0, paddingTop: 0 }}
+                  colSpan={4}
+                >
+                  <Collapse
+                    in={expandedRow === index}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <Table size="small" aria-label="details">
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>Số tác giả thực hiện</TableCell>
+                          <TableCell>{SoTacGia || "N/A"}</TableCell>
                         </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={2} align="center">
-                          Không có dữ liệu
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    <TableRow>
-                      <TableCell>Thời gian đăng ký</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.THOI_GIAN_DANG_KY ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Nội dung danh mục</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.NOI_DUNG_DANH_MUC ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>ISBN</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.ISBN || "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>WOS/Scopus</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.WOS_SCOUPUS || "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Hạng WOS/Scopus</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.HANG_WOS_SCOUPUS ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Lợi nhuận</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.LOI_NHUAN || "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Đơn vị tính</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.DON_VI_TINH || "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Giải thưởng</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.GIAI_THUONG || "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Xếp hạng Quartiles</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.XEP_HANG_QUARTILES ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Năm thực hiện</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.NAM_THUC_HIEN ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Trạng thái danh mục</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.TRANG_THAI_DANH_MUC ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Ghi chú danh mục</TableCell>
-                      <TableCell>
-                        {dataDang_ky_thuc_hien_quy_doiGV?.GHI_CHU_DANH_MUC ||
-                          "N/A"}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Collapse>
-            </TableCell>
-          </TableRow>
+                        {dataListTacGia && dataListTacGia.length > 0 ? (
+                          dataListTacGia.map((tacGia, index) => (
+                            <TableRow key={index}>
+                              <TableCell
+                                className={
+                                  tacGia.TENGV === item.TENGV ? "text-info" : ""
+                                }
+                              >
+                                {tacGia.TENGV || "N/A"}
+                              </TableCell>
+                              <TableCell
+                                className={
+                                  tacGia.TENGV === item.TENGV ? "text-info" : ""
+                                }
+                              >
+                                {tacGia.TEN_LOAI_TAC_GIA || "N/A"}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={2} align="center">
+                              Không có dữ liệu
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        {/* Additional details */}
+                        <TableRow>
+                          <TableCell>Thời gian đăng ký</TableCell>
+                          <TableCell>
+                            {item.THOI_GIAN_DANG_KY || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Nội dung danh mục</TableCell>
+                          <TableCell>
+                            {item.NOI_DUNG_DANH_MUC || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>ISBN</TableCell>
+                          <TableCell>{item.ISBN || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>WOS/Scopus</TableCell>
+                          <TableCell>{item.WOS_SCOUPUS || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Hạng WOS/Scopus</TableCell>
+                          <TableCell>
+                            {item.HANG_WOS_SCOUPUS || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Lợi nhuận</TableCell>
+                          <TableCell>{item.LOI_NHUAN || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Đơn vị tính</TableCell>
+                          <TableCell>{item.DON_VI_TINH || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Giải thưởng</TableCell>
+                          <TableCell>{item.GIAI_THUONG || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Xếp hạng Quartiles</TableCell>
+                          <TableCell>
+                            {item.XEP_HANG_QUARTILES || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Năm thực hiện</TableCell>
+                          <TableCell>{item.NAM_THUC_HIEN || "N/A"}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Trạng thái danh mục</TableCell>
+                          <TableCell>
+                            {item.TRANG_THAI_DANH_MUC || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Ghi chú danh mục</TableCell>
+                          <TableCell>
+                            {item.GHI_CHU_DANH_MUC || "N/A"}
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Collapse>
+                </TableCell>
+              </TableRow>
+            </React.Fragment>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

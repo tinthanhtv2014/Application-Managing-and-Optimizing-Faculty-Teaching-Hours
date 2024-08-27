@@ -277,9 +277,10 @@ const CreateKhoa = () => {
     event.preventDefault();
     if (
       QuyenGiangVien === "Admin" ||
-      QuyenGiangVien === "Giảng viên" ||
+      QuyenGiangVien === "Giảng Viên" ||
       QuyenGiangVien === "Trưởng Bộ Môn" ||
-      QuyenGiangVien === "Trưởng Khoa"
+      QuyenGiangVien === "Trưởng Khoa" ||
+      QuyenGiangVien === "Giảng Viên Ngoài Trường"
     ) {
       try {
         const response = await CookiesAxios.post(

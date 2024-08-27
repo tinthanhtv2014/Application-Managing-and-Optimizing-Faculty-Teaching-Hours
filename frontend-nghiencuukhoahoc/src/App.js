@@ -18,6 +18,7 @@ function App() {
           <Route path="/giang-vien/*" element={<PrivateRoute />} />
           <Route path="/truong-bm/*" element={<PrivateRoute />} />
           <Route path="/truongkhoa/*" element={<PrivateRoute />} />
+          <Route path="/giang-vien-ngoai-truong/*" element={<PrivateRoute />} />
         </Routes>
         <ToastContainer
           position="top-right"

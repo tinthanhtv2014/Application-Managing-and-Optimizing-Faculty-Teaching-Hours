@@ -62,6 +62,9 @@ const CreateGiangVienForm = ({
               <MenuItem value="Giảng viên">Giảng viên</MenuItem>
               <MenuItem value="Trưởng Bộ Môn">Trưởng Bộ Môn</MenuItem>
               <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
+              <MenuItem value="Giảng Viên Ngoài Trường">
+                Giảng Viên Ngoài Trường
+              </MenuItem>
             </Select>
           </FormControl>
         </Box>
