@@ -8,6 +8,8 @@ import DashboardAdmin from "../Admin/dashbroand/src/main.jsx";
 import DashboardTruongKhoa from "../TruongKhoa/dashbroand/src/main.jsx";
 import DashboardTruongBoMon from "../TruongBoMon/dashbroand/src/main.jsx";
 import DashboardGiangVien from "../GiangVien/dashbroand/src/main.jsx";
+import DashboardGiangVien_NgoaiTruong from "../GV_NgoaiTruong/dashbroand/src/main.jsx";
+import { toast } from "react-toastify";
 
 const PrivateRoute = () => {
   const [loading, setLoading] = useState(true);
@@ -22,6 +24,7 @@ const PrivateRoute = () => {
   const [phanQuyenGV, setPhanquyenGV] = useState(false);
   const [phanQuyenTBM, setPhanquyenTBM] = useState(false);
   const [phanQuyenTK, setPhanquyenTK] = useState(false);
+  const [phanQuyenGV_NgoaiTruong, setPhanQuyenGV_NgoaiTruong] = useState(false);
   useEffect(() => {
     if (auth) {
       const fetchData = async () => {
@@ -49,8 +52,13 @@ const PrivateRoute = () => {
               setPhanquyenTK(true);
             } else if (response.data.user.phanquyen === "Trưởng Bộ Môn") {
               setPhanquyenTBM(true);
-            } else if (response.data.user.phanquyen === "Giảng viên") {
+            } else if (response.data.user.phanquyen === "Giảng Viên") {
               setPhanquyenGV(true);
+            } else if (
+              response.data.user.phanquyen === "Giảng Viên Ngoài Trường"
+            ) {
+              toast.success("oke");
+              setPhanQuyenGV_NgoaiTruong(true);
             }
             setRedirect(false);
           } else {
@@ -95,6 +103,9 @@ const PrivateRoute = () => {
   }
   if (phanQuyenTK) {
     return <DashboardTruongKhoa />;
+  }
+  if (phanQuyenGV_NgoaiTruong) {
+    return <DashboardGiangVien_NgoaiTruong />;
   }
   return navigate("/");
 };

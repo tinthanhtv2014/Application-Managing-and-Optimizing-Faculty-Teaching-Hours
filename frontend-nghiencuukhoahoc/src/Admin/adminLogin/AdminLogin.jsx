@@ -50,7 +50,7 @@ const AdminLogin = () => {
             `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/dangnhapgoogle`,
             { tendangnhap: user.email }
           );
-          console.log('check token =>', response.data);
+          console.log("check token =>", response.data);
 
           if (response.data.EC === 1) {
             const accessToken = response.data.DT.access_token;
@@ -59,9 +59,9 @@ const AdminLogin = () => {
             if (typeof accessToken === "string") {
               const decoded = jwtDecode(accessToken);
 
-              if (decoded.phanquyen === "Giảng viên") {
+              if (decoded.phanquyen === "Giảng Viên") {
                 Cookies.set("accessToken", accessToken);
-                navigate('/giang-vien');
+                navigate("/giang-vien");
               } else if (decoded.phanquyen === "Admin") {
                 Cookies.set("accessToken", accessToken);
                 navigate("/admin");
@@ -71,6 +71,9 @@ const AdminLogin = () => {
               } else if (decoded.phanquyen === "Trưởng Bộ Môn") {
                 Cookies.set("accessToken", accessToken);
                 navigate("/truong-bm");
+              } else if (decoded.phanquyen === "Giảng Viên Ngoài Trường") {
+                Cookies.set("accessToken", accessToken);
+                navigate("/giang-vien-ngoai-truong");
               }
             } else {
               toast.error("Đã xảy ra lỗi !");

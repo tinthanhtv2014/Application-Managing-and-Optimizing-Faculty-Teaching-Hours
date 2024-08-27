@@ -367,7 +367,7 @@ const UpdateGiangVienModal = ({
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Trưởng Khoa">Trưởng Khoa</MenuItem>
               <MenuItem value="Trưởng Bộ Môn">Trưởng Bộ Môn</MenuItem>
-              <MenuItem value="Giảng viên">Giảng viên</MenuItem>
+              <MenuItem value="Giảng Viên">Giảng Viên</MenuItem>
             </Select>
           </FormControl>
           <Button variant="contained" type="submit" className="mt-2">

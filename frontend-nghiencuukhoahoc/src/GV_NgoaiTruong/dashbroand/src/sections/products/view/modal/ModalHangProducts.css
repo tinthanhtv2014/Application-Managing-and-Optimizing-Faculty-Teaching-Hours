@@ -1,0 +1,36 @@
+.hang-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.hang-table th,
+.hang-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.hang-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.hang-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.hang-table tr:hover {
+    background-color: #ddd;
+}
+
+.hang-table button {
+    /* background-color: #f44336; */
+    /* Màu đỏ */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.hang-table button:hover {
+    background-color: #d32f2f;
+}
