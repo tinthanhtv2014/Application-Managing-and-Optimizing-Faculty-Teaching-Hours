@@ -13,8 +13,8 @@ const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDHockinienkhoa = (app) => {
   // Route cho năm học, yêu cầu xác thực JWT
   router.get("/xem", checkUserJWT, getAll_hockinienkhoa);
-  router.post("/tao", checkUserJWT, tao_hockinienkhoa);
-  router.put("/sua/:MAHKNK", checkUserJWT, sua_hockinienkhoa);
+  router.post("/tao", tao_hockinienkhoa);
+  router.put("/sua/:MAHKNK", sua_hockinienkhoa);
   router.delete("/xoa", checkUserJWT, xoa_hockinienkhoa);
 
   return app.use("/api/v1/admin/hockinienkhoa", router);
