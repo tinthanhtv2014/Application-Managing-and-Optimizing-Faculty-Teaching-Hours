@@ -19,7 +19,7 @@ const updateThongTinGiangVien = async (
         dataGiangVien.field = "";
       }
     });
-    ("check dataGiangVien : ", dataGiangVien);
+    // console.log("check dataGiangVien : ", dataGiangVien);
     let KiemTra_TENDANGNHAP = await timTaiKhoan_TENDANGNHAP(TENDANGNHAP); // Hàm kiểm tra TENDANGNHAP có tồn tại không
     if (!KiemTra_TENDANGNHAP.length > 0) {
       return {
@@ -41,26 +41,26 @@ const updateThongTinGiangVien = async (
         KiemTra_TENDANGNHAP[0].MAGV,
       ]
     );
-    ("check tenchucdanh:", TENCHUCDANH);
+    // console.log("check tenchucdanh:", TENCHUCDANH);
 
     if (TENCHUCDANH) {
       let [resultstenchucdanh, fieldstenchucdanh] = await pool.execute(
         `select * from chucdanh where TENCHUCDANH = ?`,
         [TENCHUCDANH]
       );
-      ("check tenchucdanh lan 2:", resultstenchucdanh[0].MACHUCDANH);
+      // console.log("check tenchucdanh lan 2:", resultstenchucdanh[0].MACHUCDANH);
       if (resultstenchucdanh.length > 0) {
         console.log(
           "check tenchucdanh lan 3:",
           resultstenchucdanh[0].MACHUCDANH
         );
-        ("check resultscochucdanh", KiemTra_TENDANGNHAP[0].MAGV);
+        // console.log("check resultscochucdanh", KiemTra_TENDANGNHAP[0].MAGV);
         let [resultscochucdanh, fieldscochucdanh] = await pool.execute(
           `select * from co_chuc_danh where  MAGV = ?`,
           [KiemTra_TENDANGNHAP[0].MAGV]
         );
 
-        ("check tenchucdanh lan 4:", resultscochucdanh);
+        // console.log("check tenchucdanh lan 4:", resultscochucdanh);
         if (resultscochucdanh.length > 0) {
           let [resultsupdate, fieldsupdate] = await pool.execute(
             `UPDATE co_chuc_danh
@@ -69,7 +69,7 @@ const updateThongTinGiangVien = async (
             [resultstenchucdanh[0].MACHUCDANH, KiemTra_TENDANGNHAP[0].MAGV]
           );
         } else {
-          ("check tenchucdanh lan 4:", KiemTra_TENDANGNHAP[0].MAGV);
+          // console.log("check tenchucdanh lan 4:", KiemTra_TENDANGNHAP[0].MAGV);
           let [resultsinsertcochucdanh, fields1] = await pool.execute(
             `insert into co_chuc_danh (MACHUCDANH,MAGV) values (?,?)`,
             [resultstenchucdanh[0].MACHUCDANH, KiemTra_TENDANGNHAP[0].MAGV]

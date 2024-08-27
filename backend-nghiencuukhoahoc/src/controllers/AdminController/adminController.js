@@ -13,7 +13,7 @@ const {
 const getAllTaiKhoanController = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
-    (MABOMON);
+    // console.log(MABOMON);
     let results = await getAllTaiKhoan(MABOMON);
 
     return res.status(200).json({
@@ -181,7 +181,7 @@ const loginTaikhoanAdminController = async (req, res) => {
 
 //login với email từ google
 const loginTaikhoanGOOGLEController = async (req, res) => {
-  (req.body.tendangnhap);
+  // console.log(req.body.tendangnhap);
   try {
     const username = req.body.tendangnhap;
 

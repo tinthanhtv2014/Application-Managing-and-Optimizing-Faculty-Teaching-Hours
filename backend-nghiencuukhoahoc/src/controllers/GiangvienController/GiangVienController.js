@@ -22,8 +22,8 @@ const updateThongTinGiangVienController = async (req, res) => {
       }
     });
 
-    ("TENDANGNHAP: ", TENDANGNHAP);
-    ("dataGiangVien: ", dataGiangVien);
+    // console.log("TENDANGNHAP: ", TENDANGNHAP);
+    // console.log("dataGiangVien: ", dataGiangVien);
 
     let results = await updateThongTinGiangVien(
       TENDANGNHAP,

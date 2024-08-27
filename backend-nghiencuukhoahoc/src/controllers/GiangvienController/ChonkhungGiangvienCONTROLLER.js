@@ -16,8 +16,8 @@ const select_CHONKHUNG = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
-    ("TENNAMHOC", TENNAMHOC);
-    ("MAGV", MAGV);
+    // console.log("TENNAMHOC", TENNAMHOC);
+    // console.log("MAGV", MAGV);
     let results = await xem_CHONKHUNG_cho_GIANGVIEN(MAGV, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,
@@ -36,7 +36,7 @@ const select_CHONKHUNG = async (req, res) => {
 
 const create_CHONKHUNG = async (req, res) => {
   try {
-    ("check Khung: ", req.body)
+    // console.log("check Khung: ", req.body)
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
     const MAKHUNG = req.body.MAKHUNG;
@@ -61,9 +61,9 @@ const update_CHONKHUNG = async (req, res) => {
     const MAGV = req.params.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
     const MAKHUNG = req.body.MAKHUNG;
-    ("check 1: ", MAGV);
-    ("check 2: ", MANAMHOC);
-    ("check 3: ", MAKHUNG);
+    // console.log("check 1: ", MAGV);
+    // console.log("check 2: ", MANAMHOC);
+    // console.log("check 3: ", MAKHUNG);
     let results = await sua_CHONKHUNG_cho_GIANGVIEN(MAGV, TENNAMHOC, MAKHUNG);
     return res.status(200).json({
       EM: results.EM,

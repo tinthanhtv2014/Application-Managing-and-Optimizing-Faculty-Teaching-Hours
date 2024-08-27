@@ -62,7 +62,7 @@ const getAllTaiKhoan = async (MABOMON) => {
 
       [MABOMON]
     );
-    ("Query Results:", results);
+    // console.log("Query Results:", results);
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,
@@ -274,7 +274,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       //   dataTaiKhoanExcelArray[i].TENCHUCDANH
       // );
 
-      // ("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      // // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
       // if (!kiemtraTENCHUCDANH.DT || !kiemtraTENCHUCDANH.DT.MACHUCDANH) {
       //   return {
       //     EM: `Dòng số ${i} tên chức danh <${dataTaiKhoanExcelArray[i].TENCHUCDANH}> không tồn tại`,
@@ -288,7 +288,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
       //     dataTaiKhoanExcelArray[i].TENCHUCVU
       //   );
 
-      //   ("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
+      //   // console.log("<<<<<<<<<<", kiemtraTENBOMON.DT.MABOMON);
       //   if (!kiemtraTENCHUCVU.DT || !kiemtraTENCHUCVU.DT.MACHUCVU) {
       //     return {
       //       EM: `Dòng số ${i} tên chức dvụ <${dataTaiKhoanExcelArray[i].TENCHUCVU}> không tồn tại`,
@@ -488,7 +488,7 @@ const updateTaiKhoan = async (
       "select * from taikhoan where TENDANGNHAP = ?",
       [tenDangnhap]
     );
-    (results1);
+    // console.log(results1);
     if (results1.length > 0) {
       const isCorrectPass = await bcrypt.compare(
         matKhaucu,

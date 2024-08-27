@@ -140,7 +140,7 @@ const timChucVu_MACHUCVU = async (MACHUCVU) => {
       "SELECT * FROM chucvu WHERE MACHUCVU = ?",
       [MACHUCVU]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1;
   } catch (error) {
     console.log("timChucVu_MACHUCVU errr >>>", error);
@@ -164,7 +164,7 @@ const timChucDanh_MACHUCDANH = async (MACHUCDANH) => {
 //Trả dữ liệu FronEnd
 const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
   try {
-    (MABOMON + isOpenGetAllApiGV);
+    // console.log(MABOMON + isOpenGetAllApiGV);
     const query = isOpenGetAllApiGV
       ? `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, ccd.THOIGIANNHAN, cv.TENCHUCVU, gcv.TUNGAY,gcv.SOQUYETDINH, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
                 FROM taikhoan AS tk
@@ -192,7 +192,7 @@ const dataFronEnd = async (isOpenGetAllApiGV, MABOMON) => {
       query,
       isOpenGetAllApiGV ? [] : [MABOMON]
     );
-    (results);
+    // console.log(results);
     return {
       EM: "",
       EC: 1,
@@ -228,7 +228,7 @@ const timmonhoc_TENMONHOC = async (TENMONHOC) => {
       "SELECT * FROM monhoc WHERE TENMONHOC = ?",
       [TENMONHOC]
     );
-    ("Check timmonhoc_TENMONHOC:   ", results1[0]);
+    // console.log("Check timmonhoc_TENMONHOC:   ", results1[0]);
     return results1[0];
   } catch (error) {
     console.log("timmonhoc_TENMONHOC errr >>>", error);
@@ -242,7 +242,7 @@ const timnamhoc_MANAMHOC = async (MANAMHOC) => {
       "SELECT * FROM namhoc WHERE namhoc.MANAMHOC = ?",
       [MANAMHOC]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1[0];
   } catch (error) {
     console.log("timnamhoc_MANAMHOC errr >>>", error);
@@ -252,12 +252,12 @@ const timnamhoc_MANAMHOC = async (MANAMHOC) => {
 
 const timnamhoc_TENNAMHOC = async (TENNAMHOC) => {
   try {
-    ("TENNAMHOC: ", TENNAMHOC)
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     const [results1, fields] = await pool.execute(
       "SELECT * FROM namhoc WHERE namhoc.TENNAMHOC = ?",
       [TENNAMHOC]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1[0].MANAMHOC;
   } catch (error) {
     console.log("timnamhoc_TENNAMHOC errr >>>", error);
@@ -267,12 +267,12 @@ const timnamhoc_TENNAMHOC = async (TENNAMHOC) => {
 
 const timtacgia_TEN_LOAI_TAC_GIA = async (TEN_LOAI_TAC_GIA) => {
   try {
-    ("TENNAMHOC: ", TENNAMHOC)
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     const [results1, fields] = await pool.execute(
       "SELECT * FROM loai_tac_gia WHERE loai_tac_gia.TEN_LOAI_TAC_GIA = ?",
       [TEN_LOAI_TAC_GIA]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1[0].MA_LOAI_TAC_GIA;
   } catch (error) {
     console.log("timnamhoc_TENNAMHOC errr >>>", error);
@@ -282,12 +282,12 @@ const timtacgia_TEN_LOAI_TAC_GIA = async (TEN_LOAI_TAC_GIA) => {
 
 const timlop_MALOP = async (MALOP) => {
   try {
-    ("TENNAMHOC: ", TENNAMHOC)
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     const [results1, fields] = await pool.execute(
       "SELECT * FROM lop WHERE MALOP = ?",
       [MALOP]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1;
   } catch (error) {
     console.log("timnamhoc_TENNAMHOC errr >>>", error);
@@ -297,12 +297,12 @@ const timlop_MALOP = async (MALOP) => {
 
 const timdetai_TENDETAI = async (TEN_DE_TAI) => {
   try {
-    ("TENNAMHOC: ", TENNAMHOC)
+    // console.log("TENNAMHOC: ", TENNAMHOC)
     const [results1, fields] = await pool.execute(
       "SELECT * FROM nghien_cuu_kh WHERE TEN_DE_TAI = ?",
       [TEN_DE_TAI]
     );
-    ("Check timChucVu_MACHUCVU:   ", results1)
+    // console.log("Check timChucVu_MACHUCVU:   ", results1)
     return results1;
   } catch (error) {
     console.log("timnamhoc_TENNAMHOC errr >>>", error);

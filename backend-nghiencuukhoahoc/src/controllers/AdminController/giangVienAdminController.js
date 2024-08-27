@@ -75,7 +75,7 @@ const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
 const getOnlyGiangVienbyBoMon = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
-    (MABOMON);
+    // console.log(MABOMON);
     let results = await selectOnlyGiangVien(MABOMON);
 
     return res.status(200).json({
@@ -118,9 +118,9 @@ const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
     //api này dùng để đình chỉ hoạt động của 1 tài khoản
     const { TRANGTHAITAIKHOAN, MABOMON, isOpenGetAllApiGV } = req.body;
     const MAGV = req.params.MAGV;
-    (MAGV);
-    ("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
-    (MABOMON);
+    // console.log(MAGV);
+    // console.log("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
+    // console.log(MABOMON);
     let results = await updateTrangThaiTaiKhoanGiangVien(
       MAGV,
       TRANGTHAITAIKHOAN,
@@ -164,10 +164,11 @@ const updateGiangVienController = async (req, res) => {
 };
 
 const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
-  ("check req.body =>>", req.body);
+  // console.log("check req.body =>>", req.body);
   try {
     const a = req.params.TENDANGNHAP;
     const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
+    console.log(a);
     // Khởi tạo dataGiangVien với các trường cần thiết, mặc định là ''
     let dataGiangVien = {
       TENDANGNHAP: "",
@@ -193,8 +194,8 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
       }
     });
 
-    ("TENDANGNHAP: ", a);
-    ("dataGiangVien controller: ", dataGiangVien);
+    // console.log("TENDANGNHAP: ", a);
+    // console.log("dataGiangVien controller: ", dataGiangVien);
 
     let results = await update_ChucVu_ChucDanh_GiangVien(
       dataGiangVien,
@@ -221,8 +222,8 @@ const deleteGiangVienController = async (req, res) => {
     let MAGV = req.query.MAGV;
     let MABOMON = req.query.MABOMON;
     let isOpenGetAllApiGV = req.query.isOpenGetAllApiGV;
-    (MAGV);
-    (MABOMON);
+    // console.log(MAGV);
+    // console.log(MABOMON);
     let results = await deleteGiangVien(MAGV, MABOMON, isOpenGetAllApiGV);
 
     return res.status(200).json({

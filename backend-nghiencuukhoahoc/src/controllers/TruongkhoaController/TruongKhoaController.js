@@ -9,9 +9,9 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
     let page = req.query.page;
     let limit = req.query.limit;
     let TENKHOA = req.query.TENKHOA;
-    ("page: ", page)
-    ("limit: ", limit)
-    ("TENKHOA: ", TENKHOA)
+    // console.log("page: ", page)
+    // console.log("limit: ", limit)
+    // console.log("TENKHOA: ", TENKHOA)
     let results = await xem_giangvien_khoa(page, limit, TENKHOA);
 
     return res.status(200).json({
@@ -32,7 +32,7 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
 const timkiem_email_taikhoanController = async (req, res) => {
   try {
     let TENGV = req.body.TENGV;
-    ("email: ", email)
+    // console.log("email: ", email)
     let results = await timkiem_email_taikhoan(TENGV);
 
     return res.status(200).json({
@@ -53,7 +53,7 @@ const timkiem_email_taikhoanController = async (req, res) => {
 const timkiem_email_taikhoan_ngoaitruongController = async (req, res) => {
   try {
     let TENGV = req.body.TENGV;
-    ("TENGV: ", TENGV);
+    console.log("TENGV: ", TENGV);
     let results = await timkiem_email_taikhoan_ngoaitruong(TENGV);
 
     return res.status(200).json({
