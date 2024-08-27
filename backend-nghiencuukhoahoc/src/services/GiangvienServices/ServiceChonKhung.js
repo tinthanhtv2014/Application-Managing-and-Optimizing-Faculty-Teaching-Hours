@@ -23,7 +23,7 @@ const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
       "SELECT * FROM chucdanh WHERE TENCHUCDANH = ?",
       [TENCHUCDANH]
     );
-    // console.log("Check timChucVu_MACHUCVU:   ", results1)
+    ("Check timChucVu_MACHUCVU:   ", results1)
     return results1[0];
   } catch (error) {
     console.log("timChucDanh_TENCHUCDANH errr >>>", error);
@@ -34,9 +34,9 @@ const timChucDanh_TENCHUCDANH = async (TENCHUCDANH) => {
 const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
-    // console.log("TENCHUCDANH:  ", TENCHUCDANH);
-    // console.log("chucdanh:  ", chucdanh);
-    // console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
+    ("TENCHUCDANH:  ", TENCHUCDANH);
+    ("chucdanh:  ", chucdanh);
+    ("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
     if (!chucdanh) {
       return {
         EM: "Không có chức danh này",
@@ -48,7 +48,7 @@ const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
       "SELECT TENKHUNGCHUAN FROM khunggiochuan WHERE khunggiochuan.MACHUCDANH = ?",
       [chucdanh.MACHUCDANH]
     );
-    // console.log(results1);
+    (results1);
     return {
       EM: "Xem thông tin tất cả tên khung giờ chuẩn theo tên chức danh thành công",
       EC: 1,
@@ -67,9 +67,9 @@ const timAllTenKhung_TENCHUCDANH = async (TENCHUCDANH) => {
 const timKhungGioChuan_TENCHUCDANH = async (TENCHUCDANH) => {
   try {
     let chucdanh = await timChucDanh_TENCHUCDANH(TENCHUCDANH);
-    // console.log("TENCHUCDANH:  ", TENCHUCDANH);
-    // console.log("chucdanh:  ", chucdanh);
-    // console.log("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
+    ("TENCHUCDANH:  ", TENCHUCDANH);
+    ("chucdanh:  ", chucdanh);
+    ("chucdanh.MACHUCDANH:  ", chucdanh.MACHUCDANH);
     if (!chucdanh) {
       return {
         EM: "Không có chức danh này",
@@ -161,8 +161,8 @@ const tao_CHONKHUNG = async (MAGV, TENNAMHOC, MAKHUNG) => {
 
 const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
   try {
-    // console.log("xem_CHONKHUNG_cho_GIANGVIEN MAGV:", MAGV);
-    // console.log("xem_CHONKHUNG_cho_GIANGVIEN TENNAMHOC:", TENNAMHOC);
+    ("xem_CHONKHUNG_cho_GIANGVIEN MAGV:", MAGV);
+    ("xem_CHONKHUNG_cho_GIANGVIEN TENNAMHOC:", TENNAMHOC);
 
     const [results_MANAMHOC] = await pool.execute(
       "SELECT MANAMHOC FROM namhoc WHERE TENNAMHOC = ?",
@@ -237,10 +237,10 @@ const tao_THOIGIAN_CHONKHUNG = async (
   TENKHOA,
   GHICHU
 ) => {
-  // console.log("TENKHOA", TENKHOA);
-  // console.log("THOIGIANBATDAU", THOIGIANBATDAU);
+  ("TENKHOA", TENKHOA);
+  ("THOIGIANBATDAU", THOIGIANBATDAU);
 
-  // console.log("THOIGIANKETTHUC", THOIGIANKETTHUC);
+  ("THOIGIANKETTHUC", THOIGIANKETTHUC);
   try {
     // Định dạng lại ngày tháng để đảm bảo đúng định dạng YYYY-MM-DD HH:mm:ss
     const formattedStartTime = moment(THOIGIANBATDAU).format(
@@ -256,7 +256,7 @@ const tao_THOIGIAN_CHONKHUNG = async (
       "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU = ?",
       [TENKHOA, GHICHU]
     );
-    // console.log("results_MAKHOA =>", results_thoigian_xacnhan.length);
+    ("results_MAKHOA =>", results_thoigian_xacnhan.length);
     if (results_thoigian_xacnhan.length > 0) {
       return {
         EM: "Khoa này đã mở cổng rồi !",
@@ -288,7 +288,7 @@ const tao_THOIGIAN_CHONKHUNG = async (
 };
 
 const delete_THOIGIAN_CHONKHUNG = async (TENKHOA, GHICHU) => {
-  // console.log("check ten khoa ", TENKHOA);
+  ("check ten khoa ", TENKHOA);
   try {
     // Truy vấn để lấy tất cả các mã thời gian xác nhận dựa trên tên khoa
     const [results] = await pool.execute(
@@ -311,7 +311,7 @@ const delete_THOIGIAN_CHONKHUNG = async (TENKHOA, GHICHU) => {
         `,
         [results[0].MA_THOIGIAN_XACNHAN]
       );
-      // console.log("xoa thanh cong ==================");
+      ("xoa thanh cong ==================");
     }
 
     return {
@@ -364,7 +364,7 @@ const tim_THOIGIAN_CHONKHUNG = async () => {
     const [results, fields] = await pool.execute(
       "select * from thoigian_xacnhan"
     );
-    // console.log("tim_THOIGIAN_CHONKHUNG: ", results);
+    ("tim_THOIGIAN_CHONKHUNG: ", results);
     return {
       EM: "Xem thời gian thành công !",
       EC: 1,
@@ -386,7 +386,7 @@ const tim_THOIGIAN_CHONKHUNG_theoTENKHOA = async (tenKhoa, GHICHU) => {
       "SELECT * FROM thoigian_xacnhan WHERE TEN_KHOA = ? and GHICHU= ?",
       [tenKhoa, GHICHU]
     );
-    // console.log("tim_THOIGIAN_CHONKHUNG: ", results);
+    ("tim_THOIGIAN_CHONKHUNG: ", results);
     return {
       EM: "Xem thời gian thành công !",
       EC: 1,

@@ -99,7 +99,7 @@ WHERE
       results[0].THOIGIANNHAN = `${year}-${month}-${day}`;
     }
 
-    // console.log("selectOnlyGiangVienByTenDangNhap: ", results[0]);
+    ("selectOnlyGiangVienByTenDangNhap: ", results[0]);
     return {
       EM: "Xem thông tin giảng viên thành công",
       EC: 1,
@@ -117,12 +117,12 @@ WHERE
 
 const selectOnlyGiangVien = async (MABOMON) => {
   try {
-    // console.log("check 2 =", MABOMON);
+    ("check 2 =", MABOMON);
     let [results1, fields1] = await pool.execute(
       `select * from giangvien where MABOMON= ?`,
       [MABOMON]
     );
-    // console.log("check 3 =", results1);
+    ("check 3 =", results1);
     return {
       EM: " xem thông tin giảng viên của bộ môn đó thành công",
       EC: 1,
@@ -198,7 +198,7 @@ const updateTrangThaiTaiKhoanGiangVien = async (
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
-    // console.log("results0.DT:  ", results0.DT)
+    ("results0.DT:  ", results0.DT)
     return {
       EM: "Cập nhật trạng thái tài khoản thành công",
       EC: 1,
@@ -297,7 +297,7 @@ const updateGiangVien = async (MAGV, dataGiangVien) => {
 
 const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
   try {
-    // console.log("check MGV1 +>", MAGV);
+    ("check MGV1 +>", MAGV);
     if (!timGiangVien_MAGV(MAGV)) {
       return {
         EM: "Giảng viên này không tồn tại",
@@ -305,7 +305,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
         DT: [],
       };
     }
-    // console.log("check MGV2 +>", MAGV);
+    ("check MGV2 +>", MAGV);
 
     // Kiểm tra và xóa trong bảng giu_chuc_vu
     const [results1] = await pool.execute(
@@ -339,7 +339,7 @@ const deleteGiangVien = async (MAGV, MABOMON, isOpenGetAllApiGV) => {
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
-    // console.log("results0.DT:  ", results0.DT)
+    ("results0.DT:  ", results0.DT)
     return {
       EM: "Xóa Giảng Viên Thành Công",
       EC: 1,
@@ -361,7 +361,7 @@ const updateGIANGVIEN = async (datagiangvien) => {
       "select * from taikhoan where TENDANGNHAP = ?",
       [tenDangnhap]
     );
-    // console.log(results1);
+    (results1);
     if (results1.length > 0) {
       const isCorrectPass = await bcrypt.compare(
         matKhaucu,

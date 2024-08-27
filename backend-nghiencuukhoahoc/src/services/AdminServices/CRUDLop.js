@@ -24,9 +24,9 @@ const selectLop = async () => {
 
 const CreateLop = async (datalop, TENCHUONGTRINH) => {
   try {
-    console.log("check ", datalop);
+    ("check ", datalop);
     const MACHUONGTRINH = await timchuongtrinh_TENCHUONGTRINH(TENCHUONGTRINH);
-    console.log("check machuongtrinh", MACHUONGTRINH);
+    ("check machuongtrinh", MACHUONGTRINH);
     const timlop = await timlop_MALOP(datalop.MALOP);
     if (timlop.length > 0) {
       return {
@@ -66,7 +66,7 @@ const updateLop = async (MALOP, datalop) => {
     const MACHUONGTRINH = await timchuongtrinh_TENCHUONGTRINH(
       datalop.TENCHUONGTRINH
     );
-    console.log("check machuongtrinh", MACHUONGTRINH);
+    ("check machuongtrinh", MACHUONGTRINH);
     const timlop = await timlop_MALOP(MALOP);
     if (timlop.length > 0) {
       let [results1, fields1] = await pool.execute(
@@ -146,7 +146,7 @@ const deleteLop = async (MALOP) => {
 const createLopExcel = async (dataLopExcelArray) => {
   try {
     let results = [];
-    // console.log("check results =>", dataChuongtrinhdaotaoExcelArray);
+    ("check results =>", dataChuongtrinhdaotaoExcelArray);
     // Kiểm tra thông tin trong file excel
     for (var i = 0; i < dataLopExcelArray.length; i++) {
       console.log("check results =>", dataLopExcelArray);
@@ -160,7 +160,7 @@ const createLopExcel = async (dataLopExcelArray) => {
         }; // Tiếp tục thực hiện các lệnh khác
       }
 
-      // console.log("check ten bo mon ", kiemtra_tenbomon.length);
+      ("check ten bo mon ", kiemtra_tenbomon.length);
 
       let kiemtra_malop = await timlop_MALOP(dataLopExcelArray[i].MALOP);
       if (!kiemtra_malop > 0) {
@@ -188,7 +188,7 @@ const createLopExcel = async (dataLopExcelArray) => {
           dataLopExcelArray[i].TENCHUONGTRINH
         );
       }
-      console.log("check results =>", kiemtra_tenchuongtrinh);
+      ("check results =>", kiemtra_tenchuongtrinh);
       if (kiemtra_tenchuongtrinh.length === 0) {
         return {
           EM: `Không thể tạo chương trình đào tạo`,
@@ -226,7 +226,7 @@ const createLopExcel = async (dataLopExcelArray) => {
       `select bomon.TENBOMON,ctdt.TENCHUONGTRINH,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
     );
 
-    console.log("check lớp =))): ", results1);
+    ("check lớp =))): ", results1);
 
     return {
       EM: "Tất cả lớp đã được tạo",

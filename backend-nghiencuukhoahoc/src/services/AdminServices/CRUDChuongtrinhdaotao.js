@@ -21,7 +21,7 @@ const selectChuongtrinhdaotao = async () => {
   `;
 
     let [results1, fields1] = await pool.execute(query);
-    // console.log(results1);
+    (results1);
     return {
       EM: "Xem thông tin chương trình đào tạo thành công",
       EC: 1,
@@ -120,7 +120,7 @@ const timkiemChuongtrinhdaotao_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
       `SELECT * FROM chuongtrinhdaotao WHERE TENCHUONGTRINH = ?`,
       [TENCHUONGTRINH]
     );
-    // console.log("check resut: ", results1[0]);
+    ("check resut: ", results1[0]);
     return results1[0];
   } catch (error) {
     return {
@@ -234,7 +234,7 @@ const xoaChuongtrinh = async (TENCHUONGTRINH) => {
   const kiemtra_tenchuongtrinh = await timkiemChuongtrinhdaotao_TENCHUONGTRINH(
     TENCHUONGTRINH
   );
-  // console.log("check tenchuong trinh: ", kiemtra_tenchuongtrinh);
+  ("check tenchuong trinh: ", kiemtra_tenchuongtrinh);
   if (kiemtra_tenchuongtrinh) {
     let [results_detete_table_thuocCTDT, fields_detete_table_thuocCTDT] =
       await pool.execute(`DELETE FROM thuoc WHERE MACHUONGTRINH = ?`, [
@@ -273,7 +273,7 @@ const createChuongtrinhdaotaoExcel = async (
 
   // try {
   let results = [];
-  // console.log("check results =>", dataChuongtrinhdaotaoExcelArray);
+  ("check results =>", dataChuongtrinhdaotaoExcelArray);
   // Kiểm tra thông tin trong file excel
   for (var i = 0; i < dataChuongtrinhdaotaoExcelArray.length; i++) {
     if (
@@ -292,7 +292,7 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenbomon = await selectBomon_TENBOMON(
       dataChuongtrinhdaotaoExcelArray[i].TENBOMON
     );
-    // console.log("check ten bo mon ", kiemtra_tenbomon.length);
+    ("check ten bo mon ", kiemtra_tenbomon.length);
     if (kiemtra_tenbomon.length < 0) {
       return {
         EM: `bộ môn không tồn tại`,
@@ -303,7 +303,7 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
       dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
     );
-    // console.log("check ten bo mon =>>>> ", kiemtra_tenbomon[0].MABOMON);
+    ("check ten bo mon =>>>> ", kiemtra_tenbomon[0].MABOMON);
     if (!kiemtra_tenchuongtrinh) {
       // Tạo thêm chương trình đào tạo nếu không tồn tại
       await pool.execute(

@@ -73,8 +73,8 @@ const createKhoa = async (tenkhoa) => {
 
 const updateKhoa = async (makhoa, tenkhoa) => {
   try {
-    // console.log(makhoa);
-    // console.log(tenkhoa);
+    (makhoa);
+    (tenkhoa);
     let [results1, fields1] = await pool.execute(
       `select * from khoa where MAKHOA = ?`,
       [makhoa]

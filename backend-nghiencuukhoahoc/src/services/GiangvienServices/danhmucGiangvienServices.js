@@ -11,8 +11,8 @@ const {
 
 const get_thongtin_danhmuc = async (TENDANGNHAP, TENNAMHOC) => {
   try {
-    // console.log("TENDANGNHAP get_thongtin_danhmuc: ", TENDANGNHAP);
-    // console.log("TENNAMHOC get_thongtin_danhmuc: ", TENNAMHOC);
+    ("TENDANGNHAP get_thongtin_danhmuc: ", TENDANGNHAP);
+    ("TENNAMHOC get_thongtin_danhmuc: ", TENNAMHOC);
     let MANAMHOC = await timnamhoc_TENNAMHOC(TENNAMHOC);
 
     const [results_MAGV] = await pool.execute(
@@ -124,8 +124,8 @@ const getLoaiTacGiaByLoaiDanhMuc = async (MA_LOAI_DANH_MUC) => {
 
 //xem số lượng đề tài đã đăng ký
 const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
-  // console.log("MAGV get_thongtin_dangky_giangvien:", MAGV);
-  // console.log("TENNAMHOC get_thongtin_dangky_giangvien:", TENNAMHOC);
+  ("MAGV get_thongtin_dangky_giangvien:", MAGV);
+  ("TENNAMHOC get_thongtin_dangky_giangvien:", TENNAMHOC);
 
   if (!MAGV || !TENNAMHOC) {
     return {
@@ -150,7 +150,7 @@ const get_thongtin_dangky_giangvien = async (MAGV, TENNAMHOC) => {
     }
 
     const MANAMHOC = results1_NAMHOC[0].MANAMHOC; // Now safe to access
-    // console.log("check MANAMHOC", MANAMHOC);
+    ("check MANAMHOC", MANAMHOC);
     const [results1, fields] = await pool.execute(
       `
       SELECT 

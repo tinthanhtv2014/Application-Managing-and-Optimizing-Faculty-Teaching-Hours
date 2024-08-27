@@ -180,8 +180,8 @@ const createBOMON = async (req, res) => {
   try {
     const makhoa = req.body.MAKHOA;
     const tenbomon = req.body.TENBOMON;
-    // console.log(makhoa);
-    // console.log(tenbomon);
+    (makhoa);
+    (tenbomon);
     let results = await createBomon(makhoa, tenbomon);
 
     return res.status(200).json({
@@ -202,7 +202,7 @@ const createBOMON = async (req, res) => {
 const updateBOMON = async (req, res) => {
   try {
     const mabomon = req.params.mabomon;
-    // console.log("check mabomon", mabomon);
+    ("check mabomon", mabomon);
     const makhoa = req.body.makhoa;
     const tenbomon = req.body.tenbomon;
     let results = await updateBomon(mabomon, makhoa, tenbomon);
@@ -225,7 +225,7 @@ const updateBOMON = async (req, res) => {
 const deleteBOMON = async (req, res) => {
   try {
     const mabomon = req.query.mabomon;
-    // console.log(mabomon);
+    (mabomon);
     let results = await deleteBomon(mabomon);
 
     return res.status(200).json({
