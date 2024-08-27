@@ -1,13 +1,5 @@
 const pool = require("../../../config/database");
 
-const {
-    timnamhoc_TENNAMHOC,
-    timtacgia_TEN_LOAI_TAC_GIA,
-    timGiangVien_TENGV,
-    selectBomon_TENBOMON,
-    timGiangVien_TENGV_TENDANGNHAP,
-} = require("../../../services/AdminServices/helpers");
-
 const dangky_danhmuc_giangvien = async (dataDangKyDanhMuc) => {
     try {
         const loaiCountObj = dataDangKyDanhMuc.LISTGIANGVIEN.reduce(
