@@ -24,10 +24,10 @@ const getAllTaiKhoanController = async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -45,10 +45,10 @@ const getAllTaiKhoanPHANQUYENController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanPHANQUYENController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -66,10 +66,10 @@ const getAllTaiKhoanTRANGTHAIController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanTRANGTHAIController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -86,10 +86,10 @@ const createTaiKhoanController = async (req, res) => {
       DT: results.DT,
     });
   } catch (error) {
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller createTaiKhoanController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -106,10 +106,10 @@ const createTaiKhoanExcelController = async (req, res) => {
       DT: results.DT,
     });
   } catch (error) {
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller createTaiKhoanExcelController",
+      EC: -1,
+      DT: [],
     });
   }
 };

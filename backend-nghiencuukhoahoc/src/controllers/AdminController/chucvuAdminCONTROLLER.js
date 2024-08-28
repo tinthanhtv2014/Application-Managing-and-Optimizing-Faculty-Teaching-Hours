@@ -17,9 +17,9 @@ const getAllChucvu = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getAllChucvu",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -36,11 +36,11 @@ const createChucVuControler = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(404).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(404).json({
+      EM: "lỗi controller createChucVuControler",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 
@@ -58,9 +58,9 @@ const updateChucVuController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller updateChucVuController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -78,9 +78,9 @@ const deleteChucVuController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller deleteChucVuController",
+      EC: -1,
+      DT: [],
     });
   }
 };

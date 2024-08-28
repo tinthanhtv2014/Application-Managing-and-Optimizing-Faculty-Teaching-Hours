@@ -17,9 +17,9 @@ const getAllChucdanh = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getAllChucdanh",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -37,9 +37,9 @@ const createChucdanhControler = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller createChucdanhControler",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -58,9 +58,9 @@ const updateChucdanhController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller updateChucdanhController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -78,9 +78,9 @@ const deleteChucdanhController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller deleteChucdanhController",
+      EC: -1,
+      DT: [],
     });
   }
 };

@@ -26,10 +26,10 @@ const getAllKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -46,10 +46,10 @@ const getOneKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getOneKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -67,10 +67,10 @@ const createKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller createKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -88,10 +88,10 @@ const updateKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller updateKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -109,10 +109,10 @@ const deleteKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller deleteKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -129,10 +129,10 @@ const getAllBOMON = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllBOMON",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -149,10 +149,10 @@ const getOnlyBoMon_TENKHOA = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getOnlyBoMon_TENKHOA",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -169,10 +169,10 @@ const getOnlyBoMon = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getOnlyBoMon",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -191,10 +191,10 @@ const createBOMON = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller createBOMON",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -214,10 +214,10 @@ const updateBOMON = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller updateBOMON",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -235,10 +235,10 @@ const deleteBOMON = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller deleteBOMON",
+      EC: -1,
+      DT: [],
     });
   }
 };
