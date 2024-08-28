@@ -38,6 +38,12 @@ ALTER TABLE `danhmucquydoispkhcn`
   MODIFY `MA_DANH_MUC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
+-- AUTO_INCREMENT cho bảng `hockynienkhoa`
+--
+ALTER TABLE `hockynienkhoa`
+  MODIFY `MAHKNK` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `khoa`
 --
 ALTER TABLE `khoa`
@@ -89,7 +95,7 @@ ALTER TABLE `thoigian_xacnhan`
 -- AUTO_INCREMENT cho bảng `ty_le_quy_doi_gio_chuan`
 --
 ALTER TABLE `ty_le_quy_doi_gio_chuan`
-  MODIFY `MA_QUY_DOI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `MA_QUY_DOI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 INSERT INTO `khoa` (`MAKHOA`, `TENKHOA`) VALUES
 (1, 'Khoa Công Nghệ Thông Tin'),

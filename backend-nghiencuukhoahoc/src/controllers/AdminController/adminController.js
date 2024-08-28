@@ -141,6 +141,8 @@ const updateTaiKhoanController = async (req, res) => {
     const matkhaucu = req.body.matKhaucu;
     const phanQuyen = req.body.phanQuyen;
     const matkhaumoi = req.body.matKhaumoi;
+    console.log(req.body);
+    console.log(req.params.tenDangNhap);
     let results = await updateTaiKhoan(
       tendangnhap,
       matkhaucu,
