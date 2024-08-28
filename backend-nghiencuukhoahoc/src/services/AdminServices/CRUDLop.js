@@ -153,7 +153,7 @@ const createLopExcel = async (dataLopExcelArray) => {
       if (!dataLopExcelArray[i].TENCHUONGTRINH || !dataLopExcelArray[i].MALOP) {
         return {
           EM: `Bị trống thông tin tại dòng số ${i}: ${JSON.stringify(
-            dataTaiKhoanExcelArray[i]
+            dataLopExcelArray[i]
           )}`,
           EC: 0,
           DT: [],
@@ -174,15 +174,24 @@ const createLopExcel = async (dataLopExcelArray) => {
       let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
         dataLopExcelArray[i].TENCHUONGTRINH
       );
-
+      console.log("check kiemtra_tenchuongtrinh =>", kiemtra_tenchuongtrinh);
       let kiemtra_tenbomon = await selectBomon_TENBOMON(
         dataLopExcelArray[i].TENBOMON
       );
 
       if (!kiemtra_tenchuongtrinh) {
         await pool.execute(
-          `INSERT INTO chuongtrinhdaotao (TENCHUONGTRINH, MABOMON) VALUES (?, ?)`,
-          [dataLopExcelArray[i].TENCHUONGTRINH, kiemtra_tenbomon[0].MABOMON]
+          `INSERT INTO chuongtrinhdaotao 
+        (MABOMON,TENCHUONGTRINH,SO_QUYET_DINH,TRINH_DO,TONG_SO_TIN_CHI,MO_TA_HOC_KY) 
+        VALUES (?,?,?,?,?,?)`,
+          [
+            kiemtra_tenbomon[0].MABOMON,
+            dataLopExcelArray[i].TENCHUONGTRINH,
+            dataLopExcelArray[i].SO_QUYET_DINH,
+            dataLopExcelArray[i].TRINH_DO,
+            dataLopExcelArray[i].TONG_SO_TIN_CHI,
+            dataLopExcelArray[i].MO_TA_HOC_KY,
+          ]
         );
         kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
           dataLopExcelArray[i].TENCHUONGTRINH
@@ -223,7 +232,7 @@ const createLopExcel = async (dataLopExcelArray) => {
     }
 
     let [results1, fields1] = await pool.execute(
-      `select bomon.TENBOMON,ctdt.TENCHUONGTRINH,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
+      `select bomon.TENBOMON,ctdt.*,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
     );
 
     console.log("check lớp =))): ", results1);
