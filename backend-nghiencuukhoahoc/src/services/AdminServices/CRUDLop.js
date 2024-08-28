@@ -163,7 +163,7 @@ const createLopExcel = async (dataLopExcelArray) => {
       // console.log("check ten bo mon ", kiemtra_tenbomon.length);
 
       let kiemtra_malop = await timlop_MALOP(dataLopExcelArray[i].MALOP);
-      if (!kiemtra_malop > 0) {
+      if (kiemtra_malop > 0) {
         return {
           EM: `mã lớp này đã tồn tại trong hệ thống`,
           EC: 0,
