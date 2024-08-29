@@ -107,6 +107,7 @@ export default function Nav({ openNav, onCloseNav }) {
           key={item.title}
           item={item}
           isSelected={item.path === selectedPath}
+          selectedPath={selectedPath} // Pass selectedPath to NavItem
           onClick={() => setSelectedPath(item.path)} // Cập nhật trạng thái khi click
         />
       ))}
@@ -176,8 +177,9 @@ Nav.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item, isSelected, onClick }) {
+function NavItem({ item, isSelected, selectedPath, onClick }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleToggle = () => {
     if (item.children) {
@@ -215,23 +217,37 @@ function NavItem({ item, isSelected, onClick }) {
       {item.children && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Stack component="nav" spacing={0.5} sx={{ pl: 4 }}>
-            {item.children.map((child) => (
-              <ListItemButton
-                key={child.title}
-                component={RouterLink}
-                href={"/admin" + child.path}
-                sx={{
-                  minHeight: 36,
-                  borderRadius: 0.75,
-                  typography: "body2",
-                  color: "text.secondary",
-                  textTransform: "capitalize",
-                  paddingLeft: 5,
-                }}
-              >
-                <Box component="span">{child.title}</Box>
-              </ListItemButton>
-            ))}
+            {item.children.map((child) => {
+              const isChildSelected = pathname.startsWith(
+                "/admin" + child.path
+              );
+              console.log("check selectedPath", selectedPath);
+              console.log("check pathname", pathname);
+              console.log("check child.path", child.path);
+              console.log("check isChildSelected", isChildSelected);
+              return (
+                <ListItemButton
+                  key={child.title}
+                  component={RouterLink}
+                  href={"/admin" + child.path}
+                  sx={{
+                    minHeight: 36,
+                    borderRadius: 0.75,
+                    typography: "body2",
+                    color: "text.secondary",
+                    textTransform: "capitalize",
+                    paddingLeft: 5,
+                    ...(isChildSelected === true && {
+                      color: "blue",
+                      bgcolor: (theme) =>
+                        alpha(theme.palette.primary.main, 0.23),
+                    }),
+                  }}
+                >
+                  <Box component="span">{child.title}</Box>
+                </ListItemButton>
+              );
+            })}
           </Stack>
         </Collapse>
       )}
@@ -242,5 +258,6 @@ function NavItem({ item, isSelected, onClick }) {
 NavItem.propTypes = {
   item: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
+  selectedPath: PropTypes.string.isRequired, // Define selectedPath in propTypes
   onClick: PropTypes.func.isRequired,
 };

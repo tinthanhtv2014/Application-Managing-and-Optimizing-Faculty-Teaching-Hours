@@ -350,6 +350,25 @@ export default function Router() {
       ),
     },
     {
+      path: "/tai-khoan-giangvien/thong-tin", // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: "grey.300" }}
+              />
+            }
+          >
+            <AccountGV />
+          </Suspense>
+        </DashboardLayout>
+      ),
+    },
+    {
       path: "/tai-khoan-giangvien/doi-mat-khau", // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>

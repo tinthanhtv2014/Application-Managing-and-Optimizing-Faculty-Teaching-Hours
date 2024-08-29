@@ -63,7 +63,7 @@ const navConfig = [
     children: [
       {
         title: "Xem Profile",
-        path: "/tai-khoan-giangvien",
+        path: "/tai-khoan-giangvien/thong-tin",
       },
       {
         title: "Đổi Mật Khẩu",
