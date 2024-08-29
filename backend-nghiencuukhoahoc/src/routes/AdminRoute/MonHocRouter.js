@@ -26,6 +26,7 @@ const {
 //lớp
 const {
   getAllLopcontroller,
+  getAllLop_BoMon_controller,
   creatNEWLopcontroller,
   updateLOPcontroller,
   deleteLOPcontroller,
@@ -71,6 +72,7 @@ const CRUDMonHoc = (app) => {
 
   //router cho lớp thuộc chương trình đào tạo
   router.get("/lop/xem", getAllLopcontroller);
+  router.post("/lop/bomon/xem", getAllLop_BoMon_controller);
   router.post("/lop/tao", creatNEWLopcontroller);
   router.post("/lop/tao/excel", createLopcontrollerExcel);
   router.put("/lop/update/:MALOP", updateLOPcontroller);

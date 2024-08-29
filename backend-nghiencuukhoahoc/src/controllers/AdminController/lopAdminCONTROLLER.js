@@ -4,6 +4,7 @@ const {
   updateLop,
   deleteLop,
   createLopExcel,
+  selectLop_BoMon,
 } = require("../../services/AdminServices/CRUDLop");
 
 const getAllLopcontroller = async (req, res) => {
@@ -24,6 +25,25 @@ const getAllLopcontroller = async (req, res) => {
   }
 };
 
+const getAllLop_BoMon_controller = async (req, res) => {
+  try {
+    const TENBOMON = req.body.TENBOMON;
+    console.log("TENBOMON", TENBOMON);
+    let results = await selectLop_BoMon(TENBOMON);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller getAllLop",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
 const creatNEWLopcontroller = async (req, res) => {
   try {
     const datalop = req.body;
@@ -114,4 +134,5 @@ module.exports = {
   updateLOPcontroller,
   deleteLOPcontroller,
   createLopcontrollerExcel,
+  getAllLop_BoMon_controller,
 };
