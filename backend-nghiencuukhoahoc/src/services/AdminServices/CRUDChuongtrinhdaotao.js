@@ -378,11 +378,12 @@ const createChuongtrinhdaotaoExcel = async (
 
       if (kiemtra_tenmonhoc === undefined) {
         await pool.execute(
-          `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH) VALUES (?, ?,?)`,
+          `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH,GHICHU) VALUES (?, ?,?,?)`,
           [
             dataChuongtrinhdaotaoExcelArray[i].TENMONHOC,
             dataChuongtrinhdaotaoExcelArray[i].SOTINCHILYTHUYET,
             dataChuongtrinhdaotaoExcelArray[i].SOTINCHITHUCHANH,
+            dataChuongtrinhdaotaoExcelArray[i].GHICHU,
           ]
         );
       }
