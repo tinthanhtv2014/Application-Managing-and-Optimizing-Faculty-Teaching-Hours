@@ -77,9 +77,6 @@ const GiangVienProfile = ({ giangVien, CallbackAPiProfileGV }) => {
       toast.error("Số điện thoại không hợp lệ");
     }
   };
-  // const getFormattedDate = (dateTimeString) => {
-  //   return dateTimeString.split("T")[0];
-  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

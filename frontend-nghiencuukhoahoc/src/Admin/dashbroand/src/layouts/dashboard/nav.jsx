@@ -1,35 +1,41 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
-import Avatar from '@mui/material/Avatar';
-import { alpha } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import ListItemButton from '@mui/material/ListItemButton';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Drawer from "@mui/material/Drawer";
+import Avatar from "@mui/material/Avatar";
+import { alpha } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import ListItemButton from "@mui/material/ListItemButton";
 
-import { usePathname } from '../../routes/hooks';
-import { RouterLink } from '../../routes/components';
-import { useResponsive } from '../../hooks/use-responsive';
-import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-import CookiesAxios from '../../sections/CookiesAxios.js';
-import Logo from '../../components/logo';
-import Scrollbar from '../../components/scrollbar';
-import { NAV } from './config-layout';
-import navConfig from './config-navigation';
+import { usePathname } from "../../routes/hooks";
+import { RouterLink } from "../../routes/components";
+import { useResponsive } from "../../hooks/use-responsive";
+import avatarImage from "../../../public/assets/images/avatars/lufy2.jpg";
+import CookiesAxios from "../../sections/CookiesAxios.js";
+import Logo from "../../components/logo";
+import Scrollbar from "../../components/scrollbar";
+import { NAV } from "./config-layout";
+import navConfig from "./config-navigation";
 import Cookies from "js-cookie";
-import { jwtDecode } from 'jwt-decode';
-import ComponentLoading from '../dashboard/ComponentLoading/CompnentLoading.tsx';
+import { jwtDecode } from "jwt-decode";
+import ComponentLoading from "../dashboard/ComponentLoading/CompnentLoading.tsx";
+import { Collapse } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({ TENGV: '', TENCHUCVU: '' });
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({
+    TENGV: "",
+    TENCHUCVU: "",
+  });
 
-  const auth = Cookies.get('accessToken');
-  const upLg = useResponsive('up', 'lg');
+  const auth = Cookies.get("accessToken");
+  const upLg = useResponsive("up", "lg");
   const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
 
   useEffect(() => {
@@ -76,24 +82,23 @@ export default function Nav({ openNav, onCloseNav }) {
         mx: 2.5,
         py: 2,
         px: 2.5,
-        display: 'flex',
+        display: "flex",
         borderRadius: 1.5,
-        alignItems: 'center',
+        alignItems: "center",
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
       <Avatar src={avatarImage} alt="photoURL" />
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
-          {dataProfileGiangvien.TENGV || 'Đang tải...'}
+          {dataProfileGiangvien.TENGV || "Đang tải..."}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {dataProfileGiangvien.TENCHUCVU || ''}
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          {dataProfileGiangvien.TENCHUCVU || ""}
         </Typography>
       </Box>
     </Box>
   );
-
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
@@ -102,6 +107,7 @@ export default function Nav({ openNav, onCloseNav }) {
           key={item.title}
           item={item}
           isSelected={item.path === selectedPath}
+          selectedPath={selectedPath} // Pass selectedPath to NavItem
           onClick={() => setSelectedPath(item.path)} // Cập nhật trạng thái khi click
         />
       ))}
@@ -112,10 +118,10 @@ export default function Nav({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
-        '& .simplebar-content': {
+        "& .simplebar-content": {
           height: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
@@ -140,7 +146,7 @@ export default function Nav({ openNav, onCloseNav }) {
         <Box
           sx={{
             height: 1,
-            position: 'fixed',
+            position: "fixed",
             width: NAV.WIDTH,
             borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
@@ -171,38 +177,87 @@ Nav.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item, isSelected, onClick }) {
+function NavItem({ item, isSelected, selectedPath, onClick }) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  const handleToggle = () => {
+    if (item.children) {
+      setOpen((prev) => !prev);
+    }
+    onClick();
+  };
+
   return (
-    <ListItemButton
-      component={RouterLink}
-      href={"/admin" + item.path}
-      onClick={onClick} // Xử lý sự kiện click
-      sx={{
-        minHeight: 44,
-        borderRadius: 0.75,
-        typography: 'body2',
-        color: 'text.secondary',
-        textTransform: 'capitalize',
-        fontWeight: 'fontWeightMedium',
-        ...(isSelected && {
-          color: 'blue', // Màu chữ khi được chọn
-          // fontWeight: 'fontWeightBold',
-          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23), // Tăng độ đậm của nền
+    <>
+      <ListItemButton
+        component={RouterLink}
+        href={"/admin" + item.path}
+        onClick={handleToggle}
+        sx={{
+          minHeight: 44,
+          borderRadius: 0.75,
+          typography: "body2",
+          color: "text.secondary",
+          textTransform: "capitalize",
+          fontWeight: "fontWeightMedium",
+          ...(isSelected && {
+            color: "blue",
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23),
+          }),
+        }}
+      >
+        <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+          {item.icon}
+        </Box>
+        <Box component="span">{item.title}</Box>
+        {item.children && (open ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
+      </ListItemButton>
 
-        }),
-      }}
-    >
-      <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
-        {item.icon}
-      </Box>
-
-      <Box component="span">{item.title}</Box>
-    </ListItemButton>
+      {item.children && (
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <Stack component="nav" spacing={0.5} sx={{ pl: 4 }}>
+            {item.children.map((child) => {
+              const isChildSelected = pathname.startsWith(
+                "/admin" + child.path
+              );
+              console.log("check selectedPath", selectedPath);
+              console.log("check pathname", pathname);
+              console.log("check child.path", child.path);
+              console.log("check isChildSelected", isChildSelected);
+              return (
+                <ListItemButton
+                  key={child.title}
+                  component={RouterLink}
+                  href={"/admin" + child.path}
+                  sx={{
+                    minHeight: 36,
+                    borderRadius: 0.75,
+                    typography: "body2",
+                    color: "text.secondary",
+                    textTransform: "capitalize",
+                    paddingLeft: 5,
+                    ...(isChildSelected === true && {
+                      color: "blue",
+                      bgcolor: (theme) =>
+                        alpha(theme.palette.primary.main, 0.23),
+                    }),
+                  }}
+                >
+                  <Box component="span">{child.title}</Box>
+                </ListItemButton>
+              );
+            })}
+          </Stack>
+        </Collapse>
+      )}
+    </>
   );
 }
 
 NavItem.propTypes = {
   item: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
+  selectedPath: PropTypes.string.isRequired, // Define selectedPath in propTypes
   onClick: PropTypes.func.isRequired,
 };

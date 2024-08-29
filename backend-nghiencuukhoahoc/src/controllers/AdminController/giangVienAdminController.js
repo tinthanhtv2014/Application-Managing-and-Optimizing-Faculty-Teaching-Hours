@@ -43,9 +43,9 @@ const getAllGiangVien = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getAllGiangVien",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -65,9 +65,9 @@ const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyGiangVienbyTENDANGNHAP",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -86,9 +86,9 @@ const getOnlyGiangVienbyBoMon = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyGiangVienbyBoMon",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -106,9 +106,9 @@ const createGiangVienControler = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller createGiangVienControler",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -156,9 +156,9 @@ const updateGiangVienController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller updateGiangVienController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -210,9 +210,9 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller update_ChucVu_ChucDanh_GiangVien_Controller",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -234,9 +234,9 @@ const deleteGiangVienController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller deleteGiangVienController",
+      EC: -1,
+      DT: [],
     });
   }
 };

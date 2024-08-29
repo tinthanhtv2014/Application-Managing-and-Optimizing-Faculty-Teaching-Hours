@@ -5,8 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import CookiesAxios from "../CookiesAxios";
-
-const AccountGV = () => {
+import ChangePasswordForm from "./component/changePassword";
+const AccountGVChangePass = () => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,10 +54,7 @@ const AccountGV = () => {
       {giangVien ? (
         <>
           {" "}
-          <GiangVienProfile
-            CallbackAPiProfileGV={CallbackAPiProfileGV}
-            giangVien={giangVien}
-          />
+          <ChangePasswordForm data_user={data_user} />{" "}
         </>
       ) : (
         <div>Loading...</div>
@@ -66,4 +63,4 @@ const AccountGV = () => {
   );
 };
 
-export default AccountGV;
+export default AccountGVChangePass;

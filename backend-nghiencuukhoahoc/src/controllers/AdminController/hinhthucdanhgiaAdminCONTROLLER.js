@@ -17,9 +17,9 @@ const selectAll_hinhthucdanhgia = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller selectAll_hinhthucdanhgia",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -38,9 +38,9 @@ const insert_hinhthucdanhgia = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller insert_hinhthucdanhgia",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -59,9 +59,9 @@ const sua_hinhthucdanhgia = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller sua_hinhthucdanhgia",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -79,9 +79,9 @@ const xoa_hinhthucdanhgia = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller xoa_hinhthucdanhgia",
+      EC: -1,
+      DT: [],
     });
   }
 };

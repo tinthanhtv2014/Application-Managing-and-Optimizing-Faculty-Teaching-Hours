@@ -22,9 +22,9 @@ const getAllChuongtrinhdaotao = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getAllChuongtrinhdaotao",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -46,9 +46,9 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyChuongtrinhdaotao_withHOCKI",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -66,9 +66,9 @@ const getOnlyChuongtrinhdaotao_SoHocKi = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyChuongtrinhdaotao_SoHocKi",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -85,9 +85,9 @@ const getOnlyChuongtrinhdaotao = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyChuongtrinhdaotao",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -96,32 +96,19 @@ const createChuongtrinhdaotaoControler = async (req, res) => {
   try {
     let TENCHUONGTRINH = req.body.TENCHUONGTRINH;
     let MABOMON = req.body.MABOMON;
-    let results = await createChuongtrinhdaotao(MABOMON, TENCHUONGTRINH);
-
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
-    });
-  }
-};
-
-const updateChuongtrinhdaotaoController = async (req, res) => {
-  try {
-    const MACHUONGTRINH = req.params.MACHUONGTRINH;
-    const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
-    let MABOMON = req.body.MABOMON;
-    let results = await updateChuongtrinhdaotao(
-      MACHUONGTRINH,
+    let SO_QUYET_DINH = req.body.SO_QUYET_DINH;
+    let TRINH_DO = req.body.TRINH_DO;
+    let TONG_SO_TIN_CHI = req.body.TONG_SO_TIN_CHI;
+    let MO_TA_HOC_KY = req.body.MO_TA_HOC_KY;
+    let GHI_CHUONG_TRINH = req.body.GHI_CHUONG_TRINH;
+    let results = await createChuongtrinhdaotao(
       MABOMON,
-      TENCHUONGTRINH
+      TENCHUONGTRINH,
+      SO_QUYET_DINH,
+      TRINH_DO,
+      TONG_SO_TIN_CHI,
+      MO_TA_HOC_KY,
+      GHI_CHUONG_TRINH
     );
 
     return res.status(200).json({
@@ -132,9 +119,45 @@ const updateChuongtrinhdaotaoController = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
+      EM: "lỗi controller createChuongtrinhdaotaoControler",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+const updateChuongtrinhdaotaoController = async (req, res) => {
+  try {
+    const MACHUONGTRINH = req.params.MACHUONGTRINH;
+    const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+    let MABOMON = req.body.MABOMON;
+    let SO_QUYET_DINH = req.body.SO_QUYET_DINH;
+    let TRINH_DO = req.body.TRINH_DO;
+    let TONG_SO_TIN_CHI = req.body.TONG_SO_TIN_CHI;
+    let MO_TA_HOC_KY = req.body.MO_TA_HOC_KY;
+    let GHI_CHUONG_TRINH = req.body.GHI_CHUONG_TRINH;
+    let results = await updateChuongtrinhdaotao(
+      MACHUONGTRINH,
+      MABOMON,
+      TENCHUONGTRINH,
+      SO_QUYET_DINH,
+      TRINH_DO,
+      TONG_SO_TIN_CHI,
+      MO_TA_HOC_KY,
+      GHI_CHUONG_TRINH
+    );
+
+    return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
       DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller updateChuongtrinhdaotaoController",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -174,6 +197,11 @@ const createCHUONGTRINHDAOTAOExcelController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller createCHUONGTRINHDAOTAOExcelController",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 

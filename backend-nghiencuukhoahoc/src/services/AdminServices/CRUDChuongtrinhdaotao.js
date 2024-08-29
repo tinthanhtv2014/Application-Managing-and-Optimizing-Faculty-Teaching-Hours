@@ -160,7 +160,15 @@ const selectChuongtrinhdaotao_TENCHUONGTRINH = async (TENCHUONGTRINH) => {
   }
 };
 
-const createChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINH) => {
+const createChuongtrinhdaotao = async (
+  MABOMON,
+  TENCHUONGTRINH,
+  SO_QUYET_DINH,
+  TRINH_DO,
+  TONG_SO_TIN_CHI,
+  MO_TA_HOC_KY,
+  GHI_CHUONG_TRINH
+) => {
   try {
     let [results1, fields1] = await pool.execute(
       `select * from chuongtrinhdaotao where TENCHUONGTRINH = ?`,
@@ -175,8 +183,18 @@ const createChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINH) => {
     }
 
     let [results, fields] = await pool.execute(
-      `INSERT INTO chuongtrinhdaotao (MABOMON,TENCHUONGTRINH) VALUES (?,?)`,
-      [MABOMON, TENCHUONGTRINH]
+      `INSERT INTO chuongtrinhdaotao 
+      (MABOMON,TENCHUONGTRINH,SO_QUYET_DINH,TRINH_DO,TONG_SO_TIN_CHI,MO_TA_HOC_KY,GHI_CHUONG_TRINH) 
+      VALUES (?,?,?,?,?,?,?)`,
+      [
+        MABOMON,
+        TENCHUONGTRINH,
+        SO_QUYET_DINH,
+        TRINH_DO,
+        TONG_SO_TIN_CHI,
+        MO_TA_HOC_KY,
+        GHI_CHUONG_TRINH,
+      ]
     );
     return {
       EM: "thêm Chương trình mới thành công",
@@ -185,7 +203,7 @@ const createChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINH) => {
     };
   } catch (error) {
     return {
-      EM: "lỗi services createChucVu",
+      EM: "lỗi services createChuongtrinhdaotao",
       EC: -1,
       DT: [],
     };
@@ -195,7 +213,12 @@ const createChuongtrinhdaotao = async (MABOMON, TENCHUONGTRINH) => {
 const updateChuongtrinhdaotao = async (
   MACHUONGTRINH,
   MABOMON,
-  TENCHUONGTRINH
+  TENCHUONGTRINH,
+  SO_QUYET_DINH,
+  TRINH_DO,
+  TONG_SO_TIN_CHI,
+  MO_TA_HOC_KY,
+  GHI_CHUONG_TRINH
 ) => {
   try {
     let [results1, fields1] = await pool.execute(
@@ -205,8 +228,17 @@ const updateChuongtrinhdaotao = async (
     if (results1.length > 0) {
       let [results, fields] = await pool.execute(
         `UPDATE chuongtrinhdaotao
-              SET TENCHUONGTRINH = ?,MABOMON = ? where MACHUONGTRINH = ?;`,
-        [TENCHUONGTRINH, MABOMON, MACHUONGTRINH]
+              SET TENCHUONGTRINH = ?,MABOMON = ?,SO_QUYET_DINH = ?,TRINH_DO = ?,TONG_SO_TIN_CHI = ?,MO_TA_HOC_KY = ?,GHI_CHUONG_TRINH = ?  where MACHUONGTRINH = ?;`,
+        [
+          TENCHUONGTRINH,
+          MABOMON,
+          SO_QUYET_DINH,
+          TRINH_DO,
+          TONG_SO_TIN_CHI,
+          MO_TA_HOC_KY,
+          GHI_CHUONG_TRINH,
+          MACHUONGTRINH,
+        ]
       );
       return {
         EM: "sửa chương trình thành công",
@@ -222,7 +254,7 @@ const updateChuongtrinhdaotao = async (
   } catch (error) {
     console.log(error);
     return {
-      EM: "lỗi services updateGiangVien",
+      EM: "lỗi services updateChuongtrinhdaotao",
       EC: -1,
       DT: [],
     };
@@ -303,14 +335,20 @@ const createChuongtrinhdaotaoExcel = async (
     let kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
       dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH
     );
-    // console.log("check ten bo mon =>>>> ", kiemtra_tenbomon[0].MABOMON);
+
     if (!kiemtra_tenchuongtrinh) {
       // Tạo thêm chương trình đào tạo nếu không tồn tại
       await pool.execute(
-        `INSERT INTO chuongtrinhdaotao (TENCHUONGTRINH, MABOMON) VALUES (?, ?)`,
+        `INSERT INTO chuongtrinhdaotao 
+      (MABOMON,TENCHUONGTRINH,SO_QUYET_DINH,TRINH_DO,TONG_SO_TIN_CHI,MO_TA_HOC_KY) 
+      VALUES (?,?,?,?,?,?)`,
         [
-          dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH,
           kiemtra_tenbomon[0].MABOMON,
+          dataChuongtrinhdaotaoExcelArray[i].TENCHUONGTRINH,
+          dataChuongtrinhdaotaoExcelArray[i].SO_QUYET_DINH,
+          dataChuongtrinhdaotaoExcelArray[i].TRINH_DO,
+          dataChuongtrinhdaotaoExcelArray[i].TONG_SO_TIN_CHI,
+          dataChuongtrinhdaotaoExcelArray[i].MO_TA_HOC_KY,
         ]
       );
       kiemtra_tenchuongtrinh = await timchuongtrinh_TENCHUONGTRINH(
