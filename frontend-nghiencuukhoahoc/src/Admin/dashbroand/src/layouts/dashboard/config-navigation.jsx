@@ -26,11 +26,6 @@ const navConfig = [
     icon: icon("ic_user"),
   },
 
-  {
-    title: "Danh Mục Giờ Chuẩn",
-    path: "/quan-ly",
-    icon: icon("ic_blog"),
-  },
   // {
   //   title: 'Chức Danh Giảng Viên',
   //   path: '/quan-ly-chuc-danh',
@@ -46,11 +41,7 @@ const navConfig = [
     path: "/chuong-trinh-dao-tao",
     icon: icon("ic_blog"),
   },
-  {
-    title: "Quản Lý Môn Học",
-    path: "/quan-ly-mon-hoc",
-    icon: icon("ic_blog"),
-  },
+
   {
     title: "Đăng Ký Khung Giờ Chuẩn",
     path: "/dang-ky-khung-gio-chuan",
@@ -71,7 +62,11 @@ const navConfig = [
       },
     ],
   },
-
+  {
+    title: "Quản Lý Khác",
+    path: "/quan-ly",
+    icon: icon("ic_blog"),
+  },
   // {
   //   title: 'login',
   //   path: '/login',

@@ -67,7 +67,7 @@ export default function Router() {
       ),
     },
     {
-      path: "quan-ly-khoa",
+      path: "/quan-ly-khoa",
       element: (
         <DashboardLayout>
           <Suspense
@@ -180,23 +180,7 @@ export default function Router() {
         </DashboardLayout>
       ),
     },
-    {
-      path: "/quan-ly-mon-hoc", // Thêm ký tự '*' vào cuối đường dẫn
-      element: (
-        <DashboardLayout>
-          <Suspense
-            fallback={
-              <Skeleton
-                variant="rectangular"
-                width="100%"
-                height="100%"
-                sx={{ bgcolor: "grey.300" }}
-              />
-            }
-          ></Suspense>
-        </DashboardLayout>
-      ),
-    },
+
     {
       path: "/dang-ky-khung-gio-chuan", // Thêm ký tự '*' vào cuối đường dẫn
       element: (
@@ -216,25 +200,7 @@ export default function Router() {
         </DashboardLayout>
       ),
     },
-    {
-      path: "/create-khoa", // Thêm ký tự '*' vào cuối đường dẫn
-      element: (
-        <DashboardLayout>
-          <Suspense
-            fallback={
-              <Skeleton
-                variant="rectangular"
-                width="100%"
-                height="100%"
-                sx={{ bgcolor: "grey.300" }}
-              />
-            }
-          >
-            <CreateKhoa />
-          </Suspense>
-        </DashboardLayout>
-      ),
-    },
+
     {
       path: "/chuong-trinh-dao-tao", // Thêm ký tự '*' vào cuối đường dẫn
       element: (
@@ -255,7 +221,7 @@ export default function Router() {
       ),
     },
     {
-      path: "/create-bm", // Thêm ký tự '*' vào cuối đường dẫn
+      path: "/quan-ly-bm", // Thêm ký tự '*' vào cuối đường dẫn
       element: (
         <DashboardLayout>
           <Suspense

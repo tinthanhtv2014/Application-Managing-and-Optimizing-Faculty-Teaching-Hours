@@ -23,10 +23,10 @@ const AdminCreate = () => {
     }
   }, [token]);
   const handleToCreateKhoa = () => {
-    navigate("/admin/create-khoa");
+    navigate("/admin/quan-ly-khoa");
   };
   const handleToCreateBM = () => {
-    navigate("/admin/create-bm");
+    navigate("/admin/quan-ly-bm");
   };
   const handleToCreateGV = () => {
     navigate("/admin/giangvien");

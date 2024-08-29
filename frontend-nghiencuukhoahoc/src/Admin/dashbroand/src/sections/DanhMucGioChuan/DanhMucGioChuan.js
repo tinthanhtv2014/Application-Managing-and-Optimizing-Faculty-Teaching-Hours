@@ -11,6 +11,7 @@ import ModalMoCongDangKy from "./modalMoCongDangKy/ModalMoCongDangKy";
 import HinhThucDanhGia from "./modals/HinhThucDanhGia";
 import ChucDanhGiangVien from "./modals/ChucDanhGV";
 import ModalChucVu from "./modals/ChucVuGV";
+import HockyNienKhoaModal from "./modals/HocKiNienKhoa";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -23,6 +24,7 @@ const DanhMucGioChuan = () => {
     hinhThucDanhGia: false,
     chucDanhGiangVien: false,
     chucVuGiangVien: false,
+    hocKiNienKhoa: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -128,6 +130,15 @@ const DanhMucGioChuan = () => {
             >
               Chức Vụ Giảng Viên
             </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("hocKiNienKhoa")}
+            >
+              Học Kì Niên Khóa
+            </Button>
           </Col>
         </Row>
 
@@ -170,6 +181,10 @@ const DanhMucGioChuan = () => {
         <ModalChucVu
           open={open.chucVuGiangVien}
           handleClose={() => handleClose("chucVuGiangVien")}
+        />
+        <HockyNienKhoaModal
+          open={open.hocKiNienKhoa}
+          handleClose={() => handleClose("hocKiNienKhoa")}
         />
       </Container>
     </>
