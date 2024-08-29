@@ -15,14 +15,12 @@ import {
 } from "@mui/material";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 
-const IndexChiTietPhanCong = () => {
+const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
   const [data_NamHoc, setData_NamHoc] = useState([]);
   const [ListNamHoc, setListNamHoc] = useState(null);
   const [selectNamHoc, setSelectNamHoc] = useState([]);
-  const [data_hocKiNienKhoa, setData_hocKiNienKhoa] = useState([]);
-  const [select_HocKiNienKhoa, setSelect_HocKiNienKhoa] = useState([]);
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
@@ -37,14 +35,14 @@ const IndexChiTietPhanCong = () => {
       data_ListGVChuaChonKhung.length === 0 &&
       isOpenXemGiangVienChonKhung === false
     ) {
-      fetchListData();
+      fetchListGiangVienChuaChonKhung();
     }
   }, [isOpenXemGiangVienChonKhung]);
 
-  const fetchListData = async () => {
+  const fetchListGiangVienChuaChonKhung = async () => {
     try {
       const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xem`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/chuachonkhung`
       );
       console.log("chua chon khung =>", response.data);
       if (response.data.EC === 1) {
@@ -60,18 +58,13 @@ const IndexChiTietPhanCong = () => {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung`
       );
-      const response_hocKiNienKhoa = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xem`
-      );
       const response_NamHoc = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
       );
 
       if (response.data.EC === 1) {
         setData_ListGVDaChonKhung(response.data.DT);
-        setData_hocKiNienKhoa(response_hocKiNienKhoa.data.DT);
         setListNamHoc(response_NamHoc.data.DT);
-        setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0].TENDANHGIA);
         setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
       }
     } catch (error) {
@@ -104,34 +97,6 @@ const IndexChiTietPhanCong = () => {
             ) : (
               <MenuItem value="" disabled>
                 Không có năm học nào
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
-      </Box>
-      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
-        <FormControl fullWidth className="profile-email-input">
-          <InputLabel id="select-label-trang-thai">Học Kì Niên Khóa</InputLabel>
-          <Select
-            labelId="select-label-trang-thai"
-            id="trang-thai-select"
-            name="HOCKINIENKHOA"
-            label="Học Kì Niên Khóa"
-            value={select_HocKiNienKhoa}
-            defaultValue={select_HocKiNienKhoa}
-            // disabled={isDisableNamHoc}
-            onChange={(e) => setSelect_HocKiNienKhoa(e.target.value)}
-            variant="outlined"
-          >
-            {data_hocKiNienKhoa && data_hocKiNienKhoa.length > 0 ? (
-              data_hocKiNienKhoa.map((nienkhoa, index) => (
-                <MenuItem key={index} value={nienkhoa.TENHKNK}>
-                  {nienkhoa.TENHKNK}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="" disabled>
-                Không có Học Kì Niên Khóa
               </MenuItem>
             )}
           </Select>
@@ -170,7 +135,7 @@ const IndexChiTietPhanCong = () => {
         }}
       >
         <Box sx={{ width: "100%", maxWidth: "1200px" }}>
-          {/* {isOpenXemGiangVienChonKhung ? (
+          {isOpenXemGiangVienChonKhung ? (
             <GVTableDaChonKhung
               data={data_ListGVDaChonKhung}
               selectNamHoc={selectNamHoc}
@@ -180,11 +145,11 @@ const IndexChiTietPhanCong = () => {
               data={data_ListGVChuaChonKhung}
               selectNamHoc={selectNamHoc}
             />
-          )} */}
+          )}
         </Box>
       </Box>
     </>
   );
 };
 
-export default IndexChiTietPhanCong;
+export default IndexPhanCongGiangVien;

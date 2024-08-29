@@ -6,13 +6,13 @@ import DashboardLayout from "../layouts/dashboard";
 import ProductsPageFake from "../pages/products";
 import AccountGV from "../sections/Account/AccountGV";
 
-const IndexPhanCongGiangVien = lazy(() => import("../sections/PhanCongGiangVien/IndexPhanCongGiangVien"));
-const IndexChiTietPhanCong = lazy(() => import("../sections/ChiTietPhanCong/IndexChiTietPhanCong"));
+const IndexPhanCongGiangVien = lazy(() =>
+  import("../sections/PhanCongGiangVien/IndexPhanCongGiangVien")
+);
 const DangKyGioChuan = lazy(() =>
   import("../sections/DangKyGioChuan/IndexDangKyGioChuan")
 );
 const FileExcel = lazy(() => import("../sections/FileExcel/FileExcel"));
-
 
 const IndexPage = lazy(() => import("../pages/app"));
 const BlogPage = lazy(() => import("../pages/blog"));
@@ -55,13 +55,13 @@ export default function Router() {
       ),
     },
 
-
     {
       path: "/phan-cong-giang-vien", // Quản lý phân công giảng dạy.
 
       element: (
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
+            {" "}
             <IndexPhanCongGiangVien />
           </Suspense>
         </DashboardLayout>
@@ -72,9 +72,7 @@ export default function Router() {
 
       element: (
         <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
-          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}></Suspense>
         </DashboardLayout>
       ),
     },
@@ -85,29 +83,6 @@ export default function Router() {
         <DashboardLayout>
           <Suspense fallback={<div>Loading...</div>}>
             <BlogPage />
-          </Suspense>
-        </DashboardLayout>
-      ),
-    },
-    {
-      path: "/goi-y-phan-cong-giang-vien", // Gợi ý phân công giảng viên.
-
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-            <IndexChiTietPhanCong />
-          </Suspense>
-        </DashboardLayout>
-      ),
-    },
-
-    {
-      path: "/goi-y-phan-cong-giang-vien", // Gợi ý phân công giảng viên.
-
-      element: (
-        <DashboardLayout>
-          <Suspense fallback={<div>Loading...</div>}>
-
           </Suspense>
         </DashboardLayout>
       ),
