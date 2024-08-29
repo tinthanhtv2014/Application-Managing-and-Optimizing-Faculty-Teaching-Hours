@@ -21,10 +21,10 @@ const GiangVien_thuoc_KhoaController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(500).json({
+      EM: "Đã xảy ra lỗi phía server",
+      EC: -1,
+      DT: null,
     });
   }
 };

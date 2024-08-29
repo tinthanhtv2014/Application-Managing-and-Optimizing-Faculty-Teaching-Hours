@@ -374,8 +374,6 @@ const createChuongtrinhdaotaoExcel = async (
         dataChuongtrinhdaotaoExcelArray[i].TENMONHOC
       );
 
-      console.log("check kiemtratenmonhoc", kiemtra_tenmonhoc);
-
       if (kiemtra_tenmonhoc === undefined) {
         await pool.execute(
           `INSERT INTO monhoc (TENMONHOC,SOTINCHILYTHUYET,SOTINCHITHUCHANH,GHICHU) VALUES (?, ?,?,?)`,
@@ -395,7 +393,7 @@ const createChuongtrinhdaotaoExcel = async (
         `select * from thuoc where MACHUONGTRINH = ? and MAMONHOC = ?`,
         [kiemtra_tenchuongtrinh.MACHUONGTRINH, select_tenmonhoc.MAMONHOC]
       );
-      console.log("check kiemtra_bangthuoc", kiemtra_bangthuoc);
+
       if (kiemtra_bangthuoc[0] === undefined) {
         await pool.execute(
           `INSERT INTO thuoc (MACHUONGTRINH,MAMONHOC,SOTHUTUHOCKI) VALUES (?, ?,?)`,

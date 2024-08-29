@@ -18,11 +18,11 @@ const get_giangvien_CNTT = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(200).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(200).json({
+      EM: "lỗi get_giangvien_CNTT",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 
@@ -40,11 +40,11 @@ const get_giangvien_CNTT_da_chon_khung = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(200).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(200).json({
+      EM: "lỗi get_giangvien_CNTT_da_chon_khung",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 
@@ -62,11 +62,11 @@ const get_giangvien_CNTT_chua_chon_khung = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(200).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(200).json({
+      EM: "lỗi get_giangvien_CNTT_chua_chon_khung",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 

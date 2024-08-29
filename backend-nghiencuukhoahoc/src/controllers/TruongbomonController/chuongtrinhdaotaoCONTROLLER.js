@@ -17,11 +17,11 @@ const get_chuongtrinhdaotao_tenbomon = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(200).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(404).json({
+      EM: "lỗi controller get_chuongtrinhdaotao_tenbomon",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 
@@ -37,11 +37,11 @@ const get_chuongtrinhdaotao = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    // return res.status(200).json({
-    //   EM: results.EM,
-    //   EC: results.EC,
-    //   DT: results.DT,
-    // });
+    return res.status(404).json({
+      EM: "lỗi controller get_chuongtrinhdaotao",
+      EC: -1,
+      DT: [],
+    });
   }
 };
 
@@ -62,9 +62,9 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+      EM: "lỗi controller getOnlyChuongtrinhdaotao_withHOCKI",
+      EC: -1,
+      DT: [],
     });
   }
 };

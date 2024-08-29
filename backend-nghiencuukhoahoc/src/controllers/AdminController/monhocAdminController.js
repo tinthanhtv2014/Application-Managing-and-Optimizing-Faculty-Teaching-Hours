@@ -16,10 +16,10 @@ const getAllMONHOC = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller getAllMONHOC",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -36,10 +36,10 @@ const createMONHOC = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller createMONHOC",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -57,10 +57,10 @@ const updateMONHOC = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller updateMONHOC",
+      EC: -1,
+      DT: [],
     });
   }
 };
@@ -78,10 +78,10 @@ const deleteMONHOC = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({
-      EM: results.EM,
-      EC: results.EC,
-      DT: results.DT,
+    return res.status(404).json({
+      EM: "lỗi controller deleteMONHOC",
+      EC: -1,
+      DT: [],
     });
   }
 };
