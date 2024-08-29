@@ -6,6 +6,7 @@ const router = express.Router();
 //môn học
 const {
   getAllMONHOC,
+
   createMONHOC,
   updateMONHOC,
   deleteMONHOC,
@@ -26,7 +27,7 @@ const {
 //lớp
 const {
   getAllLopcontroller,
-  getAllLop_BoMon_controller,
+
   creatNEWLopcontroller,
   updateLOPcontroller,
   deleteLOPcontroller,
@@ -37,6 +38,7 @@ const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDMonHoc = (app) => {
   // Route cho môn học, yêu cầu xác thực JWT
   router.get("/xem", getAllMONHOC);
+
   router.post("/tao", checkUserJWT, createMONHOC);
   router.put("/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
   router.delete("/xoa", checkUserJWT, deleteMONHOC);
@@ -72,7 +74,7 @@ const CRUDMonHoc = (app) => {
 
   //router cho lớp thuộc chương trình đào tạo
   router.get("/lop/xem", getAllLopcontroller);
-  router.post("/lop/bomon/xem", getAllLop_BoMon_controller);
+
   router.post("/lop/tao", creatNEWLopcontroller);
   router.post("/lop/tao/excel", createLopcontrollerExcel);
   router.put("/lop/update/:MALOP", updateLOPcontroller);

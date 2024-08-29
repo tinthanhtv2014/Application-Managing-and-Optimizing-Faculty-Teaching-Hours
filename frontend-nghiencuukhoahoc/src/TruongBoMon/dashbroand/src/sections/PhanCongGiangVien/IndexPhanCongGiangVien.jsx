@@ -25,6 +25,8 @@ const IndexPhanCongGiangVien = () => {
   const [select_HocKiNienKhoa, setSelect_HocKiNienKhoa] = useState([]);
   const [data_Lop, setData_Lop] = useState([]);
   const [select_Lop, setSelect_Lop] = useState(null);
+  const [data_MonHoc, setData_MonHoc] = useState([]);
+  const [TenBoMon, setTenBoMon] = useState(null);
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
@@ -45,22 +47,44 @@ const IndexPhanCongGiangVien = () => {
       const response_NamHoc = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
       );
-      const response_Lop = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/xem`
-      );
+
       if (response.data.EC === 1) {
         setData_ListGVDaChonKhung(response.data.DT);
         setData_hocKiNienKhoa(response_hocKiNienKhoa.data.DT);
         setListNamHoc(response_NamHoc.data.DT);
         setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0].TENDANHGIA);
         setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
-        setSelect_Lop(response_Lop.data.DT);
       }
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
     }
   };
-
+  const fetchDataLop_byBoMon = async () => {
+    try {
+      const response_Lop = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/lop/bomon/xem`,
+        { TENBOMON: TenBoMon }
+      );
+      if (response_Lop.data.EC === 1) {
+        setData_Lop(response_Lop.data.DT);
+      }
+    } catch (error) {
+      console.error("Error fetching BoMon data:", error);
+    }
+  };
+  const fetchDataMonHoc_byLop = async () => {
+    try {
+      const response_MonHoc = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
+        { MALOP: select_Lop, SOHOCKI: select_HocKiNienKhoa }
+      );
+      if (response_MonHoc.data.EC === 1) {
+        setData_MonHoc(response_MonHoc.data.DT);
+      }
+    } catch (error) {
+      console.error("Error fetching BoMon data:", error);
+    }
+  };
   return (
     <>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
@@ -86,6 +110,34 @@ const IndexPhanCongGiangVien = () => {
             ) : (
               <MenuItem value="" disabled>
                 Không có Học Kì Niên Khóa
+              </MenuItem>
+            )}
+          </Select>
+        </FormControl>
+      </Box>
+      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+        <FormControl fullWidth className="profile-email-input">
+          <InputLabel id="select-label-trang-thai">Danh Sách Lớp</InputLabel>
+          <Select
+            labelId="select-label-trang-thai"
+            id="trang-thai-select"
+            name="HOCKINIENKHOA"
+            label="Học Kì Niên Khóa"
+            value={select_Lop}
+            defaultValue={select_Lop}
+            // disabled={isDisableNamHoc}
+            onChange={(e) => setSelect_Lop(e.target.value)}
+            variant="outlined"
+          >
+            {data_Lop && data_Lop.length > 0 ? (
+              data_Lop.map((lop, index) => (
+                <MenuItem key={index} value={lop.MALOP}>
+                  {lop.TENLOP}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem value="" disabled>
+                Không có dữ liệu lớp...
               </MenuItem>
             )}
           </Select>

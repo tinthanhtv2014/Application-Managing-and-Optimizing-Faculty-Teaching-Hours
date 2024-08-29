@@ -6,6 +6,7 @@ const {
 
   create_listgiangvien_phancong,
   xem_listgiangvien_phancong,
+  selectLop_BoMon,
 } = require("../../services/TruongbomonServices/CRUDphancong");
 const get_giangvien_CNTT_chuachonkhung = async (req, res) => {
   try {
@@ -20,6 +21,25 @@ const get_giangvien_CNTT_chuachonkhung = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       EM: "lỗi get_giangvien_CNTT_chuachonkhung",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+const getAllLop_BoMon_controller = async (req, res) => {
+  try {
+    const TENBOMON = req.body.TENBOMON;
+    console.log("TENBOMON", TENBOMON);
+    let results = await selectLop_BoMon(TENBOMON);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller getAllLop",
       EC: -1,
       DT: [],
     });
@@ -138,4 +158,5 @@ module.exports = {
 
   get_listgiangvien_phancong,
   create_onlylistgiangvien_phancong,
+  getAllLop_BoMon_controller,
 };

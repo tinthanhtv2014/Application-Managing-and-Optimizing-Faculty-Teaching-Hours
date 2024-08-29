@@ -10,6 +10,7 @@ const {
 } = require("../../controllers/TruongbomonController/giangvienCONTROLLER");
 
 const {
+  getAllLop_BoMon_controller,
   get_giangvien_CNTT_chuachonkhung,
   get_giangvien_CNTT_dachonkhung,
   get_monhoc_lop_hocki,
@@ -45,7 +46,7 @@ const CRUDgiangvien_CNTT = (app) => {
     "/xem/phancong/dachonkhung/chitiet",
     get_giangvien_CNTT_dachonkhung_chitietonly
   );
-
+  router.post("/lop/bomon/xem", getAllLop_BoMon_controller);
   //bảng phân công
   router.get("/xem/phancong/listgiangvien", get_listgiangvien_phancong);
   router.post("/tao/phancong/giangvien", create_onlylistgiangvien_phancong);

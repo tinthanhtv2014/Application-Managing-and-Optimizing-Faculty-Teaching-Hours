@@ -29,7 +29,31 @@ const select_giangvien_chuachonkhung = async () => {
     };
   }
 };
+const selectLop_BoMon = async (TENBOMON) => {
+  try {
+    let [results1, fields1] = await pool.execute(
+      ` SELECT lop.* 
+      FROM lop
+      INNER JOIN chuongtrinhdaotao ON lop.MACHUONGTRINH = chuongtrinhdaotao.MACHUONGTRINH
+      INNER JOIN bomon ON chuongtrinhdaotao.MABOMON = bomon.MABOMON
+      WHERE bomon.TENBOMON = ?`,
+      [TENBOMON]
+    );
 
+    return {
+      EM: " Xem thông tin lớp thành công",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.log("error", error);
+    return {
+      EM: "lỗi services selectMonHoc",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const select_giangvien_dachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
@@ -93,6 +117,8 @@ function tinhSoThuTuHocKi(n, SOHOCKI) {
 
 const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
   try {
+    console.log("SOHOCKI", SOHOCKI);
+    console.log("MALOP", MALOP);
     let [results_malop, fields_malop] = await pool.execute(
       `SELECT NAMTUYENSINH from lop where MALOP = ?`,
       [MALOP]
@@ -122,6 +148,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
       DT: results_ctdt_bomon,
     };
   } catch (error) {
+    console.log("check", error);
     return {
       EM: "Lỗi services select_lophoc_monhoc",
       EC: -1,
@@ -202,4 +229,5 @@ module.exports = {
   //bảng phân công
   create_listgiangvien_phancong,
   xem_listgiangvien_phancong,
+  selectLop_BoMon,
 };

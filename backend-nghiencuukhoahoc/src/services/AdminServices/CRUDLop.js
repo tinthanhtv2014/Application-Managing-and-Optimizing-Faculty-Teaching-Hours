@@ -21,31 +21,6 @@ const selectLop = async () => {
     };
   }
 };
-const selectLop_BoMon = async (TENBOMON) => {
-  try {
-    let [results1, fields1] = await pool.execute(
-      ` SELECT lop.* 
-      FROM lop
-      INNER JOIN chuongtrinhdaotao ON lop.MACHUONGTRINH = chuongtrinhdaotao.MACHUONGTRINH
-      INNER JOIN bomon ON chuongtrinhdaotao.MABOMON = bomon.MABOMON
-      WHERE bomon.TENBOMON = ?`,
-      [TENBOMON]
-    );
-
-    return {
-      EM: " Xem thông tin lớp thành công",
-      EC: 1,
-      DT: results1,
-    };
-  } catch (error) {
-    console.log("error", error);
-    return {
-      EM: "lỗi services selectMonHoc",
-      EC: -1,
-      DT: [],
-    };
-  }
-};
 
 const CreateLop = async (datalop, TENCHUONGTRINH) => {
   try {
@@ -282,5 +257,4 @@ module.exports = {
   updateLop,
   deleteLop,
   createLopExcel,
-  selectLop_BoMon,
 };
