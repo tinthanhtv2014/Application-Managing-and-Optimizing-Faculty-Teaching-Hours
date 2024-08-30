@@ -117,8 +117,9 @@ function tinhSoThuTuHocKi(n, SOHOCKI) {
 
 const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
   try {
-    console.log("SOHOCKI", SOHOCKI);
-    console.log("MALOP", MALOP);
+    const sothutu = SOHOCKI.split(" ");
+    const number = sothutu[sothutu.length - 1];
+
     let [results_malop, fields_malop] = await pool.execute(
       `SELECT NAMTUYENSINH from lop where MALOP = ?`,
       [MALOP]
@@ -128,7 +129,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
 
     let n = currentYear - results_malop[0].NAMTUYENSINH;
 
-    let SOTHUTUHOCKI = tinhSoThuTuHocKi(n, SOHOCKI);
+    let SOTHUTUHOCKI = tinhSoThuTuHocKi(n, number);
 
     let [results_ctdt_bomon, fields1] = await pool.execute(
       `select * from lop,
@@ -142,6 +143,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
       and lop.MALOP = ?`,
       [SOTHUTUHOCKI, MALOP]
     );
+
     return {
       EM: "Xem thông tin môn học theo lớp thành công",
       EC: 1,
