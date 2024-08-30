@@ -16,6 +16,7 @@ import {
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import LopMonHocTable from "./component/LopMonHocTable";
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
@@ -112,6 +113,7 @@ const IndexPhanCongGiangVien = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
         { MALOP: select_Lop, SOHOCKI: select_HocKiNienKhoa }
       );
+
       if (response_MonHoc.data.EC === 1) {
         setData_MonHoc(response_MonHoc.data.DT);
       }
@@ -154,6 +156,25 @@ const IndexPhanCongGiangVien = () => {
       </Box>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
         <FormControl fullWidth className="profile-email-input">
+          <InputLabel id="select-label-trang-thai">Học Kì Niên Khóa</InputLabel>
+          <Select
+            labelId="select-label-trang-thai"
+            id="trang-thai-select"
+            name="HOCKINIENKHOA"
+            label="Học Kì Niên Khóa"
+            value={select_HocKiNienKhoa}
+            defaultValue={select_HocKiNienKhoa}
+            // disabled={isDisableNamHoc}
+            onChange={(e) => setSelect_HocKiNienKhoa(e.target.value)}
+            variant="outlined"
+          >
+            <MenuItem value="1">Học Kì 1</MenuItem>
+            <MenuItem value="2">Học Kì 2</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+        <FormControl fullWidth className="profile-email-input">
           <InputLabel id="select-label-trang-thai">Danh Sách Lớp</InputLabel>
           <Select
             labelId="select-label-trang-thai"
@@ -180,7 +201,7 @@ const IndexPhanCongGiangVien = () => {
           </Select>
         </FormControl>
       </Box>
-
+      <LopMonHocTable data={data_MonHoc} />
       <Box
         sx={{
           display: "flex",
