@@ -27,6 +27,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 import CookiesAxios from "../../CookiesAxios";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const HockyNienKhoaModal = ({ open, handleClose }) => {
   const [hockyNienKhoas, setHockyNienKhoas] = useState([]);
@@ -58,8 +59,10 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
       newHockyNienKhoa.TENHKNK.trim() === "" ||
       newHockyNienKhoa.TEN_NAM_HOC.trim() === "" ||
       !newHockyNienKhoa.NGAYBATDAUNIENKHOA
-    )
+    ) {
+      toast.error("Vui lòng chọn dữ liệu");
       return;
+    }
 
     try {
       const response = await CookiesAxios.post(
@@ -74,7 +77,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
         setHockyNienKhoas(response.data.DT);
         setNewHockyNienKhoa({
           TENHKNK: "",
-          TEN_NAM_HOC: "",
+          TEN_NAM_HOC: moment().format("YYYY"),
           NGAYBATDAUNIENKHOA: null,
         });
       }

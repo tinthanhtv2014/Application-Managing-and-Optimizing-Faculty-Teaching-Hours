@@ -22,18 +22,29 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
   console.log("datahockinienkhoa", dataHockinienkhoa.TENHKNK);
   try {
     let [results_kiemtra, fields_kiemtra] = await pool.execute(
-      `select * from hockynienkhoa where TENHKNK = ?`,
-      [dataHockinienkhoa.TENHKNK]
+      `select * from hockynienkhoa where TEN_NAM_HOC = ?`,
+      [dataHockinienkhoa.TEN_NAM_HOC]
     );
 
-    if (results_kiemtra.length > 0) {
+    if (results_kiemtra.length >= 2) {
       return {
-        EM: "học kì niên khóa này đã tồn tại",
+        EM: "Học kì niên khóa này đã tồn tại (đã đủ 2 học kỳ trong năm học này)",
         EC: 0,
         DT: [],
       };
     }
+    // Kiểm tra xem học kỳ hiện tại đã tồn tại trong năm học chưa
+    let hocKyTonTai = results_kiemtra.some(
+      (item) => item.TENHKNK === dataHockinienkhoa.TENHKNK
+    );
 
+    if (hocKyTonTai) {
+      return {
+        EM: "Học kì niên khóa này đã tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
     // Chuyển đổi định dạng NGAYBATDAUNIENKHOA
     const ngayBatDauNienKhoa = moment(
       dataHockinienkhoa.NGAYBATDAUNIENKHOA
