@@ -89,7 +89,9 @@ const get_giangvien_CNTT_dachonkhung_chitietonly = async (req, res) => {
 const get_monhoc_lop_hocki = async (req, res) => {
   try {
     const MALOP = req.body.MALOP;
-    const SOHOCKI = req.body.SOHOCKI;
+    const SOHOCKI = req.body.HOCKINIENKHOA;
+    console.log("MALOP", MALOP);
+    console.log("MALOP", SOHOCKI);
     let results = await select_lophoc_monhoc(MALOP, SOHOCKI);
 
     return res.status(200).json({

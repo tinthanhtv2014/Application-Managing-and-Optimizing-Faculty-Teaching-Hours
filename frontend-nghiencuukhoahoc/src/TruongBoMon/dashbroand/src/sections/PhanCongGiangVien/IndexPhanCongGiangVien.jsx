@@ -111,7 +111,7 @@ const IndexPhanCongGiangVien = () => {
     try {
       const response_MonHoc = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
-        { MALOP: select_Lop, SOHOCKI: select_HocKiNienKhoa }
+        { MALOP: select_Lop, HOCKINIENKHOA: select_HocKiNienKhoa }
       );
 
       if (response_MonHoc.data.EC === 1) {
@@ -121,9 +121,11 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
+
   if (Loading) {
     return "Đang tải dữ liệu...";
   }
+
   return (
     <>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
@@ -142,8 +144,8 @@ const IndexPhanCongGiangVien = () => {
           >
             {data_hocKiNienKhoa && data_hocKiNienKhoa.length > 0 ? (
               data_hocKiNienKhoa.map((nienkhoa, index) => (
-                <MenuItem key={index} value={nienkhoa.TENHKNK}>
-                  {nienkhoa.TENHKNK}
+                <MenuItem key={index} value={nienkhoa}>
+                  {nienkhoa.TEN_NAM_HOC} {nienkhoa.TENHKNK}
                 </MenuItem>
               ))
             ) : (
@@ -154,25 +156,7 @@ const IndexPhanCongGiangVien = () => {
           </Select>
         </FormControl>
       </Box>
-      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
-        <FormControl fullWidth className="profile-email-input">
-          <InputLabel id="select-label-trang-thai">Học Kì Niên Khóa</InputLabel>
-          <Select
-            labelId="select-label-trang-thai"
-            id="trang-thai-select"
-            name="HOCKINIENKHOA"
-            label="Học Kì Niên Khóa"
-            value={select_HocKiNienKhoa}
-            defaultValue={select_HocKiNienKhoa}
-            // disabled={isDisableNamHoc}
-            onChange={(e) => setSelect_HocKiNienKhoa(e.target.value)}
-            variant="outlined"
-          >
-            <MenuItem value="1">Học Kì 1</MenuItem>
-            <MenuItem value="2">Học Kì 2</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
         <FormControl fullWidth className="profile-email-input">
           <InputLabel id="select-label-trang-thai">Danh Sách Lớp</InputLabel>
