@@ -14,7 +14,8 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
-
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
@@ -27,15 +28,48 @@ const IndexPhanCongGiangVien = () => {
   const [select_Lop, setSelect_Lop] = useState(null);
   const [data_MonHoc, setData_MonHoc] = useState([]);
   const [TenBoMon, setTenBoMon] = useState(null);
+  const [Loading, setLoading] = useState(true);
+
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
     useState(true);
 
   useEffect(() => {
+    const auth = Cookies.get("accessToken");
+    const decodeAuth = jwtDecode(auth);
+
+    fetchDataGV(decodeAuth.taikhoan);
     fetchListGiangVien();
   }, []);
+  useEffect(() => {
+    if (TenBoMon) {
+      fetchDataLop_byBoMon();
+    }
+  }, [TenBoMon]);
+  useEffect(() => {
+    if (select_Lop && select_HocKiNienKhoa) {
+      fetchDataMonHoc_byLop();
+    }
+  }, [select_Lop, select_HocKiNienKhoa]);
+  const fetchDataGV = async (taikhoan) => {
+    try {
+      const response = await CookiesAxios.get(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
+      );
 
+      console.log("Danh sách tài khoản:", response.data.DT);
+
+      if (response.data.EC === 1) {
+        setTenBoMon(response.data.DT.TENBOMON);
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+    }
+  };
   const fetchListGiangVien = async () => {
     try {
       const response = await CookiesAxios.get(
@@ -85,6 +119,9 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
+  if (Loading) {
+    return "Đang tải dữ liệu...";
+  }
   return (
     <>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>

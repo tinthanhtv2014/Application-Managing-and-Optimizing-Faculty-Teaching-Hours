@@ -47,7 +47,7 @@ const CRUDgiangvien_CNTT = (app) => {
     get_giangvien_CNTT_dachonkhung_chitietonly
   );
   router.post("/lop/bomon/xem", getAllLop_BoMon_controller);
-  //bảng phân công
+  //bảng phân côngA
   router.get("/xem/phancong/listgiangvien", get_listgiangvien_phancong);
   router.post("/tao/phancong/giangvien", create_onlylistgiangvien_phancong);
   return app.use("/api/v1/truongbomon/giangvien", router);
