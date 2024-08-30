@@ -1,6 +1,6 @@
 const pool = require("../../config/database");
 const {} = require("./helpers");
-
+const moment = require("moment");
 const selectAll_hockinienkhoa = async () => {
   try {
     let [results1, fields1] = await pool.execute(`select * from hockynienkhoa`);
@@ -19,6 +19,7 @@ const selectAll_hockinienkhoa = async () => {
 };
 
 const create_hockinienkhoa = async (dataHockinienkhoa) => {
+  console.log("datahockinienkhoa", dataHockinienkhoa.TENHKNK);
   try {
     let [results_kiemtra, fields_kiemtra] = await pool.execute(
       `select * from hockynienkhoa where TENHKNK = ?`,
@@ -33,25 +34,31 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
       };
     }
 
+    // Chuyển đổi định dạng NGAYBATDAUNIENKHOA
+    const ngayBatDauNienKhoa = moment(
+      dataHockinienkhoa.NGAYBATDAUNIENKHOA
+    ).format("YYYY-MM-DD");
+
     let [results_hockinienkhoa, fields_hockinienkhoa] = await pool.execute(
       `insert into hockynienkhoa (TENHKNK,TEN_NAM_HOC,NGAYBATDAUNIENKHOA) values (?,?,?)`,
       [
         dataHockinienkhoa.TENHKNK,
         dataHockinienkhoa.TEN_NAM_HOC,
-        dataHockinienkhoa.NGAYBATDAUNIENKHOA,
+        ngayBatDauNienKhoa, // Sử dụng giá trị đã chuyển đổi
       ]
     );
     let [results_namhoc, fields_namhoc] = await pool.execute(
       `insert into namhoc (TENNAMHOC) values (?)`,
       [dataHockinienkhoa.TEN_NAM_HOC]
     );
-
+    const results_data = await selectAll_hockinienkhoa();
     return {
       EM: " tạo học kì niên khóa thành công",
       EC: 1,
-      DT: results_hockinienkhoa,
+      DT: results_data.DT,
     };
   } catch (error) {
+    console.log("error", error);
     return {
       EM: "lỗi services create_hockinienkhoa",
       EC: -1,
@@ -140,10 +147,11 @@ const delete_hockinienkhoa = async (MAHKNK) => {
       `DELETE FROM hockynienkhoa WHERE MAHKNK = ?;`,
       [MAHKNK]
     );
+    const results_data = await selectAll_hockinienkhoa();
     return {
       EM: " xóa học kỳ niên khóa thành công",
       EC: 1,
-      DT: results1,
+      DT: results_data.DT,
     };
   } catch (error) {
     return {

@@ -26,6 +26,7 @@ const getAll_hockinienkhoa = async (req, res) => {
 const tao_hockinienkhoa = async (req, res) => {
   try {
     const datahockinienkhoa = req.body;
+
     let results = await create_hockinienkhoa(datahockinienkhoa);
 
     return res.status(200).json({

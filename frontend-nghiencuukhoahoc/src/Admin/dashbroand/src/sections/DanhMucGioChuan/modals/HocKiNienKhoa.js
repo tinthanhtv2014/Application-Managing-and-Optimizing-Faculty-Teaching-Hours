@@ -15,10 +15,16 @@ import {
   Paper,
   Grid,
   TextField,
+  Box,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+
 import CookiesAxios from "../../CookiesAxios";
 import moment from "moment";
 
@@ -26,7 +32,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
   const [hockyNienKhoas, setHockyNienKhoas] = useState([]);
   const [newHockyNienKhoa, setNewHockyNienKhoa] = useState({
     TENHKNK: "",
-    TEN_NAM_HOC: "",
+    TEN_NAM_HOC: moment().format("YYYY"),
     NGAYBATDAUNIENKHOA: null, // Chuyển về null để sử dụng DatePicker
   });
 
@@ -39,7 +45,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
   const fetchHockyNienKhoas = async () => {
     try {
       const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/hockynienkhoa`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xem`
       );
       setHockyNienKhoas(response.data.DT);
     } catch (error) {
@@ -57,18 +63,21 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
 
     try {
       const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/hockynienkhoa`,
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/tao`,
         {
           ...newHockyNienKhoa,
           NGAYBATDAUNIENKHOA: newHockyNienKhoa.NGAYBATDAUNIENKHOA.toISOString(),
         }
       );
-      setHockyNienKhoas(response.data.DT);
-      setNewHockyNienKhoa({
-        TENHKNK: "",
-        TEN_NAM_HOC: "",
-        NGAYBATDAUNIENKHOA: null,
-      });
+      console.log("check dataa", response.data);
+      if (response.data.EC === 1) {
+        setHockyNienKhoas(response.data.DT);
+        setNewHockyNienKhoa({
+          TENHKNK: "",
+          TEN_NAM_HOC: "",
+          NGAYBATDAUNIENKHOA: null,
+        });
+      }
     } catch (error) {
       console.error("Error adding hocky nien khoa:", error);
     }
@@ -77,7 +86,10 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
   const handleDeleteHockyNienKhoa = async (id) => {
     try {
       const response = await CookiesAxios.delete(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/danhmuc/hockynienkhoa/${id}`
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xoa`,
+        {
+          data: { MAHKNK: id },
+        }
       );
       setHockyNienKhoas(response.data.DT);
     } catch (error) {
@@ -92,55 +104,78 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
         <DialogContentText>
           Danh sách các học kỳ niên khóa hiện tại.
         </DialogContentText>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} md={6}>
-            <TextField
-              value={newHockyNienKhoa.TENHKNK}
-              onChange={(e) =>
-                setNewHockyNienKhoa({
-                  ...newHockyNienKhoa,
-                  TENHKNK: e.target.value,
-                })
-              }
-              label="Tên học kỳ niên khóa"
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              value={newHockyNienKhoa.TEN_NAM_HOC}
-              onChange={(e) =>
-                setNewHockyNienKhoa({
-                  ...newHockyNienKhoa,
-                  TEN_NAM_HOC: e.target.value,
-                })
-              }
-              label="Tên năm học"
-              fullWidth
-              margin="normal"
-            />
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker
-                label="Ngày bắt đầu niên khóa"
-                value={newHockyNienKhoa.NGAYBATDAUNIENKHOA}
-                onChange={(newValue) =>
-                  setNewHockyNienKhoa({
-                    ...newHockyNienKhoa,
-                    NGAYBATDAUNIENKHOA: newValue,
-                  })
-                }
-                renderInput={(params) => (
-                  <TextField {...params} fullWidth margin="normal" />
-                )}
-              />
-            </LocalizationProvider>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddHockyNienKhoa}
-              style={{ marginTop: "16px", marginLeft: "10px" }}
-            >
-              Thêm
-            </Button>
+            <Box sx={{ maxWidth: 330 }}>
+              <FormControl fullWidth className="profile-email-input">
+                <InputLabel id="select-label-trang-thai">Năm học</InputLabel>
+                <Select
+                  labelId="select-label-trang-thai"
+                  id="trang-thai-select"
+                  name="TENCHUCDANH"
+                  label="Chức danh"
+                  value={newHockyNienKhoa.TENHKNK}
+                  defaultValue={newHockyNienKhoa.TENHKNK}
+                  onChange={(e) =>
+                    setNewHockyNienKhoa({
+                      ...newHockyNienKhoa,
+                      TENHKNK: e.target.value,
+                    })
+                  }
+                  variant="outlined"
+                >
+                  <MenuItem value="Học Kì 1">Học Kì 1</MenuItem>
+                  <MenuItem value="Học Kì 2">Học Kì 2</MenuItem>
+                </Select>
+                <FormControl
+                  fullWidth
+                  className="profile-email-input"
+                  sx={{ mt: 2, mb: 2 }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      views={["year"]} // Chỉ hiển thị lựa chọn năm
+                      label="Tên Năm Học"
+                      value={moment(newHockyNienKhoa.TEN_NAM_HOC, "YYYY")}
+                      onChange={(newValue) =>
+                        setNewHockyNienKhoa({
+                          ...newHockyNienKhoa,
+                          TEN_NAM_HOC: newValue
+                            ? `Năm Học ${moment(newValue).format("YYYY")}`
+                            : "",
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth margin="normal" />
+                      )}
+                    />
+                  </LocalizationProvider>{" "}
+                </FormControl>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DatePicker
+                    label="Ngày bắt đầu niên khóa"
+                    value={newHockyNienKhoa.NGAYBATDAUNIENKHOA}
+                    onChange={(newValue) =>
+                      setNewHockyNienKhoa({
+                        ...newHockyNienKhoa,
+                        NGAYBATDAUNIENKHOA: newValue,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} fullWidth margin="normal" />
+                    )}
+                  />
+                </LocalizationProvider>{" "}
+              </FormControl>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddHockyNienKhoa}
+                style={{ marginTop: "16px", marginLeft: "10px" }}
+              >
+                Thêm
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <TableContainer component={Paper}>
