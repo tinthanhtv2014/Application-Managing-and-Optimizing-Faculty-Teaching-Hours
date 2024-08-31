@@ -97,14 +97,7 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
 
         if (response.data.EC === 1) {
           setDataThoiGianXacNhan(response.data.DT);
-          setTimeDangKyKhungGioChuan(
-            `${formatDateShow(
-              response.data.DT.THOIGIANBATDAU
-            )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
-          );
-          toast.success("Mở Khung Giờ Chuẩn Thành Công");
-          setStartTime(response.data.DT.THOIGIANBATDAU);
-          setEndTime(response.data.DT.THOIGIANKETTHUC);
+          toast.success("Đóng Khung Giờ Chuẩn Thành Công");
         } else {
           toast.error(response.data.EM);
         }
@@ -136,14 +129,8 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
 
         if (response.data.EC === 1) {
           setDataThoiGianXacNhan(response.data.DT);
-          setTimeDangKyKhungGioChuan(
-            `${formatDateShow(
-              response.data.DT.THOIGIANBATDAU
-            )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
-          );
+
           toast.success("Mở Khung Giờ Chuẩn Thành Công");
-          setStartTime(response.data.DT.THOIGIANBATDAU);
-          setEndTime(response.data.DT.THOIGIANKETTHUC);
         } else {
           toast.error(response.data.EM);
         }
