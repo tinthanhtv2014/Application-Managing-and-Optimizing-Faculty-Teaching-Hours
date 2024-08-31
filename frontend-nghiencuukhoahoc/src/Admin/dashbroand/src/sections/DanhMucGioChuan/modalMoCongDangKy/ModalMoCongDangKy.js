@@ -283,29 +283,59 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
           <Typography variant="h6" component="h2">
             Thời Gian Xác Nhận
           </Typography>
-          <Box>
-            <Typography variant="subtitle1">CHONKHUNG</Typography>
-            {filteredDataChonKhung.map((item, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
-                <Typography>
-                  {item.TEN_KHOA}:{" "}
-                  {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
-                  {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
-                </Typography>
-              </Box>
-            ))}
+          <Box mt={4}>
+            <Typography variant="subtitle1">NGHIENCUU</Typography>
+            {filteredDataChonKhung.map((item, index) => {
+              const now = moment();
+              const startTime = moment(item.THOIGIANBATDAU);
+              const endTime = moment(item.THOIGIANKETTHUC);
+              let color = "";
+
+              if (now.isBetween(startTime, endTime)) {
+                color = "green"; // Thời gian hiện tại nằm trong khoảng thời gian của startTime và endTime
+              } else if (now.isBefore(startTime)) {
+                color = "#4fc1ff"; // Thời gian hiện tại chưa đến thời gian đó
+              } else if (now.isAfter(endTime)) {
+                color = "red"; // Thời gian hiện tại đã vượt qua thời gian đó
+              }
+
+              return (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Typography sx={{ color: color }}>
+                    {item.TEN_KHOA}:{" "}
+                    {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
+                    {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
+                  </Typography>
+                </Box>
+              );
+            })}
           </Box>
           <Box mt={4}>
             <Typography variant="subtitle1">NGHIENCUU</Typography>
-            {filteredDataNghienCuu.map((item, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
-                <Typography>
-                  {item.TEN_KHOA}:{" "}
-                  {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
-                  {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
-                </Typography>
-              </Box>
-            ))}
+            {filteredDataNghienCuu.map((item, index) => {
+              const now = moment();
+              const startTime = moment(item.THOIGIANBATDAU);
+              const endTime = moment(item.THOIGIANKETTHUC);
+              let color = "";
+
+              if (now.isBetween(startTime, endTime)) {
+                color = "green"; // Thời gian hiện tại nằm trong khoảng thời gian của startTime và endTime
+              } else if (now.isBefore(startTime)) {
+                color = "#4fc1ff"; // Thời gian hiện tại chưa đến thời gian đó
+              } else if (now.isAfter(endTime)) {
+                color = "red"; // Thời gian hiện tại đã vượt qua thời gian đó
+              }
+
+              return (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Typography sx={{ color: color }}>
+                    {item.TEN_KHOA}:{" "}
+                    {moment(item.THOIGIANBATDAU).format("D/M/YYYY")} -{" "}
+                    {moment(item.THOIGIANKETTHUC).format("D/M/YYYY")}
+                  </Typography>
+                </Box>
+              );
+            })}
           </Box>
         </Box>
       </Box>
