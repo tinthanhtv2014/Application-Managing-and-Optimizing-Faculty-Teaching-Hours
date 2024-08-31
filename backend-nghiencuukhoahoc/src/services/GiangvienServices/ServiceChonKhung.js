@@ -180,11 +180,11 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results1] = await pool.execute(
       "SELECT giangvien.*, khunggiochuan.*, namhoc.TENNAMHOC " +
-      "FROM chon_khung " +
-      "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
-      "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
-      "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
-      "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
+        "FROM chon_khung " +
+        "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
+        "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
+        "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
+        "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
@@ -268,14 +268,12 @@ const tao_THOIGIAN_CHONKHUNG = async (
       "INSERT INTO thoigian_xacnhan (THOIGIANBATDAU, THOIGIANKETTHUC,TEN_KHOA,GHICHU) VALUES (?, ?,?,?)",
       [formattedStartTime, formattedEndTime, TENKHOA, GHICHU]
     );
-    const [results] = await pool.execute(
-      "SELECT * FROM thoigian_xacnhan WHERE THOIGIANBATDAU = ?",
-      [formattedStartTime]
-    );
+    const [results] = await pool.execute("SELECT * FROM thoigian_xacnhan");
+
     return {
       EM: "Thêm thời gian chọn khung thành công",
       EC: 1,
-      DT: results[0],
+      DT: results,
     };
   } catch (error) {
     console.log(error);
@@ -313,11 +311,11 @@ const delete_THOIGIAN_CHONKHUNG = async (TENKHOA, GHICHU) => {
       );
       // console.log("xoa thanh cong ==================");
     }
-
+    const results_data = await tim_THOIGIAN_CHONKHUNG();
     return {
       EM: "Xóa thời gian chọn khung thành công",
       EC: 1,
-      DT: null,
+      DT: results_data.DT,
     };
   } catch (error) {
     console.log("check loi ", error);

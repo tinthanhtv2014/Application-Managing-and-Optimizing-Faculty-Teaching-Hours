@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { Container, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { toast } from "react-toastify";
 import CookiesAxios from "../../CookiesAxios";
@@ -20,8 +22,9 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(true);
   const [dataListKhoa, setdataListKhoa] = useState(null);
   const [TenKhoa, setTenKhoa] = useState(null);
-  const [StartTime, setStartTime] = useState(null);
-  const [EndTime, setEndTime] = useState(null);
+  const [StartTime, setStartTime] = useState(moment());
+  const [EndTime, setEndTime] = useState(moment());
+
   const [TimeDangKyKhungGioChuan, setTimeDangKyKhungGioChuan] = useState(null);
   const [dataThoiGianXacNhan, setDataThoiGianXacNhan] = useState([]);
   useEffect(() => {
@@ -69,22 +72,17 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
     }
   };
   const formatDateShow = (dateString) => {
-    if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
-
+    if (!dateString) return "";
     const date = moment(dateString);
-    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
-
-    return date.format("HH:mm - DD/MM/YYYY"); // Định dạng ngày theo yêu cầu
+    if (!moment.isMoment(date) || !date.isValid()) return "";
+    return date.format("HH:mm - DD/MM/YYYY");
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return ""; // Trả về chuỗi rỗng nếu ngày không có giá trị
-
-    const date = moment(dateString); // Sử dụng moment để phân tích chuỗi
-    if (!date.isValid()) return ""; // Trả về chuỗi rỗng nếu định dạng không đúng
-
-    // Định dạng ngày theo yêu cầu, sử dụng múi giờ địa phương
-    return date.local().format("YYYY-MM-DDTHH:mm"); // Chuyển đổi sang định dạng ngày giờ địa phương
+    if (!dateString) return "";
+    const date = moment(dateString);
+    if (!moment.isMoment(date) || !date.isValid()) return "";
+    return date.local().format("YYYY-MM-DDTHH:mm");
   };
 
   const handleOffDangky = async () => {
@@ -98,9 +96,15 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
         console.log("response.data.DT", response.data.DT);
 
         if (response.data.EC === 1) {
-          setEndTime("");
-          setStartTime("");
-          toast.success("Đóng Khung Giờ Chuẩn Thành Công");
+          setDataThoiGianXacNhan(response.data.DT);
+          setTimeDangKyKhungGioChuan(
+            `${formatDateShow(
+              response.data.DT.THOIGIANBATDAU
+            )} đến ${formatDateShow(response.data.DT.THOIGIANKETTHUC)}`
+          );
+          toast.success("Mở Khung Giờ Chuẩn Thành Công");
+          setStartTime(response.data.DT.THOIGIANBATDAU);
+          setEndTime(response.data.DT.THOIGIANKETTHUC);
         } else {
           toast.error(response.data.EM);
         }
@@ -128,9 +132,10 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
           }
         );
 
-        console.log("response.data.DT", response.data.DT);
+        console.log("response.data.DT", response.data);
 
         if (response.data.EC === 1) {
+          setDataThoiGianXacNhan(response.data.DT);
           setTimeDangKyKhungGioChuan(
             `${formatDateShow(
               response.data.DT.THOIGIANBATDAU
@@ -151,24 +156,23 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
     }
   };
 
-  const handleStartTimeChange = (e) => {
-    const value = e.target.value;
-    setStartTime(value);
+  const handleStartTimeChange = (newValue) => {
+    setStartTime(newValue);
   };
 
-  const handleEndTimeChange = (e) => {
-    const value = e.target.value;
-    setEndTime(value);
+  const handleEndTimeChange = (newValue) => {
+    setEndTime(newValue);
   };
 
   // console.log("CHECK THOIGIANBATDAU", StartTime);
   // console.log("CHECK THOIGIANKETTHUC", EndTime);
-  const filteredDataChonKhung = dataThoiGianXacNhan.filter(
-    (item) => item.GHICHU === "CHONKHUNG"
-  );
-  const filteredDataNghienCuu = dataThoiGianXacNhan.filter(
-    (item) => item.GHICHU === "NGHIENCUU"
-  );
+  const filteredDataChonKhung = Array.isArray(dataThoiGianXacNhan)
+    ? dataThoiGianXacNhan.filter((item) => item.GHICHU === "CHONKHUNG")
+    : [];
+  const filteredDataNghienCuu = Array.isArray(dataThoiGianXacNhan)
+    ? dataThoiGianXacNhan.filter((item) => item.GHICHU === "NGHIENCUU")
+    : [];
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -196,55 +200,43 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
             <Typography variant="h6" component="h2">
               Mở Cổng Đăng Ký Nghiên Cứu Khoa Học
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: 2,
-              }}
-            >
-              <Typography variant="subtitle1">Thời Gian Bắt Đầu</Typography>
-              <input
-                type="datetime-local"
-                value={formatDate(StartTime) || ""}
-                onChange={handleStartTimeChange}
-                className="input-timechucdanh"
-                style={{
-                  padding: "10px",
-                  borderRadius: "4px",
-                  border: "1px solid #bdb3b3",
-                  fontSize: "16px",
-                  color: "#333",
-                  width: "100%",
-                  boxSizing: "border-box",
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: 2,
                 }}
-              />
-            </Box>
-            {error && <Typography color="error">{error}</Typography>}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: 2,
-              }}
-            >
-              <Typography variant="subtitle1">Thời Gian Kết Thúc</Typography>
-              <input
-                type="datetime-local"
-                value={formatDate(EndTime) || ""}
-                onChange={handleEndTimeChange}
-                className="input-timechucdanh mt-2"
-                style={{
-                  padding: "10px",
-                  borderRadius: "4px",
-                  border: "1px solid #bdb3b3",
-                  fontSize: "16px",
-                  color: "#333",
-                  width: "100%",
-                  boxSizing: "border-box",
+              >
+                <Typography variant="subtitle1">Thời Gian Bắt Đầu</Typography>
+                <DateTimePicker
+                  value={moment(StartTime, "YYYY-MM-DDTHH:mm:ss.SSSZ")}
+                  onChange={handleStartTimeChange}
+                  renderInput={(params) => (
+                    <TextField {...params} fullWidth margin="normal" />
+                  )}
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: 2,
                 }}
-              />
-            </Box>{" "}
+              >
+                <Typography variant="subtitle1">Thời Gian Kết Thúc</Typography>
+                <DateTimePicker
+                  value={moment(StartTime, "YYYY-MM-DDTHH:mm:ss.SSSZ")}
+                  onChange={handleEndTimeChange}
+                  renderInput={(params) => (
+                    <TextField {...params} fullWidth margin="normal" />
+                  )}
+                />
+              </Box>
+
+              {error && <Typography color="error">{error}</Typography>}
+            </LocalizationProvider>
             <Box
               sx={{
                 maxWidth: 300,
