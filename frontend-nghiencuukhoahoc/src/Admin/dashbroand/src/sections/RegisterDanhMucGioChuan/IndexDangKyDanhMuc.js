@@ -45,7 +45,10 @@ const IndexDangKyDanhmuc = () => {
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
-
+      console.log(
+        "response_XemTimeKhungGioChuan",
+        response_XemTimeKhungGioChuan.data
+      );
       if (
         response_XemTimeKhungGioChuan.data.EC === 1 &&
         response_XemTimeKhungGioChuan.data.DT.length > 0
@@ -57,19 +60,24 @@ const IndexDangKyDanhmuc = () => {
             item.GHICHU === "NGHIENCUU"
         );
         setMaGV(response.data.DT.MAGV);
-        // console.log("check true", matchedKhoa);
+        console.log("check true", matchedKhoa);
         if (matchedKhoa) {
-          const formattedStartDate = formatDate(matchedKhoa.THOIGIANBATDAU);
-          const formattedEndDate = formatDate(matchedKhoa.THOIGIANKETTHUC);
+          const formattedStartDate = formatDate(matchedKhoa.THOIGIANBATDAU); // "DD-MM-YYYY"
+          const formattedEndDate = formatDate(matchedKhoa.THOIGIANKETTHUC); // "DD-MM-YYYY"
 
-          console.log("GHICHU", matchedKhoa.GHICHU);
-          const currentDate = formatDate(moment().format());
+          // console.log("GHICHU", matchedKhoa.GHICHU);
+          const currentDate = moment().format("DD-MM-YYYY"); // "DD-MM-YYYY"
+          // console.log("check currentDate", currentDate);
+          // console.log("check formattedStartDate", formattedStartDate);
+          // console.log("check formattedEndDate", formattedEndDate);
+
           setStartTimeGate(formattedStartDate);
           setEndTimeGate(formattedEndDate);
+
           if (
-            moment(currentDate, "YYYY-MM-DD").isBetween(
-              moment(formattedStartDate, "YYYY-MM-DD"),
-              moment(formattedEndDate, "YYYY-MM-DD"),
+            moment(currentDate, "DD-MM-YYYY").isBetween(
+              moment(formattedStartDate, "DD-MM-YYYY"),
+              moment(formattedEndDate, "DD-MM-YYYY"),
               null,
               "[)"
             )
@@ -83,16 +91,19 @@ const IndexDangKyDanhmuc = () => {
             setOpenChucNangtheokhungthoigian({
               XemLSDangKyNghienCuu: "Xem Lịch Sử Đăng Ký Danh Mục",
             });
+            // console.log("1");
           }
         } else {
           setOpenChucNangtheokhungthoigian({
             XemLSDangKyNghienCuu: "Xem Lịch Sử Đăng Ký Danh Mục",
           });
+          // console.log("2");
         }
       } else {
         setOpenChucNangtheokhungthoigian({
           XemLSDangKyNghienCuu: "Xem Lịch Sử Đăng Ký Danh Mục",
         });
+        // console.log("3");
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu:", error);

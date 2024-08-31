@@ -63,6 +63,9 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
       toast.error("Vui lòng chọn dữ liệu");
       return;
     }
+    if (!newHockyNienKhoa.TEN_NAM_HOC.includes("Năm Học")) {
+      newHockyNienKhoa.TEN_NAM_HOC = `Năm Học ${newHockyNienKhoa.TEN_NAM_HOC}`;
+    }
 
     try {
       const response = await CookiesAxios.post(
