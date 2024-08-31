@@ -58,10 +58,19 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
         ngayBatDauNienKhoa, // Sử dụng giá trị đã chuyển đổi
       ]
     );
-    let [results_namhoc, fields_namhoc] = await pool.execute(
-      `insert into namhoc (TENNAMHOC) values (?)`,
+
+    let [results_namhoc_select, fields_namhoc_select] = await pool.execute(
+      `select * from namhoc where TENNAMHOC = ?`,
       [dataHockinienkhoa.TEN_NAM_HOC]
     );
+
+    if (results_namhoc_select.length === 0) {
+      let [results_namhoc, fields_namhoc] = await pool.execute(
+        `insert into namhoc (TENNAMHOC) values (?)`,
+        [dataHockinienkhoa.TEN_NAM_HOC]
+      );
+    }
+
     const results_data = await selectAll_hockinienkhoa();
     return {
       EM: " tạo học kì niên khóa thành công",
