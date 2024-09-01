@@ -28,7 +28,7 @@ const creatNEWLopcontroller = async (req, res) => {
   try {
     const datalop = req.body;
     const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
-    console.log(TENCHUONGTRINH);
+
     let results = await CreateLop(TENCHUONGTRINH, datalop);
 
     return res.status(200).json({

@@ -262,7 +262,6 @@ const update_ChucVu_ChucDanh_GiangVien = async (
     //==================================================================================================
 
     let results0 = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
-    // console.log("check", results0);
     return {
       EM: `Trạng thái sửa: ${kiemTraUpdateTAIKHOANG}, ${kiemTraUpdateGIANGVIEN}, ${thongBaoUpdateCHUCVU_GIU_CHUC_VU} > ${kiemTraUpdateChucVu_cua_GiangVien}, ${thongBaoChucDanh} > ${kiemTraUpdateChucDanh}, ${thongBaoBoMon}`,
       EC: 1,
@@ -278,7 +277,7 @@ const update_ChucVu_ChucDanh_GiangVien = async (
   }
 };
 
-const xem_Khung_Gio_Chuan_Theo_Chuc_Danh = async (MAGV) => {};
+const xem_Khung_Gio_Chuan_Theo_Chuc_Danh = async (MAGV) => { };
 
 module.exports = {
   update_ChucVu_ChucDanh_GiangVien,

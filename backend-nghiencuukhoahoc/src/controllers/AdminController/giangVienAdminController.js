@@ -168,7 +168,7 @@ const update_ChucVu_ChucDanh_GiangVien_Controller = async (req, res) => {
   try {
     const a = req.params.TENDANGNHAP;
     const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
-    console.log(a);
+
     // Khởi tạo dataGiangVien với các trường cần thiết, mặc định là ''
     let dataGiangVien = {
       TENDANGNHAP: "",

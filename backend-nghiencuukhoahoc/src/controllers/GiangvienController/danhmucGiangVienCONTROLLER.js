@@ -81,7 +81,6 @@ const dangky_danhmuc_Controller = async (req, res) => {
 
 const luu_data_dangky_danhmuc_Controller = async (req, res) => {
   try {
-    console.log("req.body: ", req.body);
     const datadangky = req.body;
     let results = await dangky_thongtin_giangvien(datadangky);
     return res.status(200).json({

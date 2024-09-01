@@ -29,7 +29,7 @@ const get_giangvien_CNTT_chuachonkhung = async (req, res) => {
 const getAllLop_BoMon_controller = async (req, res) => {
   try {
     const TENBOMON = req.body.TENBOMON;
-    console.log("TENBOMON", TENBOMON);
+
     let results = await selectLop_BoMon(TENBOMON);
     return res.status(200).json({
       EM: results.EM,

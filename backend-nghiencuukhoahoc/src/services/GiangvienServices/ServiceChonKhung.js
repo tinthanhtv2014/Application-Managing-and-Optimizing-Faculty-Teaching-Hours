@@ -180,15 +180,14 @@ const xem_CHONKHUNG_cho_GIANGVIEN = async (MAGV, TENNAMHOC) => {
     const MANAMHOC = results_MANAMHOC[0].MANAMHOC;
     const [results1] = await pool.execute(
       "SELECT giangvien.*, khunggiochuan.*, namhoc.TENNAMHOC " +
-        "FROM chon_khung " +
-        "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
-        "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
-        "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
-        "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
+      "FROM chon_khung " +
+      "JOIN giangvien ON giangvien.MAGV = chon_khung.MAGV " +
+      "JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG " +
+      "JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC " +
+      "WHERE giangvien.MAGV = ? AND namhoc.MANAMHOC = ?",
       [MAGV, MANAMHOC]
     );
 
-    console.log(results1);
     return {
       EM: "Xem thông tin khung hiện tại thành công",
       EC: 1,

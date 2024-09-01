@@ -122,7 +122,6 @@ const deleteQuyDinh = async (id) => {
     let [resultsData, fieldsData] = await pool.execute(
       `SELECT * FROM quy_dinh`
     );
-    // console.log("check resultsData", resultsData);
     return {
       EM: "Xóa quy định thành công",
       EC: 1,
