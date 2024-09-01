@@ -1,5 +1,5 @@
 const pool = require("../../config/database");
-const {} = require("./helpers");
+const { } = require("./helpers");
 const moment = require("moment");
 const selectAll_hockinienkhoa = async () => {
   try {
@@ -19,7 +19,7 @@ const selectAll_hockinienkhoa = async () => {
 };
 
 const create_hockinienkhoa = async (dataHockinienkhoa) => {
-  console.log("datahockinienkhoa", dataHockinienkhoa.TENHKNK);
+  // console.log("datahockinienkhoa", dataHockinienkhoa.TENHKNK);
   try {
     let [results_kiemtra, fields_kiemtra] = await pool.execute(
       `select * from hockynienkhoa where TEN_NAM_HOC = ?`,

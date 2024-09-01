@@ -53,7 +53,7 @@ const timkiem_email_taikhoanController = async (req, res) => {
 const timkiem_email_taikhoan_ngoaitruongController = async (req, res) => {
   try {
     let TENGV = req.body.TENGV;
-    console.log("TENGV: ", TENGV);
+
     let results = await timkiem_email_taikhoan_ngoaitruong(TENGV);
 
     return res.status(200).json({
