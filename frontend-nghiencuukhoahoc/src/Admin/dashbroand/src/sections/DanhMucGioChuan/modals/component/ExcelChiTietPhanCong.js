@@ -29,7 +29,7 @@ const ComponentExcelChiTietPhanCong = () => {
     if (data.length > 0) {
       try {
         const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/tao/excel`,
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/tao/chitietphancong/giangvien`,
           data,
           {
             headers: {

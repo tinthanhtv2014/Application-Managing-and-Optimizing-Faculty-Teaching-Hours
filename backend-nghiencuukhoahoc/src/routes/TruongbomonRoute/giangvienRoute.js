@@ -20,6 +20,10 @@ const {
   create_onlylistgiangvien_phancong,
 } = require("../../controllers/TruongbomonController/phancongCONTROLLER");
 
+const {
+  createChitietphancongExcelController,
+} = require("../../controllers/TruongbomonController/chitietphancongCONTROLLER");
+
 const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDgiangvien_CNTT = (app) => {
   //route cho khoa
@@ -50,6 +54,12 @@ const CRUDgiangvien_CNTT = (app) => {
   //bảng phân côngA
   router.get("/xem/phancong/listgiangvien", get_listgiangvien_phancong);
   router.post("/tao/phancong/giangvien", create_onlylistgiangvien_phancong);
+
+  //chi tiết phân công route
+  router.post(
+    "/tao/chitietphancong/giangvien",
+    createChitietphancongExcelController
+  );
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
 
