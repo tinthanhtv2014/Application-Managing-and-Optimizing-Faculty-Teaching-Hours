@@ -147,7 +147,11 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
                         setNewHockyNienKhoa({
                           ...newHockyNienKhoa,
                           TEN_NAM_HOC: newValue
-                            ? `Năm Học ${moment(newValue).format("YYYY")}`
+                            ? `Năm Học ${moment(newValue).format(
+                                "YYYY"
+                              )} - ${moment(newValue)
+                                .add(1, "year")
+                                .format("YYYY")}`
                             : "",
                         })
                       }
@@ -155,7 +159,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
                         <TextField {...params} fullWidth margin="normal" />
                       )}
                     />
-                  </LocalizationProvider>{" "}
+                  </LocalizationProvider>
                 </FormControl>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DatePicker
