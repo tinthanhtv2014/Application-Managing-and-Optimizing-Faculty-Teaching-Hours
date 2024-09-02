@@ -50,7 +50,6 @@ const createLoaiDanhMuc = async (TEN_LOAI_DANH_MUC) => {
       [TEN_LOAI_DANH_MUC]
     );
     const results_Data = await selectLoaiDanhMuc();
-    // console.log("check results_Data", results_Data.DT);
     return {
       EM: "Thêm loại danh mục mới thành công",
       EC: 1,
@@ -86,7 +85,6 @@ const updateLoaiDanhMuc = async (id, TRANG_THAI_DANH_MUC) => {
 };
 
 const deleteLoaiDanhMuc = async (id) => {
-  // console.log("check id =>", id);
   try {
     let [results, fields] = await pool.execute(
       `DELETE FROM loai_danh_muc WHERE MA_LOAI_DANH_MUC = ?`,

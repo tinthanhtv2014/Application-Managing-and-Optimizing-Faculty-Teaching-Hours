@@ -20,7 +20,6 @@ const timMonHoc_TENMONHOC = async (TENMONHOC) => {
 
 const selectMonHoc = async () => {
   try {
-    console.log("OKE");
     let [results1, fields1] = await pool.execute(`select * from monhoc`);
     return {
       EM: " xem thông tin môn học thành công",
@@ -75,7 +74,6 @@ const createMonHoc = async (dataMonHoc) => {
 const updateMonHoc = async (MAMONHOC, dataMonHoc) => {
   //dataMonHoc gồm MAMONHOC, TENMONHOC, SOTINCHILYTHUYET, SOTINCHITHUCHANH
   try {
-    //console.log(">>>>>>>>>>>>>>>> ", MAMONHOC)
     let kemtraMAMONHOC = await timMonHoc_MAMONHOC(MAMONHOC);
 
     if (!kemtraMAMONHOC.length > 0) {
@@ -113,10 +111,8 @@ const updateMonHoc = async (MAMONHOC, dataMonHoc) => {
 const deleteMonHoc = async (TENMONHOC) => {
   //dataMonHoc gồm MAMONHOC, TENMONHOC, SOTINCHILYTHUYET, SOTINCHITHUCHANH
   try {
-    //console.log(">>>>>>>>>>>>>>>>", MAMONHOC)
     let kemtraMAMONHOC = await timMonHoc_TENMONHOC(TENMONHOC);
 
-    console.log("cehck ktra ten mon hoc: ", kemtraMAMONHOC[0].MAMONHOC);
     if (kemtraMAMONHOC.length < 0) {
       return {
         EM: "Môn học này không tồn tại",
