@@ -152,7 +152,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
                               )} - ${moment(newValue)
                                 .add(1, "year")
                                 .format("YYYY")}`
-                            : "",
+                            : ``,
                         })
                       }
                       renderInput={(params) => (

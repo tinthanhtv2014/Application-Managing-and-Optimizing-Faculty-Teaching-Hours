@@ -144,7 +144,7 @@ const DangKyGioChuan = () => {
   };
   const handleMoveProfileGV = () => {
     if (!loading) {
-      navigate("/admin/account-giangvien");
+      navigate("/admin/tai-khoan-giangvien/thong-tin");
     }
   };
 

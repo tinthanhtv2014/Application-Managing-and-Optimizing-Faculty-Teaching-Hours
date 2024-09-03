@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import CookiesAxios from "../../CookiesAxios";
 import { toast } from "react-toastify";
+import { red } from "@mui/material/colors";
 
 const ChangePasswordForm = ({ data_user }) => {
   const [matKhauCu, setMatKhauCu] = useState(null);
@@ -51,8 +52,8 @@ const ChangePasswordForm = ({ data_user }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 500, margin: "auto", mt: 4, px: 2 }}>
-      <Card>
+    <Box sx={{ maxWidth: 500, ml: 10, mt: 4, px: 2 }}>
+      <Card sx={{ backgroundColor: "#f9fafb" }}>
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
             Thay đổi mật khẩu
