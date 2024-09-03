@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th9 03, 2024 lúc 06:11 AM
+-- Thời gian đã tạo: Th9 03, 2024 lúc 06:16 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -495,6 +495,15 @@ CREATE TABLE `hinhthucdanhgia` (
   `MADANHGIAKETTHUC` int(11) NOT NULL,
   `TENDANHGIA` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `hinhthucdanhgia`
+--
+
+INSERT INTO `hinhthucdanhgia` (`MADANHGIAKETTHUC`, `TENDANHGIA`) VALUES
+(1, 'Trắc nghiệm'),
+(2, 'Tự luận'),
+(3, 'Thực hành');
 
 -- --------------------------------------------------------
 
@@ -1065,6 +1074,12 @@ ALTER TABLE `chuongtrinhdaotao`
 --
 ALTER TABLE `danhmucquydoispkhcn`
   MODIFY `MA_DANH_MUC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+
+--
+-- AUTO_INCREMENT cho bảng `hinhthucdanhgia`
+--
+ALTER TABLE `hinhthucdanhgia`
+  MODIFY `MADANHGIAKETTHUC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `hockynienkhoa`
