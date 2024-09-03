@@ -344,6 +344,7 @@ const createTaiKhoanExcel = async (dataTaiKhoanExcelArray) => {
 
 const LoginTaikhoan = async (tenDangnhap, matKhau) => {
   try {
+    // console.log("tenDangnhap: ", tenDangnhap)
     const checkmail = isValidEmail(tenDangnhap);
     if (!checkmail) {
       return {
@@ -357,6 +358,7 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
       "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
     );
+    // console.log("results: ", results)
     if (results[0].TRANGTHAITAIKHOAN === "Ngưng hoạt động") {
       return {
         EM: "Đăng nhập thất bại, tài khoản của bạn đã bị ngưng hoạt động",
