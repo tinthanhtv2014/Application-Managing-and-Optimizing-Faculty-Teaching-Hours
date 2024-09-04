@@ -9,7 +9,9 @@ const bodyParser = require("body-parser");
 const connection = require("./config/database");
 const configViewEngine = require("./config/ViewEngine");
 const moment = require("moment");
-
+const { spawn } = require("child_process");
+const { exec } = require("child_process");
+const axios = require("axios");
 // Router =========================================================================
 const CRUDTaiKhoan = require("./routes/AdminRoute/adminRoute");
 const CRUDKhoa = require("./routes/AdminRoute/KhoaRoute");
@@ -61,6 +63,16 @@ CRUDHockinienkhoa(app); // route CRUD
 DangKyDanhMucRoute(app); // route chức năng cho quy đổi giờ chuẩn
 CRUDHinhthucdanhgia(app); //route hình thức đánh giá
 //=====================================================================================================
+
+app.post("/test-hello", async (req, res) => {
+  try {
+    const response = await axios.post("http://localhost:5000/predict");
+    res.send(response.data);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error connecting to Python server");
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
