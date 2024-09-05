@@ -16,7 +16,7 @@ const {
   CoTyLeExcelController,
 } = require("../../controllers/TruongkhoaController/testControler");
 
-const { GOI_Y_SERVER } = require("../../utils/controllerTEST");
+const { GOI_Y_SERVER, GOI_Y_SERVER_rf } = require("../../utils/controllerTEST");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction");
 const TruongKhoaRoute = (app) => {
@@ -29,7 +29,7 @@ const TruongKhoaRoute = (app) => {
   router.post("/test/tao/excel", CoTyLeExcelController); // Chạy CSDL bằng excel
 
   router.get("/test/dudoan", GOI_Y_SERVER);
-
+  router.get("/test/dudoan/rf", GOI_Y_SERVER_rf);
   return app.use("/api/v1/truongkhoa", router);
 };
 
