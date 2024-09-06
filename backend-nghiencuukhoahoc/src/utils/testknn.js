@@ -14,6 +14,7 @@ const knn_server = async () => {
       item.MAMONHOC,
       item.MAPHANCONG,
     ]);
+
     const labels = results_data.map((item) => item.MACHITIETPHANCONG);
 
     const newData = {

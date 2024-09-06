@@ -17,18 +17,13 @@ const LopMonHocTable = ({ data }) => {
         <TableHead>
           <TableRow>
             <TableCell>Mã Lớp</TableCell>
-            <TableCell align="center">Tên Lớp</TableCell>
-            <TableCell align="center">Năm Tuyển Sinh</TableCell>
+
             <TableCell align="center">Sĩ Số</TableCell>
-            <TableCell align="center">Mã Môn Học</TableCell>
+
             <TableCell align="center">Tên Môn Học</TableCell>
             <TableCell align="center">Số Tín Chỉ Lý Thuyết</TableCell>
             <TableCell align="center">Số Tín Chỉ Thực Hành</TableCell>
-            <TableCell align="center">Tên Chương Trình</TableCell>
-            <TableCell align="center">Số Quyết Định</TableCell>
-            <TableCell align="center">Trình Độ</TableCell>
-            <TableCell align="center">Tổng Số Tín Chỉ</TableCell>
-            <TableCell align="center">Mô Tả Học Kỳ</TableCell>
+
             <TableCell align="center">Số Thứ Tự Học Kỳ</TableCell>
           </TableRow>
         </TableHead>
@@ -38,18 +33,13 @@ const LopMonHocTable = ({ data }) => {
               <TableCell component="th" scope="row">
                 {row.MALOP}
               </TableCell>
-              <TableCell align="center">{row.TENLOP}</TableCell>
-              <TableCell align="center">{row.NAMTUYENSINH}</TableCell>
+
               <TableCell align="center">{row.SISO}</TableCell>
-              <TableCell align="center">{row.MAMONHOC}</TableCell>
+
               <TableCell align="center">{row.TENMONHOC}</TableCell>
               <TableCell align="center">{row.SOTINCHILYTHUYET}</TableCell>
               <TableCell align="center">{row.SOTINCHITHUCHANH}</TableCell>
-              <TableCell align="center">{row.TENCHUONGTRINH}</TableCell>
-              <TableCell align="center">{row.SO_QUYET_DINH}</TableCell>
-              <TableCell align="center">{row.TRINH_DO}</TableCell>
-              <TableCell align="center">{row.TONG_SO_TIN_CHI}</TableCell>
-              <TableCell align="center">{row.MO_TA_HOC_KY}</TableCell>
+
               <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
             </TableRow>
           ))}
