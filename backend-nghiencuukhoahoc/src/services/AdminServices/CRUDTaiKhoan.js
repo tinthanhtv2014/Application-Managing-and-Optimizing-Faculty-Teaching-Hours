@@ -358,18 +358,19 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
       "SELECT * FROM `taikhoan` WHERE `TENDANGNHAP` = ?",
       [tenDangnhap]
     );
-    // console.log("results: ", results)
-    if (results[0].TRANGTHAITAIKHOAN === "Ngưng hoạt động") {
-      return {
-        EM: "Đăng nhập thất bại, tài khoản của bạn đã bị ngưng hoạt động",
-        EC: 0,
-        DT: {
-          access_token: null,
-          data: [],
-        },
-      };
-    }
+
     if (results.length > 0) {
+      if (results[0].TRANGTHAITAIKHOAN === "Ngưng hoạt động") {
+        // console.log("results: ", results)
+        return {
+          EM: "Đăng nhập thất bại, tài khoản của bạn đã bị ngưng hoạt động",
+          EC: 0,
+          DT: {
+            access_token: null,
+            data: [],
+          },
+        };
+      }
       // const isCorrectPass = await bcrypt.compare(matKhau, results[0].MATKHAU);
 
       let payload = {
@@ -389,7 +390,7 @@ const LoginTaikhoan = async (tenDangnhap, matKhau) => {
       };
     } else {
       return {
-        EM: "đăng nhập thất bại, tài khoản không đúng",
+        EM: "Đăng nhập thất bại, tài khoản không đúng",
         EC: 0,
         DT: {
           access_token: null,
