@@ -12,11 +12,14 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Grid,
+  Switch,
 } from "@mui/material";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import LopMonHocTable from "./component/LopMonHocTable";
+
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
@@ -36,6 +39,7 @@ const IndexPhanCongGiangVien = () => {
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
     useState(true);
 
+  const [isOpenSwap, setIsOpenSwap] = useState(true);
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
@@ -121,93 +125,125 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
-
+  const handleChange = (event) => {
+    setIsOpenSwap(event.target.checked);
+  };
   if (Loading) {
     return "Đang tải dữ liệu...";
   }
 
   return (
     <>
-      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
-        <FormControl fullWidth className="profile-email-input">
-          <InputLabel id="select-label-trang-thai">Học Kì Niên Khóa</InputLabel>
-          <Select
-            labelId="select-label-trang-thai"
-            id="trang-thai-select"
-            name="HOCKINIENKHOA"
-            label="Học Kì Niên Khóa"
-            value={select_HocKiNienKhoa}
-            defaultValue={select_HocKiNienKhoa}
-            // disabled={isDisableNamHoc}
-            onChange={(e) => setSelect_HocKiNienKhoa(e.target.value)}
-            variant="outlined"
-          >
-            {data_hocKiNienKhoa && data_hocKiNienKhoa.length > 0 ? (
-              data_hocKiNienKhoa.map((nienkhoa, index) => (
-                <MenuItem key={index} value={nienkhoa}>
-                  {nienkhoa.TEN_NAM_HOC} {nienkhoa.TENHKNK}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="" disabled>
-                Không có Học Kì Niên Khóa
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
-      </Box>
+      <Grid container spacing={2}>
+        {/* Học Kì Niên Khóa */}
+        <Grid item xs={12} md={6}>
+          <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+            <FormControl fullWidth className="profile-email-input">
+              <InputLabel id="select-label-hoc-ki-nien-khoa">
+                Học Kì Niên Khóa
+              </InputLabel>
+              <Select
+                labelId="select-label-hoc-ki-nien-khoa"
+                id="hoc-ki-nien-khoa-select"
+                name="HOCKINIENKHOA"
+                label="Học Kì Niên Khóa"
+                value={select_HocKiNienKhoa}
+                defaultValue={select_HocKiNienKhoa}
+                onChange={(e) => setSelect_HocKiNienKhoa(e.target.value)}
+                variant="outlined"
+              >
+                {data_hocKiNienKhoa && data_hocKiNienKhoa.length > 0 ? (
+                  data_hocKiNienKhoa.map((nienkhoa, index) => (
+                    <MenuItem key={index} value={nienkhoa}>
+                      {nienkhoa.TEN_NAM_HOC} {nienkhoa.TENHKNK}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Không có Học Kì Niên Khóa
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
 
-      <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
-        <FormControl fullWidth className="profile-email-input">
-          <InputLabel id="select-label-trang-thai">Danh Sách Lớp</InputLabel>
-          <Select
-            labelId="select-label-trang-thai"
-            id="trang-thai-select"
-            name="HOCKINIENKHOA"
-            label="Học Kì Niên Khóa"
-            value={select_Lop}
-            defaultValue={select_Lop}
-            // disabled={isDisableNamHoc}
-            onChange={(e) => setSelect_Lop(e.target.value)}
-            variant="outlined"
-          >
-            {data_Lop && data_Lop.length > 0 ? (
-              data_Lop.map((lop, index) => (
-                <MenuItem key={index} value={lop.MALOP}>
-                  {lop.TENLOP}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="" disabled>
-                Không có dữ liệu lớp...
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
-      </Box>
-      <LopMonHocTable data={data_MonHoc} />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Box sx={{ width: "100%", maxWidth: "1200px" }}>
-          {/* {isOpenXemGiangVienChonKhung ? (
-            <GVTableDaChonKhung
-              data={data_ListGVDaChonKhung}
-              selectNamHoc={selectNamHoc}
-            />
-          ) : (
-            <GVTableDaChonKhung
-              data={data_ListGVChuaChonKhung}
-              selectNamHoc={selectNamHoc}
-            />
-          )} */}
-        </Box>
-      </Box>
+        {/* Danh Sách Lớp */}
+        <Grid item xs={12} md={6}>
+          <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+            <FormControl fullWidth className="profile-email-input">
+              <InputLabel id="select-label-lop">Danh Sách Lớp</InputLabel>
+              <Select
+                labelId="select-label-lop"
+                id="lop-select"
+                name="DANHSACHLOP"
+                label="Danh Sách Lớp"
+                value={select_Lop}
+                defaultValue={select_Lop}
+                onChange={(e) => setSelect_Lop(e.target.value)}
+                variant="outlined"
+              >
+                {data_Lop && data_Lop.length > 0 ? (
+                  data_Lop.map((lop, index) => (
+                    <MenuItem key={index} value={lop.MALOP}>
+                      {lop.TENLOP}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Không có dữ liệu lớp...
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        {" "}
+        <Grid item xs={12} md={8}>
+          {" "}
+          <Box sx={{ mt: 3 }}>
+            <LopMonHocTable data={data_MonHoc} />
+          </Box>
+        </Grid>
+        {isOpenSwap ? (
+          <>
+            {" "}
+            <Grid item xs={12} md={3}>
+              {" "}
+              <Box sx={{ mt: 3 }}>
+                <GVTableDaChonKhung
+                  data={data_ListGVDaChonKhung}
+                  selectNamHoc={selectNamHoc}
+                />
+              </Box>
+            </Grid>{" "}
+          </>
+        ) : (
+          <>
+            {" "}
+            <Grid item xs={12} md={3}>
+              {" "}
+              <Box sx={{ mt: 3 }}>
+                <GVTableDaChonKhung
+                  data={data_ListGVDaChonKhung}
+                  selectNamHoc={selectNamHoc}
+                />
+                1
+              </Box>
+            </Grid>{" "}
+          </>
+        )}
+        <Grid item xs={12} md={1}>
+          {" "}
+          <Switch
+            checked={isOpenSwap} // Kiểm soát Switch dựa vào isOpenSwap
+            onChange={handleChange} // Gọi hàm khi Switch thay đổi
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Grid>{" "}
+      </Grid>
     </>
   );
 };
