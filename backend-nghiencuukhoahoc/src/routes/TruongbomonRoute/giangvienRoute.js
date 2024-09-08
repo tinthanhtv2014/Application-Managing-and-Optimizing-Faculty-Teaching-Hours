@@ -22,6 +22,7 @@ const {
 
 const {
   createChitietphancongExcelController,
+  Dangky_ChitietphancongExcelController,
 } = require("../../controllers/TruongbomonController/chitietphancongCONTROLLER");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction");
@@ -59,6 +60,11 @@ const CRUDgiangvien_CNTT = (app) => {
   router.post(
     "/tao/chitietphancong/giangvien",
     createChitietphancongExcelController
+  );
+
+  router.post(
+    "/dangky/chitietphancong/giangvien",
+    Dangky_ChitietphancongExcelController
   );
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
