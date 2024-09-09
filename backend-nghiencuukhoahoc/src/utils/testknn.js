@@ -79,7 +79,7 @@ const encodeCategoricalData = (data) => {
     return encoded;
   });
 };
-const randomForest_server = async () => {
+const randomForest_server = async (MAMONHOC, MAHKNK) => {
   //   try {
   let [results_data] = await pool.execute(
     `SELECT chitietphancong.*, bangphancong.MAHKNK, bangphancong.MAGV 
@@ -117,12 +117,11 @@ const randomForest_server = async () => {
   console.log("Labels:", labels); // Kiểm tra labels
 
   // Dữ liệu mới cần dự đoán
-  const newData = [
-    [44, 250],
-    [69, 254],
-    [63, 253], // Đảm bảo rằng dữ liệu mới cần dự đoán là mảng 2 chiều
-  ];
-  console.log("New Data:", newData); //
+  let [results_data_tenmonhoc] = await pool.execute(
+    `SELECT MAMONHOC from chitietphancong,bangphancong where MAMONHOC = ? and bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG and bangphancong.MAHKNK = ?`
+  );
+
+  console.log("New results_data_tenmonhoc dấda:", results_data_tenmonhoc); //
   // Kiểm tra định dạng của newData
   if (newData.some((item) => !Array.isArray(item) || item.length !== 2)) {
     throw new Error("Dữ liệu mới cần dự đoán không đúng định dạng.");

@@ -21,7 +21,9 @@ const GOI_Y_SERVER = async (req, res) => {
 
 const GOI_Y_SERVER_rf = async (req, res) => {
   try {
-    let results = await randomForest_server();
+    const MAMONHOC = req.body.MAMONHOC;
+    const MAHKNK = req.body.MAHKNK;
+    let results = await randomForest_server(MAMONHOC, MAHKNK);
 
     return res.status(200).json({
       EM: results.EM,
