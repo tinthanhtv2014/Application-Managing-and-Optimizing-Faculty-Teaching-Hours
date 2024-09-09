@@ -39,6 +39,7 @@ const IndexPhanCongGiangVien = () => {
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
     useState(true);
 
+  const [isOpenButton, setIsOpenButton] = useState(false);
   const [isOpenSwap, setIsOpenSwap] = useState(true);
   useEffect(() => {
     const auth = Cookies.get("accessToken");
@@ -67,6 +68,7 @@ const IndexPhanCongGiangVien = () => {
 
       if (response.data.EC === 1) {
         setTenBoMon(response.data.DT.TENBOMON);
+
         setLoading(false);
       } else {
         setLoading(true);
@@ -120,6 +122,7 @@ const IndexPhanCongGiangVien = () => {
 
       if (response_MonHoc.data.EC === 1) {
         setData_MonHoc(response_MonHoc.data.DT);
+        setIsOpenButton(true);
       }
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
@@ -244,12 +247,7 @@ const IndexPhanCongGiangVien = () => {
             {" "}
             <Grid item xs={12} md={3}>
               {" "}
-              <Box sx={{ mt: 3 }}>
-                <GVTableDaChonKhung
-                  data={data_ListGVDaChonKhung}
-                  selectNamHoc={selectNamHoc}
-                />
-              </Box>
+              <Box sx={{ mt: 3 }}>Gợi Ý</Box>
             </Grid>{" "}
           </>
         ) : (
@@ -261,24 +259,31 @@ const IndexPhanCongGiangVien = () => {
                 <GVTableDaChonKhung
                   data={data_ListGVDaChonKhung}
                   selectNamHoc={selectNamHoc}
+                  select_HocKiNienKhoa={select_HocKiNienKhoa}
                 />
-                1
               </Box>
             </Grid>{" "}
           </>
         )}
       </Grid>
-      <Grid container spacing={2} mt={2}>
-        {" "}
-        <Grid item md={10}>
+      {isOpenButton ? (
+        <>
           {" "}
-          <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
-        </Grid>
-        <Grid item md={2}>
-          {" "}
-          <Button variant="contained">Xác Nhận</Button>
-        </Grid>
-      </Grid>
+          <Grid container spacing={2} mt={2}>
+            {" "}
+            <Grid item md={10}>
+              {" "}
+              <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
+            </Grid>
+            <Grid item md={2}>
+              {" "}
+              <Button variant="contained">Xác Nhận</Button>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <> </>
+      )}
     </>
   );
 };

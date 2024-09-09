@@ -383,7 +383,7 @@ WHERE
 const xem_giangvien_MonHoc_daChonkhung = async (MAMONHOC) => {
   console.log("MAMONHOC =>", MAMONHOC);
   let [results, fields] = await pool.execute(
-    `select chitietphancong.*, giangvien.* from chitietphancong ,bangphancong, giangvien,hockynienkhoa,monhoc where chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG AND bangphancong.MAGV = giangvien.MAGV AND monhoc.MAMONHOC = chitietphancong.MAMONHOC AND monhoc.MAMONHOC = ?`,
+    `select chitietphancong.*, giangvien.TENGV from chitietphancong ,bangphancong, giangvien,hockynienkhoa,monhoc where chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG AND bangphancong.MAGV = giangvien.MAGV AND monhoc.MAMONHOC = chitietphancong.MAMONHOC AND monhoc.MAMONHOC = ?`,
     [MAMONHOC]
   );
   console.log("check resuft =>", results);

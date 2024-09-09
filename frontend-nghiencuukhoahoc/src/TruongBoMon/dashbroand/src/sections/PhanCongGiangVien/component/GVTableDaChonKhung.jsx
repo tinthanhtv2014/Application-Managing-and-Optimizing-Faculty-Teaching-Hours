@@ -18,7 +18,7 @@ import {
 import axios from "axios"; // Giả sử bạn sử dụng axios để gọi API
 import CookiesAxios from "../../CookiesAxios";
 
-const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
+const GVTableDaChonKhung = ({ data, selectNamHoc, select_HocKiNienKhoa }) => {
   const [selectedGV, setSelectedGV] = useState(null); // Trạng thái để lưu giảng viên đã chọn
   const [details, setDetails] = useState(null); // Trạng thái để lưu thông tin chi tiết của giảng viên
 
@@ -46,6 +46,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
   };
 
   const handleRowClick = (row) => {
+    handlePhanCong(row.MAGV);
     if (selectedGV === row.MAGV) {
       setSelectedGV(null);
       setDetails(null);
@@ -55,6 +56,23 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
     }
   };
   console.log("check data=>", data);
+  const handlePhanCong = async (MAGV) => {
+    console.log("check select_HocKiNienKhoa", select_HocKiNienKhoa);
+    console.log("check MAGV", MAGV);
+    if (select_HocKiNienKhoa && MAGV) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung/chitiet`,
+          { HOCKINIENKHOA: select_HocKiNienKhoa, MAGV: MAGV }
+        );
+        if (response.data.EC === 1) {
+          setDetails(response.data.DT[0]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch details", error);
+      }
+    }
+  };
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -74,6 +92,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
               >
                 <TableCell
                   className={`${selectedGV === row.MAGV ? "text-success" : ""}`}
+                  title={row.MALOP}
                 >
                   {row.TENGV}
                 </TableCell>

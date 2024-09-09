@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,19 +10,20 @@ import {
 } from "@mui/material";
 
 const LopMonHocTable = ({ data, handlePhanCong }) => {
+  const [selectedRow, setSelectedRow] = useState(null); // Lưu hàng được chọn
+
   // Hàm tính số giờ giảng dạy
   const calculateTeachingHours = (siso, tinChiLyThuyet, tinChiThucHanh) => {
-    // Tính số giờ lý thuyết
     const gioLyThuyet = tinChiLyThuyet * 15;
-
-    // Tính số giờ thực hành
     const gioThucHanh =
-      siso > 30
-        ? tinChiThucHanh * 2 * 30 // Chia làm 2 ca nếu sĩ số > 30
-        : tinChiThucHanh * 1 * 30; // Không chia nếu sĩ số <= 30
-
-    // Tổng số giờ
+      siso > 30 ? tinChiThucHanh * 2 * 30 : tinChiThucHanh * 1 * 30;
     return gioLyThuyet + gioThucHanh;
+  };
+
+  // Hàm xử lý khi click vào hàng
+  const handleRowClick = (mamMonHoc) => {
+    setSelectedRow(mamMonHoc); // Cập nhật hàng được chọn
+    handlePhanCong(mamMonHoc); // Gọi hàm phân công
   };
 
   return (
@@ -31,31 +32,36 @@ const LopMonHocTable = ({ data, handlePhanCong }) => {
         <TableHead>
           <TableRow>
             <TableCell>Mã Lớp</TableCell>
-            <TableCell align="center">Sĩ Số</TableCell>
             <TableCell align="center">Tên Môn Học</TableCell>
             <TableCell align="center">Số Thứ Tự Học Kỳ</TableCell>
-            <TableCell align="center">Số Giờ Giảng Dạy</TableCell>{" "}
-            {/* Thêm cột này */}
+            <TableCell align="center">Số Giờ Giảng Dạy</TableCell>
+            <TableCell align="center">Phân Công</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
-            <TableRow key={index} onClick={() => handlePhanCong(row.MAMONHOC)}>
+            <TableRow
+              key={index}
+              onClick={() => handleRowClick(row.MAMONHOC)} // Xử lý khi click
+              sx={{
+                backgroundColor:
+                  selectedRow === row.MAMONHOC ? "#f0f0f0" : "inherit", // Tô màu nếu được chọn
+                cursor: "pointer", // Thêm hiệu ứng con trỏ
+              }}
+            >
               <TableCell component="th" scope="row">
                 {row.MALOP}
               </TableCell>
-              <TableCell align="center">{row.SISO}</TableCell>
               <TableCell align="center">{row.TENMONHOC}</TableCell>
-
               <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
               <TableCell align="center">
-                {/* Gọi hàm calculateTeachingHours để tính toán */}
                 {calculateTeachingHours(
                   row.SISO,
                   row.SOTINCHILYTHUYET,
                   row.SOTINCHITHUCHANH
                 )}
               </TableCell>
+              <TableCell align="center">Nguyễn Bảo Ân</TableCell>
             </TableRow>
           ))}
         </TableBody>
