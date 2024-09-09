@@ -7,6 +7,7 @@ const {
   get_giangvien_CNTT,
   get_giangvien_CNTT_da_chon_khung,
   get_giangvien_CNTT_chua_chon_khung,
+  get_giangvien_MonHoc_daChonKhung,
 } = require("../../controllers/TruongbomonController/giangvienCONTROLLER");
 
 const {
@@ -65,6 +66,12 @@ const CRUDgiangvien_CNTT = (app) => {
   router.post(
     "/dangky/chitietphancong/giangvien",
     Dangky_ChitietphancongExcelController
+  );
+
+  //phúc note
+  router.post(
+    "/xem/danhsach/monhoc/giangvien",
+    get_giangvien_MonHoc_daChonKhung
   );
   return app.use("/api/v1/truongbomon/giangvien", router);
 };

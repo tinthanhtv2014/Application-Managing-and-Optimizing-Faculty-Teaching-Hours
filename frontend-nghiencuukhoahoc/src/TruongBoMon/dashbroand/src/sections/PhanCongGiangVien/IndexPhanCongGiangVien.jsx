@@ -125,6 +125,22 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
+  const handlePhanCong = async (id) => {
+    if (id) {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/danhsach/monhoc/giangvien`,
+          { MAMONHOC: id }
+        );
+
+        if (response.data.EC === 1) {
+          setData_ListGVDaChonKhung(response.data.DT);
+        }
+      } catch (error) {
+        console.error("Error fetching BoMon data:", error);
+      }
+    }
+  };
   const handleChange = (event) => {
     setIsOpenSwap(event.target.checked);
   };
@@ -136,8 +152,8 @@ const IndexPhanCongGiangVien = () => {
     <>
       <Grid container spacing={2}>
         {/* Học Kì Niên Khóa */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+        <Grid item xs={12} md={3}>
+          <Box sx={{ maxWidth: { md: 250, xs: "100%" } }}>
             <FormControl fullWidth className="profile-email-input">
               <InputLabel id="select-label-hoc-ki-nien-khoa">
                 Học Kì Niên Khóa
@@ -167,10 +183,9 @@ const IndexPhanCongGiangVien = () => {
             </FormControl>
           </Box>
         </Grid>
-
         {/* Danh Sách Lớp */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
+        <Grid item xs={12} md={5}>
+          <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
             <FormControl fullWidth className="profile-email-input">
               <InputLabel id="select-label-lop">Danh Sách Lớp</InputLabel>
               <Select
@@ -197,6 +212,20 @@ const IndexPhanCongGiangVien = () => {
               </Select>
             </FormControl>
           </Box>
+        </Grid>{" "}
+        <Grid item xs={12} md={2}>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={
+              <Switch
+                checked={isOpenSwap} // Kiểm soát Switch dựa vào isOpenSwap
+                onChange={handleChange} // Gọi hàm khi Switch thay đổi
+                inputProps={{ "aria-label": "controlled" }}
+                color="secondary"
+              />
+            }
+            label="Sử dụng gợi ý"
+          />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
@@ -204,7 +233,10 @@ const IndexPhanCongGiangVien = () => {
         <Grid item xs={12} md={8}>
           {" "}
           <Box sx={{ mt: 3 }}>
-            <LopMonHocTable data={data_MonHoc} />
+            <LopMonHocTable
+              data={data_MonHoc}
+              handlePhanCong={handlePhanCong}
+            />
           </Box>
         </Grid>
         {isOpenSwap ? (
@@ -235,14 +267,17 @@ const IndexPhanCongGiangVien = () => {
             </Grid>{" "}
           </>
         )}
-        <Grid item xs={12} md={1}>
+      </Grid>
+      <Grid container spacing={2} mt={2}>
+        {" "}
+        <Grid item md={10}>
           {" "}
-          <Switch
-            checked={isOpenSwap} // Kiểm soát Switch dựa vào isOpenSwap
-            onChange={handleChange} // Gọi hàm khi Switch thay đổi
-            inputProps={{ "aria-label": "controlled" }}
-          />
-        </Grid>{" "}
+          <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
+        </Grid>
+        <Grid item md={2}>
+          {" "}
+          <Button variant="contained">Xác Nhận</Button>
+        </Grid>
       </Grid>
     </>
   );

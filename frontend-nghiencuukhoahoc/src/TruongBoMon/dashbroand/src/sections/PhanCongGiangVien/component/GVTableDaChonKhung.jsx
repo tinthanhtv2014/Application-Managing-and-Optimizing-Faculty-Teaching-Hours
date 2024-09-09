@@ -54,13 +54,13 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
       fetchDetails(row.MAGV);
     }
   };
-
+  console.log("check data=>", data);
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Tên Giảng Viên</TableCell>
+            <TableCell>Giảng Viên</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

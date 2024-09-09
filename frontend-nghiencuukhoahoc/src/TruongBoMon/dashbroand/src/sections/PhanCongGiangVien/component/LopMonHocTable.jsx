@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 
-const LopMonHocTable = ({ data }) => {
+const LopMonHocTable = ({ data, handlePhanCong }) => {
   // Hàm tính số giờ giảng dạy
   const calculateTeachingHours = (siso, tinChiLyThuyet, tinChiThucHanh) => {
     // Tính số giờ lý thuyết
@@ -40,7 +40,7 @@ const LopMonHocTable = ({ data }) => {
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} onClick={() => handlePhanCong(row.MAMONHOC)}>
               <TableCell component="th" scope="row">
                 {row.MALOP}
               </TableCell>

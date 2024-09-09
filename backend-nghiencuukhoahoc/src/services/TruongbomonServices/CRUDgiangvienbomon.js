@@ -379,8 +379,23 @@ WHERE
   }
 };
 
+//phúc note
+const xem_giangvien_MonHoc_daChonkhung = async (MAMONHOC) => {
+  console.log("MAMONHOC =>", MAMONHOC);
+  let [results, fields] = await pool.execute(
+    `select chitietphancong.*, giangvien.* from chitietphancong ,bangphancong, giangvien,hockynienkhoa,monhoc where chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG AND bangphancong.MAGV = giangvien.MAGV AND monhoc.MAMONHOC = chitietphancong.MAMONHOC AND monhoc.MAMONHOC = ?`,
+    [MAMONHOC]
+  );
+  console.log("check resuft =>", results);
+  return {
+    EM: "Xem thông tin giảng viên thành công",
+    EC: 1,
+    DT: results,
+  };
+};
 module.exports = {
   xem_giangvien,
   xem_giangvien_dachonkhung,
   xem_giangvien_chuachonkhung,
+  xem_giangvien_MonHoc_daChonkhung,
 };
