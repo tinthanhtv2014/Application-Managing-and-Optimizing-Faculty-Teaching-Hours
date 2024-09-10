@@ -77,12 +77,12 @@ const CRUDgiangvien_CNTT = (app) => {
   );
   router.get(
     "/xem/danhsach/monhoc/giangvien/lop",
-    selectChitietphancongController_giangvien
+    selectChitietphancongController_lop
   );
 
   router.get(
     "/xem/danhsach/monhoc/danhsach/giangvien",
-    selectChitietphancongController_lop
+    selectChitietphancongController_giangvien
   );
   return app.use("/api/v1/truongbomon/giangvien", router);
 };

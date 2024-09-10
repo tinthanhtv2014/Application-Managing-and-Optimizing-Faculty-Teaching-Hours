@@ -148,7 +148,7 @@ const xem_chitietphancong_giangvien = async () => {
       if (!giangVien) {
         giangVien = {
           TENGV: dong.TENGV,
-          GIOGIANGDAY_CHUAN: 90,
+          GIOGIANGDAY_CHUAN: dong.GIOGIANGDAY_CHUAN,
           monPhanCong: [],
         };
         danhSachPhanCongGiangVien.push(giangVien);
@@ -160,7 +160,6 @@ const xem_chitietphancong_giangvien = async () => {
         monHoc = {
           TENMONHOC: dong.TENMONHOC,
           MALOP: [],
-          TONG_SO_GIO: 90,
         };
         giangVien.monPhanCong.push(monHoc);
       }
@@ -213,7 +212,6 @@ const xem_chitietphancong_lop = async () => {
         monHoc = {
           TENMONHOC: dong.TENMONHOC,
           TENGV: [],
-          TONG_SO_GIO: 90,
         };
         MaLop.monPhanCong.push(monHoc);
       }
