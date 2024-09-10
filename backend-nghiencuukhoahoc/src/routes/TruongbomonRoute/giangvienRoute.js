@@ -24,6 +24,7 @@ const {
 const {
   createChitietphancongExcelController,
   Dangky_ChitietphancongExcelController,
+  selectChitietphancongController_giangvien,
 } = require("../../controllers/TruongbomonController/chitietphancongCONTROLLER");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction");
@@ -72,6 +73,10 @@ const CRUDgiangvien_CNTT = (app) => {
   router.post(
     "/xem/danhsach/monhoc/giangvien",
     get_giangvien_MonHoc_daChonKhung
+  );
+  router.get(
+    "/xem/danhsach/monhoc/giangvien/lop",
+    selectChitietphancongController_giangvien
   );
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
