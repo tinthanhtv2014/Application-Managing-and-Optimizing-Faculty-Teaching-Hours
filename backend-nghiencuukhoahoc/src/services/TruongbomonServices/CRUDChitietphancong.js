@@ -132,6 +132,58 @@ const Dangky_chitietphancong = async (datachitietphancong) => {
   }
 };
 
+const xem_chitietphancong_giangvien = async () => {
+  try {
+    let [results_chitietphancong_data, fields_data] = await pool.execute(
+      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.* from chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
+    );
+
+    const danhSachPhanCongGiangVien = [];
+
+    results_chitietphancong_data.forEach((dong) => {
+      let giangVien = danhSachPhanCongGiangVien.find(
+        (gv) => gv.TENGV === dong.TENGV
+      );
+
+      if (!giangVien) {
+        giangVien = {
+          TENGV: dong.TENGV,
+          GIOGIANGDAY_CHUAN: 90,
+          monPhanCong: [],
+        };
+        danhSachPhanCongGiangVien.push(giangVien);
+      }
+
+      let monHoc = giangVien.monPhanCong.find((m) => m.mon === dong.TENMONHOC);
+
+      if (!monHoc) {
+        monHoc = {
+          TENMONHOC: dong.TENMONHOC,
+          MALOP: [],
+          TONG_SO_GIO: 90,
+        };
+        giangVien.monPhanCong.push(monHoc);
+      }
+
+      if (!monHoc.MALOP.includes(dong.MALOP)) {
+        monHoc.MALOP.push(dong.MALOP);
+      }
+    });
+    return {
+      EM: "xem thông tin phân công thành công",
+      EC: 1,
+      DT: danhSachPhanCongGiangVien,
+    };
+  } catch (error) {
+    console.log("Lỗi services createchitietphancong_excel", error);
+    return {
+      EM: "Lỗi services createTaiKhoanExcel",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 const xem_chitietphancong_lop = async () => {
   try {
     let [results_chitietphancong_data, fields_data] = await pool.execute(
@@ -141,39 +193,37 @@ const xem_chitietphancong_lop = async () => {
     const danhSachPhanCongGiangVien = [];
 
     results_chitietphancong_data.forEach((dong) => {
-      // Kiểm tra xem giảng viên đã tồn tại trong mảng danhSachPhanCongGiangVien chưa
-      let giangVien = danhSachPhanCongGiangVien.find(
-        (gv) => gv.tenGV === dong.TENGV
+      let MaLop = danhSachPhanCongGiangVien.find(
+        (lop) => lop.MALOP === dong.MALOP
       );
 
-      if (!giangVien) {
-        giangVien = {
-          tenGV: dong.TENGV,
-          gioChuanTheoQD: 90, // Bạn có thể thay giá trị này nếu muốn linh động
+      if (!MaLop) {
+        MaLop = {
+          MALOP: dong.MALOP,
           monPhanCong: [],
         };
-        danhSachPhanCongGiangVien.push(giangVien);
+        danhSachPhanCongGiangVien.push(MaLop);
       }
 
-      // Tìm hoặc tạo môn học cho giảng viên
-      let monHoc = giangVien.monPhanCong.find((m) => m.mon === dong.TENMONHOC);
+      let monHoc = MaLop.monPhanCong.find(
+        (m) => m.TENMONHOC === dong.TENMONHOC
+      );
 
       if (!monHoc) {
         monHoc = {
-          mon: dong.TENMONHOC,
-          maLop: [],
-          tongGio: 90, // Bạn có thể điều chỉnh tổng số giờ theo dữ liệu thực tế
+          TENMONHOC: dong.TENMONHOC,
+          TENGV: [],
+          TONG_SO_GIO: 90,
         };
-        giangVien.monPhanCong.push(monHoc);
+        MaLop.monPhanCong.push(monHoc);
       }
 
-      // Thêm mã lớp vào danh sách lớp của môn học
-      if (!monHoc.maLop.includes(dong.MALOP)) {
-        monHoc.maLop.push(dong.MALOP);
+      if (!monHoc.TENGV.includes(dong.TENGV)) {
+        monHoc.TENGV.push(dong.TENGV);
       }
     });
     return {
-      EM: "Tất cả chi tiết đã được tạo",
+      EM: "xem thông tin phân công thành công",
       EC: 1,
       DT: danhSachPhanCongGiangVien,
     };
@@ -190,5 +240,6 @@ const xem_chitietphancong_lop = async () => {
 module.exports = {
   createchitietphancong_excel,
   Dangky_chitietphancong,
+  xem_chitietphancong_giangvien,
   xem_chitietphancong_lop,
 };
