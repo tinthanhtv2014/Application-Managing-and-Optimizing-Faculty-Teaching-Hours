@@ -165,10 +165,15 @@ const RenderData = ({
                 <>
                   {" "}
                   <p className="text-open-gate">
-                    {" "}
-                    {startTime
-                      ? `Thời gian mở cổng từ: ${startTime} đến ${endTime}`
-                      : "Hiện đang đóng cổng đăng ký"}
+                    {startTime ? (
+                      <>
+                        Thời gian mở cổng từ:{" "}
+                        <span className="text-info ">{startTime}</span> đến{" "}
+                        <span className="text-info ">{endTime}</span>
+                      </>
+                    ) : (
+                      "Hiện đang đóng cổng đăng ký"
+                    )}
                   </p>
                 </>
               )}
