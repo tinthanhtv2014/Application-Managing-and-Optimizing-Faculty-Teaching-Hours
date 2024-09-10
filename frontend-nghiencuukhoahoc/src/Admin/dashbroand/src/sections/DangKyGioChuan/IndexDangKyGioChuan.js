@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import GV_Hang_III from "./page/GV_Hang_III";
-
-import GV_CaoCap_Hang_I from "./page/GV_CaoCap_Hang_I";
-import GV_Chinh_Hang_II from "./page/GV_Chinh_Hang_II";
-import GV_TapSu from "./page/GV_TapSu";
+import GV_ChucDanh from "./page/GV_ChucDanh";
 import { Button, Typography } from "@mui/material";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +12,8 @@ const DangKyGioChuan = () => {
   const [loading, setLoading] = useState(true);
 
   const [ChucDanhGiangVien, setChucDanhGiangVien] = useState(null);
-  const [isGVCaoCapHangI, setIsGVCaoCapHangI] = useState(false);
-  const [isGVChinhHangII, setIsGVChinhHangII] = useState(false);
-  const [isGVHangIII, setIsGVHangIII] = useState(false);
+  const [isGVChucDanh, setIsGVChucDanh] = useState(false);
 
-  const [isGVTapSu, setIsGVTapSu] = useState(false);
   const [IsOpenCheckKhoa, setIsOpenCheckKhoa] = useState(false);
   const [OpenChucNangtheokhungthoigian, setOpenChucNangtheokhungthoigian] =
     useState({ XemKhungGioChuan: null, ChonKhungGio: null });
@@ -119,22 +112,7 @@ const DangKyGioChuan = () => {
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         setMaGV(response.data.DT.MAGV);
 
-        switch (response.data.DT.TENCHUCDANH) {
-          case "Giảng viên (Hạng III)":
-            setIsGVHangIII(true);
-            break;
-          case "Giảng viên cao cấp (Hạng I)":
-            setIsGVCaoCapHangI(true);
-            break;
-          case "Giảng viên chính (Hạng II)":
-            setIsGVChinhHangII(true);
-            break;
-          case "Giảng viên Tập sự":
-            setIsGVTapSu(true);
-            break;
-          default:
-            break;
-        }
+        setIsGVChucDanh(true);
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -152,9 +130,9 @@ const DangKyGioChuan = () => {
     return <Typography>Đang tải dữ liệu, vui lòng đợi...</Typography>; // Hiển thị thông báo tải dữ liệu
   }
 
-  if (isGVHangIII) {
+  if (isGVChucDanh) {
     return (
-      <GV_Hang_III
+      <GV_ChucDanh
         IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
@@ -163,41 +141,6 @@ const DangKyGioChuan = () => {
       />
     );
   }
-
-  if (isGVCaoCapHangI) {
-    return (
-      <GV_CaoCap_Hang_I
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-  if (isGVChinhHangII) {
-    return (
-      <GV_Chinh_Hang_II
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-  if (isGVTapSu) {
-    return (
-      <GV_TapSu
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-
   return (
     <Typography>
       Hãy Cập Nhật Chức Danh Để Đăng Ký Khung Giờ Chuẩn{" "}
