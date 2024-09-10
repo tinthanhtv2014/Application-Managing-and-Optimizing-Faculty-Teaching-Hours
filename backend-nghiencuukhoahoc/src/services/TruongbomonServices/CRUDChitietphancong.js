@@ -135,7 +135,7 @@ const Dangky_chitietphancong = async (datachitietphancong) => {
 const xem_chitietphancong_giangvien = async () => {
   try {
     let [results_chitietphancong_data, fields_data] = await pool.execute(
-      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.* from chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
+      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.*,hockynienkhoa.* from hockynienkhoa,chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and hockynienkhoa.MAHKNK = bangphancong.MAHKNK and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
     );
 
     const danhSachPhanCongGiangVien = [];
@@ -147,6 +147,7 @@ const xem_chitietphancong_giangvien = async () => {
 
       if (!giangVien) {
         giangVien = {
+          MAGV: dong.MAGV,
           TENGV: dong.TENGV,
           GIOGIANGDAY_CHUAN: dong.GIOGIANGDAY_CHUAN,
           monPhanCong: [],
@@ -159,6 +160,8 @@ const xem_chitietphancong_giangvien = async () => {
       if (!monHoc) {
         monHoc = {
           TENMONHOC: dong.TENMONHOC,
+          TENHKNK: dong.TENHKNK,
+          TEN_NAM_HOC: dong.TEN_NAM_HOC,
           MALOP: [],
         };
         giangVien.monPhanCong.push(monHoc);
@@ -211,13 +214,15 @@ const xem_chitietphancong_lop = async () => {
       if (!monHoc) {
         monHoc = {
           TENMONHOC: dong.TENMONHOC,
+          TENHKNK: dong.TENHKNK,
+          TEN_NAM_HOC: dong.TEN_NAM_HOC,
           TENGV: [],
         };
         MaLop.monPhanCong.push(monHoc);
       }
 
       if (!monHoc.TENGV.includes(dong.TENGV)) {
-        monHoc.TENGV.push(dong.TENGV);
+        monHoc.TENGV.push({ MAGV: dong.MAGV, TENGV: dong.TENGV });
       }
     });
     return {
