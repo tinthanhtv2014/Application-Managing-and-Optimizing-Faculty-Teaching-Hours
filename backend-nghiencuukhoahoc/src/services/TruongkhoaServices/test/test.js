@@ -333,9 +333,117 @@ const Sevicel_CoTyLe_Excel = async (dataCoTyLe) => {
     }
 };
 
+//========================================================================================================
+
+const Sevicel_PhanCong_Test = async (dataPhanCong) => {
+    try {
+        // dataPhanCong:  {
+        //     MAGV: '99999',
+        //     MAHKNK: '1',
+        //     MAMONHOC: '36',
+        //     MALOP: 'DA21TTA',
+        //     TONG_SO_GIO: '0'
+        // }        
+        console.log("dataPhanCong: ", dataPhanCong);
+
+        // Lấy thời gian hiện tại
+        let THOIGIANLAP = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        console.log("THOIGIANLAP: ", THOIGIANLAP);
+
+        // Thực hiện câu lệnh INSERT vào bảng bangphancong
+        let [result_bangphancong] = await pool.execute(
+            `INSERT INTO bangphancong (MAHKNK, MAGV, THOIGIANLAP) VALUES (?, ?, ?)`,
+            [
+                dataPhanCong.MAHKNK,
+                dataPhanCong.MAGV,
+                THOIGIANLAP
+            ]
+        );
+
+        console.log("Các hàng bị ảnh hưởng(Rows affected): ", result_bangphancong.affectedRows);
+
+        // Kiểm tra xem có bao nhiêu bản ghi được thêm
+        if (result_bangphancong.affectedRows === 0) {
+            return {
+                EM: "Không thêm được dữ liệu",
+                EC: -1,
+                DT: null,
+            };
+        }
+
+        // Truy vấn lại bản ghi vừa thêm
+        let [selectResult] = await pool.execute(
+            `SELECT * FROM bangphancong WHERE MAHKNK = ? AND MAGV = ? AND DATE(THOIGIANLAP) = DATE(?)`,
+            [
+                dataPhanCong.MAHKNK,
+                dataPhanCong.MAGV,
+                THOIGIANLAP
+            ]
+        );
+
+        console.log("selectResult[0]: ", selectResult[0]);
+
+        // Thực hiện câu lệnh INSERT vào bảng chitietphancong
+        let [result_chitietphancong] = await pool.execute(
+            `INSERT INTO chitietphancong (MAMONHOC, MAPHANCONG, MALOP, TONG_SO_GIO) VALUES (?, ?, ?, ?)`,
+            [
+                dataPhanCong.MAMONHOC,
+                selectResult[0].MAPHANCONG,
+                dataPhanCong.MALOP,
+                dataPhanCong.TONG_SO_GIO
+            ]
+        );
+
+        // Truy vấn lại dữ liệu vừa thêm ở cả hai bảng
+        let [selectOK] = await pool.execute(
+            `SELECT * 
+             FROM bangphancong BPC 
+             JOIN chitietphancong CTPC ON BPC.MAPHANCONG = CTPC.MAPHANCONG
+             JOIN monhoc MH ON MH.MAMONHOC = CTPC.MAMONHOC
+             JOIN lop L ON L.MALOP = CTPC.MALOP
+             JOIN giangvien GV ON BPC.MAGV = GV.MAGV 
+             WHERE BPC.MAPHANCONG = ?`,
+            [
+                selectResult[0].MAPHANCONG
+            ]
+        );
+
+        console.log("Dữ liệu vừa thêm: ", selectOK);
+
+        // Xóa dữ liệu mới thêm từ bảng chitietphancong trước
+        await pool.execute(
+            `DELETE FROM chitietphancong WHERE MAPHANCONG = ?`,
+            [selectResult[0].MAPHANCONG]
+        );
+
+        // Sau đó xóa dữ liệu từ bảng bangphancong
+        await pool.execute(
+            `DELETE FROM bangphancong WHERE MAPHANCONG = ?`,
+            [selectResult[0].MAPHANCONG]
+        );
+
+        console.log("Dữ liệu vừa thêm đã được xóa.");
+
+        return {
+            EM: "Thêm và xóa dữ liệu thành công",
+            EC: 1,
+            DT: 'ok',
+        };
+    } catch (error) {
+        console.error("Lỗi trong try-catch: ", error);
+        return {
+            EM: "Đã xảy ra lỗi khi thêm hoặc xóa dữ liệu",
+            EC: -1,
+            DT: null,
+        };
+    }
+};
+
 module.exports = {
     Sevicel_LoaiDanhMuc_Excel,
     Sevicel_DanhMuc_Excel,
     Sevicel_TyLe_Excel,
-    Sevicel_CoTyLe_Excel
+    Sevicel_CoTyLe_Excel,
+
+    Sevicel_PhanCong_Test
 };

@@ -3,6 +3,7 @@ const {
   Sevicel_DanhMuc_Excel,
   Sevicel_TyLe_Excel,
   Sevicel_CoTyLe_Excel,
+  Sevicel_PhanCong_Test,
 } = require("../../services/TruongkhoaServices/test/test");
 
 const LoaiDanhMucExcelController = async (req, res) => {
@@ -96,9 +97,32 @@ const CoTyLeExcelController = async (req, res) => {
   }
 };
 
+const PhanCongControllerTest = async (req, res) => {
+  try {
+    let data = req.body;
+    // console.log("data: ", data)
+    let results = await Sevicel_PhanCong_Test(data);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: "lỗi LoaiDanhMucExcelController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 module.exports = {
   LoaiDanhMucExcelController,
   DanhMucExcelController,
   TyLeExcelController,
   CoTyLeExcelController,
+
+  PhanCongControllerTest,
 };
