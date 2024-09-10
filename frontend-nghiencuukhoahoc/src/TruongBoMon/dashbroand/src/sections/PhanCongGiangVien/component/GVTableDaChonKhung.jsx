@@ -66,7 +66,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc, select_HocKiNienKhoa }) => {
           { HOCKINIENKHOA: select_HocKiNienKhoa, MAGV: MAGV }
         );
         if (response.data.EC === 1) {
-          setDetails(response.data.DT[0]);
+          
         }
       } catch (error) {
         console.error("Failed to fetch details", error);
