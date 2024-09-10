@@ -10,7 +10,7 @@ import {
   Collapse,
 } from "@mui/material";
 import CookiesAxios from "../CookiesAxios";
-
+import moment from "moment";
 const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [dataListTacGia, setDataListTacGia] = useState([]);
@@ -112,7 +112,11 @@ const XemLichSuChonDanhMuc = ({ dataDang_ky_thuc_hien_quy_doiGV }) => {
                         <TableRow>
                           <TableCell>Thời gian đăng ký</TableCell>
                           <TableCell>
-                            {item.THOI_GIAN_DANG_KY || "N/A"}
+                            {item.THOI_GIAN_DANG_KY
+                              ? moment(item.THOI_GIAN_DANG_KY).format(
+                                  "DD/MM/YYYY"
+                                )
+                              : "N/A"}
                           </TableCell>
                         </TableRow>
                         <TableRow>
