@@ -5,11 +5,14 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 import CookiesAxios from "../../CookiesAxios";
+
 const GV_CaoCap_Hang_I = ({
   ChucDanhGiangVien,
   MaGV,
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
+  startTime,
+  endTime,
 }) => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,6 +81,8 @@ const GV_CaoCap_Hang_I = ({
         MaGV={MaGV}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         fetchDataGV={fetchDataGV}
+        endTime={endTime}
+        startTime={startTime}
       />
     </>
   );

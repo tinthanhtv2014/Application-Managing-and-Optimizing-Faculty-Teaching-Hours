@@ -1,22 +1,27 @@
-import { lazy, Suspense } from 'react';
-import { Navigate, useRoutes } from 'react-router-dom';
-import { Skeleton } from '@mui/material';
-import DashboardLayout from '../layouts/dashboard';
+import { lazy, Suspense } from "react";
+import { Navigate, useRoutes } from "react-router-dom";
+import { Skeleton } from "@mui/material";
+import DashboardLayout from "../layouts/dashboard";
 
-const AccountGV = lazy(() => import('../sections/Account/AccountGV'));
-const DangKyGioChuan = lazy(() => import('../sections/DangKyGioChuan/IndexDangKyGioChuan'));
-const FileExcel = lazy(() => import('../sections/FileExcel/FileExcel'));
+const IndexDangKyDanhmuc = lazy(() =>
+  import("../sections/RegisterDanhMucGioChuan/IndexDangKyDanhMuc")
+);
+const AccountGV = lazy(() => import("../sections/Account/AccountGV"));
+const DangKyGioChuan = lazy(() =>
+  import("../sections/DangKyGioChuan/IndexDangKyGioChuan")
+);
+const FileExcel = lazy(() => import("../sections/FileExcel/FileExcel"));
 
-const IndexPage = lazy(() => import('../pages/app'));
-const BlogPage = lazy(() => import('../pages/blog'));
-const UserPage = lazy(() => import('../pages/user'));
-const LoginPage = lazy(() => import('../pages/login'));
-const Page404 = lazy(() => import('../pages/page-not-found'));
+const IndexPage = lazy(() => import("../pages/app"));
+const BlogPage = lazy(() => import("../pages/blog"));
+const UserPage = lazy(() => import("../pages/user"));
+const LoginPage = lazy(() => import("../pages/login"));
+const Page404 = lazy(() => import("../pages/page-not-found"));
 
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/',
+      path: "/",
       element: (
         <DashboardLayout>
           <Suspense
@@ -25,7 +30,7 @@ export default function Router() {
                 variant="rectangular"
                 width="100%"
                 height="100%"
-                sx={{ bgcolor: 'grey.300' }}
+                sx={{ bgcolor: "grey.300" }}
               />
             }
           >
@@ -35,7 +40,7 @@ export default function Router() {
       ),
     },
     {
-      path: '/dang-ky-muc-chuan-gio-giang',
+      path: "/dang-ky-muc-chuan-gio-giang",
       element: (
         <DashboardLayout>
           <Suspense
@@ -44,7 +49,7 @@ export default function Router() {
                 variant="rectangular"
                 width="100%"
                 height="100%"
-                sx={{ bgcolor: 'grey.300' }}
+                sx={{ bgcolor: "grey.300" }}
               />
             }
           >
@@ -54,7 +59,7 @@ export default function Router() {
       ),
     },
     {
-      path: '/dang-ky-cong-viec-thuc-hien',
+      path: "/dang-ky-cong-viec-thuc-hien",
       element: (
         <DashboardLayout>
           <Suspense
@@ -63,7 +68,7 @@ export default function Router() {
                 variant="rectangular"
                 width="100%"
                 height="100%"
-                sx={{ bgcolor: 'grey.300' }}
+                sx={{ bgcolor: "grey.300" }}
               />
             }
           >
@@ -73,7 +78,7 @@ export default function Router() {
       ),
     },
     {
-      path: '/phan-cong-cua-toi',
+      path: "/phan-cong-cua-toi",
       element: (
         <DashboardLayout>
           <Suspense
@@ -82,7 +87,7 @@ export default function Router() {
                 variant="rectangular"
                 width="100%"
                 height="100%"
-                sx={{ bgcolor: 'grey.300' }}
+                sx={{ bgcolor: "grey.300" }}
               />
             }
           >
@@ -92,7 +97,7 @@ export default function Router() {
       ),
     },
     {
-      path: '/excel',
+      path: "/excel",
       element: (
         <DashboardLayout>
           <Suspense
@@ -101,7 +106,7 @@ export default function Router() {
                 variant="rectangular"
                 width="100%"
                 height="100%"
-                sx={{ bgcolor: 'grey.300' }}
+                sx={{ bgcolor: "grey.300" }}
               />
             }
           >
@@ -111,15 +116,34 @@ export default function Router() {
       ),
     },
     {
-      path: '/login',
+      path: "/dang-ky-danh-muc", // Thêm ký tự '*' vào cuối đường dẫn
+      element: (
+        <DashboardLayout>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: "grey.300" }}
+              />
+            }
+          >
+            <IndexDangKyDanhmuc />
+          </Suspense>
+        </DashboardLayout>
+      ),
+    },
+    {
+      path: "/login",
       element: <LoginPage />,
     },
     {
-      path: '/404',
+      path: "/404",
       element: <Page404 />,
     },
     {
-      path: '*',
+      path: "*",
       element: <Navigate to="/404" replace />,
     },
   ]);

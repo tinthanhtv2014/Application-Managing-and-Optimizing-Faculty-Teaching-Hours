@@ -22,6 +22,8 @@ import axios from "axios";
 import moment from "moment";
 import { toast } from "react-toastify";
 import CookiesAxios from "../../../CookiesAxios";
+import { useNavigate } from "react-router-dom";
+
 const RenderData = ({
   dataKhungChuan,
   dataTenKhungChuan,
@@ -30,6 +32,8 @@ const RenderData = ({
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
   IsOpenCheckKhoa,
+  endTime,
+  startTime,
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
@@ -44,7 +48,7 @@ const RenderData = ({
   const [TimeDangKyKhungGioChuan, setTimeDangKyKhungGioChuan] = useState("");
   const [StartTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (dataKhungChuan) {
       const TimeKhungGioChuan = async () => {
@@ -53,26 +57,26 @@ const RenderData = ({
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
           );
 
-          if (response.data.EC === 1) {
-            if (response.data.DT && response.data.DT.length > 0) {
-              // Kiểm tra dữ liệu có tồn tại không
-              setStartTime(response.data.DT[0].THOIGIANBATDAU);
-              setEndTime(response.data.DT[0].THOIGIANKETTHUC);
+          if (response.data.EC === 1 && response.data.DT) {
+            // Tìm phần tử có GHICHU là "CHONKHUNG"
+            const matchedItem = response.data.DT.find(
+              (item) => item.GHICHU === "CHONKHUNG"
+            );
+
+            if (matchedItem) {
+              // Nếu tìm thấy, cập nhật các giá trị cần thiết
+              setStartTime(matchedItem.THOIGIANBATDAU);
+              setEndTime(matchedItem.THOIGIANKETTHUC);
               setTimeDangKyKhungGioChuan(
-                ` ${formatDate(
-                  response.data.DT[0].THOIGIANBATDAU
-                )} đến ${formatDate(response.data.DT[0].THOIGIANKETTHUC)}`
+                ` ${formatDate(matchedItem.THOIGIANBATDAU)} đến ${formatDate(
+                  matchedItem.THOIGIANKETTHUC
+                )}`
               );
             } else {
-              // Xử lý trường hợp không có dữ liệu
-              toast.warn("Không có dữ liệu thời gian khung giờ chuẩn.");
+              // Nếu không tìm thấy, xử lý trường hợp không có dữ liệu phù hợp
               setStartTime("");
               setEndTime("");
             }
-          } else {
-            toast.error(
-              "Đã xảy ra lỗi khi lấy dữ liệu thời gian khung giờ chuẩn."
-            );
           }
         } catch (error) {
           console.error("Lỗi khi gọi API:", error);
@@ -95,7 +99,8 @@ const RenderData = ({
             `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/canhan/khunggiochuan`,
             { MAGV: MaGV, TENNAMHOC: selectNamHoc }
           );
-          console.log("response.data.DT", response.data.DT);
+          console.log("response.data.DT22222", MaGV);
+          console.log("response.data.DT", response);
           setDataRenderKhungChuan(response.data.DT);
         } else if (isOpenOption === "Chọn Khung Giờ") {
           setDataRenderKhungChuan(dataKhungChuan);
@@ -141,16 +146,58 @@ const RenderData = ({
       toast.error(response.data.EM);
     }
   };
+  const handleMoveRegisterDanhMuc = () => {
+    navigate("/admin/dang-ky-danh-muc");
+  };
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  console.log("OpenChucNangtheokhungthoigian", OpenChucNangtheokhungthoigian);
+
   if (loading) {
     return <p>loading</p>;
   }
   return (
     <>
       <Container>
-        <Row className="mb-4"> </Row>
+        <Row className="mb-4 ">
+          <Col md={6} className="row-with-border1">
+            <Typography>
+              {OpenChucNangtheokhungthoigian && (
+                <>
+                  {" "}
+                  <p className="text-open-gate">
+                    {startTime ? (
+                      <>
+                        Thời gian mở cổng từ:{" "}
+                        <span className="text-info ">{startTime}</span> đến{" "}
+                        <span className="text-info ">{endTime}</span>
+                      </>
+                    ) : (
+                      "Hiện đang đóng cổng đăng ký"
+                    )}
+                  </p>
+                </>
+              )}
+            </Typography>
+          </Col>{" "}
+          <Col md={6} className="row-with-border1">
+            <Typography>
+              <>
+                <Col>
+                  <Button
+                    variant="contained"
+                    onClick={handleMoveRegisterDanhMuc}
+                  >
+                    Thực Hiện Đăng Ký Khoa Học
+                  </Button>
+                </Col>
+              </>
+            </Typography>{" "}
+            <p className="text-open-gate1">
+              Lưu ý phải đăng ký khung giờ chuẩn nghiên cứu khoa học để có thể
+              đăng ký danh mục khoa học công nghệ
+            </p>
+          </Col>
+        </Row>
         <Row>
           <Col>
             <Box sx={{ maxWidth: 220 }}>
@@ -176,7 +223,7 @@ const RenderData = ({
                 </Select>
               </FormControl>
             </Box>
-          </Col>
+          </Col>{" "}
           <Col>
             <Box sx={{ maxWidth: 220 }}>
               <FormControl fullWidth className="profile-email-input">
