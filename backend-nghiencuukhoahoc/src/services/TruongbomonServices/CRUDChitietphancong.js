@@ -192,10 +192,10 @@ const xem_chitietphancong_lop = async () => {
       `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.* from chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
     );
 
-    const danhSachPhanCongGiangVien = [];
+    const danhSachPhanCongGiangVien_banthan = [];
 
     results_chitietphancong_data.forEach((dong) => {
-      let MaLop = danhSachPhanCongGiangVien.find(
+      let MaLop = danhSachPhanCongGiangVien_banthan.find(
         (lop) => lop.MALOP === dong.MALOP
       );
 
@@ -204,7 +204,7 @@ const xem_chitietphancong_lop = async () => {
           MALOP: dong.MALOP,
           monPhanCong: [],
         };
-        danhSachPhanCongGiangVien.push(MaLop);
+        danhSachPhanCongGiangVien_banthan.push(MaLop);
       }
 
       let monHoc = MaLop.monPhanCong.find(
@@ -228,7 +228,7 @@ const xem_chitietphancong_lop = async () => {
     return {
       EM: "xem thông tin phân công thành công",
       EC: 1,
-      DT: danhSachPhanCongGiangVien,
+      DT: danhSachPhanCongGiangVien_banthan,
     };
   } catch (error) {
     console.log("Lỗi services createchitietphancong_excel", error);
@@ -240,44 +240,54 @@ const xem_chitietphancong_lop = async () => {
   }
 };
 
-const xem_chitietphancong_banthan = async () => {
+const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
   try {
     let [results_chitietphancong_data, fields_data] = await pool.execute(
-      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.* from chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
+      `select chitietphancong.*,
+      bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.*,hockynienkhoa.*,lop.* 
+      from hockynienkhoa,chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan,lop
+      where giangvien.MAGV = chon_khung.MAGV 
+      and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG 
+      and  giangvien.MAGV = bangphancong.MAGV 
+      and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG 
+      and hockynienkhoa.MAHKNK = ?
+      and monhoc.MAMONHOC = chitietphancong.MAMONHOC 
+      and giangvien.MAGV = ? and hockynienkhoa.MAHKNK = bangphancong.MAHKNK
+      and lop.MALOP = chitietphancong.MALOP `
     );
 
+    console.log("cehci: ", results_chitietphancong_data);
     const danhSachPhanCongGiangVien = [];
 
     results_chitietphancong_data.forEach((dong) => {
-      let MaLop = danhSachPhanCongGiangVien.find(
-        (lop) => lop.MALOP === dong.MALOP
+      let Monhoc = danhSachPhanCongGiangVien.find(
+        (mon) => mon.MAMONHOC === dong.MAMONHOC
       );
 
-      if (!MaLop) {
-        MaLop = {
-          MALOP: dong.MALOP,
-          monPhanCong: [],
-        };
-        danhSachPhanCongGiangVien.push(MaLop);
-      }
-
-      let monHoc = MaLop.monPhanCong.find(
-        (m) => m.TENMONHOC === dong.TENMONHOC
-      );
-
-      if (!monHoc) {
-        monHoc = {
+      if (!Monhoc) {
+        Monhoc = {
           TENMONHOC: dong.TENMONHOC,
           TENHKNK: dong.TENHKNK,
-          TEN_NAM_HOC: dong.TEN_NAM_HOC,
-          TENGV: [],
+          CHITIET_LOP: [],
+        };
+        danhSachPhanCongGiangVien.push(Monhoc);
+      }
+
+      let lophoc = Monhoc.CHITIET_LOP.find((m) => m.MALOP === dong.MALOP);
+
+      if (!lophoc) {
+        lophoc = {
+          MALOP: dong.MALOP,
+          TENLOP: dong.TENLOP,
+          NAMTUYENSINH: dong.NAMTUYENSINH,
+          SISO: dong.SISO,
         };
         MaLop.monPhanCong.push(monHoc);
       }
 
-      if (!monHoc.TENGV.includes(dong.TENGV)) {
-        monHoc.TENGV.push({ MAGV: dong.MAGV, TENGV: dong.TENGV });
-      }
+      // if (!monHoc.TENGV.includes(dong.TENGV)) {
+      //   monHoc.TENGV.push({ MAGV: dong.MAGV, TENGV: dong.TENGV });
+      // }
     });
     return {
       EM: "xem thông tin phân công thành công",

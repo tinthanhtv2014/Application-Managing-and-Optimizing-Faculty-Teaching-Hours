@@ -91,8 +91,9 @@ const Dangky_ChitietphancongExcelController = async (req, res) => {
 const Xem_Chitietphancong_banthan_Controller = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
+    const MAHKNK = req.body.MAHKNK;
 
-    let results = await xem_chitietphancong_banthan(MAGV);
+    let results = await xem_chitietphancong_banthan(MAGV, MAHKNK);
 
     return res.status(200).json({
       EM: results.EM,
@@ -114,4 +115,5 @@ module.exports = {
   Dangky_ChitietphancongExcelController,
   selectChitietphancongController_giangvien,
   selectChitietphancongController_lop,
+  Xem_Chitietphancong_banthan_Controller,
 };
