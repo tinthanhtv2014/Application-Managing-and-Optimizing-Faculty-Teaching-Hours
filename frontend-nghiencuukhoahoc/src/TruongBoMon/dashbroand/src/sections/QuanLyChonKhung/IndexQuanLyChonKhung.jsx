@@ -13,22 +13,41 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
+import GVTableChuaChonKhung from "./component/GVTableChuaChonKhung";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
-
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
   const [data_ListGVDaChonKhung, setData_ListGVDaChonKhung] = useState([]);
   const [data_NamHoc, setData_NamHoc] = useState([]);
   const [ListNamHoc, setListNamHoc] = useState(null);
-  const [selectNamHoc, setSelectNamHoc] = useState([]);
+  const [selectNamHoc, setSelectNamHoc] = useState(null);
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
     useState(true);
 
   useEffect(() => {
-    fetchListGiangVien();
+    const fetchNamHocList = async () => {
+      try {
+        const response_NamHoc = await CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+        );
+        console.log("check response_NamHoc", response_NamHoc.data);
+        if (response_NamHoc.data.EC === 1) {
+          setListNamHoc(response_NamHoc.data.DT);
+          setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
+        }
+      } catch (error) {
+        console.error("Error fetching NamHoc data:", error);
+      }
+    };
+    fetchNamHocList();
   }, []);
+  useEffect(() => {
+    if (selectNamHoc) {
+      fetchGiangVienList(selectNamHoc);
+    }
+  }, [selectNamHoc]);
 
   useEffect(() => {
     if (
@@ -52,23 +71,18 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
-
-  const fetchListGiangVien = async () => {
+  const fetchGiangVienList = async (selectNamHoc) => {
     try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung`
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung/chitiet`,
+        { TENNAMHOC: selectNamHoc }
       );
-      const response_NamHoc = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
-      );
-
+      console.log("check setData_ListGVDaChonKhung", response.data);
       if (response.data.EC === 1) {
         setData_ListGVDaChonKhung(response.data.DT);
-        setListNamHoc(response_NamHoc.data.DT);
-        setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
       }
     } catch (error) {
-      console.error("Error fetching BoMon data:", error);
+      console.error("Error fetching GiangVien data:", error);
     }
   };
 
@@ -141,7 +155,7 @@ const IndexPhanCongGiangVien = () => {
               selectNamHoc={selectNamHoc}
             />
           ) : (
-            <GVTableDaChonKhung
+            <GVTableChuaChonKhung
               data={data_ListGVChuaChonKhung}
               selectNamHoc={selectNamHoc}
             />
