@@ -67,9 +67,8 @@ const get_giangvien_CNTT_dachonkhung = async (req, res) => {
 
 const get_giangvien_CNTT_dachonkhung_chitietonly = async (req, res) => {
   try {
-    const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
-    let results = await select_giangvien_dachonkhung_chitiet(TENNAMHOC, MAGV);
+    let results = await select_giangvien_dachonkhung_chitiet(TENNAMHOC);
 
     return res.status(200).json({
       EM: results.EM,

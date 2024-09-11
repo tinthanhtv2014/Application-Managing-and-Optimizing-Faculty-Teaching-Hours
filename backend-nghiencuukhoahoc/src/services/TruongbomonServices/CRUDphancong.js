@@ -78,7 +78,7 @@ const select_giangvien_dachonkhung = async () => {
   }
 };
 
-const select_giangvien_dachonkhung_chitiet = async (TENNAMHOC, MAGV) => {
+const select_giangvien_dachonkhung_chitiet = async (TENNAMHOC) => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
       `SELECT gv.*,nh.TENNAMHOC,kgc.*
@@ -88,13 +88,57 @@ const select_giangvien_dachonkhung_chitiet = async (TENNAMHOC, MAGV) => {
       JOIN namhoc nh ON nh.MANAMHOC = ck.MANAMHOC
       JOIN taikhoan tk ON gv.MAGV = tk.MAGV
       WHERE tk.TENDANGNHAP IS NOT NULL 
-      and gv.MAGV = ? and nh.TENNAMHOC = ?; `,
-      [MAGV, TENNAMHOC]
+       and nh.TENNAMHOC = ?; `,
+      [TENNAMHOC]
     );
+
+    console.log(results_ctdt_bomon);
+
+    let danhSachGiangVienDaChonKhung = [];
+
+    results_ctdt_bomon.forEach((dong) => {
+      let MaGV = danhSachGiangVienDaChonKhung.find(
+        (gv) => gv.MAGV === dong.MAGV
+      );
+
+      if (!MaGV) {
+        MaGV = {
+          MAGV: dong.MAGV,
+          ThongtinGiangvien: [],
+        };
+        danhSachGiangVienDaChonKhung.push(MaGV);
+      }
+
+      let giangvien = MaGV.ThongtinGiangvien.find(
+        (m) => m.TENGV === dong.TENGV
+      );
+
+      if (!giangvien) {
+        giangvien = {
+          MABOMON: dong.MABOMON,
+          TENNAMHOC: dong.TENNAMHOC,
+          TENGIANGVIEN: dong.TENGV,
+          EMAIL: dong.EMAIL,
+          GIOCHUAN: [],
+        };
+        MaGV.ThongtinGiangvien.push(giangvien);
+      }
+      if (!giangvien.GIOCHUAN.includes(dong.TENKHHUNGCHUAN)) {
+        giangvien.GIOCHUAN.push({
+          GIOGIANGDAY_HANHCHINH: dong.GIOGIANGDAY_HANHCHINH,
+          GIOGIANGDAY_CHUAN: dong.GIOGIANGDAY_CHUAN,
+          GIONGHIENCUUKHOAHOC_HANHCHINH: dong.GIONGHIENCUUKHOAHOC_HANHCHINH,
+          GIONGHIENCUUKHOAHOC_CHUAN: dong.GIONGHIENCUUKHOAHOC_CHUAN,
+          GIOPHUCVUCONGDONG_HANHCHINH: dong.GIOPHUCVUCONGDONG_HANHCHINH,
+          GIOPHUCVUCONGDONG_CHUAN: dong.GIOPHUCVUCONGDONG_CHUAN,
+        });
+      }
+    });
+
     return {
       EM: "Xem thông tin giảng viên đã chọn khung chuẩn thành công",
       EC: 1,
-      DT: results_ctdt_bomon,
+      DT: danhSachGiangVienDaChonKhung,
     };
   } catch (error) {
     console.log("error =>", error);

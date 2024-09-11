@@ -240,9 +240,64 @@ const xem_chitietphancong_lop = async () => {
   }
 };
 
+const xem_chitietphancong_banthan = async () => {
+  try {
+    let [results_chitietphancong_data, fields_data] = await pool.execute(
+      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.* from chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
+    );
+
+    const danhSachPhanCongGiangVien = [];
+
+    results_chitietphancong_data.forEach((dong) => {
+      let MaLop = danhSachPhanCongGiangVien.find(
+        (lop) => lop.MALOP === dong.MALOP
+      );
+
+      if (!MaLop) {
+        MaLop = {
+          MALOP: dong.MALOP,
+          monPhanCong: [],
+        };
+        danhSachPhanCongGiangVien.push(MaLop);
+      }
+
+      let monHoc = MaLop.monPhanCong.find(
+        (m) => m.TENMONHOC === dong.TENMONHOC
+      );
+
+      if (!monHoc) {
+        monHoc = {
+          TENMONHOC: dong.TENMONHOC,
+          TENHKNK: dong.TENHKNK,
+          TEN_NAM_HOC: dong.TEN_NAM_HOC,
+          TENGV: [],
+        };
+        MaLop.monPhanCong.push(monHoc);
+      }
+
+      if (!monHoc.TENGV.includes(dong.TENGV)) {
+        monHoc.TENGV.push({ MAGV: dong.MAGV, TENGV: dong.TENGV });
+      }
+    });
+    return {
+      EM: "xem thông tin phân công thành công",
+      EC: 1,
+      DT: danhSachPhanCongGiangVien,
+    };
+  } catch (error) {
+    console.log("Lỗi services createchitietphancong_excel", error);
+    return {
+      EM: "Lỗi services createTaiKhoanExcel",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   createchitietphancong_excel,
   Dangky_chitietphancong,
   xem_chitietphancong_giangvien,
   xem_chitietphancong_lop,
+  xem_chitietphancong_banthan,
 };

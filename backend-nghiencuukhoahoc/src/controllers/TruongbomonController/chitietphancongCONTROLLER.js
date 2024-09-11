@@ -3,6 +3,7 @@ const {
   Dangky_chitietphancong,
   xem_chitietphancong_giangvien,
   xem_chitietphancong_lop,
+  xem_chitietphancong_banthan,
 } = require("../../services/TruongbomonServices/CRUDChitietphancong");
 
 const selectChitietphancongController_giangvien = async (req, res) => {
@@ -71,6 +72,27 @@ const Dangky_ChitietphancongExcelController = async (req, res) => {
     const dataChitietphancongExcelArray = req.body;
 
     let results = await Dangky_chitietphancong(dataChitietphancongExcelArray);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller createChitietphancongExcelController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+const Xem_Chitietphancong_banthan_Controller = async (req, res) => {
+  try {
+    const MAGV = req.body.MAGV;
+
+    let results = await xem_chitietphancong_banthan(MAGV);
 
     return res.status(200).json({
       EM: results.EM,
