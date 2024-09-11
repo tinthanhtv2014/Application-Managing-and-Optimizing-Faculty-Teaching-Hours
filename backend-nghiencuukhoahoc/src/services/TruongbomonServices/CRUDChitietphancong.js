@@ -253,7 +253,8 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       and hockynienkhoa.MAHKNK = ?
       and monhoc.MAMONHOC = chitietphancong.MAMONHOC 
       and giangvien.MAGV = ? and hockynienkhoa.MAHKNK = bangphancong.MAHKNK
-      and lop.MALOP = chitietphancong.MALOP `
+      and lop.MALOP = chitietphancong.MALOP`,
+      [MAHKNK, MAGV]
     );
 
     console.log("cehci: ", results_chitietphancong_data);
@@ -282,7 +283,7 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
           NAMTUYENSINH: dong.NAMTUYENSINH,
           SISO: dong.SISO,
         };
-        MaLop.monPhanCong.push(monHoc);
+        Monhoc.CHITIET_LOP.push(lophoc);
       }
 
       // if (!monHoc.TENGV.includes(dong.TENGV)) {
