@@ -13,6 +13,11 @@ const FileExcel = lazy(() => import("../sections/FileExcel/FileExcel"));
 const IndexDangKyDanhmuc = lazy(() =>
   import("../sections/RegisterDanhMucGioChuan/IndexDangKyDanhMuc")
 );
+
+const IndexQuanLyChonKhung = lazy(() =>
+  import("../sections/QuanLyChonKhung/IndexQuanLyChonKhung")
+);
+
 const IndexPage = lazy(() => import("../pages/app"));
 const BlogPage = lazy(() => import("../pages/blog"));
 const UserPage = lazy(() => import("../pages/user"));
@@ -128,7 +133,7 @@ export default function Router() {
               />
             }
           >
-            <BlogPage />
+            <IndexQuanLyChonKhung />
           </Suspense>
         </DashboardLayout>
       ),
