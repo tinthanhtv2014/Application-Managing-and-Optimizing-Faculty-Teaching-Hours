@@ -116,8 +116,12 @@ const DangKyGioChuan = () => {
         setGiangVien(response.data.DT);
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         setMaGV(response.data.DT.MAGV);
-
-        setIsGVChucDanh(true);
+        console.log("check chuc danh =>", response.data.DT.TENCHUCDANH);
+        if (response.data.DT.TENCHUCDANH) {
+          setIsGVChucDanh(true);
+        } else {
+          setIsGVChucDanh(false);
+        }
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);

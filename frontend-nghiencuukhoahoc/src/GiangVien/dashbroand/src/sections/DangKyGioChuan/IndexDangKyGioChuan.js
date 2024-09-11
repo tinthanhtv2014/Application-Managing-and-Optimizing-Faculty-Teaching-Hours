@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import GV_Hang_III from "./page/GV_Hang_III";
 
-import GV_CaoCap_Hang_I from "./page/GV_CaoCap_Hang_I";
-import GV_Chinh_Hang_II from "./page/GV_Chinh_Hang_II";
-import GV_TapSu from "./page/GV_TapSu";
+import GV_ChucDanh from "./page/GV_ChucDanh";
+
 import { Button, Typography } from "@mui/material";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +14,8 @@ const DangKyGioChuan = () => {
   const [loading, setLoading] = useState(true);
 
   const [ChucDanhGiangVien, setChucDanhGiangVien] = useState(null);
-  const [isGVCaoCapHangI, setIsGVCaoCapHangI] = useState(false);
-  const [isGVChinhHangII, setIsGVChinhHangII] = useState(false);
-  const [isGVHangIII, setIsGVHangIII] = useState(false);
+  const [isGVChucDanh, setIsGVChucDanh] = useState(false);
 
-  const [isGVTapSu, setIsGVTapSu] = useState(false);
   const [IsOpenCheckKhoa, setIsOpenCheckKhoa] = useState(false);
   const [OpenChucNangtheokhungthoigian, setOpenChucNangtheokhungthoigian] =
     useState({ XemKhungGioChuan: null, ChonKhungGio: null });
@@ -28,11 +23,12 @@ const DangKyGioChuan = () => {
   const [MaGV, setMaGV] = useState(null);
 
   const navigate = useNavigate();
-
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
-
+    console.log("fetchDataGV run");
     fetchDataGV(decodeAuth.taikhoan);
   }, []);
 
@@ -64,17 +60,21 @@ const DangKyGioChuan = () => {
       ) {
         // Tìm phần tử có TEN_KHOA trùng khớp
         const matchedKhoa = response_XemTimeKhungGioChuan.data.DT.find(
-          (item) => item.TEN_KHOA === response.data.DT.TENKHOA
+          (item) =>
+            item.TEN_KHOA === response.data.DT.TENKHOA &&
+            item.GHICHU === "CHONKHUNG"
         );
-        console.log("matchedKhoa", matchedKhoa);
+
         if (matchedKhoa) {
           const startTime = matchedKhoa.THOIGIANBATDAU;
           const endTime = matchedKhoa.THOIGIANKETTHUC;
-
+          // console.log("matchedKhoa", matchedKhoa);
           // Định dạng startTime và endTime chỉ lấy ngày
           const formattedStartDate = formatDate(startTime);
           const formattedEndDate = formatDate(endTime);
 
+          setStartTime(moment(startTime).format("DD-MM-YYYY"));
+          setEndTime(moment(endTime).format("DD-MM-YYYY"));
           // Lấy thời gian hiện tại và định dạng chỉ có ngày
           const currentDate = formatDate(moment().format()); // Định dạng ngày hiện tại
 
@@ -90,6 +90,7 @@ const DangKyGioChuan = () => {
               "[)"
             )
           ) {
+            console.log("check true ");
             setOpenChucNangtheokhungthoigian({
               XemKhungGio: "Xem Khung Giờ",
               ChonKhungGio: "Chọn Khung Giờ",
@@ -115,22 +116,11 @@ const DangKyGioChuan = () => {
         setGiangVien(response.data.DT);
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         setMaGV(response.data.DT.MAGV);
-
-        switch (response.data.DT.TENCHUCDANH) {
-          case "Giảng viên (Hạng III)":
-            setIsGVHangIII(true);
-            break;
-          case "Giảng viên cao cấp (Hạng I)":
-            setIsGVCaoCapHangI(true);
-            break;
-          case "Giảng viên chính (Hạng II)":
-            setIsGVChinhHangII(true);
-            break;
-          case "Giảng viên Tập sự":
-            setIsGVTapSu(true);
-            break;
-          default:
-            break;
+        console.log("check chuc danh =>", response.data.DT.TENCHUCDANH);
+        if (response.data.DT.TENCHUCDANH) {
+          setIsGVChucDanh(true);
+        } else {
+          setIsGVChucDanh(false);
         }
       }
     } catch (error) {
@@ -142,7 +132,7 @@ const DangKyGioChuan = () => {
 
   const handleMoveProfileGV = () => {
     if (!loading) {
-      navigate("/giangvien/");
+      navigate("/truong-bm/thong-tin");
     }
   };
 
@@ -150,48 +140,16 @@ const DangKyGioChuan = () => {
     return <Typography>Đang tải dữ liệu, vui lòng đợi...</Typography>; // Hiển thị thông báo tải dữ liệu
   }
 
-  if (isGVHangIII) {
+  if (isGVChucDanh) {
     return (
-      <GV_Hang_III
+      <GV_ChucDanh
         IsOpenCheckKhoa={IsOpenCheckKhoa}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         ChucDanhGiangVien={ChucDanhGiangVien}
         MaGV={MaGV}
         fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-
-  if (isGVCaoCapHangI) {
-    return (
-      <GV_CaoCap_Hang_I
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-  if (isGVChinhHangII) {
-    return (
-      <GV_Chinh_Hang_II
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
-      />
-    );
-  }
-  if (isGVTapSu) {
-    return (
-      <GV_TapSu
-        IsOpenCheckKhoa={IsOpenCheckKhoa}
-        OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
-        ChucDanhGiangVien={ChucDanhGiangVien}
-        MaGV={MaGV}
-        fetchDataGV={fetchDataGV}
+        startTime={startTime}
+        endTime={endTime}
       />
     );
   }

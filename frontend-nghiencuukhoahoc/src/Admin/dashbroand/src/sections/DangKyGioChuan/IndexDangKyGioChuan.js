@@ -47,10 +47,10 @@ const DangKyGioChuan = () => {
       const response_XemTimeKhungGioChuan = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`
       );
-      console.log(
-        "response_XemTimeKhungGioChuan.data.DT",
-        response_XemTimeKhungGioChuan.data.DT
-      );
+      // console.log(
+      //   "response_XemTimeKhungGioChuan.data.DT",
+      //   response_XemTimeKhungGioChuan.data.DT
+      // );
       if (
         response_XemTimeKhungGioChuan.data.EC === 1 &&
         response_XemTimeKhungGioChuan.data.DT.length > 0
@@ -111,8 +111,11 @@ const DangKyGioChuan = () => {
         setGiangVien(response.data.DT);
         setChucDanhGiangVien(response.data.DT.TENCHUCDANH);
         setMaGV(response.data.DT.MAGV);
-
-        setIsGVChucDanh(true);
+        if (response.data.DT.TENCHUCDANH) {
+          setIsGVChucDanh(true);
+        } else {
+          setIsGVChucDanh(false);
+        }
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);

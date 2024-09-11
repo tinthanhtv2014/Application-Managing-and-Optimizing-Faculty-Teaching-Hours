@@ -5,11 +5,14 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import RenderData from "./RenderData/Renderdata";
 import CookiesAxios from "../../CookiesAxios";
-const GV_CaoCap_Hang_II = ({
+
+const GV_CaoCap_Hang_I = ({
   ChucDanhGiangVien,
   MaGV,
   OpenChucNangtheokhungthoigian,
   fetchDataGV,
+  startTime,
+  endTime,
 }) => {
   const [giangVien, setGiangVien] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +39,7 @@ const GV_CaoCap_Hang_II = ({
 
   const fetchDataGV_II = async () => {
     try {
+      console.log("ChucDanhGiangVien:", ChucDanhGiangVien);
       const [response_ListKhungChuan, responseListNamHoc] = await Promise.all([
         CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/khunggiochuan/${ChucDanhGiangVien}`
@@ -44,12 +48,6 @@ const GV_CaoCap_Hang_II = ({
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
         ),
       ]);
-
-      // console.log(
-      //   "Check response_ListKhungChuan:",
-      //   response_ListKhungChuan.data.DT
-      // );
-      // console.log("Check responseListNamHoc:", responseListNamHoc.data.DT);
 
       if (response_ListKhungChuan.data.EC === 1) {
         setListKhungGioChuan(response_ListKhungChuan.data.DT);
@@ -83,9 +81,11 @@ const GV_CaoCap_Hang_II = ({
         MaGV={MaGV}
         OpenChucNangtheokhungthoigian={OpenChucNangtheokhungthoigian}
         fetchDataGV={fetchDataGV}
+        endTime={endTime}
+        startTime={startTime}
       />
     </>
   );
 };
 
-export default GV_CaoCap_Hang_II;
+export default GV_CaoCap_Hang_I;
