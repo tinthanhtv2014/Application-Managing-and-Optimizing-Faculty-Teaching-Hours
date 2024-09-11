@@ -41,11 +41,12 @@ const createchitietphancong_excel = async (datachitietphancong) => {
       );
 
       await pool.execute(
-        `INSERT INTO chitietphancong (MAMONHOC,MAPHANCONG,MALOP) VALUES (?, ?,?)`,
+        `INSERT INTO chitietphancong (MAMONHOC,MAPHANCONG,MALOP,TONG_SO_GIO) VALUES (?, ?,?,?)`,
         [
           results_TENMONHOC[0].MAMONHOC,
           results_bangphancong_data[0].MAPHANCONG,
           datachitietphancong[i].MALOP,
+          datachitietphancong[i].THOIGIAN,
         ]
       );
 
@@ -268,6 +269,7 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       if (!Monhoc) {
         Monhoc = {
           TENMONHOC: dong.TENMONHOC,
+          THOI_LUONG_MON_HOC: dong.TONG_SO_GIO,
           TENHKNK: dong.TENHKNK,
           CHITIET_LOP: [],
         };
