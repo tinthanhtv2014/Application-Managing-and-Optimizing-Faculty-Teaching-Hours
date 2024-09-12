@@ -37,7 +37,7 @@ const RenderData = ({
 }) => {
   const [TenKhung, setTenKhung] = useState();
   const [loading, setLoading] = useState(true);
-  const [selectNamHoc, setSelectNamhoc] = useState();
+  const [selectNamHoc, setSelectNamhoc] = useState(null);
   const [isOpenOption, setIsOpenOption] = useState("Xem Khung Giờ");
   const [selectedRow, setSelectedRow] = useState(null);
   const [SelectKhungGioChuan, setSelectKhungGioChuan] = useState(null);
@@ -112,7 +112,9 @@ const RenderData = ({
         console.log(error);
       }
     };
-    DataXemKhungGio();
+    if (selectNamHoc) {
+      DataXemKhungGio();
+    }
   }, [isOpenOption, selectNamHoc]);
   const handleRowClick = (index, khungChuan) => {
     setSelectedRow(index);
