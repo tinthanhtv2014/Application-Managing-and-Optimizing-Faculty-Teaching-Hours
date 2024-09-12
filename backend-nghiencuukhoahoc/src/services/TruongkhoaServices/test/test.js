@@ -515,6 +515,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
         console.log("Nhận danh sách GV có thể dạy lớp này data_GV: ", data_GV);
         console.log("data_GV.length: ", data_GV.length);
 
+        //Tìm GV trong bảng chuyên môn và Auto phân công
         let data_CMGV;
         let data_AutoPhanCong;
         for (let i = 0; i < data_GV.length; i++) {
