@@ -3,6 +3,10 @@ import { Navigate, useRoutes } from "react-router-dom";
 import DashboardLayout from "../layouts/dashboard";
 import AccountGV from "../sections/Account/AccountGV";
 import Skeleton from "@mui/material/Skeleton";
+
+const IndexPhanCongCuaToi = lazy(() =>
+  import("../sections/PhanCongCuaToi/IndexPhanCongCuaToi")
+);
 const IndexPhanCongGiangVien = lazy(() =>
   import("../sections/PhanCongGiangVien/IndexPhanCongGiangVien")
 );
@@ -172,6 +176,25 @@ export default function Router() {
             }
           >
             <AccountGV />
+          </Suspense>
+        </DashboardLayout>
+      ),
+    },
+    {
+      path: "/phan-cong-cua-toi", // Gợi ý phân công giảng viên.
+      element: (
+        <DashboardLayout>
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height="100%"
+                sx={{ bgcolor: "grey.300" }}
+              />
+            }
+          >
+            <IndexPhanCongCuaToi />
           </Suspense>
         </DashboardLayout>
       ),
