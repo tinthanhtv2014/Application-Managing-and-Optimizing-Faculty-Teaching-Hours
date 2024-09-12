@@ -22,6 +22,10 @@ const IndexQuanLyChonKhung = lazy(() =>
   import("../sections/QuanLyChonKhung/IndexQuanLyChonKhung")
 );
 
+const IndexQuanLyCTDT = lazy(() =>
+  import("../sections/BomonCNTT/CTDT_CNTT/ChuongtrinhDT_CNTT")
+);
+
 const IndexPage = lazy(() => import("../pages/app"));
 const BlogPage = lazy(() => import("../pages/blog"));
 const UserPage = lazy(() => import("../pages/user"));
@@ -119,7 +123,9 @@ export default function Router() {
                 sx={{ bgcolor: "grey.300" }}
               />
             }
-          />
+          >
+            <IndexQuanLyCTDT />
+          </Suspense>
         </DashboardLayout>
       ),
     },
