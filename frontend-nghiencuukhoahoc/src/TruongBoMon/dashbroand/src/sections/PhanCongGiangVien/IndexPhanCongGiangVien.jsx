@@ -126,6 +126,8 @@ const IndexPhanCongGiangVien = () => {
         setData_MonHoc(response_MonHoc.data.DT);
         setIsOpenButton(true);
       }
+      console.log("data_MonHoc >>>>>>>: ", data_MonHoc)
+      console.log("response_MonHoc.data.DT: ", response_MonHoc.data.DT)
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
     }
@@ -152,6 +154,24 @@ const IndexPhanCongGiangVien = () => {
   if (Loading) {
     return "Đang tải dữ liệu...";
   }
+
+  // Hàm xử lý sự kiện để gửi data_MonHoc vào API
+  const handleAutoAssign = async () => {
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/test/phancong`,
+        { data: data_MonHoc } // Gửi data_MonHoc vào API
+      );
+
+      if (response.data.EC === 1) {
+        console.log("Phân công tự động thành công:", response.data);
+      } else {
+        console.error("Phân công tự động thất bại:", response.data.EM);
+      }
+    } catch (error) {
+      console.error("Lỗi khi phân công tự động:", error);
+    }
+  };
 
   return (
     <>
@@ -311,7 +331,9 @@ const IndexPhanCongGiangVien = () => {
                 {" "}
                 <Grid item md={10}>
                   {" "}
-                  <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
+                  <Button variant="contained" onClick={handleAutoAssign}>
+                    Tự Động Phân Công Tất Cả
+                  </Button>
                 </Grid>
                 <Grid item md={2}>
                   {" "}

@@ -272,18 +272,18 @@ const DangKyDanhMucGioChuan = ({
         (tacGia, i) =>
           i === index
             ? {
-                loai: "",
-                khoa: "",
-                boMon: "",
-                maSoGV: "",
-                tenGV: "",
-                emailGV: "",
-                searchTerm: "",
-                laVienChuc: !isNgoaiTruong,
-                duocMien: false,
-                soGio: "",
-                soPhanTram: "",
-              } // Reset thông tin giảng viên tại index
+              loai: "",
+              khoa: "",
+              boMon: "",
+              maSoGV: "",
+              tenGV: "",
+              emailGV: "",
+              searchTerm: "",
+              laVienChuc: !isNgoaiTruong,
+              duocMien: false,
+              soGio: "",
+              soPhanTram: "",
+            } // Reset thông tin giảng viên tại index
             : tacGia // Giữ nguyên các giảng viên khác
       )
     );
@@ -501,7 +501,7 @@ const DangKyDanhMucGioChuan = ({
         "Thông tin đăng ký danh mục quy đổi không có tài khoản của bạn!"
       );
       console.error("Bạn phải đăng ký thông tin của chính mình", tacGiaList);
-      console.log("MAGV bản thân =>", MaGV);
+      // console.log("MAGV bản thân =>", MaGV);
       return; // Dừng hàm nếu có giảng viên không hợp lệ
     }
     try {
@@ -790,7 +790,7 @@ const DangKyDanhMucGioChuan = ({
                                     }
                                   >
                                     {data_BoMon[index] &&
-                                    data_BoMon[index].length > 0 ? (
+                                      data_BoMon[index].length > 0 ? (
                                       (data_BoMon[index] || []).map((loai) => (
                                         <MenuItem
                                           key={loai.MABOMON}

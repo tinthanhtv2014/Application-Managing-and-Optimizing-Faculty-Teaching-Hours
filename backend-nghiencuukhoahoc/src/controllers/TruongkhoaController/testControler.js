@@ -3,7 +3,9 @@ const {
   Sevicel_DanhMuc_Excel,
   Sevicel_TyLe_Excel,
   Sevicel_CoTyLe_Excel,
+
   Sevicel_PhanCong_Test,
+  Sevicel_AutoPhanCong_Test
 } = require("../../services/TruongkhoaServices/test/test");
 
 const LoaiDanhMucExcelController = async (req, res) => {
@@ -101,7 +103,7 @@ const PhanCongControllerTest = async (req, res) => {
   try {
     let data = req.body;
     // console.log("data: ", data)
-    let results = await Sevicel_PhanCong_Test(data);
+    let results = await Sevicel_AutoPhanCong_Test(data);
 
     return res.status(200).json({
       EM: results.EM,

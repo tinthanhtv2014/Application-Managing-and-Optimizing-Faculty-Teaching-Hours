@@ -439,11 +439,31 @@ const Sevicel_PhanCong_Test = async (dataPhanCong) => {
     }
 };
 
+const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
+    try {
+        console.log("dataAutoPhanCong: ", dataAutoPhanCong);
+
+        return {
+            EM: "Đã nhận",
+            EC: 1,
+            DT: 'ok',
+        };
+    } catch (error) {
+        console.error("Lỗi trong try-catch: ", error);
+        return {
+            EM: "Đã xảy ra lỗi khi thêm hoặc xóa dữ liệu",
+            EC: -1,
+            DT: null,
+        };
+    }
+};
+
 module.exports = {
     Sevicel_LoaiDanhMuc_Excel,
     Sevicel_DanhMuc_Excel,
     Sevicel_TyLe_Excel,
     Sevicel_CoTyLe_Excel,
 
-    Sevicel_PhanCong_Test
+    Sevicel_PhanCong_Test,
+    Sevicel_AutoPhanCong_Test
 };

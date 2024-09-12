@@ -263,7 +263,7 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       [MAHKNK, MAGV]
     );
 
-    console.log("cehci: ", results_chitietphancong_data);
+    // console.log("cehci: ", results_chitietphancong_data);
     const danhSachPhanCongGiangVien = [];
 
     results_chitietphancong_data.forEach((dong) => {

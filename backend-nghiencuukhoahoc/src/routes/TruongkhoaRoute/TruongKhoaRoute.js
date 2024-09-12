@@ -33,6 +33,7 @@ const TruongKhoaRoute = (app) => {
 
   router.get("/test/dudoan", GOI_Y_SERVER);
   router.post("/test/dudoan/rf", GOI_Y_SERVER_rf);
+
   return app.use("/api/v1/truongkhoa", router);
 };
 

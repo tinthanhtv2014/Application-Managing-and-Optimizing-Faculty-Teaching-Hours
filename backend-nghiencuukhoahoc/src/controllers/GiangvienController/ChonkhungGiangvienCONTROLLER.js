@@ -16,8 +16,8 @@ const select_CHONKHUNG = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
-    console.log("TENNAMHOC", TENNAMHOC);
-    console.log("MAGV", MAGV);
+    // console.log("TENNAMHOC", TENNAMHOC);
+    // console.log("MAGV", MAGV);
     let results = await xem_CHONKHUNG_cho_GIANGVIEN(MAGV, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,
