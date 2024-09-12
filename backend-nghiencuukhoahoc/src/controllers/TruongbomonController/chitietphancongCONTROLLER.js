@@ -8,7 +8,8 @@ const {
 
 const selectChitietphancongController_giangvien = async (req, res) => {
   try {
-    let results = await xem_chitietphancong_giangvien();
+    const MAHKNK = req.body.MAHKNK;
+    let results = await xem_chitietphancong_giangvien(MAHKNK);
 
     return res.status(200).json({
       EM: results.EM,

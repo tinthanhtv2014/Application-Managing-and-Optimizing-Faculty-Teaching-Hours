@@ -80,7 +80,7 @@ const CRUDgiangvien_CNTT = (app) => {
     selectChitietphancongController_lop
   );
 
-  router.get(
+  router.post(
     "/xem/danhsach/monhoc/danhsach/giangvien",
     selectChitietphancongController_giangvien
   );

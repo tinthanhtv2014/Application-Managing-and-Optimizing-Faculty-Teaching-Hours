@@ -133,10 +133,12 @@ const Dangky_chitietphancong = async (datachitietphancong) => {
   }
 };
 
-const xem_chitietphancong_giangvien = async () => {
+const xem_chitietphancong_giangvien = async (MAHKNK) => {
   try {
     let [results_chitietphancong_data, fields_data] = await pool.execute(
-      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.*,hockynienkhoa.* from hockynienkhoa,chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and hockynienkhoa.MAHKNK = bangphancong.MAHKNK and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC`
+      `select chitietphancong.*,bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.*,hockynienkhoa.* from hockynienkhoa,chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan where giangvien.MAGV = chon_khung.MAGV and hockynienkhoa.MAHKNK = bangphancong.MAHKNK and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and  giangvien.MAGV = bangphancong.MAGV and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and monhoc.MAMONHOC = chitietphancong.MAMONHOC 
+      and hockynienkhoa.MAHKNK = ?`,
+      [MAHKNK]
     );
 
     const danhSachPhanCongGiangVien = [];
@@ -163,6 +165,7 @@ const xem_chitietphancong_giangvien = async () => {
           TENMONHOC: dong.TENMONHOC,
           TENHKNK: dong.TENHKNK,
           TEN_NAM_HOC: dong.TEN_NAM_HOC,
+          SO_GIO: dong.TONG_SO_GIO,
           MALOP: [],
         };
         giangVien.monPhanCong.push(monHoc);
