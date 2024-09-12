@@ -439,9 +439,106 @@ const Sevicel_PhanCong_Test = async (dataPhanCong) => {
     }
 };
 
+const XuLy_dataAutoPhanCong = async (dataAutoPhanCong) => {
+    for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
+        // Truy xuất tên môn học của phần tử hiện tại
+        const tenMonHoc = dataAutoPhanCong.data[i].TENMONHOC;
+
+        // Truy vấn thông tin môn học từ cơ sở dữ liệu
+        let [data_MonHoc] = await pool.execute(
+            `SELECT * FROM monhoc MH WHERE MH.TENMONHOC = ?`,
+            [tenMonHoc]
+        );
+
+        // Nếu tìm thấy môn học, cập nhật thông tin vào đối tượng hiện tại
+        if (data_MonHoc.length > 0) {
+            dataAutoPhanCong.data[i].TENMONHOC = data_MonHoc[0].TENMONHOC;
+        } else {
+            dataAutoPhanCong.data[i].TENMONHOC = -1;
+        }
+    }
+    return dataAutoPhanCong;
+};
+
+const XuLy_data_GV_TungDay = async (dataAutoPhanCong) => {
+    let [data_GV_TungDay] = await pool.execute(
+        `SELECT BM.TENBOMON, L.MALOP, GV.MAGV, GV.TENGV, MH.MAMONHOC, MH.TENMONHOC
+        FROM lop L
+        JOIN chuongtrinhdaotao CTDT ON L.MACHUONGTRINH = CTDT.MACHUONGTRINH
+        JOIN thuoc T ON T.MACHUONGTRINH = CTDT.MACHUONGTRINH
+        JOIN monhoc MH ON MH.MAMONHOC = T.MAMONHOC
+        JOIN bomon BM ON BM.MABOMON = CTDT.MABOMON
+        JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
+        JOIN bangphancong BPC ON BPC.MAGV = GV.MAGV
+        JOIN chitietphancong CTPC ON CTPC.MAPHANCONG = BPC.MAPHANCONG
+        WHERE L.MALOP = ?
+        GROUP BY BM.TENBOMON, L.MALOP, GV.TENGV;`,
+        [
+            dataAutoPhanCong.data[0].MALOP,
+        ]
+    );
+    return data_GV_TungDay;
+};
+
+const XuLy_data_GV = async (dataAutoPhanCong) => {
+    console.log("Nhận diện cho lớp: ", dataAutoPhanCong.data[0].MALOP);
+    console.log("Số thứ tự học kỳ: ", dataAutoPhanCong.data[0].SOTHUTUHOCKI);
+    let [data_GV] = await pool.execute(
+        `SELECT BM.TENBOMON, L.MALOP, GV.MAGV, GV.TENGV
+            FROM lop L
+            JOIN chuongtrinhdaotao CTDT ON L.MACHUONGTRINH = CTDT.MACHUONGTRINH
+            JOIN thuoc T ON T.MACHUONGTRINH = CTDT.MACHUONGTRINH
+            JOIN monhoc MH ON MH.MAMONHOC = T.MAMONHOC
+            JOIN bomon BM ON BM.MABOMON = CTDT.MABOMON
+            JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
+            WHERE L.MALOP = ? AND T.SOTHUTUHOCKI = ?
+            GROUP BY BM.TENBOMON, L.MALOP, GV.TENGV;`,
+        [
+            dataAutoPhanCong.data[0].MALOP,
+            dataAutoPhanCong.data[0].SOTHUTUHOCKI
+        ]
+    );
+    return data_GV;
+};
+
 const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
     try {
-        console.log("dataAutoPhanCong: ", dataAutoPhanCong);
+        dataAutoPhanCong = await XuLy_dataAutoPhanCong(dataAutoPhanCong);
+        console.log("Đã xủ lý dataAutoPhanCong: ", dataAutoPhanCong);
+
+        //Lấy ds giảng viên từng dạy ở lớp này
+        let data_GV_TungDay = await XuLy_data_GV_TungDay(dataAutoPhanCong);
+        console.log("data_GV_TungDay: ", data_GV_TungDay);
+
+        //Lấy ds giảng viên có thể dạy ở lớp này
+        let data_GV = await XuLy_data_GV(dataAutoPhanCong);
+        console.log("Nhận danh sách GV có thể dạy lớp này data_GV: ", data_GV);
+        console.log("data_GV.length: ", data_GV.length);
+
+        let data_CMGV;
+        let data_AutoPhanCong;
+        for (let i = 0; i < data_GV.length; i++) {
+            for (let y = 0; y < dataAutoPhanCong.data.length; y++) {
+                // console.log("data_for: ", i, y, data_GV[i].MAGV, dataAutoPhanCong.data[y].MAMONHOC, dataAutoPhanCong.data[y].MALOP);
+                [data_CMGV] = await pool.execute(
+                    `SELECT * FROM chuyen_mon_giang_vien WHERE MA_GV_CMGV = ? AND MA_MON_CMGV = ?`,
+                    [
+                        data_GV[i].MAGV,
+                        dataAutoPhanCong.data[y].MAMONHOC
+                    ]
+                );
+
+                [data_AutoPhanCong] = await pool.execute(
+                    `SELECT * FROM phan_cong_gv_tu_dong 
+                    WHERE MAGV_PCGVTD = ? AND MA_MON_HOC_PCGVTD = ? AND MA_LOP_PCGVTD = ?`,
+                    [
+                        data_GV[i].MAGV, dataAutoPhanCong.data[y].MAMONHOC, dataAutoPhanCong.data[y].MALOP
+                    ]
+                );
+            }
+        }
+        console.log("data_CMGV.length: ", data_CMGV.length);
+        console.log("data_AutoPhanCong.length: ", data_AutoPhanCong.length);
 
         return {
             EM: "Đã nhận",
@@ -451,7 +548,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
     } catch (error) {
         console.error("Lỗi trong try-catch: ", error);
         return {
-            EM: "Đã xảy ra lỗi khi thêm hoặc xóa dữ liệu",
+            EM: "Đã xảy ra lỗi khi phân công giảng viên tự động",
             EC: -1,
             DT: null,
         };
