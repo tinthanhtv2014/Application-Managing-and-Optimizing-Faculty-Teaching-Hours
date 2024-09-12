@@ -84,6 +84,7 @@ const ChuongtrinhDT_CNTT = () => {
 
       // Lưu trữ dữ liệu môn học từ API trả về
       const monHocData = chuongtrinh_chitiet_Response.data.DT;
+      console.log("check", monHocData);
       setMonHocData(monHocData);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu học kỳ:", error);
@@ -209,133 +210,168 @@ const ChuongtrinhDT_CNTT = () => {
           </FormControl>
         )}
       </div>
+      {selectedHocki ? (
+        <>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    colSpan={5}
+                    className="tableHeaderCell1"
+                  >
+                    Mô tả chi tiết
+                  </TableCell>
+                </TableRow>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                align="center"
-                colSpan={2}
-                className="tableHeaderCell1"
-              >
-                Mô tả chi tiết
-              </TableCell>
-              <TableCell
-                align="center"
-                colSpan={3}
-                className="tableHeaderCell1"
-              >
-                Tổng số
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell align="center" className="tableHeaderCell">
-                Tên Chương Trình
-              </TableCell>
-              <TableCell align="center" className="tableHeaderCell">
-                Tên Môn Học
-              </TableCell>
-              <TableCell align="center" className="tableHeaderCell">
-                Số Tín Chỉ Lý Thuyết
-              </TableCell>
-              <TableCell align="center" className="tableHeaderCell">
-                Số Tín Chỉ Thực Hành
-              </TableCell>
-              <TableCell align="center" className="tableHeaderCell">
-                Tổng Số Tín Chỉ
-              </TableCell>
-              <TableCell align="center" className="tableHeaderCell">
-                Ghi Chú
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell align="center" colSpan={2} className="tableHeaderCell">
-                Học Phần Bắt Buộc
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {monHocData
-              .filter(
-                (monHoc) =>
-                  monHoc.SOTHUTUHOCKI === selectedHocki &&
-                  monHoc.GHICHU === "bb"
-              )
-              .map((monHoc, index) => (
-                <TableRow key={index}>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.TENCHUONGTRINH}
+                <TableRow>
+                  <TableCell align="center" className="tableHeaderCell1">
+                    Số Quyết Định
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.TENMONHOC}
+                  <TableCell align="center" className="tableHeaderCell1">
+                    Trình Độ
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHILYTHUYET}
+                  <TableCell align="center" className="tableHeaderCell1">
+                    Hình Thức
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHITHUCHANH}
-                  </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
-                  </TableCell>
-                  <TableCell align="center" className="tableBodyCell-ghichubb">
-                    {monHoc.GHICHU === "bb" ? "Bắt buộc" : null}
+                  <TableCell align="center" className="tableHeaderCell1">
+                    Tổng Số Tín Chỉ
                   </TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-          <TableRow>
-            <TableCell align="center" colSpan={2} className="tableHeaderCell">
-              Học Phần Tự Chọn
-            </TableCell>
-          </TableRow>
-          <TableBody>
-            {monHocData
-              .filter(
-                (monHoc) =>
-                  monHoc.SOTHUTUHOCKI === selectedHocki &&
-                  monHoc.GHICHU === "tc"
-              )
-              .map((monHoc, index) => (
-                <TableRow key={index}>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.TENCHUONGTRINH}
+                {monHocData && monHocData.length > 0 ? (
+                  <>
+                    <TableRow>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHocData[0].SO_QUYET_DINH}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHocData[0].TRINH_DO}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHocData[0].MO_TA_HOC_KY}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHocData[0].TONG_SO_TIN_CHI}
+                      </TableCell>
+                    </TableRow>
+                  </>
+                ) : null}
+                <TableRow>
+                  <TableCell align="center" className="tableHeaderCell">
+                    Tên Môn Học
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.TENMONHOC}
+                  <TableCell align="center" className="tableHeaderCell">
+                    Số Tín Chỉ Lý Thuyết
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHILYTHUYET}
+                  <TableCell align="center" className="tableHeaderCell">
+                    Số Tín Chỉ Thực Hành
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHITHUCHANH}
+                  <TableCell align="center" className="tableHeaderCell">
+                    Tổng Số Tín Chỉ
                   </TableCell>
-                  <TableCell align="center" className="tableBodyCell">
-                    {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
-                  </TableCell>
-                  <TableCell align="center" className="tableBodyCell-ghichutc">
-                    {monHoc.GHICHU === "tc" ? "Tự Chọn" : null}
+                  <TableCell align="center" className="tableHeaderCell">
+                    Ghi Chú
                   </TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-          <TableRow>
-            <TableCell colSpan={2} align="center" className="tablefootCell">
-              Tổng số tín chỉ
-            </TableCell>
-            <TableCell align="center" className="tablefootCell">
-              {totalLyThuyet}
-            </TableCell>
-            <TableCell align="center" className="tablefootCell">
-              {totalThucHanh}
-            </TableCell>
-            <TableCell align="center" className="tablefootCell">
-              {total_tong}
-            </TableCell>
-          </TableRow>
-        </Table>
-      </TableContainer>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    colSpan={2}
+                    className="tableHeaderCell"
+                  >
+                    Học Phần Bắt Buộc
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {monHocData
+                  .filter(
+                    (monHoc) =>
+                      monHoc.SOTHUTUHOCKI === selectedHocki &&
+                      monHoc.GHICHU === "bb"
+                  )
+                  .map((monHoc, index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.TENMONHOC}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHILYTHUYET}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHITHUCHANH}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="tableBodyCell-ghichubb"
+                      >
+                        {monHoc.GHICHU === "bb" ? "Bắt buộc" : null}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+              <TableRow>
+                <TableCell
+                  align="center"
+                  colSpan={2}
+                  className="tableHeaderCell"
+                >
+                  Học Phần Tự Chọn
+                </TableCell>
+              </TableRow>
+              <TableBody>
+                {monHocData
+                  .filter(
+                    (monHoc) =>
+                      monHoc.SOTHUTUHOCKI === selectedHocki &&
+                      monHoc.GHICHU === "tc"
+                  )
+                  .map((monHoc, index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.TENMONHOC}
+                      </TableCell>
+
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHILYTHUYET}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHITHUCHANH}
+                      </TableCell>
+                      <TableCell align="center" className="tableBodyCell">
+                        {monHoc.SOTINCHILYTHUYET + monHoc.SOTINCHITHUCHANH}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="tableBodyCell-ghichutc"
+                      >
+                        {monHoc.GHICHU === "tc" ? "Tự Chọn" : null}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+              <TableRow>
+                <TableCell colSpan={2} align="center" className="tablefootCell">
+                  Tổng số tín chỉ
+                </TableCell>
+                <TableCell align="center" className="tablefootCell">
+                  {totalLyThuyet}
+                </TableCell>
+                <TableCell align="center" className="tablefootCell">
+                  {totalThucHanh}
+                </TableCell>
+                <TableCell align="center" className="tablefootCell">
+                  {total_tong}
+                </TableCell>
+              </TableRow>
+            </Table>
+          </TableContainer>
+        </>
+      ) : null}
     </div>
   );
 };
