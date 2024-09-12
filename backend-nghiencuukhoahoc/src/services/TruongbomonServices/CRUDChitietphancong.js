@@ -158,7 +158,9 @@ const xem_chitietphancong_giangvien = async (MAHKNK) => {
         danhSachPhanCongGiangVien.push(giangVien);
       }
 
-      let monHoc = giangVien.monPhanCong.find((m) => m.mon === dong.TENMONHOC);
+      let monHoc = giangVien.monPhanCong.find(
+        (m) => m.TENMONHOC === dong.TENMONHOC
+      );
 
       if (!monHoc) {
         monHoc = {
