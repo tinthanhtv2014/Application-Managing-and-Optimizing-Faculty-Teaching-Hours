@@ -68,6 +68,7 @@ const get_giangvien_CNTT_dachonkhung = async (req, res) => {
 const get_giangvien_CNTT_dachonkhung_chitietonly = async (req, res) => {
   try {
     const TENNAMHOC = req.body.TENNAMHOC;
+    console.log("check TENNAMHOC", TENNAMHOC);
     let results = await select_giangvien_dachonkhung_chitiet(TENNAMHOC);
 
     return res.status(200).json({

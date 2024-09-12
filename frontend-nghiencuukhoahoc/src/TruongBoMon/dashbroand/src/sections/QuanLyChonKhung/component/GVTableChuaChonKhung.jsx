@@ -75,6 +75,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+            {(!isMobile || showAll) && <TableCell>#</TableCell>}
             {(!isMobile || showAll) && <TableCell>Mã Giảng Viên</TableCell>}
             <TableCell>Tên Giảng Viên</TableCell>
             {(!isMobile || showAll) && <TableCell>Email</TableCell>}
@@ -83,7 +84,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {paginatedData.map((row) => (
+          {paginatedData.map((row, index) => (
             <React.Fragment key={row.MAGV}>
               <TableRow
                 onClick={() => handleRowClick(row)}
@@ -91,6 +92,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc }) => {
                   cursor: "pointer",
                 }}
               >
+                {(!isMobile || showAll) && <TableCell>{index + 1}</TableCell>}
                 {(!isMobile || showAll) && <TableCell>{row.MAGV}</TableCell>}
                 <TableCell
                   className={`${selectedGV === row.MAGV ? "text-success" : ""}`}

@@ -33,6 +33,7 @@ const GVTableDaChonKhung = ({ data }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell>#</TableCell>
             <TableCell>Mã Giảng Viên</TableCell>
             <TableCell>Tên Giảng Viên</TableCell>
             <TableCell>Email</TableCell>
@@ -43,11 +44,12 @@ const GVTableDaChonKhung = ({ data }) => {
         </TableHead>
         <TableBody>
           {paginatedData.length > 0 ? (
-            paginatedData.map((row) => {
+            paginatedData.map((row, index) => {
               const info = row.ThongtinGiangvien[0]; // Lấy thông tin giảng viên
               const gioChuan = info.GIOCHUAN[0]; // Lấy thông tin giờ chuẩn
               return (
                 <TableRow key={row.MAGV}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{row.MAGV}</TableCell>
                   <TableCell>{info.TENGIANGVIEN}</TableCell>
                   <TableCell>{info.EMAIL || "Không có"}</TableCell>

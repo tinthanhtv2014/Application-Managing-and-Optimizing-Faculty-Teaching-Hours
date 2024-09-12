@@ -92,7 +92,8 @@ const Xem_Chitietphancong_banthan_Controller = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const MAHKNK = req.body.MAHKNK;
-
+    console.log("check MAGV", MAGV);
+    console.log("check MAHKNK", MAHKNK);
     let results = await xem_chitietphancong_banthan(MAGV, MAHKNK);
 
     return res.status(200).json({

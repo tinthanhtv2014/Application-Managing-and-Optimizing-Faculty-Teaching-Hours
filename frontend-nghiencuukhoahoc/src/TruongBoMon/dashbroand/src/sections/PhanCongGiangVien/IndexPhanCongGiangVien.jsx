@@ -19,6 +19,7 @@ import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import LopMonHocTable from "./component/LopMonHocTable";
+import ListPhanCong from "./component/XemPhanCong";
 
 const IndexPhanCongGiangVien = () => {
   const [data_ListGVChuaChonKhung, setData_ListGVChuaChonKhung] = useState([]);
@@ -36,8 +37,9 @@ const IndexPhanCongGiangVien = () => {
 
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
-  const [isOpenXemGiangVienChonKhung, setIsOpenXemGiangVienChonKhung] =
-    useState(true);
+  const [isOpenXemPhanCong, setIsOpenXemPhanCong] = useState(
+    "Thực Hiện Phân Công"
+  );
 
   const [isOpenButton, setIsOpenButton] = useState(false);
   const [isOpenSwap, setIsOpenSwap] = useState(true);
@@ -154,6 +156,30 @@ const IndexPhanCongGiangVien = () => {
   return (
     <>
       <Grid container spacing={2}>
+        <Grid item xs={12} md={3}>
+          <Box sx={{ maxWidth: { md: 250, xs: "100%" } }}>
+            <FormControl fullWidth className="profile-email-input">
+              <InputLabel id="select-label-hoc-ki-nien-khoa">
+                Học Kì Niên Khóa
+              </InputLabel>
+              <Select
+                labelId="select-label-hoc-ki-nien-khoa"
+                id="hoc-ki-nien-khoa-select"
+                name="HOCKINIENKHOA"
+                label="Học Kì Niên Khóa"
+                value={isOpenXemPhanCong}
+                defaultValue={isOpenXemPhanCong}
+                onChange={(e) => setIsOpenXemPhanCong(e.target.value)}
+                variant="outlined"
+              >
+                <MenuItem value="Xem Phân Công">Xem Phân Công</MenuItem>{" "}
+                <MenuItem value="Thực Hiện Phân Công">
+                  Thực Hiện Phân Công
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
         {/* Học Kì Niên Khóa */}
         <Grid item xs={12} md={3}>
           <Box sx={{ maxWidth: { md: 250, xs: "100%" } }}>
@@ -187,7 +213,7 @@ const IndexPhanCongGiangVien = () => {
           </Box>
         </Grid>
         {/* Danh Sách Lớp */}
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={2}>
           <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
             <FormControl fullWidth className="profile-email-input">
               <InputLabel id="select-label-lop">Danh Sách Lớp</InputLabel>
@@ -204,7 +230,7 @@ const IndexPhanCongGiangVien = () => {
                 {data_Lop && data_Lop.length > 0 ? (
                   data_Lop.map((lop, index) => (
                     <MenuItem key={index} value={lop.MALOP}>
-                      {lop.TENLOP}
+                      {lop.MALOP}
                     </MenuItem>
                   ))
                 ) : (
@@ -216,73 +242,93 @@ const IndexPhanCongGiangVien = () => {
             </FormControl>
           </Box>
         </Grid>{" "}
-        <Grid item xs={12} md={2}>
-          <FormControlLabel
-            sx={{ mt: 2 }}
-            control={
-              <Switch
-                checked={isOpenSwap} // Kiểm soát Switch dựa vào isOpenSwap
-                onChange={handleChange} // Gọi hàm khi Switch thay đổi
-                inputProps={{ "aria-label": "controlled" }}
-                color="secondary"
-              />
-            }
-            label="Sử dụng gợi ý"
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2}>
-        {" "}
-        <Grid item xs={12} md={8}>
-          {" "}
-          <Box sx={{ mt: 3 }}>
-            <LopMonHocTable
-              data={data_MonHoc}
-              handlePhanCong={handlePhanCong}
-            />
-          </Box>
-        </Grid>
-        {isOpenSwap ? (
+        {isOpenXemPhanCong === "Thực Hiện Phân Công" ? (
           <>
             {" "}
-            <Grid item xs={12} md={3}>
-              {" "}
-              <Box sx={{ mt: 3 }}>Gợi Ý</Box>
-            </Grid>{" "}
+            <Grid item xs={12} md={2}>
+              <FormControlLabel
+                sx={{ mt: 2 }}
+                control={
+                  <Switch
+                    checked={isOpenSwap} // Kiểm soát Switch dựa vào isOpenSwap
+                    onChange={handleChange} // Gọi hàm khi Switch thay đổi
+                    inputProps={{ "aria-label": "controlled" }}
+                    color="secondary"
+                  />
+                }
+                label="Sử dụng gợi ý"
+              />
+            </Grid>
           </>
         ) : (
-          <>
-            {" "}
-            <Grid item xs={12} md={3}>
-              {" "}
-              <Box sx={{ mt: 3 }}>
-                <GVTableDaChonKhung
-                  data={data_ListGVDaChonKhung}
-                  selectNamHoc={selectNamHoc}
-                  select_HocKiNienKhoa={select_HocKiNienKhoa}
-                />
-              </Box>
-            </Grid>{" "}
-          </>
+          <></>
         )}
       </Grid>
-      {isOpenButton ? (
+
+      {/* -----------TABLE SHOW GIANGVIEN----------- */}
+      {isOpenXemPhanCong === "Thực Hiện Phân Công" ? (
         <>
           {" "}
-          <Grid container spacing={2} mt={2}>
+          <Grid container spacing={2}>
             {" "}
-            <Grid item md={10}>
+            <Grid item xs={12} md={8}>
               {" "}
-              <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
+              <Box sx={{ mt: 3 }}>
+                <LopMonHocTable
+                  data={data_MonHoc}
+                  handlePhanCong={handlePhanCong}
+                />
+              </Box>
             </Grid>
-            <Grid item md={2}>
-              {" "}
-              <Button variant="contained">Xác Nhận</Button>
-            </Grid>
+            {isOpenSwap ? (
+              <>
+                {" "}
+                <Grid item xs={12} md={3}>
+                  {" "}
+                  <Box sx={{ mt: 3 }}>Gợi Ý</Box>
+                </Grid>{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                <Grid item xs={12} md={3}>
+                  {" "}
+                  <Box sx={{ mt: 3 }}>
+                    <GVTableDaChonKhung
+                      data={data_ListGVDaChonKhung}
+                      selectNamHoc={selectNamHoc}
+                      select_HocKiNienKhoa={select_HocKiNienKhoa}
+                    />
+                  </Box>
+                </Grid>{" "}
+              </>
+            )}
           </Grid>
+          {isOpenButton ? (
+            <>
+              {" "}
+              <Grid container spacing={2} mt={2}>
+                {" "}
+                <Grid item md={10}>
+                  {" "}
+                  <Button variant="contained">Tự Động Phân Công Tất Cả</Button>
+                </Grid>
+                <Grid item md={2}>
+                  {" "}
+                  <Button variant="contained">Xác Nhận</Button>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <> </>
+          )}{" "}
         </>
       ) : (
-        <> </>
+        <>
+          <h1>
+            <ListPhanCong />
+          </h1>
+        </>
       )}
     </>
   );

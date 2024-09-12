@@ -71,7 +71,6 @@ const CRUDgiangvien_CNTT = (app) => {
     Dangky_ChitietphancongExcelController
   );
 
-  //phúc note
   router.post(
     "/xem/danhsach/monhoc/giangvien",
     get_giangvien_MonHoc_daChonKhung
