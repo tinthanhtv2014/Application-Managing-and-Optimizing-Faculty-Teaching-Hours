@@ -9,6 +9,7 @@ const {
 const selectChitietphancongController_giangvien = async (req, res) => {
   try {
     const MAHKNK = req.body.MAHKNK;
+    console.log("check MAHKNK", MAHKNK);
     let results = await xem_chitietphancong_giangvien(MAHKNK);
 
     return res.status(200).json({

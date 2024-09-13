@@ -95,7 +95,7 @@ const IndexPhanCongGiangVien = () => {
         setData_ListGVDaChonKhung(response.data.DT);
         setData_hocKiNienKhoa(response_hocKiNienKhoa.data.DT);
         setListNamHoc(response_NamHoc.data.DT);
-        setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0].TENDANHGIA);
+        setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0]);
         setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
       }
     } catch (error) {
@@ -110,6 +110,7 @@ const IndexPhanCongGiangVien = () => {
       );
       if (response_Lop.data.EC === 1) {
         setData_Lop(response_Lop.data.DT);
+        setSelect_Lop(response_Lop.data.DT[0].MALOP);
       }
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
@@ -126,8 +127,8 @@ const IndexPhanCongGiangVien = () => {
         setData_MonHoc(response_MonHoc.data.DT);
         setIsOpenButton(true);
       }
-      console.log("data_MonHoc >>>>>>>: ", data_MonHoc)
-      console.log("response_MonHoc.data.DT: ", response_MonHoc.data.DT)
+      console.log("data_MonHoc >>>>>>>: ", data_MonHoc);
+      console.log("response_MonHoc.data.DT: ", response_MonHoc.data.DT);
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
     }
@@ -348,7 +349,7 @@ const IndexPhanCongGiangVien = () => {
       ) : (
         <>
           <h1>
-            <ListPhanCong />
+            <ListPhanCong select_HocKiNienKhoa={select_HocKiNienKhoa} />
           </h1>
         </>
       )}

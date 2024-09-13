@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CookiesAxios from "../../CookiesAxios";
 
-const ListPhanCong = () => {
+const ListPhanCong = ({ select_HocKiNienKhoa }) => {
   const [lecturers, setLecturers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); // Thêm state cho từ khóa tìm kiếm
@@ -23,10 +23,14 @@ const ListPhanCong = () => {
   useEffect(() => {
     const fetchLecturers = async () => {
       try {
-        const response = await CookiesAxios.get(
-          "http://localhost:8081/api/v1/truongbomon/giangvien/xem/danhsach/monhoc/danhsach/giangvien"
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/danhsach/monhoc/danhsach/giangvien`,
+          { MAHKNK: select_HocKiNienKhoa.MAHKNK }
         );
+
+        console.log("check response", response.data);
         setLecturers(response.data.DT);
+
         setFilteredLecturers(response.data.DT); // Ban đầu hiển thị toàn bộ giảng viên
         setLoading(false);
       } catch (error) {
@@ -34,9 +38,10 @@ const ListPhanCong = () => {
         setLoading(false);
       }
     };
-
-    fetchLecturers();
-  }, []);
+    if (select_HocKiNienKhoa) {
+      fetchLecturers();
+    }
+  }, [select_HocKiNienKhoa]);
 
   // Hàm xử lý khi có sự thay đổi trong input tìm kiếm
   const handleSearchChange = (e) => {
@@ -82,7 +87,6 @@ const ListPhanCong = () => {
             <TableRow>
               <TableCell>STT</TableCell>
               <TableCell>Họ và Tên</TableCell>
-
               <TableCell>Giờ chuẩn</TableCell>
               <TableCell>Môn được phân công giảng dạy</TableCell>
               <TableCell>Mã lớp</TableCell>
@@ -92,48 +96,56 @@ const ListPhanCong = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredLecturers.map((lecturer, index) => (
-              <TableRow key={lecturer.MAGV}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{lecturer.TENGV}</TableCell>
+            {filteredLecturers.map((lecturer, index) => {
+              // Tính tổng số giờ giảng dạy
+              const totalHours = lecturer.monPhanCong.reduce(
+                (acc, mon) => acc + mon.SO_GIO,
+                0
+              );
 
-                <TableCell>{lecturer.GIOGIANGDAY_CHUAN}</TableCell>
-                <TableCell>
-                  {lecturer.monPhanCong.map((mon) => (
-                    <Box key={mon.MALOP}>
-                      <Typography>{mon.TENMONHOC}</Typography>
-                    </Box>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {lecturer.monPhanCong.map((mon) => (
-                    <Box key={mon.MALOP}>
-                      <Typography>{mon.MALOP}</Typography>
-                    </Box>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {lecturer.monPhanCong.map((mon) => (
-                    <Box key={mon.MALOP}>
-                      <Typography>
-                        {mon.TENHKNK === "Học Kì 1" ? `${mon.TENHKNK}` : ""}
-                      </Typography>
-                    </Box>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {lecturer.monPhanCong.map((mon) => (
-                    <Box key={mon.MALOP}>
-                      <Typography>
-                        {" "}
-                        {mon.TENHKNK === "Học Kì 2" ? `${mon.TENHKNK}` : ""}
-                      </Typography>
-                    </Box>
-                  ))}
-                </TableCell>
-                <TableCell>{lecturer.TONGGIO}</TableCell>
-              </TableRow>
-            ))}
+              return (
+                <TableRow key={lecturer.MAGV}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{lecturer.TENGV}</TableCell>
+                  <TableCell>{lecturer.GIOGIANGDAY_CHUAN}</TableCell>
+                  <TableCell>
+                    {lecturer.monPhanCong.map((mon) => (
+                      <Box key={mon.MALOP}>
+                        <Typography>{mon.TENMONHOC}</Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {lecturer.monPhanCong.map((mon) => (
+                      <Box key={mon.MALOP}>
+                        <Typography>{mon.MALOP}</Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {lecturer.monPhanCong.map((mon) => (
+                      <Box key={mon.MALOP}>
+                        <Typography>
+                          {mon.TENHKNK === "Học Kì 1" ? `${mon.SO_GIO}` : ""}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {lecturer.monPhanCong.map((mon) => (
+                      <Box key={mon.MALOP}>
+                        <Typography>
+                          {mon.TENHKNK === "Học Kì 2" ? `${mon.SO_GIO}` : ""}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell style={{ color: "#A02334" }}>
+                    {totalHours}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
