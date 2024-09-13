@@ -226,38 +226,6 @@ const ChuongtrinhDT_CNTT = () => {
                 </TableRow>
 
                 <TableRow>
-                  <TableCell align="center" className="tableHeaderCell1">
-                    Số Quyết Định
-                  </TableCell>
-                  <TableCell align="center" className="tableHeaderCell1">
-                    Trình Độ
-                  </TableCell>
-                  <TableCell align="center" className="tableHeaderCell1">
-                    Hình Thức
-                  </TableCell>
-                  <TableCell align="center" className="tableHeaderCell1">
-                    Tổng Số Tín Chỉ
-                  </TableCell>
-                </TableRow>
-                {monHocData && monHocData.length > 0 ? (
-                  <>
-                    <TableRow>
-                      <TableCell align="center" className="tableBodyCell">
-                        {monHocData[0].SO_QUYET_DINH}
-                      </TableCell>
-                      <TableCell align="center" className="tableBodyCell">
-                        {monHocData[0].TRINH_DO}
-                      </TableCell>
-                      <TableCell align="center" className="tableBodyCell">
-                        {monHocData[0].MO_TA_HOC_KY}
-                      </TableCell>
-                      <TableCell align="center" className="tableBodyCell">
-                        {monHocData[0].TONG_SO_TIN_CHI}
-                      </TableCell>
-                    </TableRow>
-                  </>
-                ) : null}
-                <TableRow>
                   <TableCell align="center" className="tableHeaderCell">
                     Tên Môn Học
                   </TableCell>
