@@ -90,7 +90,9 @@ const IndexPhanCongGiangVien = () => {
     <>
       <Box sx={{ maxWidth: { md: 220, xs: "100%" } }}>
         <FormControl fullWidth className="profile-email-input">
-          <InputLabel id="select-label-trang-thai">Năm học</InputLabel>
+          <InputLabel id="select-label-trang-thai" shrink={!!selectNamHoc}>
+            Năm học
+          </InputLabel>
           <Select
             labelId="select-label-trang-thai"
             id="trang-thai-select"

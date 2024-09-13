@@ -237,7 +237,9 @@ const IndexPhanCongGiangVien = () => {
         <Grid item xs={12} md={2}>
           <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
             <FormControl fullWidth className="profile-email-input">
-              <InputLabel id="select-label-lop">Danh Sách Lớp</InputLabel>
+              <InputLabel id="select-label-lop" shrink={!!select_Lop}>
+                Danh Sách Lớp
+              </InputLabel>
               <Select
                 labelId="select-label-lop"
                 id="lop-select"
