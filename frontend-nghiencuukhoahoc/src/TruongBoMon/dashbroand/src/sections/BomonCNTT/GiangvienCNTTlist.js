@@ -147,7 +147,6 @@ const GiangvienCNTTList = () => {
 
   return (
     <>
-      <h1 className="header">DANH SÁCH GIẢNG VIÊN THUỘC BỘ MÔN</h1>
       <div
         style={{
           height: dataGridHeight > 653 ? dataGridHeight : 653,
