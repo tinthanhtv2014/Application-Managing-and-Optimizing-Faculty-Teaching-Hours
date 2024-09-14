@@ -33,7 +33,7 @@ const GiangVienList = ({
   searchStatus,
   setCurrentPage,
 }) => {
-  const pageSize = 10;
+  const pageSize = 30;
   const totalGiangVien = dataMonHoc ? dataMonHoc.length : 0;
   const totalPages = Math.ceil(totalGiangVien / pageSize);
 

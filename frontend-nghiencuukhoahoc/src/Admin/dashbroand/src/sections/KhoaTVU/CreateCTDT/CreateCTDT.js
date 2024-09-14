@@ -51,7 +51,7 @@ const ComponenCreateGiangVien = () => {
   const [activeRowGV, setActiveRowGV] = useState(null);
   const [disabledGV, setDisableGV] = useState(true);
   const [isOpenGetAllApiGV, setisOpenGetAllApiGV] = useState(true);
-  const [TenChuongTrinhDaoTao, setTenChuongTrinhDaoTao] = useState("");
+  const [TenChuongTrinhDaoTao, setTenChuongTrinhDaoTao] = useState(null);
 
   // --------------------------ISOPEN---------------------------------------
   const [ValueExcel, setValueExcel] = useState("Excel");
@@ -63,19 +63,48 @@ const ComponenCreateGiangVien = () => {
   //------------------KHAI BÁO BIẾN LƯU DATA TỪ BACKEND--------------------
 
   const fetchData = async () => {
-    const token = Cookies.get("accessToken");
+    try {
+      const [response, response_ChuongTrinhDaoTao] = await Promise.all([
+        CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
+        ),
+        CookiesAxios.get(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
+        ),
+      ]);
 
-    const response = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/khoa/xem`
-    );
-    const response_ChuongTinhDaoTao = await CookiesAxios.get(
-      `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/chuongtrinh/xem`
-    );
+      // Kiểm tra phản hồi từ server
+      if (response.data.EC === 1) {
+        setdataListKhoa(response.data.DT);
+      }
 
-    setdatListCTDT(response_ChuongTinhDaoTao.data.DT);
-    setdataListKhoa(response.data.DT);
+      if (response_ChuongTrinhDaoTao.data.EC === 1) {
+        setdatListCTDT(response_ChuongTrinhDaoTao.data.DT);
+        setTenChuongTrinhDaoTao(
+          response_ChuongTrinhDaoTao.data.DT[0].TENCHUONGTRINH
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
+  useEffect(() => {
+    if (TenChuongTrinhDaoTao) {
+      if (selectHocKi) {
+        handleChoseHocKi(selectHocKi);
+      } else {
+        getHocKibyCTDT(TenChuongTrinhDaoTao);
+      }
+    }
+  }, [TenChuongTrinhDaoTao]);
+
+  useEffect(() => {
+    if (selectHocKi) {
+      handleChoseHocKi(selectHocKi);
+    }
+  }, [selectHocKi]);
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -103,8 +132,10 @@ const ComponenCreateGiangVien = () => {
         const response = await CookiesAxios.get(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/xem`
         );
-        console.log("Danh sách tài khoản:", response.data);
-        setDataMonHoc(response.data.DT);
+        // console.log("Danh sách tài khoản:", response.data);
+        if (response.data.EC === 1) {
+          setDataMonHoc(response.data.DT);
+        }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
       }
@@ -113,7 +144,7 @@ const ComponenCreateGiangVien = () => {
     }
   };
   const getHocKibyCTDT = async (TENCHUONGTRINH) => {
-    console.log("check TenChuongTrinhDaoTao", TENCHUONGTRINH);
+    // console.log("check TenChuongTrinhDaoTao", TENCHUONGTRINH);
     setTenChuongTrinhDaoTao(TENCHUONGTRINH);
     try {
       const response = await CookiesAxios.post(
@@ -122,8 +153,11 @@ const ComponenCreateGiangVien = () => {
           TENCHUONGTRINH: TENCHUONGTRINH,
         }
       );
-      console.log("Dữ liệu học kì", response.data);
-      setDataHocKi(response.data.DT);
+      // console.log("Dữ liệu học kì", response.data);
+      if (response.data.EC == 1) {
+        setDataHocKi(response.data.DT);
+        setSelectHocKi(response.data.DT[0].value);
+      }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
@@ -156,9 +190,6 @@ const ComponenCreateGiangVien = () => {
   const handleChangeExcel = (event) => {
     setValueExcel(event.target.value);
   };
-  const handleStatusChange = (e) => {
-    setTenChuongTrinhDaoTao(e.target.value);
-  };
 
   const [dataListChucVuGiangVien, setdataListChucVuGiangVien] = useState();
   const [dataListChucDanhGiangVien, setdataListChucDanhGiangVien] = useState();
@@ -189,7 +220,8 @@ const ComponenCreateGiangVien = () => {
     setShowUpdateModal(false);
   };
 
-  // console.log("check API ALL +> ", isOpenGetAllApiGV);
+  console.log("check API ALL TenChuongTrinhDaoTao +> ", TenChuongTrinhDaoTao);
+  console.log("check API ALL selectHocKi +> ", selectHocKi);
   return (
     <Container>
       {" "}
@@ -200,6 +232,7 @@ const ComponenCreateGiangVien = () => {
             dataListCTDT={dataListCTDT}
             activeRow={activeRow}
             handleChose={handleChose}
+            TenChuongTrinhDaoTao={TenChuongTrinhDaoTao}
           />
         </Col>{" "}
         <Col md={2}>
@@ -228,9 +261,9 @@ const ComponenCreateGiangVien = () => {
       <Row>
         <Col md={6}>
           {" "}
-          <h5 className="active mt-4">Thêm chương trình đào tạo</h5>
+          <h5 className=" mt-4">Thêm chương trình đào tạo</h5>
           <p className="opacity-7">
-            Bạn có thể thêm gchương trình đào tạo bằng chức năng excel <br></br>
+            Bạn có thể thêm chương trình đào tạo bằng chức năng excel <br></br>
             hoặc thủ công.
           </p>
           <Box sx={{ maxWidth: 300 }}>

@@ -9,7 +9,9 @@ const HocKiList = ({ dataHocKi, selectHocKi, handleChoseHocKi }) => {
     <div className="custom-select-container">
       <Box sx={{ maxWidth: 300 }}>
         <FormControl fullWidth>
-          <InputLabel id="bomon-select-label">Chọn học kì</InputLabel>
+          <InputLabel id="bomon-select-label" shrink={!!selectHocKi}>
+            Chọn học kì
+          </InputLabel>
           <Select
             className="height-selectGV"
             labelId="bomon-select-label"

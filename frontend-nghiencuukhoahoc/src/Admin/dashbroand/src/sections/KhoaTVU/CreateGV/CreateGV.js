@@ -521,7 +521,7 @@ const ComponenCreateGiangVien = () => {
       <Row>
         <Col md={6}>
           {" "}
-          <h5 className="active mt-4">Thêm Tài Khoản Giảng Viên</h5>
+          <h5 className="mt-4">Thêm Tài Khoản Giảng Viên</h5>
           <p className="opacity-7">
             Bạn có thể thêm giảng viên bằng chức năng excel hoặc thủ công.
           </p>
