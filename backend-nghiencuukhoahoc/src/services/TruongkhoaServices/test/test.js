@@ -517,7 +517,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
 
         //Tìm GV trong bảng chuyên môn và Auto phân công
         let data_CMGV;
-        let data_AutoPhanCong;
+        let data_AutoPhanCongFor;
         for (let i = 0; i < data_GV.length; i++) {
             for (let y = 0; y < dataAutoPhanCong.data.length; y++) {
                 // console.log("data_for: ", i, y, data_GV[i].MAGV, dataAutoPhanCong.data[y].MAMONHOC, dataAutoPhanCong.data[y].MALOP);
@@ -529,17 +529,32 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                     ]
                 );
 
-                [data_AutoPhanCong] = await pool.execute(
+                [data_AutoPhanCongFor] = await pool.execute(
                     `SELECT * FROM phan_cong_gv_tu_dong 
                     WHERE MAGV_PCGVTD = ? AND MA_MON_HOC_PCGVTD = ? AND MA_LOP_PCGVTD = ?`,
                     [
                         data_GV[i].MAGV, dataAutoPhanCong.data[y].MAMONHOC, dataAutoPhanCong.data[y].MALOP
                     ]
                 );
+
+                //Kiểm tra bảng Phân Công Auto có chưa nếu chưa có thì tạo (sơ khai) !!!!!
+                if (data_AutoPhanCongFor.length === 0) {
+                    await pool.execute(
+                        `INSERT INTO phan_cong_gv_tu_dong (MAGV_PCGVTD, MA_MON_HOC_PCGVTD, MA_LOP_PCGVTD, DO_UU_TIEN_PCGVTD) 
+                        VALUES (?, ?, ?, ?);`,
+                        [
+                            data_GV[i].MAGV,
+                            dataAutoPhanCong.data[y].MAMONHOC,
+                            dataAutoPhanCong.data[y].MALOP,
+                            data_CMGV.length === 0 ? 10 : 20
+                        ]
+                    );
+                }
+
+                //Nếu bảng Phân Công Auto đã được tạo thì cần làm tiếp ==================
+
             }
         }
-        console.log("data_CMGV.length: ", data_CMGV.length);
-        console.log("data_AutoPhanCong.length: ", data_AutoPhanCong.length);
 
         return {
             EM: "Đã nhận",
