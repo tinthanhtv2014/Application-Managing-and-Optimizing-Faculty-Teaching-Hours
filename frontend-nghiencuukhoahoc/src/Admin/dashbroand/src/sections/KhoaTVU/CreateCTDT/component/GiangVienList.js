@@ -105,7 +105,7 @@ const GiangVienList = ({
             {filteredChuongTrinh && filteredChuongTrinh.length > 0 ? (
               filteredChuongTrinh.map((chuongTrinh, index) => (
                 <TableRow
-                  onClick={() => handleChoseRowGV(chuongTrinh)}
+                  // onClick={() => handleChoseRowGV(chuongTrinh)}
                   key={index}
                   className={`custom-table-row ${
                     activeRowGV === chuongTrinh.MABOMON ? "activeBM" : ""

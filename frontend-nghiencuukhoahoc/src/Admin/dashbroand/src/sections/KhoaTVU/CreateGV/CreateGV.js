@@ -26,6 +26,8 @@ import {
   FormControl,
   Button,
   Typography,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import UpdateGiangVienModal from "./modal/updateGiangVienModal.js";
 const ComponenCreateGiangVien = () => {
@@ -471,7 +473,7 @@ const ComponenCreateGiangVien = () => {
             </FormControl>
           </Box>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <div className="mb-3">
             <input
               type="text"
@@ -482,40 +484,45 @@ const ComponenCreateGiangVien = () => {
             />
           </div>
         </Col>
-        <Col md={2}>
-          <Button
-            variant={isOpenGetAllApiGV ? "outlined" : "contained"} // Toggle between outlined and contained
-            fullWidth
+        <Col md={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isOpenGetAllApiGV} // Kiểm tra trạng thái của switch
+                onChange={handleGetAllGiangVien} // Hàm thay đổi trạng thái
+                sx={{
+                  "& .MuiSwitch-switchBase.Mui-checked": {
+                    color: "primary.main", // Màu khi bật
+                  },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                    bgcolor: "primary.main", // Màu nền khi bật
+                  },
+                  "& .MuiSwitch-track": {
+                    bgcolor: "secondary.main", // Màu nền khi tắt
+                  },
+                  "& .MuiSwitch-switchBase": {
+                    "&:hover": {
+                      bgcolor: (theme) =>
+                        alpha(theme.palette.primary.main, 0.1), // Background khi hover
+                    },
+                  },
+                }}
+              />
+            }
             sx={{
-              height: "45px",
-              textTransform: "none",
-              borderRadius: 0.75,
-              typography: "body2",
-              fontWeight: "fontWeightMedium",
-              color: isOpenGetAllApiGV ? "secondary.main" : "white", // Text color
-              bgcolor: isOpenGetAllApiGV
-                ? "transparent" // Transparent background for outlined variant
-                : "primary.main", // Primary color background for contained variant
-              borderColor: isOpenGetAllApiGV
-                ? "secondary.main" // Border color for outlined variant
-                : "transparent", // No border for contained variant
-              "&:hover": {
-                bgcolor: isOpenGetAllApiGV
-                  ? (theme) => alpha(theme.palette.secondary.main, 0.1) // Slight background for outlined variant on hover
-                  : (theme) => alpha(theme.palette.primary.main, 0.8), // Darker primary color on hover for contained variant
+              "& .MuiFormControlLabel-label": {
+                fontSize: "13px", // Tùy chỉnh kích thước chữ
               },
             }}
-            placeholder="Nhập email đăng nhập"
-            value={isOpenGetAllApiGV}
-            onClick={handleGetAllGiangVien}
+            label={
+              isOpenGetAllApiGV ? "Đang Xem Tất Cả" : "Đang Xem Theo Bộ Môn"
+            } // Nhãn của switch
             title={
               isOpenGetAllApiGV
                 ? "Xem Tất Cả Giảng Viên"
                 : "Xem Tất Cả Giảng Viên Ở Bộ Môn"
             }
-          >
-            {isOpenGetAllApiGV ? "Xem Tất Cả" : "Chỉ Xem Bộ Môn"}
-          </Button>
+          />
         </Col>
       </Row>
       <Row>
