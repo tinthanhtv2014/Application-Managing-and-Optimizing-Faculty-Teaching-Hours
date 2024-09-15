@@ -75,7 +75,14 @@ const get_giangvien_CNTT_chua_chon_khung = async (req, res) => {
 const get_giangvien_MonHoc_daChonKhung = async (req, res) => {
   try {
     const MAMONHOC = req.body.MAMONHOC;
-
+    // Kiểm tra dữ liệu đầu vào
+    if (!MAMONHOC) {
+      return res.status(400).json({
+        EM: "Mã môn học không được bỏ trống",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_giangvien_MonHoc_daChonkhung(MAMONHOC);
 
     return res.status(200).json({

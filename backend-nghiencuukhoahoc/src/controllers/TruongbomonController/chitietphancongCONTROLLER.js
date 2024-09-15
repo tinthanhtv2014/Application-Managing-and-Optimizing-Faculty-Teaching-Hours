@@ -9,7 +9,15 @@ const {
 const selectChitietphancongController_giangvien = async (req, res) => {
   try {
     const MAHKNK = req.body.MAHKNK;
-    console.log("check MAHKNK", MAHKNK);
+    // console.log("check MAHKNK", MAHKNK);
+    // Kiểm tra dữ liệu đầu vào
+    if (!MAHKNK) {
+      return res.status(400).json({
+        EM: "Học kì niên khóa bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_chitietphancong_giangvien(MAHKNK);
 
     return res.status(200).json({
@@ -96,6 +104,15 @@ const Xem_Chitietphancong_banthan_Controller = async (req, res) => {
     const MAHKNK = req.body.MAHKNK;
     // console.log("check MAGV", MAGV);
     // console.log("check MAHKNK", MAHKNK);
+    if (!MAGV || !MAHKNK) {
+      return res.status(400).json({
+        EM: !MAGV
+          ? "Mã giảng viên không được bỏ trống"
+          : "Học kì niên khóa không được bỏ trống",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_chitietphancong_banthan(MAGV, MAHKNK);
 
     return res.status(200).json({

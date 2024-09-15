@@ -7,7 +7,14 @@ const {
 const get_chuongtrinhdaotao_tenbomon = async (req, res) => {
   try {
     let TENBOMON = req.body.TENBOMON;
-
+    // Kiểm tra dữ liệu đầu vào
+    if (!TENBOMON) {
+      return res.status(400).json({
+        EM: "Tên bộ môn không được bỏ trống",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectChuongtrinhdaotao_tenbomon(TENBOMON);
 
     return res.status(200).json({
@@ -28,6 +35,13 @@ const get_chuongtrinhdaotao_tenbomon = async (req, res) => {
 const get_chuongtrinhdaotao = async (req, res) => {
   try {
     let TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+    if (!TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: "Tên chương trình không được bỏ trống",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectOnlyChuongtrinhdaotao(TENCHUONGTRINH);
 
     return res.status(200).json({
@@ -46,9 +60,17 @@ const get_chuongtrinhdaotao = async (req, res) => {
 };
 
 const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
-  const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
-  const SOTHUTUHOCKI = req.body.SOTHUTUHOCKI;
   try {
+    const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+    const SOTHUTUHOCKI = req.body.SOTHUTUHOCKI;
+    if (!TENCHUONGTRINH || !SOTHUTUHOCKI) {
+      return res.status(400).json({
+        EM: "Tên chương trình và số thứ tự học kỳ không được bỏ trống",
+        EC: 400,
+        DT: null,
+      });
+    }
+
     let results = await selectOnlyChuongtrinhdaotao_withHOCKI(
       TENCHUONGTRINH,
       SOTHUTUHOCKI

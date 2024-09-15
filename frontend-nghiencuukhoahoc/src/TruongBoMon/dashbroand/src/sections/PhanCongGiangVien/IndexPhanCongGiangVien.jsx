@@ -58,10 +58,8 @@ const IndexPhanCongGiangVien = () => {
     }
   }, [TenBoMon]);
   useEffect(() => {
-    // if (select_Lop && select_HocKiNienKhoa.length > 0) {
-    console.log("check useEffect");
+    // console.log("check useEffect");
     fetchDataMonHoc_byLop();
-    // }
   }, [select_Lop, select_HocKiNienKhoa]);
 
   const fetchDataGV = async (taikhoan) => {
@@ -143,13 +141,13 @@ const IndexPhanCongGiangVien = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
         { MALOP: select_Lop, HOCKINIENKHOA: select_HocKiNienKhoa }
       );
-      console.log("check fetchDataMonHoc_byLop", response_MonHoc);
+      // console.log("check fetchDataMonHoc_byLop", response_MonHoc);
       if (response_MonHoc.data.EC === 1) {
         setData_MonHoc(response_MonHoc.data.DT);
         setIsOpenButton(true);
       }
-      console.log("data_MonHoc >>>>>>>: ", data_MonHoc);
-      console.log("response_MonHoc.data.DT: ", response_MonHoc.data.DT);
+      // console.log("data_MonHoc >>>>>>>: ", data_MonHoc);
+      // console.log("response_MonHoc.data.DT: ", response_MonHoc.data.DT);
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
     }
