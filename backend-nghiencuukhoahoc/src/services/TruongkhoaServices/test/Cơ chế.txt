@@ -1,0 +1,16 @@
+1. Lấy ds gv có môn học được dạy ở lớp đó >>> OK
+2. Cần có chuyên môn của GV dùng chung tất cả lớp >>> NO cần tạo dữ liệu mẫu, và dự trù khi ko có dữ liệu
+3. Cần có chuyên môn của GV dùng cho 1 lớp cụ thể với 1 môn cụ thể >>> NO cần tạo dữ liệu mẫu, và dự trù khi ko có dữ liệu
+4. Cần có dữ liệu trong bảng Chuyên môn giảng viên, nếu không có dựa vào danh sách 1, 2 để tạo
+5. Cần có dữ liệu trong bảng Phân công tự động, nếu không có thì dựa vào danh sách 1, 2 để tạo
+
+Thực làm
+Xử lý dataAutoPhanCong thêm trường MAMONHOC
+Lấy ds giảng viên từng dạy ở lớp này
+Lấy ds giảng viên có thể dạy ở lớp này
+Tìm GV trong bảng chuyên môn và Auto phân công
+
+dataAutoPhanCong dữ liệu lấy từ Fron, dùng hàm XuLy_dataAutoPhanCong để kiểm tra;
+data_GV_TungDay là dữ liệu các GV từng dạy ở dataAutoPhanCong.data[0].MALOP;
+data_GV là dữ liệu GV có thể dạy lớp này;
+data_CMGV và data_AutoPhanCongFor sử dụng for để kiểm tra bảng 'Chuyên môn GV' và 'Phân công auto' xem GV có chuyên môn hay không, đã có dữ liệu chưa

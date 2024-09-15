@@ -518,6 +518,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
         //Tìm GV trong bảng chuyên môn và Auto phân công
         let data_CMGV;
         let data_AutoPhanCongFor;
+        let DO_UU_TIEN_PCGVTD = 0;
         for (let i = 0; i < data_GV.length; i++) {
             for (let y = 0; y < dataAutoPhanCong.data.length; y++) {
                 // console.log("data_for: ", i, y, data_GV[i].MAGV, dataAutoPhanCong.data[y].MAMONHOC, dataAutoPhanCong.data[y].MALOP);
@@ -538,6 +539,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                 );
 
                 //Kiểm tra bảng Phân Công Auto có chưa nếu chưa có thì tạo (sơ khai) !!!!!
+                data_CMGV.length === 0 ? DO_UU_TIEN_PCGVTD += 10 : DO_UU_TIEN_PCGVTD += 20
                 if (data_AutoPhanCongFor.length === 0) {
                     await pool.execute(
                         `INSERT INTO phan_cong_gv_tu_dong (MAGV_PCGVTD, MA_MON_HOC_PCGVTD, MA_LOP_PCGVTD, DO_UU_TIEN_PCGVTD) 
@@ -546,10 +548,11 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                             data_GV[i].MAGV,
                             dataAutoPhanCong.data[y].MAMONHOC,
                             dataAutoPhanCong.data[y].MALOP,
-                            data_CMGV.length === 0 ? 10 : 20
+
                         ]
                     );
                 }
+                DO_UU_TIEN_PCGVTD = 0;
 
                 //Nếu bảng Phân Công Auto đã được tạo thì cần làm tiếp ==================
 
