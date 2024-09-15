@@ -120,46 +120,30 @@ const ChuongtrinhDT_CNTT = () => {
   const handleHockiChange = (event) => {
     setSelectedHocki(event.target.value);
   };
-  const [totalLyThuyet, setTotalLyThuyet] = useState(0);
-  const [totalThucHanh, setTotalThucHanh] = useState(0);
-  const [totalTong, setTotalTong] = useState(0);
+
   useEffect(() => {
     if (selectedChuongTrinh) {
       fetchHocki(selectedChuongTrinh[0]);
     }
   }, [selectedChuongTrinh]);
-  useEffect(() => {
-    if (
-      selectedChuongTrinh &&
-      monHocData.length > 0 &&
-      selectedHocki.length > 0
-    ) {
-      const filteredMonHoc = monHocData.filter(
-        (monHoc) => monHoc.SOTHUTUHOCKI === selectedHocki
-      );
 
-      const totalLyThuyet = filteredMonHoc.reduce(
-        (acc, mon) => acc + mon.SOTINCHILYTHUYET,
-        0
-      );
-      const totalThucHanh = filteredMonHoc.reduce(
-        (acc, mon) => acc + mon.SOTINCHITHUCHANH,
-        0
-      );
-      const total_tong = filteredMonHoc.reduce(
-        (acc, mon) => acc + mon.SOTINCHILYTHUYET + mon.SOTINCHITHUCHANH,
-        0
-      );
-      console.log("totalLyThuyet", totalLyThuyet);
-      console.log("totalThucHanh", totalThucHanh);
-      console.log("total_tong", total_tong);
-      // Cập nhật giá trị state
-      setTotalLyThuyet(totalLyThuyet);
-      setTotalThucHanh(totalThucHanh);
-      setTotalTong(total_tong);
-    }
-  }, [selectedChuongTrinh, selectedHocki, monHocData]);
+  const filteredMonHoc = monHocData.filter(
+    (monHoc) => monHoc.SOTHUTUHOCKI === selectedHocki
+  );
 
+  // Tính toán tổng số tín chỉ lý thuyết, thực hành và tổng
+  const totalLyThuyet = filteredMonHoc.reduce(
+    (acc, mon) => acc + mon.SOTINCHILYTHUYET,
+    0
+  );
+  const totalThucHanh = filteredMonHoc.reduce(
+    (acc, mon) => acc + mon.SOTINCHITHUCHANH,
+    0
+  );
+  const totalTong = filteredMonHoc.reduce(
+    (acc, mon) => acc + mon.SOTINCHILYTHUYET + mon.SOTINCHITHUCHANH,
+    0
+  );
   return (
     <div className="containerchuongtrinhdaotao-truongbomon">
       <div className="formControlContainer">
@@ -305,7 +289,7 @@ const ChuongtrinhDT_CNTT = () => {
 
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={2} align="center" className="tablefootCell">
+              <TableCell colSpan={1} align="center" className="tablefootCell">
                 Tổng số tín chỉ
               </TableCell>
               <TableCell align="center" className="tablefootCell">
@@ -316,7 +300,7 @@ const ChuongtrinhDT_CNTT = () => {
               </TableCell>
               <TableCell align="center" className="tablefootCell">
                 {totalTong || 0}
-              </TableCell>
+              </TableCell>{" "}
             </TableRow>
           </TableFooter>
         </Table>
