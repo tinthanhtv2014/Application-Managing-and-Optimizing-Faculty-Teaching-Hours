@@ -46,8 +46,10 @@ const IndexPhanCongGiangVien = () => {
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
+    if (decodeAuth) {
+      fetchDataGV(decodeAuth.taikhoan);
+    }
 
-    fetchDataGV(decodeAuth.taikhoan);
     fetchListGiangVien();
   }, []);
   useEffect(() => {
@@ -56,17 +58,19 @@ const IndexPhanCongGiangVien = () => {
     }
   }, [TenBoMon]);
   useEffect(() => {
-    if (select_Lop && select_HocKiNienKhoa) {
-      fetchDataMonHoc_byLop();
-    }
+    // if (select_Lop && select_HocKiNienKhoa.length > 0) {
+    console.log("check useEffect");
+    fetchDataMonHoc_byLop();
+    // }
   }, [select_Lop, select_HocKiNienKhoa]);
+
   const fetchDataGV = async (taikhoan) => {
     try {
       const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/only/xemprofile/${taikhoan}`
       );
 
-      console.log("Danh sách tài khoản:", response.data.DT);
+      // console.log("Danh sách tài khoản:", response.data.DT);
 
       if (response.data.EC === 1) {
         setTenBoMon(response.data.DT.TENBOMON);
@@ -81,33 +85,50 @@ const IndexPhanCongGiangVien = () => {
   };
   const fetchListGiangVien = async () => {
     try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung`
-      );
-      const response_hocKiNienKhoa = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xem`
-      );
-      const response_NamHoc = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
-      );
+      // Gọi tất cả các API cùng lúc bằng Promise.all
+      const [response, response_hocKiNienKhoa, response_NamHoc] =
+        await Promise.all([
+          CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung`
+          ),
+          CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/xem`
+          ),
+          CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/namhoc/xem`
+          ),
+        ]);
 
+      // console.log("Response from phancong/dachonkhung:", response.data);
+      // console.log(
+      //   "Response from hockinienkhoa/xem:",
+      //   response_hocKiNienKhoa.data
+      // );
+      // console.log("Response from namhoc/xem:", response_NamHoc.data);
+      if (response_hocKiNienKhoa.data.EC == 1) {
+        setData_hocKiNienKhoa(response_hocKiNienKhoa.data.DT);
+        setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0]);
+      }
+      if (response_NamHoc.data.EC == 1) {
+        setListNamHoc(response_NamHoc.data.DT);
+        setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
+      }
       if (response.data.EC === 1) {
         setData_ListGVDaChonKhung(response.data.DT);
-        setData_hocKiNienKhoa(response_hocKiNienKhoa.data.DT);
-        setListNamHoc(response_NamHoc.data.DT);
-        setSelect_HocKiNienKhoa(response_hocKiNienKhoa.data.DT[0]);
-        setSelectNamHoc(response_NamHoc.data.DT[0].TENNAMHOC);
+        // Thiết lập giá trị mặc định cho Học Kì và Năm Học
       }
     } catch (error) {
       console.error("Error fetching BoMon data:", error);
     }
   };
+
   const fetchDataLop_byBoMon = async () => {
     try {
       const response_Lop = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/lop/bomon/xem`,
         { TENBOMON: TenBoMon }
       );
+
       if (response_Lop.data.EC === 1) {
         setData_Lop(response_Lop.data.DT);
         setSelect_Lop(response_Lop.data.DT[0].MALOP);
@@ -122,7 +143,7 @@ const IndexPhanCongGiangVien = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
         { MALOP: select_Lop, HOCKINIENKHOA: select_HocKiNienKhoa }
       );
-
+      console.log("check fetchDataMonHoc_byLop", response_MonHoc);
       if (response_MonHoc.data.EC === 1) {
         setData_MonHoc(response_MonHoc.data.DT);
         setIsOpenButton(true);
