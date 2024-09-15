@@ -13,17 +13,19 @@ import {
   Select,
   MenuItem,
   Grid,
+  Button,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import CookiesAxios from "../CookiesAxios";
-
+import { useNavigate } from "react-router-dom";
+import "./IndexPhanCongCuaToi.scss";
 const IndexPhanCongCuaToi = () => {
   const [dataPhanCong, setDataPhanCong] = useState([]);
   const [magv, setMagv] = useState("");
   const [hocKiNienKhoaList, setHocKiNienKhoaList] = useState([]);
   const [selectedHocKiNienKhoa, setSelectedHocKiNienKhoa] = useState("");
-
+  const navgate = useNavigate();
   useEffect(() => {
     const auth = Cookies.get("accessToken");
     const decodeAuth = jwtDecode(auth);
@@ -85,7 +87,9 @@ const IndexPhanCongCuaToi = () => {
   const handleChange = (event) => {
     setSelectedHocKiNienKhoa(event.target.value);
   };
-
+  const handleMoveBaoCaoKetThuc = () => {
+    navgate("/bao-cao-ket-thuc-mon");
+  };
   return (
     <Grid container spacing={2}>
       {/* Form Select */}
@@ -107,7 +111,22 @@ const IndexPhanCongCuaToi = () => {
           </Select>
         </FormControl>
       </Grid>
-
+      <Grid item xs={6} md={3}>
+        {" "}
+      </Grid>
+      <Grid item xs={6} md={4}>
+        {" "}
+        <Typography>
+          <>
+            <Button variant="contained" onClick={handleMoveBaoCaoKetThuc}>
+              Báo Cáo Kết Thúc Môn
+            </Button>
+          </>
+        </Typography>{" "}
+        <p className="text-open-gate">
+          Dùng để tiến hành báo cáo môn học khi kết thúc học kì đó
+        </p>
+      </Grid>
       {/* Bảng Phân Công */}
       <Grid item xs={12}>
         <TableContainer component={Paper} sx={{ mt: 2 }}>
