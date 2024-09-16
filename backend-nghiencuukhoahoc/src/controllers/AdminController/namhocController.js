@@ -27,6 +27,14 @@ const getAllNAMHOC = async (req, res) => {
 const createNAMHOC = async (req, res) => {
   try {
     const TENNAMHOC = req.body;
+
+    if (!TENNAMHOC) {
+      return res.status(400).json({
+        EM: "Tên năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createNamHoc(TENNAMHOC);
 
     return res.status(200).json({
@@ -46,8 +54,15 @@ const createNAMHOC = async (req, res) => {
 
 const updateNAMHOC = async (req, res) => {
   try {
-    MANAMHOC = req.params.MANAMHOC;
+    const MANAMHOC = req.params.MANAMHOC;
     const TENNAMHOC = req.body;
+    if (!TENNAMHOC || !MANAMHOC) {
+      return res.status(400).json({
+        EM: "Tên năm học hoặc mã năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateNamHoc(MANAMHOC, TENNAMHOC);
 
     return res.status(200).json({
@@ -68,7 +83,13 @@ const updateNAMHOC = async (req, res) => {
 const deleteNAMHOC = async (req, res) => {
   try {
     const MANAMHOC = req.query.MANAMHOC;
-
+    if (!MANAMHOC) {
+      return res.status(400).json({
+        EM: " mã năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteNamHoc(MANAMHOC);
 
     return res.status(200).json({
