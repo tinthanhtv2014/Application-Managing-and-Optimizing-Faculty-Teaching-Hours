@@ -14,3 +14,9 @@ dataAutoPhanCong dữ liệu lấy từ Fron, dùng hàm XuLy_dataAutoPhanCong �
 data_GV_TungDay là dữ liệu các GV từng dạy ở dataAutoPhanCong.data[0].MALOP;
 data_GV là dữ liệu GV có thể dạy lớp này;
 data_CMGV và data_AutoPhanCongFor sử dụng for để kiểm tra bảng 'Chuyên môn GV' và 'Phân công auto' xem GV có chuyên môn hay không, đã có dữ liệu chưa
+
+Độ ưu tiên:
+Bình thường: +10 OK
+Có chuyên môn: +20 OK
+Chưa từng dạy lớp: +5 
+Đã dạy 2 lần: -100%
