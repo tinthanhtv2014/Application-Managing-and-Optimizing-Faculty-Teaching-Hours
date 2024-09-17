@@ -27,6 +27,13 @@ const getAllChucdanh = async (req, res) => {
 const createChucdanhControler = async (req, res) => {
   try {
     let TENCHUCDANH = req.body.TENCHUCDANH;
+    if (!TENCHUCDANH) {
+      return res.status(400).json({
+        EM: " tên chức danh  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createChucdanh(TENCHUCDANH);
 
     return res.status(200).json({
@@ -48,6 +55,13 @@ const updateChucdanhController = async (req, res) => {
   try {
     const MACHUCDANH = req.params.MACHUCDANH;
     const TENCHUCDANH = req.body.TENCHUCDANH;
+    if (!MACHUCDANH) {
+      return res.status(400).json({
+        EM: " MACHUCDANH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateChucdanh(MACHUCDANH, TENCHUCDANH);
 
     return res.status(200).json({
@@ -68,6 +82,13 @@ const updateChucdanhController = async (req, res) => {
 const deleteChucdanhController = async (req, res) => {
   try {
     let MACHUCDANH = req.query.MACHUCDANH;
+    if (!MACHUCDANH) {
+      return res.status(400).json({
+        EM: " MACHUCDANH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xoaChucdanh(MACHUCDANH);
 
     return res.status(200).json({

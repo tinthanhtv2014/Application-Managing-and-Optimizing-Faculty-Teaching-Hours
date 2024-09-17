@@ -27,6 +27,13 @@ const getAllChucvu = async (req, res) => {
 const createChucVuControler = async (req, res) => {
   try {
     let TENCHUCVU = req.body.TENCHUCVU;
+    if (!TENCHUCVU) {
+      return res.status(400).json({
+        EM: " TENCHUCVU  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createChucVu(TENCHUCVU);
 
     return res.status(200).json({
@@ -48,6 +55,13 @@ const updateChucVuController = async (req, res) => {
   try {
     const MACHUCVU = req.params.MACHUCVU;
     const TENCHUCVU = req.body.TENCHUCVU;
+    if (!MACHUCVU) {
+      return res.status(400).json({
+        EM: " MACHUCVU  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateChucVu(MACHUCVU, TENCHUCVU);
 
     return res.status(200).json({
@@ -68,6 +82,13 @@ const updateChucVuController = async (req, res) => {
 const deleteChucVuController = async (req, res) => {
   try {
     let MACHUCVU = req.query.MACHUCVU;
+    if (!MACHUCVU) {
+      return res.status(400).json({
+        EM: " MACHUCVU  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xoaChucVu(MACHUCVU);
 
     return res.status(200).json({
