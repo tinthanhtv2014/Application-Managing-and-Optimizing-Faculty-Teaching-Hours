@@ -6,6 +6,13 @@ const {
 const getKhungGioChuan_TENCHUCDANH = async (req, res) => {
   try {
     let TENCHUCDANH = req.params.TENCHUCDANH;
+    if (!TENCHUCDANH) {
+      return res.status(400).json({
+        EM: " tên chức danh  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await timKhungGioChuan_TENCHUCDANH(TENCHUCDANH);
 
     return res.status(200).json({
@@ -25,6 +32,13 @@ const getKhungGioChuan_TENCHUCDANH = async (req, res) => {
 const getAllTenKhung_TENCHUCDANH = async (req, res) => {
   try {
     let TENCHUCDANH = req.params.TENCHUCDANH;
+    if (!TENCHUCDANH) {
+      return res.status(400).json({
+        EM: " tên chức danh  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await timAllTenKhung_TENCHUCDANH(TENCHUCDANH);
 
     return res.status(200).json({

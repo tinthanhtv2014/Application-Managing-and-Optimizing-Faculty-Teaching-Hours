@@ -110,6 +110,13 @@ const deleteLOPcontroller = async (req, res) => {
   try {
     const MALOP = req.query.MALOP;
 
+    if (!MALOP) {
+      return res.status(400).json({
+        EM: " mã lớp  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteLop(MALOP);
 
     return res.status(200).json({
