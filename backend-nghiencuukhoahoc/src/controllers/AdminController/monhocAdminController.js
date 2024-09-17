@@ -27,6 +27,14 @@ const getAllMONHOC = async (req, res) => {
 const createMONHOC = async (req, res) => {
   try {
     const dataMonHoc = req.body;
+    console.log(dataMonHoc);
+    if (!dataMonHoc) {
+      return res.status(400).json({
+        EM: " mã năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createMonHoc(dataMonHoc);
 
     return res.status(200).json({
@@ -48,6 +56,13 @@ const updateMONHOC = async (req, res) => {
   try {
     const MAMONHOC = req.params.MAMONHOC;
     const dataMonHoc = req.body;
+    if (!MAMONHOC) {
+      return res.status(400).json({
+        EM: " mã năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateMonHoc(MAMONHOC, dataMonHoc);
 
     return res.status(200).json({
@@ -68,7 +83,13 @@ const updateMONHOC = async (req, res) => {
 const deleteMONHOC = async (req, res) => {
   try {
     const TENMONHOC = req.query.TENMONHOC;
-
+    if (!TENMONHOC) {
+      return res.status(400).json({
+        EM: " tên năm học bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteMonHoc(TENMONHOC);
 
     return res.status(200).json({
