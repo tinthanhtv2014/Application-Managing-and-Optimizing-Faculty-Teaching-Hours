@@ -18,5 +18,6 @@ data_CMGV và data_AutoPhanCongFor sử dụng for để kiểm tra bảng 'Chuy
 Độ ưu tiên:
 Bình thường: +10 OK
 Có chuyên môn: +20 OK
-Chưa từng dạy lớp: +5 
-Đã dạy 2 lần: -100%
+Chưa từng dạy lớp: +20 OK
+Đã dạy lớp 1 lần: +10 OK
+Đã dạy 2 lần: -100% OK
