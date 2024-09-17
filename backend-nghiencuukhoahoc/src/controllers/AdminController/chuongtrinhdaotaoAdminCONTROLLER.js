@@ -33,6 +33,13 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
   const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
   const SOTHUTUHOCKI = req.body.SOTHUTUHOCKI;
   try {
+    if (!TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectOnlyChuongtrinhdaotao_withHOCKI(
       TENCHUONGTRINH,
       SOTHUTUHOCKI
@@ -56,6 +63,13 @@ const getOnlyChuongtrinhdaotao_withHOCKI = async (req, res) => {
 const getOnlyChuongtrinhdaotao_SoHocKi = async (req, res) => {
   const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
   try {
+    if (!TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectTongSoHocKi(TENCHUONGTRINH);
 
     return res.status(200).json({
@@ -75,6 +89,13 @@ const getOnlyChuongtrinhdaotao_SoHocKi = async (req, res) => {
 const getOnlyChuongtrinhdaotao = async (req, res) => {
   const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
   try {
+    if (!TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectOnlyChuongtrinhdaotao(TENCHUONGTRINH);
 
     return res.status(200).json({
@@ -101,6 +122,14 @@ const createChuongtrinhdaotaoControler = async (req, res) => {
     let TONG_SO_TIN_CHI = req.body.TONG_SO_TIN_CHI;
     let MO_TA_HOC_KY = req.body.MO_TA_HOC_KY;
     let GHI_CHUONG_TRINH = req.body.GHI_CHUONG_TRINH;
+
+    if (!TENCHUONGTRINH || !MABOMON) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH hoặc MABOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createChuongtrinhdaotao(
       MABOMON,
       TENCHUONGTRINH,
@@ -136,6 +165,13 @@ const updateChuongtrinhdaotaoController = async (req, res) => {
     let TONG_SO_TIN_CHI = req.body.TONG_SO_TIN_CHI;
     let MO_TA_HOC_KY = req.body.MO_TA_HOC_KY;
     let GHI_CHUONG_TRINH = req.body.GHI_CHUONG_TRINH;
+    if (!MACHUONGTRINH) {
+      return res.status(400).json({
+        EM: " MACHUONGTRINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateChuongtrinhdaotao(
       MACHUONGTRINH,
       MABOMON,
@@ -165,6 +201,13 @@ const updateChuongtrinhdaotaoController = async (req, res) => {
 const deleteChuongtrinhdaotaoController = async (req, res) => {
   try {
     let TENCHUONGTRINH = req.body.TENCHUONGTRINH;
+    if (!TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xoaChuongtrinh(TENCHUONGTRINH);
 
     return res.status(200).json({
@@ -185,7 +228,17 @@ const deleteChuongtrinhdaotaoController = async (req, res) => {
 const createCHUONGTRINHDAOTAOExcelController = async (req, res) => {
   try {
     const dataChuongtrinhdaotaoExcelArray = req.body;
-
+    if (
+      !dataChuongtrinhdaotaoExcelArray.TENCHUONGTRINH ||
+      !dataChuongtrinhdaotaoExcelArray.TENMONHOC ||
+      !dataChuongtrinhdaotaoExcelArray.MABOMON
+    ) {
+      return res.status(400).json({
+        EM: " TENCHUONGTRINH hoặc TENMONHOC hoặc MABOMON  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createChuongtrinhdaotaoExcel(
       dataChuongtrinhdaotaoExcelArray
     );
