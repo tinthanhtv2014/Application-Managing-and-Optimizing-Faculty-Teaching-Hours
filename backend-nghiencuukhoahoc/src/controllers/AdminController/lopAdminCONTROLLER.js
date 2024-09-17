@@ -28,8 +28,14 @@ const creatNEWLopcontroller = async (req, res) => {
   try {
     const datalop = req.body;
     const TENCHUONGTRINH = req.body.TENCHUONGTRINH;
-
-    let results = await CreateLop(TENCHUONGTRINH, datalop);
+    if (!TENCHUONGTRINH || !datalop.Lop.MALOP) {
+      return res.status(400).json({
+        EM: " mã lớp hoặc chương trình bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
+    let results = await CreateLop(datalop, TENCHUONGTRINH);
 
     return res.status(200).json({
       EM: results.EM,
@@ -49,6 +55,13 @@ const creatNEWLopcontroller = async (req, res) => {
 const createLopcontrollerExcel = async (req, res) => {
   try {
     const dataexcel = req.body;
+    if (!dataexcel.TENBOMON || !dataexcel.MALOP || !dataexcel.TENCHUONGTRINH) {
+      return res.status(400).json({
+        EM: " mã lớp hoặc chương trình hoặc tên bộ môn bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createLopExcel(dataexcel);
     return res.status(200).json({
       EM: results.EM,
@@ -69,7 +82,13 @@ const updateLOPcontroller = async (req, res) => {
   try {
     const MALOP = req.params.MALOP;
     const datalop = req.body;
-
+    if (!MALOP) {
+      return res.status(400).json({
+        EM: " mã lớp  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateLop(MALOP, datalop);
 
     return res.status(200).json({

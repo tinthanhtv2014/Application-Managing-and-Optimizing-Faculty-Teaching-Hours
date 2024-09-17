@@ -24,8 +24,10 @@ const selectLop = async () => {
 
 const CreateLop = async (datalop, TENCHUONGTRINH) => {
   try {
+    console.log("create", datalop);
     const MACHUONGTRINH = await timchuongtrinh_TENCHUONGTRINH(TENCHUONGTRINH);
-    const timlop = await timlop_MALOP(datalop.MALOP);
+    const timlop = await timlop_MALOP(datalop.Lop.MALOP);
+    console.log("create", timlop);
     if (timlop.length > 0) {
       return {
         EM: " lớp này đã tồn tại",
@@ -37,11 +39,11 @@ const CreateLop = async (datalop, TENCHUONGTRINH) => {
     let [results1, fields1] = await pool.execute(
       `insert into lop values (?,?,?,?,?)`,
       [
-        datalop.MALOP,
+        datalop.Lop.MALOP,
         MACHUONGTRINH.MACHUONGTRINH,
-        datalop.TENLOP,
-        datalop.NAMTUYENSINH,
-        datalop.SISO,
+        datalop.Lop.TENLOP,
+        datalop.Lop.NAMTUYENSINH,
+        datalop.Lop.SISO,
       ]
     );
     const data = await selectLop();
@@ -155,7 +157,6 @@ const createLopExcel = async (dataLopExcelArray) => {
         }; // Tiếp tục thực hiện các lệnh khác
       }
 
-
       let kiemtra_malop = await timlop_MALOP(dataLopExcelArray[i].MALOP);
       if (kiemtra_malop > 0) {
         return {
@@ -226,7 +227,6 @@ const createLopExcel = async (dataLopExcelArray) => {
     let [results1, fields1] = await pool.execute(
       `select bomon.TENBOMON,ctdt.*,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
     );
-
 
     return {
       EM: "Tất cả lớp đã được tạo",
