@@ -61,6 +61,13 @@ const getAllQuyDinh = async (req, res) => {
 const getOnlyDanhMucQuyDoi = async (req, res) => {
   try {
     const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({
+        EM: " id  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     // console.log("check id", id);
     const results = await selectOnlyDanhMucQuyDoi(id);
     return res.status(200).json({
@@ -111,7 +118,13 @@ const addDanhMucQuyDoi = async (req, res) => {
     TRANG_THAI_DANH_MUC,
     GHI_CHU_DANH_MUC,
   } = req.body;
-
+  if (!MA_LOAI_DANH_MUC) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await createDanhMucQuyDoi(
       MA_LOAI_DANH_MUC,
@@ -161,7 +174,13 @@ const editDanhMucQuyDoi = async (req, res) => {
     GHI_CHU_DANH_MUC,
   } = req.body;
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await updateDanhMucQuyDoi(
       id,
@@ -197,7 +216,13 @@ const editDanhMucQuyDoi = async (req, res) => {
 
 const removeDanhMucQuyDoi = async (req, res) => {
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await deleteDanhMucQuyDoi(id);
     return res.status(200).json({
@@ -236,6 +261,13 @@ const getQuyDinh = async (req, res) => {
 const getAllQuyDinh_TRANGTHAI = async (req, res) => {
   try {
     const TRANG_THAI_QUY_DINH = req.body.TRANG_THAI_QUY_DINH;
+    if (!TRANG_THAI_QUY_DINH) {
+      return res.status(400).json({
+        EM: " TRANG_THAI_QUY_DINH  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectQuyDinh_TRANGTHAI(TRANG_THAI_QUY_DINH);
 
     return res.status(200).json({
@@ -255,7 +287,14 @@ const getAllQuyDinh_TRANGTHAI = async (req, res) => {
 
 const addQuyDinh = async (req, res) => {
   const { TEN_QUY_DINH } = req.body;
-
+  if (!TEN_QUY_DINH) {
+    return res.status(400).json({
+      EM: " TEN_QUY_DINH  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
+  let
   try {
     const results = await createQuyDinh(TEN_QUY_DINH);
     return res.status(201).json({
@@ -276,7 +315,13 @@ const addQuyDinh = async (req, res) => {
 const editQuyDinh = async (req, res) => {
   const { TRANG_THAI_QUY_DINH } = req.body;
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await updateQuyDinh(id, TRANG_THAI_QUY_DINH);
     return res.status(200).json({
@@ -296,7 +341,13 @@ const editQuyDinh = async (req, res) => {
 
 const removeQuyDinh = async (req, res) => {
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await deleteQuyDinh(id);
     return res.status(200).json({
@@ -337,6 +388,13 @@ const getLoaiDanhMuc = async (req, res) => {
 const getLoaiDanhMuc_TRANGTHAI = async (req, res) => {
   try {
     const TRANG_THAI_DANH_MUC = req.body.TRANG_THAI_DANH_MUC;
+    if (!TRANG_THAI_DANH_MUC) {
+      return res.status(400).json({
+        EM: " TRANG_THAI_DANH_MUC  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     const results = await selectLoaiDanhMuc_TRANGTHAI(TRANG_THAI_DANH_MUC);
     return res.status(200).json({
       EM: results.EM,
@@ -355,7 +413,13 @@ const getLoaiDanhMuc_TRANGTHAI = async (req, res) => {
 
 const addLoaiDanhMuc = async (req, res) => {
   const { TEN_LOAI_DANH_MUC } = req.body;
-
+  if (!TEN_LOAI_DANH_MUC) {
+    return res.status(400).json({
+      EM: " TEN_LOAI_DANH_MUC  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await createLoaiDanhMuc(TEN_LOAI_DANH_MUC);
     return res.status(201).json({
@@ -376,7 +440,13 @@ const addLoaiDanhMuc = async (req, res) => {
 const editLoaiDanhMuc = async (req, res) => {
   const { TRANG_THAI_DANH_MUC } = req.body;
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await updateLoaiDanhMuc(id, TRANG_THAI_DANH_MUC);
     return res.status(200).json({
@@ -396,7 +466,13 @@ const editLoaiDanhMuc = async (req, res) => {
 
 const removeLoaiDanhMuc = async (req, res) => {
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await deleteLoaiDanhMuc(id);
     return res.status(200).json({
@@ -436,7 +512,13 @@ const getLoaiTacGia = async (req, res) => {
 
 const addLoaiTacGia = async (req, res) => {
   const { TEN_LOAI_TAC_GIA } = req.body;
-
+  if (!TEN_LOAI_TAC_GIA) {
+    return res.status(400).json({
+      EM: " TEN_LOAI_TAC_GIA  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await createLoaiTacGia(TEN_LOAI_TAC_GIA);
     return res.status(201).json({
@@ -457,7 +539,13 @@ const addLoaiTacGia = async (req, res) => {
 const editLoaiTacGia = async (req, res) => {
   const { TEN_LOAI_TAC_GIA } = req.body;
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await updateLoaiTacGia(id, TEN_LOAI_TAC_GIA);
     return res.status(200).json({
@@ -478,6 +566,13 @@ const editLoaiTacGia = async (req, res) => {
 const removeLoaiTacGia = async (req, res) => {
   const { id } = req.params;
   // console.log("id", id);
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await deleteLoaiTacGia(id);
     return res.status(200).json({
@@ -523,7 +618,13 @@ const addTyLeQuyDoi = async (req, res) => {
     TRANG_THAI_QUY_DOI,
     GHI_CHU_QUY_DOI,
   } = req.body;
-
+  if (!MA_QUY_DINH) {
+    return res.status(400).json({
+      EM: " MA_QUY_DINH  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await createTyLeQuyDoi(
       MA_QUY_DINH,
@@ -550,7 +651,13 @@ const addTyLeQuyDoi = async (req, res) => {
 const editTyLeQuyDoi = async (req, res) => {
   const { id } = req.params;
   const { TRANG_THAI_QUY_DOI } = req.body;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await updateTyLeQuyDoi(id, TRANG_THAI_QUY_DOI);
     return res.status(200).json({
@@ -570,7 +677,13 @@ const editTyLeQuyDoi = async (req, res) => {
 
 const removeTyLeQuyDoi = async (req, res) => {
   const { id } = req.params;
-
+  if (!id) {
+    return res.status(400).json({
+      EM: " id  bị rỗng",
+      EC: 400,
+      DT: null,
+    });
+  }
   try {
     const results = await deleteTyLeQuyDoi(id);
     return res.status(200).json({
@@ -636,6 +749,13 @@ const addCoQuyDinh = async (req, res) => {
   // console.log("check data MA_LOAI_TAC_GIA =>", MA_LOAI_TAC_GIA);
   // console.log("check data SO_TAC_GIA =>", SO_TAC_GIA);
   try {
+    if (!MA_QUY_DOI || !MA_LOAI_DANH_MUC || !MA_LOAI_TAC_GIA) {
+      return res.status(400).json({
+        EM: " MA_QUY_DOI || !MA_LOAI_DANH_MUC || !MA_LOAI_TAC_GIA bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await create_Co_Quy_Dinh(
       MA_QUY_DOI,
       MA_LOAI_DANH_MUC,
@@ -662,6 +782,13 @@ const getAll_Co_Quy_Dinh_REQ = async (req, res) => {
   try {
     const MA_LOAI_DANH_MUC = req.body.MA_LOAI_DANH_MUC;
     const MA_LOAI_TAC_GIA = req.body.MA_LOAI_TAC_GIA;
+    if ( !MA_LOAI_DANH_MUC || !MA_LOAI_TAC_GIA) {
+      return res.status(400).json({
+        EM: "  !MA_LOAI_DANH_MUC || !MA_LOAI_TAC_GIA bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await select_Co_Quy_Dinh_truyenREQ(
       MA_LOAI_DANH_MUC,
       MA_LOAI_TAC_GIA
