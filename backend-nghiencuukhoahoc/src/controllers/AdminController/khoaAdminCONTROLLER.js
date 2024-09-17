@@ -37,6 +37,13 @@ const getAllKHOA = async (req, res) => {
 const getOneKHOA = async (req, res) => {
   try {
     const makhoa = req.body.MAKHOA;
+    if (!makhoa) {
+      return res.status(400).json({
+        EM: " makhoa  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectOneKhoa(makhoa);
 
     return res.status(200).json({
@@ -58,6 +65,13 @@ const createKHOA = async (req, res) => {
   try {
     // const makhoa = req.body.makhoa;
     const tenkhoa = req.body.tenkhoa;
+    if (!tenkhoa) {
+      return res.status(400).json({
+        EM: " tenkhoa  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createKhoa(tenkhoa);
 
     return res.status(200).json({
@@ -78,6 +92,13 @@ const createKHOA = async (req, res) => {
 const updateKHOA = async (req, res) => {
   try {
     const makhoa = req.params.makhoa;
+    if (!makhoa) {
+      return res.status(400).json({
+        EM: " makhoa  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     const tenkhoa = req.body.tenkhoa;
     let results = await updateKhoa(makhoa, tenkhoa);
 
@@ -99,7 +120,13 @@ const updateKHOA = async (req, res) => {
 const deleteKHOA = async (req, res) => {
   try {
     const makhoa = req.query.makhoa;
-
+    if (!makhoa) {
+      return res.status(400).json({
+        EM: " makhoa  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteKhoa(makhoa);
 
     return res.status(200).json({
@@ -139,7 +166,13 @@ const getAllBOMON = async (req, res) => {
 const getOnlyBoMon_TENKHOA = async (req, res) => {
   try {
     const TENKHOA = req.params.TENKHOA;
-
+    if (!TENKHOA) {
+      return res.status(400).json({
+        EM: " TENKHOA  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectBomon_TENKHOA(TENKHOA);
 
     return res.status(200).json({
@@ -159,7 +192,13 @@ const getOnlyBoMon_TENKHOA = async (req, res) => {
 const getOnlyBoMon = async (req, res) => {
   try {
     const MAKHOA = req.body.MAKHOA;
-
+    if (!MAKHOA) {
+      return res.status(400).json({
+        EM: " MAKHOA  bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectBomon_MAKHOA(MAKHOA);
 
     return res.status(200).json({
@@ -182,6 +221,13 @@ const createBOMON = async (req, res) => {
     const tenbomon = req.body.TENBOMON;
     // console.log(makhoa);
     // console.log(tenbomon);
+    if (!MAKHOA || !tenbomon) {
+      return res.status(400).json({
+        EM: " MAKHOA ,tenbomon bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createBomon(makhoa, tenbomon);
 
     return res.status(200).json({
@@ -205,6 +251,13 @@ const updateBOMON = async (req, res) => {
     // console.log("check mabomon", mabomon);
     const makhoa = req.body.makhoa;
     const tenbomon = req.body.tenbomon;
+    if (!mabomon) {
+      return res.status(400).json({
+        EM: "mabomon bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateBomon(mabomon, makhoa, tenbomon);
 
     return res.status(200).json({
@@ -226,6 +279,13 @@ const deleteBOMON = async (req, res) => {
   try {
     const mabomon = req.query.mabomon;
     // console.log(mabomon);
+    if (!mabomon) {
+      return res.status(400).json({
+        EM: "mabomon bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteBomon(mabomon);
 
     return res.status(200).json({
