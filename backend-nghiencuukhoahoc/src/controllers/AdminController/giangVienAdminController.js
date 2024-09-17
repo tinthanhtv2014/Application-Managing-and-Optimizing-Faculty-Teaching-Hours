@@ -32,7 +32,13 @@ const getAllGiangVien = async (req, res) => {
   try {
     const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
     const MABOMON = req.body.MABOMON;
-
+    if (!MABOMON) {
+      return res.status(400).json({
+        EM: " MABOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await dataFronEnd(isOpenGetAllApiGV, MABOMON);
 
     return res.status(200).json({
@@ -53,7 +59,13 @@ const getAllGiangVien = async (req, res) => {
 const getOnlyGiangVienbyTENDANGNHAP = async (req, res) => {
   try {
     const TENDANGNHAP = req.params.TENDANGNHAP;
-
+    if (!TENDANGNHAP) {
+      return res.status(400).json({
+        EM: " TENDANGNHAP bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results;
     results = await selectOnlyGiangVienByTenDangNhap(TENDANGNHAP);
 
@@ -76,6 +88,13 @@ const getOnlyGiangVienbyBoMon = async (req, res) => {
   try {
     const MABOMON = req.params.MABOMON;
     // console.log(MABOMON);
+    if (!MABOMON) {
+      return res.status(400).json({
+        EM: " MABOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await selectOnlyGiangVien(MABOMON);
 
     return res.status(200).json({
@@ -96,6 +115,17 @@ const getOnlyGiangVienbyBoMon = async (req, res) => {
 const createGiangVienControler = async (req, res) => {
   try {
     let dataGiangVien = req.body;
+    if (
+      !dataGiangVien.MABOMON ||
+      !dataGiangVien.MAGV ||
+      !dataGiangVien.TENDANGNHAP
+    ) {
+      return res.status(400).json({
+        EM: " MABOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await createGiangVien(dataGiangVien);
 
     return res.status(200).json({
@@ -118,6 +148,13 @@ const updateTrangThaiTaiKhoanGiangVienController = async (req, res) => {
     //api này dùng để đình chỉ hoạt động của 1 tài khoản
     const { TRANGTHAITAIKHOAN, MABOMON, isOpenGetAllApiGV } = req.body;
     const MAGV = req.params.MAGV;
+    if (!MAGV) {
+      return res.status(400).json({
+        EM: " MAGV bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     // console.log(MAGV);
     // console.log("TRANGTHAITAIKHOAN:  ", TRANGTHAITAIKHOAN);
     // console.log(MABOMON);
@@ -146,6 +183,13 @@ const updateGiangVienController = async (req, res) => {
   try {
     const MAGV = req.params.MAGV;
     let dataGiangVien = req.body;
+    if (!MAGV) {
+      return res.status(400).json({
+        EM: " MAGV bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await updateGiangVien(MAGV, dataGiangVien);
 
     return res.status(200).json({
@@ -224,6 +268,13 @@ const deleteGiangVienController = async (req, res) => {
     let isOpenGetAllApiGV = req.query.isOpenGetAllApiGV;
     // console.log(MAGV);
     // console.log(MABOMON);
+    if (!MAGV || !MABOMON) {
+      return res.status(400).json({
+        EM: " MAGV bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await deleteGiangVien(MAGV, MABOMON, isOpenGetAllApiGV);
 
     return res.status(200).json({

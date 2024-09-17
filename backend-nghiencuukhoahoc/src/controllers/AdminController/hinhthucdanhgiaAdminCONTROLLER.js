@@ -27,6 +27,13 @@ const selectAll_hinhthucdanhgia = async (req, res) => {
 const insert_hinhthucdanhgia = async (req, res) => {
   try {
     let TENDANHGIA = req.body.TENDANHGIA;
+    if (!TENDANHGIA) {
+      return res.status(400).json({
+        EM: " TENDANHGIA bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     // console.log("check ", TENDANHGIA);
     let results = await create_hinhthucdanhgia(TENDANHGIA);
 
@@ -49,6 +56,13 @@ const sua_hinhthucdanhgia = async (req, res) => {
   try {
     let MADANHGIAKETTHUC = req.params.MADANHGIAKETTHUC;
     let TENDANHGIA = req.body.TENDANHGIA;
+    if (!MADANHGIAKETTHUC) {
+      return res.status(400).json({
+        EM: " MADANHGIAKETTHUC bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await update_hinhthucdanhgia(MADANHGIAKETTHUC, TENDANHGIA);
 
     return res.status(200).json({
