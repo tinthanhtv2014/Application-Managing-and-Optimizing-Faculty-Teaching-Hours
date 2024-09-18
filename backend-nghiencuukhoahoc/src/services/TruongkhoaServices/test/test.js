@@ -508,6 +508,24 @@ const XuLy_data_GV = async (dataAutoPhanCong) => {
     return data_GV;
 };
 
+const XuLy_data_GV_TungDay_HocKy = async (dataAutoPhanCong) => {
+    let [data_GV] = await pool.execute(
+        `SELECT BM.TENBOMON, L.MALOP, GV.MAGV, GV.TENGV
+        FROM lop L
+        JOIN chuongtrinhdaotao CTDT ON L.MACHUONGTRINH = CTDT.MACHUONGTRINH
+        JOIN thuoc T ON T.MACHUONGTRINH = CTDT.MACHUONGTRINH
+        JOIN monhoc MH ON MH.MAMONHOC = T.MAMONHOC
+        JOIN bomon BM ON BM.MABOMON = CTDT.MABOMON
+        JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
+        JOIN bangphancong BPC ON BPC.MAGV = GV.MAGV
+        WHERE T.SOTHUTUHOCKI = ?
+        GROUP BY L.MALOP, BM.TENBOMON, GV.MAGV, GV.TENGV;`,
+        [dataAutoPhanCong.data[0].SOTHUTUHOCKI]
+    );
+
+    return data_GV;
+};
+
 const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
     try {
         dataAutoPhanCong = await XuLy_dataAutoPhanCong(dataAutoPhanCong);
@@ -515,12 +533,16 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
 
         //Lấy ds giảng viên từng dạy ở lớp này
         let data_GV_TungDay = await XuLy_data_GV_TungDay(dataAutoPhanCong);
-        console.log("data_GV_TungDay: ", data_GV_TungDay);
+        // console.log("data_GV_TungDay: ", data_GV_TungDay);
+
+        //Lấy ds giảng viên từng dạy ở lớp này
+        let data_GV_TungDay_HocKy = await XuLy_data_GV_TungDay_HocKy(dataAutoPhanCong);
+        // console.log("data_GV_TungDay_HocKy: ", data_GV_TungDay);
 
         //Lấy ds giảng viên có thể dạy ở lớp này
         let data_GV = await XuLy_data_GV(dataAutoPhanCong);
-        console.log("Nhận danh sách GV có thể dạy lớp này data_GV: ", data_GV);
-        console.log("data_GV.length: ", data_GV.length);
+        // console.log("Nhận danh sách GV có thể dạy lớp này data_GV: ", data_GV);
+        // console.log("data_GV.length: ", data_GV.length);
 
         //Tìm GV trong bảng chuyên môn và Auto phân công
         let data_CMGV; //Dữ liệu chuyên môn của GV
@@ -544,13 +566,54 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                     ]
                 );
 
+                DO_UU_TIEN_PCGVTD = 0;
+                let countLop = 0; // Đặt lại biến countLop, biến này dùng để đếm GV đã dạy lớp mấy lần
+                let countHocKy = 0 // Đặt lại biến countHocKy, biến này dùng để đếm GV đã dạy bao nhiêu môn
+
+                // Tăng điểm ưu tiên dựa trên chuyên môn giảng viên
+                data_CMGV.length === 0
+                    ? (DO_UU_TIEN_PCGVTD += 10)
+                    : (DO_UU_TIEN_PCGVTD += 20);
+
+                // Kiểm tra xem giảng viên đã từng dạy lớp này chưa
+                let exists = data_GV_TungDay.some((giangvien) => giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD);
+
+                // Tăng điểm ưu tiên nếu giảng viên đã từng dạy
+                exists ? (DO_UU_TIEN_PCGVTD += 10) : (DO_UU_TIEN_PCGVTD += 20);
+
+                // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay
+                countLop = data_GV_TungDay.reduce((acc, giangvien) => {
+                    return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD ? acc + 1 : acc;
+                }, 0);
+
+                // Nếu giảng viên xuất hiện nhiều hơn 2 lần, đặt lại ưu tiên
+                // console.log("countLop: ", countLop)
+                if (countLop >= 2) {
+                    DO_UU_TIEN_PCGVTD = 0; // Nếu xuất hiện nhiều hơn 2 lần thì đặt lại ưu tiên
+                } else {
+                    DO_UU_TIEN_PCGVTD += 10; // Nếu xuất hiện ít hơn 2 lần thì tăng thêm điểm ưu tiên
+                }
+
+                // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay_HocKy
+                if (data_GV_TungDay_HocKy.length > 0) {
+                    countHocKy = data_GV_TungDay_HocKy.reduce((acc, giangvien) => {
+                        return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD ? acc + 1 : acc;
+                    }, 0);
+                }
+                // console.log("data_GV_TungDay_HocKy.lengh: ", data_GV_TungDay_HocKy.length)
+                // console.log("data_AutoPhanCongFor.lengh: ", data_AutoPhanCongFor.length)
+                // console.log("countHocKy: ", countHocKy)
+                if (countHocKy > 0) {
+                    DO_UU_TIEN_PCGVTD = DO_UU_TIEN_PCGVTD - countHocKy; // -1 cho mỗi môn GV dạy
+                } else {
+                    DO_UU_TIEN_PCGVTD += 10; // Nếu GV không dạy bất kỳ lớp nào +10
+                }
+                //Không cho phép độ ưu tiên nhỏ hơn 0
+                DO_UU_TIEN_PCGVTD <= 0 ? DO_UU_TIEN_PCGVTD = 0 : DO_UU_TIEN_PCGVTD
+                // console.log("Tên: ", data_GV[i].TENGV, " Môn: ", dataAutoPhanCong.data[y].TENMONHOC, " Độ ưu tiên: ", DO_UU_TIEN_PCGVTD)
+
                 //Kiểm tra bảng Phân Công Auto có chưa nếu chưa có thì tạo (sơ khai) !!!!!
                 if (data_AutoPhanCongFor.length === 0) {
-                    DO_UU_TIEN_PCGVTD = 0;
-                    data_CMGV.length === 0
-                        ? (DO_UU_TIEN_PCGVTD += 10)
-                        : (DO_UU_TIEN_PCGVTD += 20);
-
                     await pool.execute(
                         `INSERT INTO phan_cong_gv_tu_dong (MAGV_PCGVTD, MA_MON_HOC_PCGVTD, MA_LOP_PCGVTD, DO_UU_TIEN_PCGVTD) 
                         VALUES (?, ?, ?, ?);`,
@@ -564,47 +627,56 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                 }
 
                 if (data_AutoPhanCongFor.length > 0) {
-                    DO_UU_TIEN_PCGVTD = 0;
-                    let count = 0; // Đặt lại biến count, biến này dùng để đếm GV đã dạy lớp mấy lần
-
-                    // Tăng điểm ưu tiên dựa trên chuyên môn giảng viên
-                    data_CMGV.length === 0
-                        ? (DO_UU_TIEN_PCGVTD += 10)
-                        : (DO_UU_TIEN_PCGVTD += 20);
-
-                    // Kiểm tra xem giảng viên đã từng dạy lớp này chưa
-                    let exists = data_GV_TungDay.some((giangvien) => giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD);
-
-                    // Tăng điểm ưu tiên nếu giảng viên đã từng dạy
-                    exists ? (DO_UU_TIEN_PCGVTD += 10) : (DO_UU_TIEN_PCGVTD += 20);
-
-                    // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay
-                    count = data_GV_TungDay.reduce((acc, giangvien) => {
-                        return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD ? acc + 1 : acc;
-                    }, 0);
-
-                    // Nếu giảng viên xuất hiện nhiều hơn 2 lần, đặt lại ưu tiên
-                    if (count >= 2) {
-                        DO_UU_TIEN_PCGVTD = 0; // Nếu xuất hiện nhiều hơn 2 lần thì đặt lại ưu tiên
-                    } else {
-                        DO_UU_TIEN_PCGVTD += 10; // Nếu xuất hiện ít hơn 2 lần thì tăng thêm điểm ưu tiên
-                    }
+                    await pool.execute(
+                        `UPDATE phan_cong_gv_tu_dong 
+                        SET DO_UU_TIEN_PCGVTD = ? 
+                        WHERE MAGV_PCGVTD = ? AND MA_MON_HOC_PCGVTD = ? AND MA_LOP_PCGVTD = ?;`,
+                        [
+                            DO_UU_TIEN_PCGVTD,
+                            data_GV[i].MAGV,
+                            dataAutoPhanCong.data[y].MAMONHOC,
+                            dataAutoPhanCong.data[y].MALOP,
+                        ]
+                    );
                 }
 
             }
         }
 
+        for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
+            let [PhanCong] = await pool.execute(
+                `SELECT * 
+                FROM phan_cong_gv_tu_dong PCGVTD
+                WHERE PCGVTD.MA_MON_HOC_PCGVTD = ? 
+                AND PCGVTD.MA_LOP_PCGVTD = ?
+                ORDER BY PCGVTD.DO_UU_TIEN_PCGVTD DESC
+                LIMIT 1;`,
+                [
+                    dataAutoPhanCong.data[i].MAMONHOC,
+                    dataAutoPhanCong.data[i].MALOP
+                ]
+            );
+
+            if (PhanCong.length > 0) {
+                dataAutoPhanCong.data[i].MAGV = PhanCong[0].MAGV_PCGVTD;
+            } else {
+                dataAutoPhanCong.data[i].MAGV = '';
+            }
+        }
+        console.log("dataAutoPhanCong: ", dataAutoPhanCong);
+
         return {
             EM: "Đã nhận",
             EC: 1,
-            DT: "ok",
+            DT: dataAutoPhanCong,
         };
+
     } catch (error) {
         console.error("Lỗi trong try-catch: ", error);
         return {
             EM: "Đã xảy ra lỗi khi phân công giảng viên tự động",
             EC: -1,
-            DT: null,
+            DT: dataAutoPhanCong,
         };
     }
 };
