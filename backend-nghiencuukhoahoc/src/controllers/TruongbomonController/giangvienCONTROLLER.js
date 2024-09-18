@@ -10,6 +10,13 @@ const get_giangvien_CNTT = async (req, res) => {
     let page = req.query.page;
     let limit = req.query.limit;
     let TENBOMON = req.query.TENBOMON;
+    if (!TENBOMON) {
+      return res.status(400).json({
+        EM: "TENBOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_giangvien(page, limit, TENBOMON);
 
     return res.status(200).json({
@@ -32,6 +39,13 @@ const get_giangvien_CNTT_da_chon_khung = async (req, res) => {
     let page = req.query.page;
     let limit = req.query.limit;
     let TENBOMON = req.query.TENBOMON;
+    if (!TENBOMON) {
+      return res.status(400).json({
+        EM: "TENBOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_giangvien_dachonkhung(page, limit, TENBOMON);
 
     return res.status(200).json({
@@ -54,6 +68,13 @@ const get_giangvien_CNTT_chua_chon_khung = async (req, res) => {
     let page = req.query.page;
     let limit = req.query.limit;
     let TENBOMON = req.query.TENBOMON;
+    if (!TENBOMON) {
+      return res.status(400).json({
+        EM: "TENBOMON bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await xem_giangvien_chuachonkhung(page, limit, TENBOMON);
 
     return res.status(200).json({

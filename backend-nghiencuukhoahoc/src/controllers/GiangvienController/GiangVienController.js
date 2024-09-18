@@ -6,6 +6,13 @@ const updateThongTinGiangVienController = async (req, res) => {
   try {
     const TENDANGNHAP = req.params.TENDANGNHAP;
     const TENCHUCDANH = req.body.TENCHUCDANH;
+    if (!TENDANGNHAP || !TENCHUCDANH) {
+      return res.status(400).json({
+        EM: "!TENDANGNHAP || !TENCHUCDANH bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     // Khởi tạo dataGiangVien với các trường cần thiết, mặc định là ''
     let dataGiangVien = {
       TENGV: "",
