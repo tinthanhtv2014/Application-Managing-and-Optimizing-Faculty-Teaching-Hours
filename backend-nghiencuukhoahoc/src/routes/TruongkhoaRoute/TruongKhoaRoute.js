@@ -26,13 +26,14 @@ const TruongKhoaRoute = (app) => {
   router.post("/timkiem/email", checkUserJWT, timkiem_email_taikhoanController);
   router.post(
     "/timkiem/ngoaitruong/email",
+    checkUserJWT,
     timkiem_email_taikhoan_ngoaitruongController
   );
-  router.post("/test/tao/excel", CoTyLeExcelController); // Chạy CSDL bằng excel
-  router.post("/test/phancong", PhanCongControllerTest);
+  router.post("/test/tao/excel", checkUserJWT, CoTyLeExcelController); // Chạy CSDL bằng excel
+  router.post("/test/phancong", checkUserJWT, PhanCongControllerTest);
 
-  router.get("/test/dudoan", GOI_Y_SERVER);
-  router.post("/test/dudoan/rf", GOI_Y_SERVER_rf);
+  router.get("/test/dudoan", checkUserJWT, GOI_Y_SERVER);
+  router.post("/test/dudoan/rf", checkUserJWT, GOI_Y_SERVER_rf);
 
   return app.use("/api/v1/truongkhoa", router);
 };

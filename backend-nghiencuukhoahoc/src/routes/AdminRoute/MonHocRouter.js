@@ -37,7 +37,7 @@ const {
 const { checkUserJWT } = require("../../middlewares/JWTAction.js");
 const CRUDMonHoc = (app) => {
   // Route cho môn học, yêu cầu xác thực JWT
-  router.get("/xem", getAllMONHOC);
+  router.get("/xem", checkUserJWT, getAllMONHOC);
 
   router.post("/tao", checkUserJWT, createMONHOC);
   router.put("/sua/:MAMONHOC", checkUserJWT, updateMONHOC);
@@ -45,16 +45,16 @@ const CRUDMonHoc = (app) => {
 
   /////////////////////////////////////////////////////
   // Router cho chương trình đào tạo, yêu cầu xác thực JWT
-  router.get("/chuongtrinh/xem", getAllChuongtrinhdaotao);
-  router.post("/chuongtrinh/only/xem", getOnlyChuongtrinhdaotao);
+  router.get("/chuongtrinh/xem", checkUserJWT, getAllChuongtrinhdaotao);
+  router.post("/chuongtrinh/only/xem", checkUserJWT, getOnlyChuongtrinhdaotao);
   router.post(
     "/chuongtrinh/only/hocki/xem",
-
+    checkUserJWT,
     getOnlyChuongtrinhdaotao_withHOCKI
   );
   router.post(
     "/chuongtrinh/sohocki/xem",
-
+    checkUserJWT,
     getOnlyChuongtrinhdaotao_SoHocKi
   );
   router.post(
@@ -73,12 +73,12 @@ const CRUDMonHoc = (app) => {
   //////////////////////////////////////////////////////
 
   //router cho lớp thuộc chương trình đào tạo
-  router.get("/lop/xem", getAllLopcontroller);
+  router.get("/lop/xem", checkUserJWT, getAllLopcontroller);
 
-  router.post("/lop/tao", creatNEWLopcontroller);
-  router.post("/lop/tao/excel", createLopcontrollerExcel);
-  router.put("/lop/update/:MALOP", updateLOPcontroller);
-  router.delete("/lop/xoa", deleteLOPcontroller);
+  router.post("/lop/tao", checkUserJWT, creatNEWLopcontroller);
+  router.post("/lop/tao/excel", checkUserJWT, createLopcontrollerExcel);
+  router.put("/lop/update/:MALOP", checkUserJWT, updateLOPcontroller);
+  router.delete("/lop/xoa", checkUserJWT, deleteLOPcontroller);
   return app.use("/api/v1/admin/monhoc", router);
 };
 

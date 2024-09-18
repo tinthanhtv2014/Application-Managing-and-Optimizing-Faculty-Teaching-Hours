@@ -72,10 +72,10 @@ const CRUDDanhMuc = (app) => {
   router.delete("/tylequydoi/:id", checkUserJWT, removeTyLeQuyDoi);
 
   // Route cho các API bảng có quy định yêu cầu xác thực JWT
-  router.get("/coquydinh", getAll_Co_Quy_Dinh);
-  router.post("/coquydinh", addCoQuyDinh);
-  router.post("/coquydinh/xem", getAll_Co_Quy_Dinh_REQ);
-  router.post("/coquydinh/excel", add_Co_Quy_Dinh_excel);
+  router.get("/coquydinh", checkUserJWT, getAll_Co_Quy_Dinh);
+  router.post("/coquydinh", checkUserJWT, addCoQuyDinh);
+  router.post("/coquydinh/xem", checkUserJWT, getAll_Co_Quy_Dinh_REQ);
+  router.post("/coquydinh/excel", checkUserJWT, add_Co_Quy_Dinh_excel);
   return app.use("/api/v1/admin/danhmuc", router);
 };
 

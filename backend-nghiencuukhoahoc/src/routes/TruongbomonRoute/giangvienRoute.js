@@ -48,45 +48,68 @@ const CRUDgiangvien_CNTT = (app) => {
   //   router.delete("/xoa", deleteNAMHOC);
 
   //route bên phân công
-  router.get("/xem/phancong/chuachonkhung", get_giangvien_CNTT_chuachonkhung);
-  router.get("/xem/phancong/dachonkhung", get_giangvien_CNTT_dachonkhung);
-  router.post("/xem/phancong/lophoc/hocki", get_monhoc_lop_hocki);
+  router.get(
+    "/xem/phancong/chuachonkhung",
+    checkUserJWT,
+    get_giangvien_CNTT_chuachonkhung
+  );
+  router.get(
+    "/xem/phancong/dachonkhung",
+    checkUserJWT,
+    get_giangvien_CNTT_dachonkhung
+  );
+  router.post("/xem/phancong/lophoc/hocki", checkUserJWT, get_monhoc_lop_hocki);
   router.post(
     "/xem/phancong/dachonkhung/chitiet",
+    checkUserJWT,
     get_giangvien_CNTT_dachonkhung_chitietonly
   );
-  router.post("/lop/bomon/xem", getAllLop_BoMon_controller);
+  router.post("/lop/bomon/xem", checkUserJWT, getAllLop_BoMon_controller);
   //bảng phân côngA
-  router.get("/xem/phancong/listgiangvien", get_listgiangvien_phancong);
-  router.post("/tao/phancong/giangvien", create_onlylistgiangvien_phancong);
+  router.get(
+    "/xem/phancong/listgiangvien",
+    checkUserJWT,
+    get_listgiangvien_phancong
+  );
+  router.post(
+    "/tao/phancong/giangvien",
+    checkUserJWT,
+    create_onlylistgiangvien_phancong
+  );
 
   //chi tiết phân công route
   router.post(
     "/tao/chitietphancong/giangvien",
+    checkUserJWT,
     createChitietphancongExcelController
   );
 
   router.post(
     "/dangky/chitietphancong/giangvien",
+    checkUserJWT,
     Dangky_ChitietphancongExcelController
   );
 
   router.post(
     "/xem/danhsach/monhoc/giangvien",
+    checkUserJWT,
     get_giangvien_MonHoc_daChonKhung
   );
   router.get(
     "/xem/danhsach/monhoc/giangvien/lop",
+    checkUserJWT,
     selectChitietphancongController_lop
   );
 
   router.post(
     "/xem/danhsach/monhoc/danhsach/giangvien",
+    checkUserJWT,
     selectChitietphancongController_giangvien
   );
 
   router.post(
     "/xem/danhsach/monhoc/giangvien/canhan",
+    checkUserJWT,
     Xem_Chitietphancong_banthan_Controller
   );
   return app.use("/api/v1/truongbomon/giangvien", router);

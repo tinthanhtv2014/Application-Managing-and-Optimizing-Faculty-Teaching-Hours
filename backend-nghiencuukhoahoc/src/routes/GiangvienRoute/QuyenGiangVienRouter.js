@@ -52,7 +52,7 @@ const QuyenGiangVienRouter = (app) => {
     checkUserJWT,
     update_THOIGIAN_XACNHAN
   );
-  router.get("/xem/thoigianxacnhan", xem_THOIGIAN_XACNHAN);
+  router.get("/xem/thoigianxacnhan", checkUserJWT, xem_THOIGIAN_XACNHAN);
   router.get(
     "/xem/thoigianxacnhantheokhoa/:tenKhoa",
     checkUserJWT,
@@ -62,7 +62,11 @@ const QuyenGiangVienRouter = (app) => {
   // router.put("/sua/khunggiochuan/:MAGV", update_CHONKHUNG); //phúc viểt
 
   //router cho danh mục chọn khung
-  router.post("/xem/canhan/thongtinkhung", select_thongtin_danhmuc);
+  router.post(
+    "/xem/canhan/thongtinkhung",
+    checkUserJWT,
+    select_thongtin_danhmuc
+  );
 
   return app.use("/api/v1/quyengiangvien/giangvien", router);
 };

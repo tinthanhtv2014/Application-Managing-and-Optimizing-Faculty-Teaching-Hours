@@ -30,7 +30,9 @@ const {
 
 const getAllGiangVien_indatabase = async (req, res) => {
   try {
-    let results = await selectGiangVien();
+    let page = req.query.page;
+    let limit = req.query.limit;
+    let results = await selectGiangVien(page, limit);
 
     return res.status(200).json({
       EM: results.EM,
