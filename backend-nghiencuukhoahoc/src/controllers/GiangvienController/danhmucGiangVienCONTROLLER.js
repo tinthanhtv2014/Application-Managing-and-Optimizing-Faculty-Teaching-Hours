@@ -7,7 +7,7 @@ const {
 } = require("../../services/GiangvienServices/danhmucGiangvienServices");
 
 const {
-  dangky_danhmuc_giangvien
+  dangky_danhmuc_giangvien,
 } = require("../../services/GiangvienServices/DanhMucSevicers/dangky_danhmuc_giangvien");
 
 const select_thongtin_danhmuc = async (req, res) => {
@@ -16,6 +16,13 @@ const select_thongtin_danhmuc = async (req, res) => {
     const TENNAMHOC = req.body.TENNAMHOC;
     // console.log("TENNAMHOC", TENNAMHOC);
     // console.log("TENDANGNHAP", TENDANGNHAP);
+    if (!TENDANGNHAP || !TENNAMHOC) {
+      return res.status(400).json({
+        EM: " TENDANGNHAP  TENNAMHOC bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await get_thongtin_danhmuc(TENDANGNHAP, TENNAMHOC);
     return res.status(200).json({
       EM: results.EM,
@@ -37,6 +44,13 @@ const select_loaitacgia_loaidanhmuc = async (req, res) => {
     const MA_LOAI_DANH_MUC = req.body.MA_LOAI_DANH_MUC;
     // console.log("req.body: ", req.body)
     // console.log("TEN_LOAI_DANH_MUC: ", TEN_LOAI_DANH_MUC)
+    if (!MA_LOAI_DANH_MUC) {
+      return res.status(400).json({
+        EM: "MA_LOAI_DANH_MUC bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await getLoaiTacGiaByLoaiDanhMuc(MA_LOAI_DANH_MUC);
     return res.status(200).json({
       EM: results.EM,
@@ -58,6 +72,13 @@ const dangky_danhmuc_Controller = async (req, res) => {
     // console.log("req.body dangky_danhmuc_Controller: ", req.body);
     let dataDangKyDanhMuc = req.body;
     // console.log("dataDangKyDanhMuc: ", dataDangKyDanhMuc);
+    if (!dataDangKyDanhMuc) {
+      return res.status(400).json({
+        EM: "dataDangKyDanhMuc bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await dangky_danhmuc_giangvien(dataDangKyDanhMuc);
     // let results = {
     //   EM: "ok",
@@ -82,6 +103,13 @@ const dangky_danhmuc_Controller = async (req, res) => {
 const luu_data_dangky_danhmuc_Controller = async (req, res) => {
   try {
     const datadangky = req.body;
+    if (!datadangky) {
+      return res.status(400).json({
+        EM: "datadangky bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await dangky_thongtin_giangvien(datadangky);
     return res.status(200).json({
       EM: results.EM,
@@ -102,6 +130,13 @@ const select_thongtin_dangkydanhmuc_giangvien = async (req, res) => {
   try {
     const MAGV = req.body.MAGV;
     const TENNAMHOC = req.body.TENNAMHOC;
+    if (!MAGV || !TENNAMHOC) {
+      return res.status(400).json({
+        EM: "MAGV TENNAMHOC bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     // console.log("MAGV select_thongtin_dangkydanhmuc_giangvien: ", MAGV);
     let results = await get_thongtin_dangky_giangvien(MAGV, TENNAMHOC);
     return res.status(200).json({
@@ -122,6 +157,13 @@ const select_thongtin_dangkydanhmuc_giangvien = async (req, res) => {
 const select_thongtin_dangkydanhmuc__danhsach_giangvien = async (req, res) => {
   try {
     const TEN_NGHIEN_CUU = req.body.TEN_NGHIEN_CUU;
+    if (!TEN_NGHIEN_CUU) {
+      return res.status(400).json({
+        EM: "TEN_NGHIEN_CUU bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await get_thongtin_dangky_giangvien_hoptac(TEN_NGHIEN_CUU);
     return res.status(200).json({
       EM: results.EM,
