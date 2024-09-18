@@ -643,27 +643,47 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
             }
         }
 
-        for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
-            let [PhanCong] = await pool.execute(
-                `SELECT * 
-                FROM phan_cong_gv_tu_dong PCGVTD
-                WHERE PCGVTD.MA_MON_HOC_PCGVTD = ? 
-                AND PCGVTD.MA_LOP_PCGVTD = ?
-                ORDER BY PCGVTD.DO_UU_TIEN_PCGVTD DESC
-                LIMIT 1;`,
-                [
-                    dataAutoPhanCong.data[i].MAMONHOC,
-                    dataAutoPhanCong.data[i].MALOP
-                ]
-            );
+        let checkTrungMAGV = []; // Khởi tạo mảng để lưu danh sách MAGV
 
+        for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
+            // Tạo câu SQL cơ bản
+            let query = `
+        SELECT * 
+        FROM phan_cong_gv_tu_dong PCGVTD
+        WHERE PCGVTD.MA_MON_HOC_PCGVTD = ? 
+        AND PCGVTD.MA_LOP_PCGVTD = ? 
+    `;
+
+            let params = [dataAutoPhanCong.data[i].MAMONHOC, dataAutoPhanCong.data[i].MALOP];
+
+            // Nếu checkTrungMAGV có dữ liệu, thêm điều kiện NOT IN vào câu SQL
+            if (checkTrungMAGV.length > 0) {
+                // Loại bỏ giá trị trùng lặp và làm phẳng mảng
+                let uniqueMAGV = [...new Set(checkTrungMAGV)];
+                query += `AND PCGVTD.MAGV_PCGVTD NOT IN (${uniqueMAGV.map(() => '?').join(', ')}) `;
+                params.push(...uniqueMAGV); // Thêm các giá trị MAGV vào tham số
+            }
+
+            query += `ORDER BY PCGVTD.DO_UU_TIEN_PCGVTD DESC LIMIT 1;`;
+
+            // Thực hiện truy vấn
+            let [PhanCong] = await pool.execute(query, params);
+
+            // Kiểm tra kết quả của truy vấn
             if (PhanCong.length > 0) {
                 dataAutoPhanCong.data[i].MAGV = PhanCong[0].MAGV_PCGVTD;
+                checkTrungMAGV.push(PhanCong[0].MAGV_PCGVTD); // Thêm MAGV vào mảng để kiểm tra lần sau
             } else {
                 dataAutoPhanCong.data[i].MAGV = '';
             }
         }
-        console.log("dataAutoPhanCong: ", dataAutoPhanCong);
+
+        // console.log("dataAutoPhanCong: ", dataAutoPhanCong);
+
+        console.log("checkTrungMAGV: ", checkTrungMAGV);
+        for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
+            console.log("dataAutoPhanCong cuối: ", dataAutoPhanCong.data[i].MAGV);
+        }
 
         return {
             EM: "Đã nhận",
