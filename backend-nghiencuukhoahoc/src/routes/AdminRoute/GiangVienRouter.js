@@ -5,6 +5,7 @@ const router = express.Router();
 
 const {
   getAllGiangVien,
+  getAllGiangVien_indatabase,
   getOnlyGiangVienbyBoMon,
   getOnlyGiangVienbyTENDANGNHAP,
   createGiangVienControler,
@@ -32,6 +33,9 @@ const {
 const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
+
+  router.get("/xem/tatca", checkUserJWT, getAllGiangVien_indatabase);
+
   router.post("/xem", checkUserJWT, getAllGiangVien);
 
   router.get("/only/xem/:MABOMON", checkUserJWT, getOnlyGiangVienbyBoMon);

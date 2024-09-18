@@ -28,6 +28,25 @@ const {
   dataFronEnd,
 } = require("../../services/AdminServices/helpers");
 
+const getAllGiangVien_indatabase = async (req, res) => {
+  try {
+    let results = await selectGiangVien();
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller getAllGiangVien",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 const getAllGiangVien = async (req, res) => {
   try {
     const isOpenGetAllApiGV = req.body.isOpenGetAllApiGV;
@@ -294,6 +313,7 @@ const deleteGiangVienController = async (req, res) => {
 
 module.exports = {
   getAllGiangVien,
+  getAllGiangVien_indatabase,
   getOnlyGiangVienbyBoMon,
   getOnlyGiangVienbyTENDANGNHAP,
   createGiangVienControler,
