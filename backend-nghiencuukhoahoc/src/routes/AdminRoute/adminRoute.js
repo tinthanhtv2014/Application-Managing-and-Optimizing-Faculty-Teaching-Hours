@@ -28,7 +28,7 @@ const CRUDTaiKhoan = (app) => {
   router.post("/tao/excel", checkUserJWT, createTaiKhoanExcelController); // Tạo hàng loạt tài khoản
   router.post("/only/tao", checkUserJWT, createTaiKhoanOnlyController); // Tạo tài khoản chỉ với thông tin cần thiết
 
-  router.get("/xem/:MABOMON", checkUserJWT, getAllTaiKhoanController); // Xem tất cả tài khoản theo mã bộ môn
+  router.post("/xem", checkUserJWT, getAllTaiKhoanController); // Xem tất cả tài khoản theo mã bộ môn
   router.get(
     "/xem/phanquyen/:MABOMON",
     checkUserJWT,

@@ -3,7 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./KhoaList.scss";
-const BoMonList = ({ dataListBoMon, activeRowBM, handleChoseRowBM }) => {
+const BoMonList = ({
+  dataListBoMon,
+  activeRowBM,
+  handleChoseRowBM,
+  selectBoMon,
+  setSelectBoMon,
+}) => {
   return (
     <div className="custom-select-container">
       <Box sx={{ maxWidth: 300 }}>
@@ -13,13 +19,13 @@ const BoMonList = ({ dataListBoMon, activeRowBM, handleChoseRowBM }) => {
             className="height-selectGV"
             labelId="bomon-select-label"
             id="bomon-select"
-            value={activeRowBM}
+            value={selectBoMon}
             label="Chọn Bộ Môn"
-            onChange={(e) => handleChoseRowBM(e.target.value)}
+            onChange={(e) => setSelectBoMon(e.target.value)}
           >
             {dataListBoMon && dataListBoMon.length > 0 ? (
               dataListBoMon.map((bomon, index) => (
-                <MenuItem key={index} value={bomon.MABOMON}>
+                <MenuItem key={index} value={bomon.TENBOMON}>
                   {bomon.TENBOMON}
                 </MenuItem>
               ))

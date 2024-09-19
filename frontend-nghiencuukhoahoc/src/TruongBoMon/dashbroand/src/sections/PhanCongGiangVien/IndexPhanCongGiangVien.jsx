@@ -180,7 +180,7 @@ const IndexPhanCongGiangVien = () => {
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/test/phancong`,
-        { data: data_MonHoc } // Gửi data_MonHoc vào API
+        { data: data_MonHoc, HOCKINIENKHOA: select_HocKiNienKhoa } // Gửi data_MonHoc vào API
       );
 
       if (response.data.EC === 1) {

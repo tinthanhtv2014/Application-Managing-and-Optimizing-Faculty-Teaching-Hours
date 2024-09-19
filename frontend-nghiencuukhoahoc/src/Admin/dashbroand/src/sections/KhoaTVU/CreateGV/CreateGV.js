@@ -43,6 +43,7 @@ const ComponenCreateGiangVien = () => {
   const [TenDangNhapGV, setTenDangNhapGV] = useState(null);
   const [QuyenGiangVien, setQuyenGiangVien] = useState(null);
   const [TrangThaiGV, setTrangThaiGV] = useState(null);
+  const [selectBoMon, setSelectBoMon] = useState(null);
   //----------------------KHAI BÁO BIẾN INPUT DATA--------------------------
 
   const auth = Cookies.get("accessToken");
@@ -204,18 +205,24 @@ const ComponenCreateGiangVien = () => {
 
     setMaBoMon(bomon);
     setActiveRowBM(bomon);
-
-    try {
-      const response = await CookiesAxios.get(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/${bomon}`
-      );
-      // console.log("Danh sách tài khoản:", response.data);
-      setdataListGiangVien(response.data.DT);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
-    }
   };
-
+  useEffect(() => {
+    const fetchDataTheoBoMon = async () => {
+      try {
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/taikhoan/xem/`,
+          { TENBOMON: selectBoMon }
+        );
+        // console.log("Danh sách tài khoản:", response.data);
+        if (response.data.EC == 1) {
+          setdataListGiangVien(response.data.DT);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+      }
+    };
+    fetchDataTheoBoMon();
+  }, [selectBoMon]);
   const handleChoseEditBM = (bomon) => {
     setTenBoMon(bomon.TENBOMON);
     setMaBoMon(bomon.MABOMON);
@@ -469,6 +476,8 @@ const ComponenCreateGiangVien = () => {
             activeRowBM={activeRowBM}
             handleChoseRowBM={handleChoseRowBM}
             handleChoseEditBM={handleChoseEditBM}
+            setSelectBoMon={setSelectBoMon}
+            selectBoMon={selectBoMon}
           />
         </Col>{" "}
         <Col md={2}>
