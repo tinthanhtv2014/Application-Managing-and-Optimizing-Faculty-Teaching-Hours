@@ -246,37 +246,57 @@ const xem_chitietphancong_lop = async () => {
 
 const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
   try {
-    let [results_chitietphancong_data, fields_data] = await pool.execute(
-      `SELECT chitietphancong.*, 
-       bangphancong.*, 
-       monhoc.*, 
-       giangvien.*, 
-       chon_khung.*, 
-       khunggiochuan.*, 
-       hockynienkhoa.*, 
-       lop.*, 
-       bao_cao_ket_thuc_mon.*, 
-       hinhthucdanhgia.* 
-FROM hockynienkhoa
-LEFT JOIN bangphancong ON hockynienkhoa.MAHKNK = bangphancong.MAHKNK
-LEFT JOIN chitietphancong ON bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
-LEFT JOIN monhoc ON chitietphancong.MAMONHOC = monhoc.MAMONHOC
-LEFT JOIN giangvien ON bangphancong.MAGV = giangvien.MAGV
-LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
-LEFT JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG
-LEFT JOIN lop ON chitietphancong.MALOP = lop.MALOP
-LEFT JOIN bao_cao_ket_thuc_mon ON chitietphancong.MACHITIETPHANCONG = bao_cao_ket_thuc_mon.MACHITIETPHANCONG
-LEFT JOIN hinhthucdanhgia ON bao_cao_ket_thuc_mon.MADANHGIAKETTHUC = hinhthucdanhgia.MADANHGIAKETTHUC
-WHERE hockynienkhoa.MAHKNK = ?
-AND giangvien.MAGV = ?;
+    let [results_hknk, fields_hknk] = await pool.execute(
+      `select TEN_NAM_HOC from hockynienkhoa where MAHKNK = ?
 `,
-      [MAHKNK, MAGV]
+      [MAHKNK]
     );
+
+    console.log("check 1", results_hknk[0].TEN_NAM_HOC);
+    let [results_namhoc, fields_namhoc] = await pool.execute(
+      `select TENNAMHOC from namhoc where TENNAMHOC = ?
+`,
+      [results_hknk[0].TEN_NAM_HOC]
+    );
+    console.log("check 2", results_namhoc[0].TENNAMHOC);
+    let results_chitietphancong_data = [];
+
+    if (results_namhoc[0].TENNAMHOC === results_hknk[0].TEN_NAM_HOC) {
+      results_chitietphancong_data = await pool.execute(
+        `SELECT chitietphancong.*, 
+         bangphancong.*, 
+         monhoc.*, 
+         giangvien.*, 
+         chon_khung.*, 
+         khunggiochuan.*, 
+         hockynienkhoa.*, 
+         lop.*, 
+         bao_cao_ket_thuc_mon.*, 
+         hinhthucdanhgia.*
+  FROM hockynienkhoa
+  LEFT JOIN bangphancong ON hockynienkhoa.MAHKNK = bangphancong.MAHKNK
+  LEFT JOIN chitietphancong ON bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
+  LEFT JOIN monhoc ON chitietphancong.MAMONHOC = monhoc.MAMONHOC
+  LEFT JOIN giangvien ON bangphancong.MAGV = giangvien.MAGV
+  LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
+  LEFT JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG
+  LEFT JOIN lop ON chitietphancong.MALOP = lop.MALOP
+  LEFT JOIN bao_cao_ket_thuc_mon ON chitietphancong.MACHITIETPHANCONG = bao_cao_ket_thuc_mon.MACHITIETPHANCONG
+  LEFT JOIN hinhthucdanhgia ON bao_cao_ket_thuc_mon.MADANHGIAKETTHUC = hinhthucdanhgia.MADANHGIAKETTHUC
+  LEFT JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC
+  WHERE namhoc.TENNAMHOC = ?
+  AND giangvien.MAGV = ?;
+  `,
+        [results_namhoc[0].TENNAMHOC, MAGV]
+      );
+    }
+
+    console.log("check 3 ", results_chitietphancong_data);
 
     // console.log("cehci: ", results_chitietphancong_data);
     const danhSachPhanCongGiangVien = [];
 
-    results_chitietphancong_data.forEach((dong) => {
+    results_chitietphancong_data[0].forEach((dong) => {
       let Monhoc = danhSachPhanCongGiangVien.find(
         (mon) => mon.MAMONHOC === dong.MAMONHOC
       );
