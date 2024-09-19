@@ -247,17 +247,29 @@ const xem_chitietphancong_lop = async () => {
 const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
   try {
     let [results_chitietphancong_data, fields_data] = await pool.execute(
-      `select chitietphancong.*,
-      bangphancong.*,monhoc.*,giangvien.*,chon_khung.*,khunggiochuan.*,hockynienkhoa.*,lop.* 
-      from hockynienkhoa,chitietphancong,bangphancong,monhoc,giangvien,chon_khung,khunggiochuan,lop
-      where giangvien.MAGV = chon_khung.MAGV 
-      and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG 
-      and  giangvien.MAGV = bangphancong.MAGV 
-      and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG 
-      and hockynienkhoa.MAHKNK = ?
-      and monhoc.MAMONHOC = chitietphancong.MAMONHOC 
-      and giangvien.MAGV = ? and hockynienkhoa.MAHKNK = bangphancong.MAHKNK
-      and lop.MALOP = chitietphancong.MALOP`,
+      `SELECT chitietphancong.*, 
+       bangphancong.*, 
+       monhoc.*, 
+       giangvien.*, 
+       chon_khung.*, 
+       khunggiochuan.*, 
+       hockynienkhoa.*, 
+       lop.*, 
+       bao_cao_ket_thuc_mon.*, 
+       hinhthucdanhgia.* 
+FROM hockynienkhoa
+LEFT JOIN bangphancong ON hockynienkhoa.MAHKNK = bangphancong.MAHKNK
+LEFT JOIN chitietphancong ON bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
+LEFT JOIN monhoc ON chitietphancong.MAMONHOC = monhoc.MAMONHOC
+LEFT JOIN giangvien ON bangphancong.MAGV = giangvien.MAGV
+LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
+LEFT JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG
+LEFT JOIN lop ON chitietphancong.MALOP = lop.MALOP
+LEFT JOIN bao_cao_ket_thuc_mon ON chitietphancong.MACHITIETPHANCONG = bao_cao_ket_thuc_mon.MACHITIETPHANCONG
+LEFT JOIN hinhthucdanhgia ON bao_cao_ket_thuc_mon.MADANHGIAKETTHUC = hinhthucdanhgia.MADANHGIAKETTHUC
+WHERE hockynienkhoa.MAHKNK = ?
+AND giangvien.MAGV = ?;
+`,
       [MAHKNK, MAGV]
     );
 
@@ -287,6 +299,11 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
           TENLOP: dong.TENLOP,
           NAMTUYENSINH: dong.NAMTUYENSINH,
           SISO: dong.SISO,
+          LANDANHGIA: dong.LANDANHGIA,
+          NGAYDANHGIA: dong.NGAYDANHGIA,
+          NGAYBAOCAOKETTHUC: dong.NGAYBAOCAOKETTHUC,
+          TENDANHGIA: dong.TENDANHGIA,
+          TRANG_THAI_DANG_KY: dong.TRANG_THAI_DANG_KY,
         };
         Monhoc.CHITIET_LOP.push(lophoc);
       }
