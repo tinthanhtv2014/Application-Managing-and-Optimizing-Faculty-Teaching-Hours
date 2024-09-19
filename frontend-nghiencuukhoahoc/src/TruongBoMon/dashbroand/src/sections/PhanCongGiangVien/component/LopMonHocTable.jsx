@@ -39,31 +39,39 @@ const LopMonHocTable = ({ data, handlePhanCong }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
-            <TableRow
-              key={index}
-              onClick={() => handleRowClick(row.MAMONHOC)} // Xử lý khi click
-              sx={{
-                backgroundColor:
-                  selectedRow === row.MAMONHOC ? "#f0f0f0" : "inherit", // Tô màu nếu được chọn
-                cursor: "pointer", // Thêm hiệu ứng con trỏ
-              }}
-            >
-              <TableCell component="th" scope="row">
-                {row.MALOP}
+          {Array.isArray(data) && data.length > 0 ? (
+            data.map((row, index) => (
+              <TableRow
+                key={index}
+                onClick={() => handleRowClick(row.MAMONHOC)} // Xử lý khi click
+                sx={{
+                  backgroundColor:
+                    selectedRow === row.MAMONHOC ? "#f0f0f0" : "inherit", // Tô màu nếu được chọn
+                  cursor: "pointer", // Thêm hiệu ứng con trỏ
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.MALOP}
+                </TableCell>
+                <TableCell align="center">{row.TENMONHOC}</TableCell>
+                <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
+                <TableCell align="center">
+                  {calculateTeachingHours(
+                    row.SISO,
+                    row.SOTINCHILYTHUYET,
+                    row.SOTINCHITHUCHANH
+                  )}
+                </TableCell>
+                <TableCell align="center">{row.MAGV}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                Không có dữ liệu
               </TableCell>
-              <TableCell align="center">{row.TENMONHOC}</TableCell>
-              <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
-              <TableCell align="center">
-                {calculateTeachingHours(
-                  row.SISO,
-                  row.SOTINCHILYTHUYET,
-                  row.SOTINCHITHUCHANH
-                )}
-              </TableCell>
-              <TableCell align="center">Nguyễn Bảo Ân</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

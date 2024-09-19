@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../CreateKhoa/CreateKhoa.scss";
 import "./KhoaList.scss";
@@ -24,26 +24,19 @@ import {
 
 const GiangVienList = ({
   currentPage,
-  isOpenGetAllApiGV,
-  handleGetAllGiangVien,
+  totalPages,
   dataListGiangVien,
   activeRowGV,
   handleChoseRowGV,
   handleDeleteGiangVien,
   handleChoseEditGiangVien,
+  handleShowUpdateModal,
   searchEmail,
   searchStatus,
   setCurrentPage,
-  handleShowUpdateModal,
-  prevPage,
-  nextPage,
+  pageSize,
 }) => {
-  const pageSize = 10;
-  const totalGiangVien = dataListGiangVien ? dataListGiangVien.length : 0;
-  const totalPages = Math.ceil(totalGiangVien / pageSize);
-
-  const startIndex = currentPage * pageSize;
-
+  // Lọc và phân trang danh sách giảng viên
   const filteredGiangVien = dataListGiangVien
     ? dataListGiangVien
         .filter((giangvien) => {
@@ -58,18 +51,20 @@ const GiangVienList = ({
           if (searchStatus === "All") return true;
           return giangvien.TRANGTHAITAIKHOAN === searchStatus;
         })
-        .slice(startIndex, startIndex + pageSize)
+        .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
     : [];
 
+  // Điều hướng trang
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
   const goToNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
   };
   const goToBackPage = () => {
-    setCurrentPage(currentPage - 1);
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
+
   const renderPageButtons = () => {
     const buttons = [];
     for (let i = 0; i < totalPages; i++) {
@@ -88,7 +83,13 @@ const GiangVienList = ({
     }
     return buttons;
   };
+  useEffect(() => {
+    console.log("dataListGiangVien:", dataListGiangVien);
+    console.log("searchEmail:", searchEmail);
+    console.log("searchStatus:", searchStatus);
+  }, [dataListGiangVien, searchEmail, searchStatus]);
 
+  console.log("check dataa gv = >", filteredGiangVien);
   return (
     <>
       <TableContainer component={Paper}>
@@ -112,8 +113,8 @@ const GiangVienList = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredGiangVien && filteredGiangVien.length > 0 ? (
-              filteredGiangVien.map((giangvien, index) => (
+            {dataListGiangVien.length > 0 ? (
+              dataListGiangVien.map((giangvien, index) => (
                 <TableRow
                   onClick={() => handleChoseRowGV(giangvien)}
                   key={index}
@@ -121,7 +122,7 @@ const GiangVienList = ({
                     activeRowGV === giangvien.MABOMON ? "activeBM" : ""
                   }`}
                 >
-                  <TableCell>{startIndex + index + 1}</TableCell>
+                  <TableCell>{currentPage * pageSize + index + 1}</TableCell>
                   <TableCell>{giangvien.MAGV}</TableCell>
                   <TableCell>{giangvien.TENDANGNHAP}</TableCell>
                   <TableCell>{giangvien.TENGV}</TableCell>

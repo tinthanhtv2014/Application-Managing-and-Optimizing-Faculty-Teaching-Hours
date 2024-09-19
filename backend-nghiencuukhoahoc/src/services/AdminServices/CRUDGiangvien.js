@@ -16,10 +16,15 @@ const {
 } = require("./helpers");
 
 const selectGiangVien = async (page, limit) => {
-  if (page && limit) {
-    let offset = (page - 1) * limit;
-    let [results0, fields] = await pool.execute(
-      `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+  // Kiểm tra page và limit có hợp lệ không
+  if (!page || page < 1) page = 1;
+  if (!limit || limit < 1) limit = 10;
+
+  let offset = (page - 1) * limit;
+
+  // Truy vấn dữ liệu giảng viên với phân trang
+  let [results0, fields] = await pool.execute(
+    `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
       FROM taikhoan AS tk
       LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
       LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
@@ -31,54 +36,41 @@ const selectGiangVien = async (page, limit) => {
       ORDER BY tk.TENDANGNHAP ASC
       LIMIT ? OFFSET ?;
     `,
-      [limit, offset]
-    );
+    [limit, offset]
+  );
 
-    const totalCountResult = await pool.execute(
-      `SELECT COUNT(*) AS total
-FROM taikhoan AS tk
-      LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
-      LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
-      LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
-      LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
-      LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
-      LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
-      LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH`
-    );
+  // Truy vấn tổng số lượng bản ghi để tính số trang
+  const totalCountResult = await pool.execute(
+    `SELECT COUNT(*) AS total
+    FROM taikhoan AS tk
+    LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+    LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+    LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+    LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+    LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+    LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+    LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH`
+  );
 
-    const totalCount = totalCountResult[0][0].total;
-    let totalPages = Math.ceil(totalCount / limit);
-    let data = {
-      totalRows: results0,
-      totalPages: totalPages,
-      users: fields,
-    };
-    return {
-      EM: "Xem thông tin giảng viên thành công",
-      EC: 1,
-      DT: data,
-    };
-  } else {
-    let [results0, fields] = await pool.execute(
-      `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
-      FROM taikhoan AS tk
-      LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
-      LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
-      LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
-      LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
-      LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
-      LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
-      LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
-      ORDER BY tk.TENDANGNHAP ASC;
-    `
-    );
+  const totalCount = totalCountResult[0][0].total;
+  let totalPages = Math.ceil(totalCount / limit);
 
-    return {
-      EM: "Xem thông tin giảng viên thành công",
-      EC: 1,
-      DT: results0,
-    };
-  }
+  // Cấu trúc dữ liệu trả về
+  let data = {
+    items: results0, // Danh sách giảng viên
+    totalItems: totalCount, // Tổng số bản ghi
+    totalPages: totalPages, // Tổng số trang
+    currentPage: page, // Trang hiện tại
+    itemsPerPage: limit, // Số bản ghi mỗi trang
+  };
+
+  console.log(results0);
+
+  return {
+    EM: "Xem thông tin giảng viên thành công",
+    EC: 1,
+    DT: data,
+  };
 };
 
 const selectOnlyGiangVienByTenDangNhap = async (TENDANGNHAP) => {
@@ -136,7 +128,7 @@ WHERE
       results[0].THOIGIANNHAN = `${year}-${month}-${day}`;
     }
 
-    // console.log("selectOnlyGiangVienByTenDangNhap: ", results[0]);
+    // console.log("selectOnlyGiangVienByTenDangNhap: ", results);
     return {
       EM: "Xem thông tin giảng viên thành công",
       EC: 1,

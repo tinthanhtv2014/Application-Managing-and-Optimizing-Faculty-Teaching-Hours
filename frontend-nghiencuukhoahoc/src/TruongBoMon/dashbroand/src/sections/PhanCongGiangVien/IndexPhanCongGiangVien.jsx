@@ -185,6 +185,7 @@ const IndexPhanCongGiangVien = () => {
 
       if (response.data.EC === 1) {
         console.log("Phân công tự động thành công:", response.data);
+        setData_MonHoc(response.data.DT.data);
       } else {
         console.error("Phân công tự động thất bại:", response.data.EM);
       }

@@ -95,19 +95,29 @@ const ComponenCreateGiangVien = () => {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
+  const [currentPage, setCurrentPage] = useState(0); // Trang hiện tại
+  const [pageSize] = useState(10); // Số lượng giảng viên trên mỗi trang
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   useEffect(() => {
     if (isOpenGetAllApiGV) {
       const fetchDataAllGV = async () => {
         try {
-          const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xem`,
-            { isOpenGetAllApiGV: isOpenGetAllApiGV, MABOMON: MaBoMon }
+          const response = await CookiesAxios.get(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/xem/tatca`,
+            {
+              params: {
+                page: currentPage, // trang hiện tại
+                limit: pageSize, // số lượng giảng viên mỗi trang
+              },
+            }
           );
-          //     console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
+          console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT.items);
           if (response.data.EC === 1) {
-            setdataListGiangVien(response.data.DT);
-            setLoading(false);
+            setdataListGiangVien(response.data.DT.items); // Cập nhật danh sách giảng viên
+            setTotalPages(response.data.DT.totalPages); // Cập nhật tổng số trang
           }
+
+          setLoading(false);
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
         }
@@ -133,7 +143,7 @@ const ComponenCreateGiangVien = () => {
         toast.error("Vui lòng chọn bộ môn mà bạn muốn xem");
       }
     }
-  }, [isOpenGetAllApiGV]);
+  }, [isOpenGetAllApiGV, currentPage, pageSize]);
   useEffect(() => {
     fetchData();
     if (auth) {
@@ -348,7 +358,6 @@ const ComponenCreateGiangVien = () => {
   // -----------------------IS OPEN EXCEL-----------------------------------
   const [searchEmail, setSearchEmail] = useState("");
   const [searchStatus, setSearchStatus] = useState("All");
-  const [currentPage, setCurrentPage] = useState(0);
 
   const handleSearch = (e) => {
     setSearchEmail(e.target.value);
@@ -590,6 +599,8 @@ const ComponenCreateGiangVien = () => {
           <GiangVienList
             searchStatus={searchStatus}
             currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
             setCurrentPage={setCurrentPage}
             searchEmail={searchEmail}
             isOpenGetAllApiGV={isOpenGetAllApiGV}

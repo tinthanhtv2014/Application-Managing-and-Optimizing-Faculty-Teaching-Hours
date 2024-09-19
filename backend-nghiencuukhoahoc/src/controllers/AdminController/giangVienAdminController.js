@@ -32,6 +32,15 @@ const getAllGiangVien_indatabase = async (req, res) => {
   try {
     let page = req.query.page;
     let limit = req.query.limit;
+    console.log("check page ", page);
+    console.log("check limit ", limit);
+    if (!page || !limit) {
+      return res.status(400).json({
+        EM: "Lỗi không xác định phân trang",
+        EC: -1,
+        DT: null,
+      });
+    }
     let results = await selectGiangVien(page, limit);
 
     return res.status(200).json({
