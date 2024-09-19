@@ -18,9 +18,12 @@ const {
 const selectGiangVien = async (page, limit) => {
   // Kiểm tra page và limit có hợp lệ không
   if (!page || page < 1) page = 1;
+
   if (!limit || limit < 1) limit = 10;
 
   let offset = (page - 1) * limit;
+  console.log("-----------------------------------------------------------");
+  console.log("check page", page);
 
   // Truy vấn dữ liệu giảng viên với phân trang
   let [results0, fields] = await pool.execute(
@@ -427,7 +430,36 @@ const updateGIANGVIEN = async (datagiangvien) => {
     };
   }
 };
-
+const searchTenGiangVien = async (TENGIANGVIEN) => {
+  try {
+    const query = `SELECT k.TENKHOA, bm.MABOMON, bm.TENBOMON, tk.TENDANGNHAP, gv.TENGV, gv.EMAIL, tk.MAGV, cd.TENCHUCDANH, cv.TENCHUCVU, gv.DIENTHOAI, gv.DIACHI, tk.PHANQUYEN, tk.TRANGTHAITAIKHOAN
+        FROM taikhoan AS tk
+        LEFT JOIN giangvien AS gv ON tk.MAGV = gv.MAGV
+        LEFT JOIN bomon AS bm ON bm.MABOMON = gv.MABOMON
+        LEFT JOIN khoa AS k ON k.MAKHOA = bm.MAKHOA
+        LEFT JOIN giu_chuc_vu AS gcv ON gv.MAGV = gcv.MAGV
+        LEFT JOIN chucvu AS cv ON gcv.MACHUCVU = cv.MACHUCVU
+        LEFT JOIN co_chuc_danh AS ccd ON ccd.MAGV = gv.MAGV
+        LEFT JOIN chucdanh AS cd ON ccd.MACHUCDANH = cd.MACHUCDANH
+       WHERE gv.TENGV LIKE ? LIMIT 10
+       
+      `;
+    const [rows] = await pool.execute(query, [`%${TENGIANGVIEN}%`]);
+    console.log("rows", rows);
+    return {
+      EM: "Xem giảng viên thành công",
+      EC: 1,
+      DT: rows,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "Lỗi services updateGiangVien",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 module.exports = {
   selectGiangVien,
   selectOnlyGiangVien,
@@ -438,4 +470,5 @@ module.exports = {
   updateTrangThaiTaiKhoanGiangVien,
 
   deleteGiangVien,
+  searchTenGiangVien,
 };

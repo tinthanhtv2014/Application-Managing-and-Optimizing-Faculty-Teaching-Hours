@@ -95,9 +95,9 @@ const ComponenCreateGiangVien = () => {
       console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
     }
   };
-  const [currentPage, setCurrentPage] = useState(0); // Trang hiện tại
-  const [pageSize] = useState(10); // Số lượng giảng viên trên mỗi trang
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     if (isOpenGetAllApiGV) {
       const fetchDataAllGV = async () => {
@@ -111,7 +111,7 @@ const ComponenCreateGiangVien = () => {
               },
             }
           );
-          console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT.items);
+          console.log("Dữ liệu bộ môn theo mã khoa:", response.data.DT);
           if (response.data.EC === 1) {
             setdataListGiangVien(response.data.DT.items); // Cập nhật danh sách giảng viên
             setTotalPages(response.data.DT.totalPages); // Cập nhật tổng số trang
@@ -356,12 +356,31 @@ const ComponenCreateGiangVien = () => {
 
   const handleSumitEditGV = async (event) => {};
   // -----------------------IS OPEN EXCEL-----------------------------------
-  const [searchEmail, setSearchEmail] = useState("");
-  const [searchStatus, setSearchStatus] = useState("All");
 
+  const [searchStatus, setSearchStatus] = useState("All");
+  const [searchEmail, setSearchEmail] = useState(null);
   const handleSearch = (e) => {
     setSearchEmail(e.target.value);
   };
+  //
+  useEffect(() => {
+    const fetchDataAllGV = async () => {
+      try {
+        if (searchEmail) {
+          const response = await CookiesAxios.post(
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/email/search`,
+            { TENGIANGVIEN: searchEmail }
+          );
+          console.log("aaaaaaaaaaa", response.data);
+          setdataListGiangVien(response.data.DT);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
+      }
+    };
+    fetchDataAllGV();
+  }, [searchEmail]);
+
   const handleChangeExcel = (event) => {
     setValueExcel(event.target.value);
   };
@@ -602,7 +621,6 @@ const ComponenCreateGiangVien = () => {
             totalPages={totalPages}
             pageSize={pageSize}
             setCurrentPage={setCurrentPage}
-            searchEmail={searchEmail}
             isOpenGetAllApiGV={isOpenGetAllApiGV}
             handleGetAllGiangVien={handleGetAllGiangVien}
             dataListGiangVien={dataListGiangVien}

@@ -6,7 +6,7 @@ const {
 
   updateGiangVien,
   updateTrangThaiTaiKhoanGiangVien,
-
+  searchTenGiangVien,
   deleteGiangVien,
 } = require("../../services/AdminServices/CRUDGiangvien");
 
@@ -34,6 +34,7 @@ const getAllGiangVien_indatabase = async (req, res) => {
     let limit = req.query.limit;
     console.log("check page ", page);
     console.log("check limit ", limit);
+
     if (!page || !limit) {
       return res.status(400).json({
         EM: "Lỗi không xác định phân trang",
@@ -41,6 +42,7 @@ const getAllGiangVien_indatabase = async (req, res) => {
         DT: null,
       });
     }
+
     let results = await selectGiangVien(page, limit);
 
     return res.status(200).json({
@@ -321,7 +323,33 @@ const deleteGiangVienController = async (req, res) => {
     });
   }
 };
+const searchEmailGiangVienController = async (req, res) => {
+  try {
+    const TENGIANGVIEN = req.body.TENGIANGVIEN;
+    console.log("TENGIANGVIEN", TENGIANGVIEN);
+    if (!TENGIANGVIEN) {
+      return res.status(400).json({
+        EM: " TENGIANGVIEN bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
+    let results = await searchTenGiangVien(TENGIANGVIEN);
 
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller searchTenGiangVien",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
 module.exports = {
   getAllGiangVien,
   getAllGiangVien_indatabase,
@@ -334,4 +362,5 @@ module.exports = {
   update_ChucVu_ChucDanh_GiangVien_Controller,
 
   deleteGiangVienController,
+  searchEmailGiangVienController,
 };

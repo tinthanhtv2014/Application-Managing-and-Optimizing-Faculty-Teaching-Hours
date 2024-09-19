@@ -31,7 +31,7 @@ const GiangVienList = ({
   handleDeleteGiangVien,
   handleChoseEditGiangVien,
   handleShowUpdateModal,
-  searchEmail,
+
   searchStatus,
   setCurrentPage,
   pageSize,
@@ -39,19 +39,12 @@ const GiangVienList = ({
   // Lọc và phân trang danh sách giảng viên
   const filteredGiangVien = dataListGiangVien
     ? dataListGiangVien
-        .filter((giangvien) => {
-          if (searchEmail && giangvien.TENDANGNHAP) {
-            return giangvien.TENDANGNHAP.toLowerCase().includes(
-              searchEmail.toLowerCase()
-            );
-          }
-          return true;
-        })
+
         .filter((giangvien) => {
           if (searchStatus === "All") return true;
           return giangvien.TRANGTHAITAIKHOAN === searchStatus;
         })
-        .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
+        .slice((currentPage - 1) * pageSize, currentPage * pageSize) // Đã chỉnh từ 0 sang 1
     : [];
 
   // Điều hướng trang
@@ -59,15 +52,16 @@ const GiangVienList = ({
     setCurrentPage(pageNumber);
   };
   const goToNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
   const goToBackPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 0));
+    setCurrentPage((prev) => Math.max(prev - 1, 1)); // Đảm bảo không nhỏ hơn 1
   };
 
   const renderPageButtons = () => {
     const buttons = [];
-    for (let i = 0; i < totalPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
+      // Thay 0 thành 1
       buttons.push(
         <button
           key={i}
@@ -77,17 +71,12 @@ const GiangVienList = ({
           } mx-1`}
           onClick={() => goToPage(i)}
         >
-          {i + 1}
+          {i}
         </button>
       );
     }
     return buttons;
   };
-  useEffect(() => {
-    console.log("dataListGiangVien:", dataListGiangVien);
-    console.log("searchEmail:", searchEmail);
-    console.log("searchStatus:", searchStatus);
-  }, [dataListGiangVien, searchEmail, searchStatus]);
 
   console.log("check dataa gv = >", filteredGiangVien);
   return (
@@ -122,7 +111,9 @@ const GiangVienList = ({
                     activeRowGV === giangvien.MABOMON ? "activeBM" : ""
                   }`}
                 >
-                  <TableCell>{currentPage * pageSize + index + 1}</TableCell>
+                  <TableCell>
+                    {currentPage * pageSize + index + 1 - 10}
+                  </TableCell>
                   <TableCell>{giangvien.MAGV}</TableCell>
                   <TableCell>{giangvien.TENDANGNHAP}</TableCell>
                   <TableCell>{giangvien.TENGV}</TableCell>
@@ -228,8 +219,8 @@ const GiangVienList = ({
           type="button"
           variant="contained"
           color="primary"
-          disabled={currentPage === 0}
-          onClick={() => goToPage(0)}
+          disabled={currentPage === 1}
+          onClick={() => goToPage(1)}
         >
           Đầu
         </Button>
@@ -237,7 +228,7 @@ const GiangVienList = ({
           type="button"
           variant="contained"
           color="primary"
-          disabled={currentPage === 0}
+          disabled={currentPage === 1}
           onClick={goToBackPage}
           sx={{ ml: 1 }}
         >
@@ -248,7 +239,7 @@ const GiangVienList = ({
           type="button"
           variant="contained"
           color="primary"
-          disabled={currentPage === totalPages - 1}
+          disabled={currentPage === totalPages}
           onClick={goToNextPage}
           sx={{ ml: 1 }}
         >
@@ -258,8 +249,8 @@ const GiangVienList = ({
           type="button"
           variant="contained"
           color="primary"
-          disabled={currentPage === totalPages - 1}
-          onClick={() => goToPage(totalPages - 1)}
+          disabled={currentPage === totalPages}
+          onClick={() => goToPage(totalPages)}
           sx={{ ml: 1 }}
         >
           Cuối

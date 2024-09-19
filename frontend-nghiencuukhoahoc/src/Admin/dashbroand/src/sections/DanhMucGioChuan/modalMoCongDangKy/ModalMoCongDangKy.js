@@ -58,7 +58,7 @@ const ModalMoCongDangKy = ({ open, handleClose }) => {
   };
   const fetchThoiGianXacNhan = async () => {
     try {
-      const response = await axios.get(
+      const response = await CookiesAxios.get(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/quyengiangvien/giangvien/xem/thoigianxacnhan`,
         { withCredentials: true } // Nếu bạn cần gửi cookie hoặc JWT trong yêu cầu
       );

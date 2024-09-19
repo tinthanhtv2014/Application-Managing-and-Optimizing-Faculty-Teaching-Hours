@@ -15,6 +15,7 @@ const {
   update_ChucVu_ChucDanh_GiangVien_Controller,
 
   deleteGiangVienController,
+  searchEmailGiangVienController,
 } = require("../../controllers/AdminController/giangVienAdminController");
 
 const {
@@ -34,7 +35,7 @@ const { checkUserJWT } = require("../../middlewares/JWTAction");
 const CRUDGiangVien = (app) => {
   //route cho giảng viên
 
-  router.get("/xem/tatca", checkUserJWT, getAllGiangVien_indatabase);
+  router.get("/xem/tatca", getAllGiangVien_indatabase);
 
   router.post("/xem", checkUserJWT, getAllGiangVien);
 
@@ -79,7 +80,7 @@ const CRUDGiangVien = (app) => {
     updateChucdanhController
   );
   router.delete("/xoachucdanh", checkUserJWT, deleteChucdanhController);
-
+  router.post("/email/search", checkUserJWT, searchEmailGiangVienController);
   return app.use("/api/v1/admin/giangvien", router);
 };
 
