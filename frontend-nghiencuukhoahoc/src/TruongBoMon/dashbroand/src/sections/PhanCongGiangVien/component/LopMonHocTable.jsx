@@ -55,14 +55,14 @@ const LopMonHocTable = ({ data, handlePhanCong }) => {
                 </TableCell>
                 <TableCell align="center">{row.TENMONHOC}</TableCell>
                 <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
-                <TableCell align="center">
-                  {calculateTeachingHours(
+                <TableCell align="center"> {row.TONG_SO_GIO}
+                  {/* {calculateTeachingHours(
                     row.SISO,
                     row.SOTINCHILYTHUYET,
                     row.SOTINCHITHUCHANH
-                  )}
+                  )} */}
                 </TableCell>
-                <TableCell align="center">{row.MAGV}</TableCell>
+                <TableCell align="center">{row.TENGV}</TableCell>
               </TableRow>
             ))
           ) : (
