@@ -573,7 +573,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                 // Tăng điểm ưu tiên dựa trên chuyên môn giảng viên
                 data_CMGV.length === 0
                     ? (DO_UU_TIEN_PCGVTD += 10)
-                    : (DO_UU_TIEN_PCGVTD += 20);
+                    : (DO_UU_TIEN_PCGVTD += 25);
 
                 // Kiểm tra xem giảng viên đã từng dạy lớp này chưa
                 let exists = data_GV_TungDay.some((giangvien) => giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD);
@@ -597,16 +597,20 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
                 // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay_HocKy
                 if (data_GV_TungDay_HocKy.length > 0) {
                     countHocKy = data_GV_TungDay_HocKy.reduce((acc, giangvien) => {
-                        return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD ? acc + 1 : acc;
+                        return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD ? acc + (acc < 1 ? 1 : acc) : acc;
                     }, 0);
                 }
                 // console.log("data_GV_TungDay_HocKy.lengh: ", data_GV_TungDay_HocKy.length)
                 // console.log("data_AutoPhanCongFor.lengh: ", data_AutoPhanCongFor.length)
                 // console.log("countHocKy: ", countHocKy)
                 if (countHocKy > 0) {
-                    DO_UU_TIEN_PCGVTD = DO_UU_TIEN_PCGVTD - countHocKy; // -1 cho mỗi môn GV dạy
+                    console.log(`
+                        GV: ${data_GV[i].TENGV}
+                        Có acc: ${countHocKy}
+                    `)
+                    DO_UU_TIEN_PCGVTD = DO_UU_TIEN_PCGVTD - countHocKy; // trừ độ ưu tiên cho mỗi môn GV dạy
                 } else {
-                    DO_UU_TIEN_PCGVTD += 10; // Nếu GV không dạy bất kỳ lớp nào +10
+                    DO_UU_TIEN_PCGVTD += 20; // Nếu GV không dạy bất kỳ lớp nào +10
                 }
                 //Không cho phép độ ưu tiên nhỏ hơn 0
                 DO_UU_TIEN_PCGVTD <= 0 ? DO_UU_TIEN_PCGVTD = 0 : DO_UU_TIEN_PCGVTD
@@ -648,11 +652,11 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
         for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
             // Tạo câu SQL cơ bản
             let query = `
-        SELECT * 
-        FROM phan_cong_gv_tu_dong PCGVTD
-        WHERE PCGVTD.MA_MON_HOC_PCGVTD = ? 
-        AND PCGVTD.MA_LOP_PCGVTD = ? 
-    `;
+            SELECT * 
+            FROM phan_cong_gv_tu_dong PCGVTD
+            WHERE PCGVTD.MA_MON_HOC_PCGVTD = ? 
+            AND PCGVTD.MA_LOP_PCGVTD = ? 
+            `;
 
             let params = [dataAutoPhanCong.data[i].MAMONHOC, dataAutoPhanCong.data[i].MALOP];
 
@@ -680,9 +684,69 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
 
         // console.log("dataAutoPhanCong: ", dataAutoPhanCong);
 
-        console.log("checkTrungMAGV: ", checkTrungMAGV);
+        // console.log("checkTrungMAGV: ", checkTrungMAGV);
+        // console.log("dataAutoPhanCong.HOCKINIENKHOA.MAHKNK: ", dataAutoPhanCong.HOCKINIENKHOA.MAHKNK);
         for (let i = 0; i < dataAutoPhanCong.data.length; i++) {
-            console.log("dataAutoPhanCong cuối: ", dataAutoPhanCong.data[i].MAGV);
+            // Lấy tên GV
+            let [data_TENGV] = await pool.execute(
+                `SELECT * FROM giangvien GV WHERE GV.MAGV = ?`,
+                [dataAutoPhanCong.data[i].MAGV]
+            );
+
+            // Data các môn GV đã dạy trong học kỳ dự đoán
+            let [data_TinChi] = await pool.execute(
+                `SELECT 
+                    SUM(MH.SOTINCHILYTHUYET) AS TongSoTinChiLyThuyet,
+                    SUM(MH.SOTINCHITHUCHANH) AS TongSoTinChiThucHanh
+                FROM giangvien GV
+                JOIN bangphancong BPC ON BPC.MAGV = GV.MAGV
+                JOIN hockynienkhoa HKNK ON HKNK.MAHKNK = BPC.MAHKNK
+                JOIN chitietphancong CTPC ON CTPC.MAPHANCONG = BPC.MAPHANCONG
+                JOIN monhoc MH ON MH.MAMONHOC = CTPC.MAMONHOC
+                WHERE GV.MAGV = ? AND HKNK.MAHKNK = ?;`,
+                [
+                    dataAutoPhanCong.data[i].MAGV,
+                    dataAutoPhanCong.HOCKINIENKHOA.MAHKNK
+                ]
+            );
+
+            // Data môn học được dự đoán chưa lưu vào CSDL
+            let [data_MonHoc_duoc_du_doan] = await pool.execute(
+                `SELECT 
+                    SUM(MH.SOTINCHILYTHUYET) AS TongSoTinChiLyThuyet,
+                    SUM(MH.SOTINCHITHUCHANH) AS TongSoTinChiThucHanh
+                FROM monhoc MH
+                WHERE MH.MAMONHOC = ?;`,
+                [dataAutoPhanCong.data[i].MAMONHOC]
+            );
+
+            // Tính toán số giờ GV đã dạy trong học kỳ này
+            if (data_TinChi.length > 0 && data_TinChi[0].TongSoTinChiLyThuyet !== null && data_TinChi[0].TongSoTinChiThucHanh !== null) {
+                dataAutoPhanCong.data[i].TONG_SO_GIO = (15 * data_TinChi[0].TongSoTinChiLyThuyet) + (30 * data_TinChi[0].TongSoTinChiThucHanh);
+            } else {
+                dataAutoPhanCong.data[i].TONG_SO_GIO = 0;
+            }
+
+            // Tính toán số giờ cho môn học được phân công
+            if (data_MonHoc_duoc_du_doan.length > 0 && data_MonHoc_duoc_du_doan[0].TongSoTinChiLyThuyet !== null && data_MonHoc_duoc_du_doan[0].TongSoTinChiThucHanh !== null) {
+                let TONG_SO_GIO_MonHocDuocPhanCong = (15 * data_MonHoc_duoc_du_doan[0].TongSoTinChiLyThuyet) + (30 * data_MonHoc_duoc_du_doan[0].TongSoTinChiThucHanh);
+                dataAutoPhanCong.data[i].TONG_SO_GIO += TONG_SO_GIO_MonHocDuocPhanCong;
+            }
+
+            // Gán tên giảng viên
+            if (data_TENGV.length > 0) {
+                dataAutoPhanCong.data[i].TENGV = data_TENGV[0].TENGV;
+            } else {
+                dataAutoPhanCong.data[i].TENGV = "Không tìm thấy tên GV";
+            }
+
+            // Log kết quả cuối cùng
+            console.log(`dataAutoPhanCong thứ ${i}:
+                MAGV: ${dataAutoPhanCong.data[i].MAGV}
+                Tên: ${dataAutoPhanCong.data[i].TENGV}
+                Tổng giờ: ${dataAutoPhanCong.data[i].TONG_SO_GIO}
+            `);
+            // console.log(`dataAutoPhanCong cuối:`, dataAutoPhanCong.data[i]);
         }
 
         return {
