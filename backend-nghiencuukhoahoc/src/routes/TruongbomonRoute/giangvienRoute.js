@@ -19,6 +19,7 @@ const {
 
   get_listgiangvien_phancong,
   create_onlylistgiangvien_phancong,
+  phancongtudong_giangvien_Controller,
 } = require("../../controllers/TruongbomonController/phancongCONTROLLER");
 
 const {
@@ -112,6 +113,13 @@ const CRUDgiangvien_CNTT = (app) => {
 
     Xem_Chitietphancong_banthan_Controller
   );
+
+  router.post(
+    "/phancong/tudong/giangvien",
+
+    phancongtudong_giangvien_Controller
+  );
+
   return app.use("/api/v1/truongbomon/giangvien", router);
 };
 

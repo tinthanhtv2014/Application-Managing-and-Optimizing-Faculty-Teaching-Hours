@@ -194,6 +194,24 @@ const IndexPhanCongGiangVien = () => {
     }
   };
 
+  const handleXacNhanPhanCong = async () => {
+    try {
+      const response = await CookiesAxios.post(
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/phancong/tudong/giangvien`,
+        { data: data_MonHoc, HOCKINIENKHOA: select_HocKiNienKhoa } // Gửi data_MonHoc vào API
+      );
+
+      if (response.data.EC === 1) {
+        console.log("Phân công tự động thành công:", response.data);
+        setData_MonHoc(response.data.DT.data);
+      } else {
+        console.error("Phân công tự động thất bại:", response.data.EM);
+      }
+    } catch (error) {
+      console.error("Lỗi khi phân công tự động:", error);
+    }
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -360,7 +378,9 @@ const IndexPhanCongGiangVien = () => {
                 </Grid>
                 <Grid item md={2}>
                   {" "}
-                  <Button variant="contained">Xác Nhận</Button>
+                  <Button variant="contained" onClick={handleXacNhanPhanCong}>
+                    Xác Nhận
+                  </Button>
                 </Grid>
               </Grid>
             </>

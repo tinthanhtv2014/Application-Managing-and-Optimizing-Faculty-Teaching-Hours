@@ -266,6 +266,84 @@ const xem_listgiangvien_phancong = async (page, limit) => {
   }
 };
 
+function tinhSoTinChi(lythuyet, thuchanh) {
+  // Chuyển đổi các tham số thành kiểu số (nếu chúng là chuỗi)
+  const nNumber = Number(lythuyet);
+  const soHocKiNumber = Number(thuchanh);
+
+  // Tính toán
+  return nNumber * 15 + soHocKiNumber * 30;
+}
+
+const phancong_tudong_giangvien = async (data_phancong) => {
+  // try {
+  const currentTime = moment().format("YYYY-MM-DD");
+  for (var i = 0; i < data_phancong.data.length; i++) {
+    console.log(data_phancong.data[i]);
+    let tongSogio = tinhSoTinChi(
+      data_phancong.data[i].SOTINCHILYTHUYET,
+      data_phancong.data[i].SOTINCHITHUCHANH
+    );
+
+    const [kiemtra_bangphancong, fields_kiemtrabangphancong] =
+      await pool.execute(
+        `select * from bangphancong where MAHKNK = ? and MAGV = ?`,
+        [data_phancong.HOCKINIENKHOA.MAHKNK, data_phancong.data[i].MAGV]
+      );
+
+    if (kiemtra_bangphancong.length === 0) {
+      await pool.execute(
+        `insert into bangphancong (MAHKNK,MAGV,THOIGIANLAP) values (?,?,?)`,
+        [
+          data_phancong.HOCKINIENKHOA.MAHKNK,
+          data_phancong.data[i].MAGV,
+          currentTime,
+        ]
+      );
+    }
+
+    const [select_bangphancong, fields_selectbangphancong] = await pool.execute(
+      `select MAPHANCONG from bangphancong where MAHKNK = ? and MAGV = ?`,
+      [data_phancong.HOCKINIENKHOA.MAHKNK, data_phancong.data[i].MAGV]
+    );
+
+    const [select_chitietphancong, fields_selectchitietphancong] =
+      await pool.execute(
+        `select * from chitietphancong where MAMONHOC = ? and MAPHANCONG = ? and MALOP = ?`,
+        [
+          data_phancong.data[i].MAMONHOC,
+          select_bangphancong[0].MAPHANCONG,
+          data_phancong.data[i].MAGV,
+        ]
+      );
+
+    if (select_chitietphancong.length === 0) {
+      await pool.execute(
+        `insert into chitietphancong (MAMONHOC,MAPHANCONG,MALOP,TONG_SO_GIO) values (?,?,?,?)`,
+        [
+          data_phancong.data[i].MAMONHOC,
+          select_bangphancong[0].MAPHANCONG,
+          data_phancong.data[i].MALOP,
+          tongSogio,
+        ]
+      );
+    }
+  }
+
+  return {
+    EM: "phân công cho giảng viên thành công",
+    EC: 1,
+    DT: [],
+  };
+  // } catch (error) {
+  //   return {
+  //     EM: "Lỗi services create_listgiangvien_phancong",
+  //     EC: -1,
+  //     DT: [],
+  //   };
+  // }
+};
+
 module.exports = {
   select_giangvien_chuachonkhung,
   select_giangvien_dachonkhung,
@@ -276,4 +354,5 @@ module.exports = {
   create_listgiangvien_phancong,
   xem_listgiangvien_phancong,
   selectLop_BoMon,
+  phancong_tudong_giangvien,
 };
