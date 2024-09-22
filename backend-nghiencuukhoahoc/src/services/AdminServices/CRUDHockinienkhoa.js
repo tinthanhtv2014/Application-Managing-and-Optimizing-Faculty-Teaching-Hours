@@ -66,11 +66,13 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
   try {
     // Kiểm tra định dạng của TEN_NAM_HOC
     if (!regexNamHoc.test(dataHockinienkhoa.TEN_NAM_HOC)) {
+      Sevicel_DongBoNamHoc_HocKy();
+      const results_data = await selectAll_hockinienkhoa();
       console.log("TEN_NAM_HOC không đúng định dạng. Phải là 'Năm học xxxx-xxxx'.");
       return {
         EM: "TEN_NAM_HOC không đúng định dạng. Phải là 'Năm học xxxx-xxxx'.",
         EC: 0,
-        DT: [],
+        DT: results_data,
       };
     }
 
@@ -95,10 +97,12 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     );
 
     if (existingHocKy.length >= 2) {
+      Sevicel_DongBoNamHoc_HocKy();
+      const results_data = await selectAll_hockinienkhoa();
       return {
         EM: "Học kì niên khóa này đã tồn tại đủ 2 học kỳ.",
         EC: 0,
-        DT: [],
+        DT: results_data
       };
     }
 
@@ -108,10 +112,12 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     );
 
     if (hocKyTonTai) {
+      Sevicel_DongBoNamHoc_HocKy();
+      const results_data = await selectAll_hockinienkhoa();
       return {
         EM: "Học kỳ này đã tồn tại.",
         EC: 0,
-        DT: [],
+        DT: results_data,
       };
     }
 
