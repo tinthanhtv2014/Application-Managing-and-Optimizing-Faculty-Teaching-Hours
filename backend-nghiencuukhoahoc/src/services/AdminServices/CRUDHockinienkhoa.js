@@ -64,7 +64,6 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
   const regexNamHoc = /^Năm [Hh]ọc \d{4}[-\s]\d{4}$/;
 
   try {
-    Sevicel_DongBoNamHoc_HocKy();
     // Kiểm tra định dạng của TEN_NAM_HOC
     if (!regexNamHoc.test(dataHockinienkhoa.TEN_NAM_HOC)) {
       console.log("TEN_NAM_HOC không đúng định dạng. Phải là 'Năm học xxxx-xxxx'.");
@@ -124,6 +123,7 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     );
 
     // Lấy danh sách tất cả các học kỳ niên khóa để trả về
+    Sevicel_DongBoNamHoc_HocKy();
     const results_data = await selectAll_hockinienkhoa();
     return {
       EM: "Tạo học kỳ niên khóa thành công.",
