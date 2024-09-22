@@ -386,7 +386,7 @@ const xem_giangvien_MonHoc_daChonkhung = async (MAMONHOC) => {
     `select chitietphancong.*, giangvien.TENGV from chitietphancong ,bangphancong, giangvien,hockynienkhoa,monhoc where chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG AND bangphancong.MAGV = giangvien.MAGV AND monhoc.MAMONHOC = chitietphancong.MAMONHOC AND monhoc.MAMONHOC = ?`,
     [MAMONHOC]
   );
-  console.log("check resuft =>", results);
+
   return {
     EM: "Xem thông tin giảng viên thành công",
     EC: 1,
