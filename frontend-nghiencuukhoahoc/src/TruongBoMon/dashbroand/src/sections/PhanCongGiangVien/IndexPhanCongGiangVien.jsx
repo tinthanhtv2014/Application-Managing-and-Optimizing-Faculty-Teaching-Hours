@@ -14,7 +14,10 @@ import {
   FormControlLabel,
   Grid,
   Switch,
+  Stack,
+  CircularProgress,
 } from "@mui/material";
+import { toast } from "react-toastify";
 import GVTableDaChonKhung from "./component/GVTableDaChonKhung";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -34,7 +37,7 @@ const IndexPhanCongGiangVien = () => {
   const [data_MonHoc, setData_MonHoc] = useState([]);
   const [TenBoMon, setTenBoMon] = useState(null);
   const [Loading, setLoading] = useState(true);
-
+  const [dataLoading, setDataLoading] = useState(false);
   // ---------------------------------------------------------------
   const [isDisableNamHoc, setIsDisableNamHoc] = useState(false);
   const [isOpenXemPhanCong, setIsOpenXemPhanCong] = useState(
@@ -177,6 +180,11 @@ const IndexPhanCongGiangVien = () => {
 
   // Hàm xử lý sự kiện để gửi data_MonHoc vào API
   const handleAutoAssign = async () => {
+    if (dataLoading) {
+      toast.error("Đang phân công, vui lòng chờ");
+      return;
+    }
+    setDataLoading(true);
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/test/phancong`,
@@ -188,9 +196,13 @@ const IndexPhanCongGiangVien = () => {
         setData_MonHoc(response.data.DT.data);
       } else {
         console.error("Phân công tự động thất bại:", response.data.EM);
+        toast.error("Đã xảy ra lỗi, vui lòng liên hệ chúng tôi");
       }
     } catch (error) {
       console.error("Lỗi khi phân công tự động:", error);
+      toast.error("Đã xảy ra lỗi, vui lòng liên hệ chúng tôi");
+    } finally {
+      setDataLoading(false);
     }
   };
 
@@ -371,9 +383,27 @@ const IndexPhanCongGiangVien = () => {
               <Grid container spacing={2} mt={2}>
                 {" "}
                 <Grid item md={10}>
-                  {" "}
-                  <Button variant="contained" onClick={handleAutoAssign}>
-                    Tự Động Phân Công Tất Cả
+                  <Button
+                    variant="contained"
+                    onClick={handleAutoAssign}
+                    sx={{
+                      width: "250px", // Đặt width cố định để nút không thay đổi kích thước
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {dataLoading ? (
+                      <Stack
+                        sx={{ color: "inherit" }} // CircularProgress sẽ có màu trắng
+                        spacing={2}
+                        direction="row"
+                      >
+                        <CircularProgress color="inherit" size={20} />
+                      </Stack>
+                    ) : (
+                      <>Tự Động Phân Công Tất Cả</>
+                    )}
                   </Button>
                 </Grid>
                 <Grid item md={2}>
