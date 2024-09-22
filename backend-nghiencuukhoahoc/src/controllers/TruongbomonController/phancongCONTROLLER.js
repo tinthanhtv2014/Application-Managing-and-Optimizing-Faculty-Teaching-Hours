@@ -30,7 +30,9 @@ const get_giangvien_CNTT_chuachonkhung = async (req, res) => {
 const getAllLop_BoMon_controller = async (req, res) => {
   try {
     const TENBOMON = req.body.TENBOMON;
+    const data = req.body;
     // Kiểm tra dữ liệu đầu vào
+    console.log(data);
     if (!TENBOMON) {
       return res.status(400).json({
         EM: "Tên bộ môn không được bỏ trống và phải là một chuỗi hợp lệ",
@@ -38,7 +40,7 @@ const getAllLop_BoMon_controller = async (req, res) => {
         DT: null,
       });
     }
-    let results = await selectLop_BoMon(TENBOMON);
+    let results = await selectLop_BoMon(TENBOMON, data);
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,

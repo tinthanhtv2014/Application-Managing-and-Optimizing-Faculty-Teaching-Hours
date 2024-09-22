@@ -29,7 +29,7 @@ const select_giangvien_chuachonkhung = async () => {
     };
   }
 };
-const selectLop_BoMon = async (TENBOMON) => {
+const selectLop_BoMon = async (TENBOMON, data) => {
   try {
     let [results1, fields1] = await pool.execute(
       ` SELECT lop.* 

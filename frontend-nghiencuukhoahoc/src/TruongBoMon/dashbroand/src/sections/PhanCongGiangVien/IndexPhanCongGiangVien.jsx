@@ -60,6 +60,7 @@ const IndexPhanCongGiangVien = () => {
       fetchDataLop_byBoMon();
     }
   }, [TenBoMon]);
+
   useEffect(() => {
     // console.log("check useEffect");
     fetchDataMonHoc_byLop();
