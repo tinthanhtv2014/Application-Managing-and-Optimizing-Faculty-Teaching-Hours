@@ -84,6 +84,11 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
           NGAYBATDAUNIENKHOA: null,
         });
       }
+
+      if (response.data.EC !== 1) {
+        toast.error(`Lỗi: ${response.data.EM}`);
+      }
+
     } catch (error) {
       console.error("Error adding hocky nien khoa:", error);
     }
@@ -148,10 +153,10 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
                           ...newHockyNienKhoa,
                           TEN_NAM_HOC: newValue
                             ? `Năm Học ${moment(newValue).format(
-                                "YYYY"
-                              )} - ${moment(newValue)
-                                .add(1, "year")
-                                .format("YYYY")}`
+                              "YYYY"
+                            )} - ${moment(newValue)
+                              .add(1, "year")
+                              .format("YYYY")}`
                             : ``,
                         })
                       }
