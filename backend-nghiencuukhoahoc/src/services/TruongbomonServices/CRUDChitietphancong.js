@@ -252,13 +252,12 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       [MAHKNK]
     );
 
-    console.log("check 1", results_hknk[0].TEN_NAM_HOC);
     let [results_namhoc, fields_namhoc] = await pool.execute(
       `select TENNAMHOC from namhoc where TENNAMHOC = ?
 `,
       [results_hknk[0].TEN_NAM_HOC]
     );
-    console.log("check 2", results_namhoc[0].TENNAMHOC);
+
     let results_chitietphancong_data = [];
 
     if (results_namhoc[0].TENNAMHOC === results_hknk[0].TEN_NAM_HOC) {
@@ -291,9 +290,6 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       );
     }
 
-    console.log("check 3 ", results_chitietphancong_data);
-
-    // console.log("cehci: ", results_chitietphancong_data);
     const danhSachPhanCongGiangVien = [];
 
     results_chitietphancong_data[0].forEach((dong) => {

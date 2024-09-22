@@ -110,13 +110,13 @@ const CRUDgiangvien_CNTT = (app) => {
 
   router.post(
     "/xem/danhsach/monhoc/giangvien/canhan",
-
+    checkUserJWT,
     Xem_Chitietphancong_banthan_Controller
   );
 
   router.post(
     "/phancong/tudong/giangvien",
-
+    checkUserJWT,
     phancongtudong_giangvien_Controller
   );
 
