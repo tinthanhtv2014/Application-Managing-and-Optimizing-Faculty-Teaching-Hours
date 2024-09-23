@@ -26,6 +26,7 @@ const getAll_hockinienkhoa = async (req, res) => {
 const tao_hockinienkhoa = async (req, res) => {
   try {
     const datahockinienkhoa = req.body;
+    console.log("check", req.body);
     if (!datahockinienkhoa.TENHKNK || !datahockinienkhoa.TEN_NAM_HOC) {
       return res.status(400).json({
         EM: " tên hknk hoặc năm học bị rỗng",

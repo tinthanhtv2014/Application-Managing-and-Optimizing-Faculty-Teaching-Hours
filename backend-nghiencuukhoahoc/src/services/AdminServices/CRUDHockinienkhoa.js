@@ -1,5 +1,5 @@
 const pool = require("../../config/database");
-const { } = require("./helpers");
+const {} = require("./helpers");
 const moment = require("moment");
 
 const selectAll_hockinienkhoa = async () => {
@@ -23,14 +23,13 @@ const selectAll_hockinienkhoa = async () => {
 const Sevicel_DongBoNamHoc_HocKy = async () => {
   try {
     // Lấy tất cả năm học từ bảng namhoc
-    let [namhocRows] = await pool.execute(
-      `SELECT * FROM namhoc`
-    );
+    let [namhocRows] = await pool.execute(`SELECT * FROM namhoc`);
 
     // Lặp qua từng năm học và đồng bộ học kỳ
     for (let namhoc of namhocRows) {
       let [existingHocKy] = await pool.execute(
-        `SELECT * FROM hockynienkhoa WHERE TEN_NAM_HOC = ?`, [namhoc.TENNAMHOC]
+        `SELECT * FROM hockynienkhoa WHERE TEN_NAM_HOC = ?`,
+        [namhoc.TENNAMHOC]
       );
 
       // Nếu chưa có học kỳ cho năm học này, tạo mới học kỳ 1 và học kỳ 2
@@ -39,8 +38,12 @@ const Sevicel_DongBoNamHoc_HocKy = async () => {
           `INSERT INTO hockynienkhoa (TENHKNK, TEN_NAM_HOC, NGAYBATDAUNIENKHOA) VALUES 
                   (?, ?, ?), (?, ?, ?)`,
           [
-            'Học Kì 1', namhoc.TENNAMHOC, '2020-09-01',
-            'Học Kì 2', namhoc.TENNAMHOC, '2021-02-01'
+            "Học Kì 1",
+            namhoc.TENNAMHOC,
+            "2020-09-01",
+            "Học Kì 2",
+            namhoc.TENNAMHOC,
+            "2021-02-01",
           ]
         );
       }
@@ -58,24 +61,7 @@ const Sevicel_DongBoNamHoc_HocKy = async () => {
 };
 
 const create_hockinienkhoa = async (dataHockinienkhoa) => {
-  // console.log("datahockinienkhoa", dataHockinienkhoa);
-
-  // Biểu thức chính quy để kiểm tra định dạng "Năm học xxxx-xxxx"
-  const regexNamHoc = /^Năm [Hh]ọc \d{4}[-\s]\d{4}$/;
-
   try {
-    // Kiểm tra định dạng của TEN_NAM_HOC
-    if (!regexNamHoc.test(dataHockinienkhoa.TEN_NAM_HOC)) {
-      Sevicel_DongBoNamHoc_HocKy();
-      const results_data = await selectAll_hockinienkhoa();
-      console.log("TEN_NAM_HOC không đúng định dạng. Phải là 'Năm học xxxx-xxxx'.");
-      return {
-        EM: "TEN_NAM_HOC không đúng định dạng. Phải là 'Năm học xxxx-xxxx'.",
-        EC: 0,
-        DT: results_data,
-      };
-    }
-
     // Kiểm tra xem năm học đã tồn tại hay chưa
     let [results_namhoc] = await pool.execute(
       `SELECT * FROM namhoc WHERE TENNAMHOC = ?`,
@@ -84,10 +70,9 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
 
     // Nếu năm học chưa tồn tại, thêm vào bảng namhoc
     if (results_namhoc.length === 0) {
-      await pool.execute(
-        `INSERT INTO namhoc (TENNAMHOC) VALUES (?)`,
-        [dataHockinienkhoa.TEN_NAM_HOC]
-      );
+      await pool.execute(`INSERT INTO namhoc (TENNAMHOC) VALUES (?)`, [
+        dataHockinienkhoa.TEN_NAM_HOC,
+      ]);
     }
 
     // Kiểm tra xem học kỳ trong năm học đó đã có 2 học kỳ hay chưa
@@ -102,7 +87,7 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
       return {
         EM: "Học kì niên khóa này đã tồn tại đủ 2 học kỳ.",
         EC: 0,
-        DT: results_data
+        DT: results_data,
       };
     }
 
@@ -122,10 +107,16 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     }
 
     // Thêm học kỳ mới
-    const ngayBatDauNienKhoa = moment(dataHockinienkhoa.NGAYBATDAUNIENKHOA).format("YYYY-MM-DD");
+    const ngayBatDauNienKhoa = moment(
+      dataHockinienkhoa.NGAYBATDAUNIENKHOA
+    ).format("YYYY-MM-DD");
     await pool.execute(
       `INSERT INTO hockynienkhoa (TENHKNK, TEN_NAM_HOC, NGAYBATDAUNIENKHOA) VALUES (?, ?, ?)`,
-      [dataHockinienkhoa.TENHKNK, dataHockinienkhoa.TEN_NAM_HOC, ngayBatDauNienKhoa]
+      [
+        dataHockinienkhoa.TENHKNK,
+        dataHockinienkhoa.TEN_NAM_HOC,
+        ngayBatDauNienKhoa,
+      ]
     );
 
     // Lấy danh sách tất cả các học kỳ niên khóa để trả về
@@ -145,7 +136,6 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     };
   }
 };
-
 
 const update_hockinienkhoa = async (MAHKNK, dataHockinienkhoa) => {
   // try {

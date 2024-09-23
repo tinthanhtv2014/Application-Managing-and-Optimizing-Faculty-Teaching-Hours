@@ -64,9 +64,13 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
       return;
     }
     if (!newHockyNienKhoa.TEN_NAM_HOC.includes("Năm Học")) {
-      newHockyNienKhoa.TEN_NAM_HOC = `Năm Học ${newHockyNienKhoa.TEN_NAM_HOC}`;
+      const namHoc = parseInt(newHockyNienKhoa.TEN_NAM_HOC, 10); // Lấy năm hiện tại
+      newHockyNienKhoa.TEN_NAM_HOC = `Năm Học ${namHoc} - Năm Học ${
+        namHoc + 1
+      }`;
+      console.log("1");
     }
-
+    console.log("newHockyNienKhoa", newHockyNienKhoa.TEN_NAM_HOC);
     try {
       const response = await CookiesAxios.post(
         `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/hockinienkhoa/tao`,
@@ -88,7 +92,6 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
       if (response.data.EC !== 1) {
         toast.error(`Lỗi: ${response.data.EM}`);
       }
-
     } catch (error) {
       console.error("Error adding hocky nien khoa:", error);
     }
@@ -102,7 +105,9 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
           data: { MAHKNK: id },
         }
       );
-      setHockyNienKhoas(response.data.DT);
+      if (response.data.EC === 1) {
+        setHockyNienKhoas(response.data.DT);
+      }
     } catch (error) {
       console.error("Error deleting hocky nien khoa:", error);
     }
@@ -153,10 +158,10 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
                           ...newHockyNienKhoa,
                           TEN_NAM_HOC: newValue
                             ? `Năm Học ${moment(newValue).format(
-                              "YYYY"
-                            )} - ${moment(newValue)
-                              .add(1, "year")
-                              .format("YYYY")}`
+                                "YYYY"
+                              )} - ${moment(newValue)
+                                .add(1, "year")
+                                .format("YYYY")}`
                             : ``,
                         })
                       }
