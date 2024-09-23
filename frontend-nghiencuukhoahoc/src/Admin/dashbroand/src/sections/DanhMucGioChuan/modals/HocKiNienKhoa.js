@@ -65,9 +65,7 @@ const HockyNienKhoaModal = ({ open, handleClose }) => {
     }
     if (!newHockyNienKhoa.TEN_NAM_HOC.includes("Năm Học")) {
       const namHoc = parseInt(newHockyNienKhoa.TEN_NAM_HOC, 10); // Lấy năm hiện tại
-      newHockyNienKhoa.TEN_NAM_HOC = `Năm Học ${namHoc} - Năm Học ${
-        namHoc + 1
-      }`;
+      newHockyNienKhoa.TEN_NAM_HOC = `Năm Học ${namHoc} - ${namHoc + 1}`;
       console.log("1");
     }
     console.log("newHockyNienKhoa", newHockyNienKhoa.TEN_NAM_HOC);
