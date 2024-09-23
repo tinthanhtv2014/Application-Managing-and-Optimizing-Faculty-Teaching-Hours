@@ -1,5 +1,5 @@
 const pool = require("../../config/database");
-const { } = require("./helpers");
+const {} = require("./helpers");
 const moment = require("moment");
 
 const selectAll_hockinienkhoa = async () => {
@@ -60,7 +60,7 @@ const Sevicel_DongBoNamHoc_HocKy = async () => {
   }
 };
 
-const create_hockinienkhoa = async (dataHockinienkhoa) => {
+const create_hockinienkhoa_ver2 = async (dataHockinienkhoa) => {
   try {
     // Kiểm tra xem năm học đã tồn tại hay chưa
     let [results_namhoc] = await pool.execute(
@@ -131,6 +131,75 @@ const create_hockinienkhoa = async (dataHockinienkhoa) => {
     console.log("error", error);
     return {
       EM: "Lỗi khi tạo học kỳ niên khóa.",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
+const create_hockinienkhoa = async (dataHockinienkhoa) => {
+  // console.log("datahockinienkhoa", dataHockinienkhoa.TENHKNK);
+  try {
+    let [results_kiemtra, fields_kiemtra] = await pool.execute(
+      `select * from hockynienkhoa where TEN_NAM_HOC = ?`,
+      [dataHockinienkhoa.TEN_NAM_HOC]
+    );
+
+    if (results_kiemtra.length >= 2) {
+      return {
+        EM: "Học kì niên khóa này đã tồn tại (đã đủ 2 học kỳ trong năm học này)",
+        EC: 0,
+        DT: [],
+      };
+    }
+    // Kiểm tra xem học kỳ hiện tại đã tồn tại trong năm học chưa
+    let hocKyTonTai = results_kiemtra.some(
+      (item) => item.TENHKNK === dataHockinienkhoa.TENHKNK
+    );
+
+    if (hocKyTonTai) {
+      return {
+        EM: "Học kì niên khóa này đã tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+    // Chuyển đổi định dạng NGAYBATDAUNIENKHOA
+    const ngayBatDauNienKhoa = moment(
+      dataHockinienkhoa.NGAYBATDAUNIENKHOA
+    ).format("YYYY-MM-DD");
+
+    let [results_hockinienkhoa, fields_hockinienkhoa] = await pool.execute(
+      `insert into hockynienkhoa (TENHKNK,TEN_NAM_HOC,NGAYBATDAUNIENKHOA) values (?,?,?)`,
+      [
+        dataHockinienkhoa.TENHKNK,
+        dataHockinienkhoa.TEN_NAM_HOC,
+        ngayBatDauNienKhoa, // Sử dụng giá trị đã chuyển đổi
+      ]
+    );
+
+    let [results_namhoc_select, fields_namhoc_select] = await pool.execute(
+      `select * from namhoc where TENNAMHOC = ?`,
+      [dataHockinienkhoa.TEN_NAM_HOC]
+    );
+
+    if (results_namhoc_select.length === 0) {
+      let [results_namhoc, fields_namhoc] = await pool.execute(
+        `insert into namhoc (TENNAMHOC) values (?)`,
+        [dataHockinienkhoa.TEN_NAM_HOC]
+      );
+    }
+
+    const results_data = await selectAll_hockinienkhoa();
+    return {
+      EM: " tạo học kì niên khóa thành công",
+      EC: 1,
+      DT: results_data.DT,
+    };
+  } catch (error) {
+    console.log("error", error);
+    return {
+      EM: "lỗi services create_hockinienkhoa",
       EC: -1,
       DT: [],
     };
@@ -235,6 +304,7 @@ const delete_hockinienkhoa = async (MAHKNK) => {
 module.exports = {
   selectAll_hockinienkhoa,
   create_hockinienkhoa,
+  create_hockinienkhoa_ver2,
   update_hockinienkhoa,
   delete_hockinienkhoa,
 };
