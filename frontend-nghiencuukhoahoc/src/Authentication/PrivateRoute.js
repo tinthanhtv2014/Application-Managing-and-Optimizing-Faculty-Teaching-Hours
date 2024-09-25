@@ -37,7 +37,7 @@ const PrivateRoute = () => {
               },
             }
           );
-
+          console.log(response.data);
           console.log("API response:", response.data.user.phanquyen); // Log phản hồi từ API
           console.log(
             "check token user update trang thai ",

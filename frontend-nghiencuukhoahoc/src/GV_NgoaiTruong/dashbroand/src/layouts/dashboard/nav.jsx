@@ -1,36 +1,39 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
-import Avatar from '@mui/material/Avatar';
-import { alpha } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import ListItemButton from '@mui/material/ListItemButton';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Drawer from "@mui/material/Drawer";
+import Avatar from "@mui/material/Avatar";
+import { alpha } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import ListItemButton from "@mui/material/ListItemButton";
 
-import { usePathname } from '../../routes/hooks';
-import { RouterLink } from '../../routes/components';
-import { useResponsive } from '../../hooks/use-responsive';
-import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-import CookiesAxios from '../../sections/CookiesAxios.js';
-import Logo from '../../components/logo';
-import Scrollbar from '../../components/scrollbar';
-import { NAV } from './config-layout';
-import navConfig from './config-navigation';
+import { usePathname } from "../../routes/hooks";
+import { RouterLink } from "../../routes/components";
+import { useResponsive } from "../../hooks/use-responsive";
+import avatarImage from "../../../public/assets/images/avatars/lufy2.jpg";
+import CookiesAxios from "../../sections/CookiesAxios.js";
+import Logo from "../../components/logo";
+import Scrollbar from "../../components/scrollbar";
+import { NAV } from "./config-layout";
+import navConfig from "./config-navigation";
 import Cookies from "js-cookie";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({ TENGV: '', TENCHUCVU: '' });
+  const [dataProfileGiangvien, setdataProfileGiangvien] = useState({
+    TENGV: "",
+    TENCHUCVU: "",
+  });
 
-  const auth = Cookies.get('accessToken');
-  const upLg = useResponsive('up', 'lg');
+  const auth = Cookies.get("accessToken");
+  const upLg = useResponsive("up", "lg");
   const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
-
+  const [AvatarImage, setAvatarImage] = useState(null);
   useEffect(() => {
     if (openNav) {
       // onCloseNav();
@@ -50,6 +53,8 @@ export default function Nav({ openNav, onCloseNav }) {
           if (response.data.EC === 1) {
             setdataProfileGiangvien(response.data.DT);
             setLoading(false);
+            const userPicture = sessionStorage.getItem("userPicture");
+            setAvatarImage(userPicture);
           } else {
             setLoading(false);
           }
@@ -75,24 +80,23 @@ export default function Nav({ openNav, onCloseNav }) {
         mx: 2.5,
         py: 2,
         px: 2.5,
-        display: 'flex',
+        display: "flex",
         borderRadius: 1.5,
-        alignItems: 'center',
+        alignItems: "center",
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={avatarImage} alt="photoURL" />
+      <Avatar src={AvatarImage || avatarImage} alt="photoURL" />
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
-          {dataProfileGiangvien.TENGV || 'Đang tải...'}
+          {dataProfileGiangvien.TENGV || "Đang tải..."}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {dataProfileGiangvien.TENCHUCVU || ''}
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          {dataProfileGiangvien.TENCHUCVU || ""}
         </Typography>
       </Box>
     </Box>
   );
-
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
@@ -111,10 +115,10 @@ export default function Nav({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
-        '& .simplebar-content': {
+        "& .simplebar-content": {
           height: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
@@ -139,7 +143,7 @@ export default function Nav({ openNav, onCloseNav }) {
         <Box
           sx={{
             height: 1,
-            position: 'fixed',
+            position: "fixed",
             width: NAV.WIDTH,
             borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
@@ -179,15 +183,14 @@ function NavItem({ item, isSelected, onClick }) {
       sx={{
         minHeight: 44,
         borderRadius: 0.75,
-        typography: 'body2',
-        color: 'text.secondary',
-        textTransform: 'capitalize',
-        fontWeight: 'fontWeightMedium',
+        typography: "body2",
+        color: "text.secondary",
+        textTransform: "capitalize",
+        fontWeight: "fontWeightMedium",
         ...(isSelected && {
-          color: 'blue', // Màu chữ khi được chọn
+          color: "blue", // Màu chữ khi được chọn
           // fontWeight: 'fontWeightBold',
           bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23), // Tăng độ đậm của nền
-
         }),
       }}
     >

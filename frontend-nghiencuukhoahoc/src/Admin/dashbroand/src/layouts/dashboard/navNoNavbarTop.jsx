@@ -1,35 +1,33 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
-import Avatar from '@mui/material/Avatar';
-import { alpha } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import ListItemButton from '@mui/material/ListItemButton';
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Drawer from "@mui/material/Drawer";
+import Avatar from "@mui/material/Avatar";
+import { alpha } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import ListItemButton from "@mui/material/ListItemButton";
 
-import { usePathname } from '../../routes/hooks';
-import { RouterLink } from '../../routes/components';
-import { useResponsive } from '../../hooks/use-responsive';
+import { usePathname } from "../../routes/hooks";
+import { RouterLink } from "../../routes/components";
+import { useResponsive } from "../../hooks/use-responsive";
 
-import avatarImage from '../../../public/assets/images/avatars/lufy2.jpg';
-
-import Logo from '../../components/logo';
-import Scrollbar from '../../components/scrollbar';
-import CookiesAxios from '../../sections/CookiesAxios.js';
-import { NAV } from './config-layout';
-import navConfig from './config-navigation';
+import Logo from "../../components/logo";
+import Scrollbar from "../../components/scrollbar";
+import CookiesAxios from "../../sections/CookiesAxios.js";
+import { NAV } from "./config-layout";
+import navConfig from "./config-navigation";
 import Cookies from "js-cookie";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 export default function NavNoTop({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [selectedPath, setSelectedPath] = useState(pathname);
-  const upLg = useResponsive('up', 'lg');
+  const upLg = useResponsive("up", "lg");
   const [dataProfileGiangvien, setDataProfileGiangvien] = useState(null);
-  const auth = Cookies.get('accessToken');
-
+  const auth = Cookies.get("accessToken");
+  const [avatarImage, setAvatarImage] = useState(null);
   useEffect(() => {
     if (auth) {
       const decoded = jwtDecode(auth);
@@ -42,6 +40,8 @@ export default function NavNoTop({ openNav, onCloseNav }) {
 
           if (response.data.EC === 1) {
             setDataProfileGiangvien(response.data.DT);
+            const userPicture = sessionStorage.getItem("userPicture");
+            setAvatarImage(userPicture);
           }
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu bộ môn:", error);
@@ -65,19 +65,19 @@ export default function NavNoTop({ openNav, onCloseNav }) {
         mx: 2.5,
         py: 2,
         px: 2.5,
-        display: 'flex',
+        display: "flex",
         borderRadius: 1.5,
-        alignItems: 'center',
+        alignItems: "center",
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={avatarImage} alt="photoURL" />
+      <Avatar src={avatarImage || ""} alt="photoURL" />
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
-          {dataProfileGiangvien ? dataProfileGiangvien.TENGV : 'Đang tải...'}
+          {dataProfileGiangvien ? dataProfileGiangvien.TENGV : "Đang tải..."}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {dataProfileGiangvien ? dataProfileGiangvien.TENCHUCVU : ''}
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          {dataProfileGiangvien ? dataProfileGiangvien.TENCHUCVU : ""}
         </Typography>
       </Box>
     </Box>
@@ -100,10 +100,10 @@ export default function NavNoTop({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
-        '& .simplebar-content': {
+        "& .simplebar-content": {
           height: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
@@ -125,7 +125,7 @@ export default function NavNoTop({ openNav, onCloseNav }) {
         <Box
           sx={{
             height: 1,
-            position: 'fixed',
+            position: "fixed",
             width: NAV.WIDTH,
             borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
@@ -163,12 +163,12 @@ function NavItem({ item, isSelected, onClick }) {
       sx={{
         minHeight: 44,
         borderRadius: 0.75,
-        typography: 'body2',
-        color: 'text.secondary',
-        textTransform: 'capitalize',
-        fontWeight: 'fontWeightMedium',
+        typography: "body2",
+        color: "text.secondary",
+        textTransform: "capitalize",
+        fontWeight: "fontWeightMedium",
         ...(isSelected && {
-          color: 'blue',
+          color: "blue",
           bgcolor: (theme) => alpha(theme.palette.primary.main, 0.23),
         }),
       }}

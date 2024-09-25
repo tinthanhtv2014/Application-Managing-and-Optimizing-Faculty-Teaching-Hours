@@ -37,7 +37,7 @@ export default function AccountPopover() {
   const auth = Cookies.get("accessToken");
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
-
+  const [userPicture, setUserPicture] = useState(null);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -63,6 +63,8 @@ export default function AccountPopover() {
 
           if (response.data.EC === 1) {
             setdataProfileGiangvien(response.data.DT);
+            let userPicture = sessionStorage.getItem("userPicture");
+            setUserPicture(userPicture);
           }
           setLoading(false);
         } catch (error) {
@@ -127,7 +129,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={avat}
+          src={userPicture || avat}
           alt={account.displayName}
           sx={{
             width: 36,

@@ -37,7 +37,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const auth = Cookies.get("accessToken");
   const upLg = useResponsive("up", "lg");
   const [selectedPath, setSelectedPath] = useState(pathname); // Trạng thái để lưu đường dẫn đã chọn
-
+  const [avatarImage, setAvatarImage] = useState(null);
   useEffect(() => {
     if (openNav) {
       // onCloseNav();
@@ -56,6 +56,8 @@ export default function Nav({ openNav, onCloseNav }) {
 
           if (response.data.EC === 1) {
             setdataProfileGiangvien(response.data.DT);
+            let userPicture = sessionStorage.getItem("userPicture");
+            setAvatarImage(userPicture);
             setLoading(false);
           } else {
             setLoading(false);
@@ -88,7 +90,7 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={avatarImage} alt="photoURL" />
+      <Avatar src={avatarImage || avatarImage} alt="photoURL" />
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">
           {dataProfileGiangvien.TENGV || "Đang tải..."}

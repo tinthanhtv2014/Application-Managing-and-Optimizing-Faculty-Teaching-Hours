@@ -145,7 +145,7 @@ const IndexPhanCongGiangVien = () => {
         `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/lophoc/hocki`,
         { MALOP: select_Lop, HOCKINIENKHOA: select_HocKiNienKhoa }
       );
-      // console.log("check fetchDataMonHoc_byLop", response_MonHoc);
+      console.log("check fetchDataMonHoc_byLop", response_MonHoc.data);
       if (response_MonHoc.data.EC === 1) {
         setData_MonHoc(response_MonHoc.data.DT);
         setIsOpenButton(true);
@@ -216,7 +216,7 @@ const IndexPhanCongGiangVien = () => {
 
       if (response.data.EC === 1) {
         console.log("Phân công tự động thành công:", response.data);
-        setData_MonHoc(response.data.DT.data);
+        // setData_MonHoc(response.data.DT.data);
       } else {
         console.error("Phân công tự động thất bại:", response.data.EM);
       }

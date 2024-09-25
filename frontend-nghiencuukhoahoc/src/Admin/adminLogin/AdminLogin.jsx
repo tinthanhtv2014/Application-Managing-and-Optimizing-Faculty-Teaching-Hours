@@ -30,7 +30,6 @@ const AdminLogin = () => {
         );
 
         setUser(userInfo.data);
-        console.log(userInfo.data);
         console.log("User Info:", userInfo.data);
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -54,7 +53,7 @@ const AdminLogin = () => {
 
           if (response.data.EC === 1) {
             const accessToken = response.data.DT.access_token;
-
+            sessionStorage.setItem("userPicture", user.picture);
             // Kiểm tra nếu accessToken là chuỗi hợp lệ
             if (typeof accessToken === "string") {
               const decoded = jwtDecode(accessToken);
