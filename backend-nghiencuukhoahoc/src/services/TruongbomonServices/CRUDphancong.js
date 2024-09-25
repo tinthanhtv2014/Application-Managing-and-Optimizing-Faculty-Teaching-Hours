@@ -2,6 +2,7 @@ const pool = require("../../config/database");
 const moment = require("moment");
 
 const { timnamhoc_TENNAMHOC } = require("../AdminServices/helpers");
+const e = require("express");
 const select_giangvien_chuachonkhung = async () => {
   try {
     let [results_ctdt_bomon, fields1] = await pool.execute(
@@ -159,7 +160,7 @@ function tinhSoThuTuHocKi(n, SOHOCKI) {
   return 2 * (nNumber - 1) + soHocKiNumber;
 }
 
-const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
+const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK) => {
   try {
     const sothutu = SOHOCKI.split(" ");
     const number = sothutu[sothutu.length - 1];
@@ -175,8 +176,14 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
 
     let SOTHUTUHOCKI = tinhSoThuTuHocKi(n, number);
 
-    let [results_ctdt_bomon, fields1] = await pool.execute(
-      `select lop.*,monhoc.*,ctdt.* from lop,
+    let [results_chitietphancong, fields_chitietphancong] = await pool.execute(
+      `SELECT chitietphancong.* from chitietphancong,bangphancong where chitietphancong.MALOP = ?  and bangphancong.MAHKNK = ? and bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG`,
+      [MALOP, MAHKNK]
+    );
+
+    if (results_chitietphancong.length === 0) {
+      let [results_ctdt_bomon, fields1] = await pool.execute(
+        `select * from lop,
       monhoc,
       chuongtrinhdaotao as ctdt,
       thuoc 
@@ -185,14 +192,37 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
       and thuoc.MAMONHOC = monhoc.MAMONHOC
       and thuoc.SOTHUTUHOCKI = ?
       and lop.MALOP = ?`,
-      [SOTHUTUHOCKI, MALOP]
-    );
-
-    return {
-      EM: "Xem thông tin môn học theo lớp thành công",
-      EC: 1,
-      DT: results_ctdt_bomon,
-    };
+        [SOTHUTUHOCKI, MALOP]
+      );
+      return {
+        EM: "Xem thông tin môn học theo lớp thành công",
+        EC: 1,
+        DT: results_ctdt_bomon,
+      };
+    } else {
+      let [results_ctdt_bomon, fields1] = await pool.execute(
+        ` 
+      select giangvien.*,chitietphancong.*,bangphancong.*,lop.*,monhoc.*,hockynienkhoa.* 
+      from giangvien, chitietphancong,bangphancong,lop,monhoc,hockynienkhoa,thuoc
+      where giangvien.MAGV = bangphancong.MAGV
+      and bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
+      and lop.MALOP = chitietphancong.MALOP
+      and monhoc.MAMONHOC = chitietphancong.MAMONHOC
+      and bangphancong.MAHKNK = hockynienkhoa.MAHKNK
+      and monhoc.MAMONHOC = thuoc.MAMONHOC
+      and lop.MALOP = ? 
+      and hockynienkhoa.MAHKNK = ? 
+      and thuoc.SOTHUTUHOCKI = ?
+  
+  `,
+        [MALOP, MAHKNK, SOTHUTUHOCKI]
+      );
+      return {
+        EM: "Xem thông tin môn học theo lớp thành công",
+        EC: 1,
+        DT: results_ctdt_bomon,
+      };
+    }
   } catch (error) {
     console.log("check", error);
     return {
