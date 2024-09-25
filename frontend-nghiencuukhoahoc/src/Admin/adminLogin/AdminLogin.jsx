@@ -52,6 +52,7 @@ const AdminLogin = () => {
           console.log("check token =>", response.data);
 
           if (response.data.EC === 1) {
+            Cookies.remove("accessToken");
             const accessToken = response.data.DT.access_token;
             sessionStorage.setItem("userPicture", user.picture);
             // Kiểm tra nếu accessToken là chuỗi hợp lệ

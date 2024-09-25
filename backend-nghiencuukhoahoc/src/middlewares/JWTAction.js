@@ -4,12 +4,13 @@ var jwt = require("jsonwebtoken");
 const nonSercurePaths = ["/", "/register", "/login", "/logout"];
 const createJWT = (payload) => {
   let key = process.env.SECRETKEYADMIN;
+  // console.log("create key", key);
 
   let token;
   try {
-    token = jwt.sign(payload, key, { expiresIn: 300000 });
+    token = jwt.sign(payload, key, { expiresIn: "5h" });
   } catch (e) {
-    console.log(e);
+    console.log("Error while creating JWT:", e);
   }
 
   return token;
@@ -17,11 +18,13 @@ const createJWT = (payload) => {
 
 const verifyToken = (token) => {
   let key = process.env.SECRETKEYADMIN;
+  // console.log("key", key);
+  // console.log("token", token);
   let decoded = null;
   try {
     decoded = jwt.verify(token, key);
   } catch (e) {
-    console.log(e);
+    console.log("Error while verifying JWT:", e);
   }
 
   return decoded;
@@ -41,6 +44,9 @@ const checkUserJWT = (req, res, next) => {
   if (nonSercurePaths.includes(req.path)) return next();
   let cookie = req.cookies;
   let tokenFromHeader = extractToken(req);
+  // console.log("Cookie:", cookie);
+  // console.log("Token from Header:", tokenFromHeader);
+
   if ((cookie && cookie.jwt) || tokenFromHeader) {
     let token = cookie && cookie.jwt ? cookie.jwt : tokenFromHeader;
     let decoded = verifyToken(token);

@@ -216,6 +216,7 @@ const IndexPhanCongGiangVien = () => {
 
       if (response.data.EC === 1) {
         console.log("Phân công tự động thành công:", response.data);
+        toast.success("Phân công thành công");
         // setData_MonHoc(response.data.DT.data);
       } else {
         console.error("Phân công tự động thất bại:", response.data.EM);
@@ -223,6 +224,22 @@ const IndexPhanCongGiangVien = () => {
     } catch (error) {
       console.error("Lỗi khi phân công tự động:", error);
     }
+  };
+  const handleUpdateGiangVien = (updatedTeacher, index) => {
+    // Cập nhật dữ liệu giảng viên trong data_MonHoc
+    setData_MonHoc((prevData) =>
+      prevData.map((item, i) => {
+        if (i === index) {
+          // Kiểm tra chỉ số của hàng
+          return {
+            ...item,
+            TENGV: updatedTeacher.TENGV,
+            MAGV: updatedTeacher.MAGV,
+          }; // Cập nhật thông tin giảng viên
+        }
+        return item; // Giữ nguyên các hàng khác
+      })
+    );
   };
 
   return (
@@ -345,12 +362,12 @@ const IndexPhanCongGiangVien = () => {
           {" "}
           <Grid container spacing={2}>
             {" "}
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={12}>
               {" "}
               <Box sx={{ mt: 3 }}>
                 <LopMonHocTable
                   data={data_MonHoc}
-                  handlePhanCong={handlePhanCong}
+                  handleUpdateGiangVien={handleUpdateGiangVien}
                 />
               </Box>
             </Grid>
@@ -365,7 +382,7 @@ const IndexPhanCongGiangVien = () => {
             ) : (
               <>
                 {" "}
-                <Grid item xs={12} md={3}>
+                {/* <Grid item xs={12} md={3}>
                   {" "}
                   <Box sx={{ mt: 3 }}>
                     <GVTableDaChonKhung
@@ -374,7 +391,7 @@ const IndexPhanCongGiangVien = () => {
                       select_HocKiNienKhoa={select_HocKiNienKhoa}
                     />
                   </Box>
-                </Grid>{" "}
+                </Grid>{" "} */}
               </>
             )}
           </Grid>

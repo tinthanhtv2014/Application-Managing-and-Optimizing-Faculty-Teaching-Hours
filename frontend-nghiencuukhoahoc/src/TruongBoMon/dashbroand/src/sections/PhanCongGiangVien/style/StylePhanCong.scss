@@ -1,0 +1,11 @@
+.suggestion-item {
+    transition: background-color 0.2s ease;
+    /* Hiệu ứng chuyển màu */
+}
+
+.suggestion-item:hover {
+    background-color: #6c757d;
+    /* Màu secondary trong Bootstrap */
+    color: white;
+    /* Đổi màu chữ thành trắng khi hover */
+}
