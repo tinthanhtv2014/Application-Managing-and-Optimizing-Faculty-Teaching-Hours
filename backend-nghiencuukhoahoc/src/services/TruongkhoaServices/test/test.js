@@ -499,9 +499,10 @@ const XuLy_data_GV = async (dataAutoPhanCong) => {
         JOIN thuoc T ON T.MACHUONGTRINH = CTDT.MACHUONGTRINH
         JOIN monhoc MH ON MH.MAMONHOC = T.MAMONHOC
         JOIN bomon BM ON BM.MABOMON = CTDT.MABOMON
-        JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
-        WHERE L.MALOP = ? AND T.SOTHUTUHOCKI = ?
-        GROUP BY L.MALOP, BM.TENBOMON, GV.MAGV, GV.TENGV AND GV.TRANGTHAITAIKHOAN= 'Đang hoạt động';`,
+        JOIN giangvien GV ON GV.MABOMON = BM.MABOMON 
+        JOIN taikhoan TK ON TK.MAGV = GV.MAGV
+        WHERE L.MALOP = ? AND T.SOTHUTUHOCKI = ? AND TK.TRANGTHAITAIKHOAN= 'Đang hoạt động'
+        GROUP BY L.MALOP, BM.TENBOMON, GV.MAGV, GV.TENGV;`,
     [dataAutoPhanCong.data[0].MALOP, dataAutoPhanCong.data[0].SOTHUTUHOCKI]
   );
 
