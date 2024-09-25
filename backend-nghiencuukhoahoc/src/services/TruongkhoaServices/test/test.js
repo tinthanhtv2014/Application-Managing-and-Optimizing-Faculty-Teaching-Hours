@@ -529,7 +529,9 @@ const XuLy_data_GV_TungDay_HocKy = async (dataAutoPhanCong) => {
 const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
   try {
     if (!dataAutoPhanCong.data.length > 0) {
-      console.log("Dữ liệu bị lỗi, rỗng hoặc không đúng định dạng Sevicel_AutoPhanCong_Test");
+      console.log(
+        "Dữ liệu bị lỗi, rỗng hoặc không đúng định dạng Sevicel_AutoPhanCong_Test"
+      );
       return {
         EM: "Dữ liệu bị lỗi, rỗng hoặc không đúng định dạng",
         EC: 0,

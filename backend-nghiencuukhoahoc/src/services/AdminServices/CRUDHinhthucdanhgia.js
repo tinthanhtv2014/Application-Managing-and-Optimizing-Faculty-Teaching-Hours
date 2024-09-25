@@ -111,6 +111,7 @@ const delete_hinhthucdanhgia = async (MADANHGIAKETTHUC) => {
     };
   }
 };
+
 module.exports = {
   getAll_hinhthucdanhgia,
   create_hinhthucdanhgia,

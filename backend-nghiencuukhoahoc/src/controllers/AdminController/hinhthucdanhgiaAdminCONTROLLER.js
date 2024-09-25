@@ -83,6 +83,13 @@ const sua_hinhthucdanhgia = async (req, res) => {
 const xoa_hinhthucdanhgia = async (req, res) => {
   try {
     let MADANHGIAKETTHUC = req.query.MADANHGIAKETTHUC;
+    if (!MADANHGIAKETTHUC) {
+      return res.status(400).json({
+        EM: " MADANHGIAKETTHUC bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
     let results = await delete_hinhthucdanhgia(MADANHGIAKETTHUC);
 
     return res.status(200).json({
