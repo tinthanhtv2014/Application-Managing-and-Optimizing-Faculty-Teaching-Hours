@@ -309,7 +309,6 @@ const phancong_tudong_giangvien = async (data_phancong) => {
   // try {
   const currentTime = moment().format("YYYY-MM-DD");
   for (var i = 0; i < data_phancong.data.length; i++) {
-    console.log(data_phancong.data[i]);
     let tongSogio = tinhSoTinChi(
       data_phancong.data[i].SOTINCHILYTHUYET,
       data_phancong.data[i].SOTINCHITHUCHANH
@@ -343,7 +342,7 @@ const phancong_tudong_giangvien = async (data_phancong) => {
         [
           data_phancong.data[i].MAMONHOC,
           select_bangphancong[0].MAPHANCONG,
-          data_phancong.data[i].MAGV,
+          data_phancong.data[i].MALOP,
         ]
       );
 
