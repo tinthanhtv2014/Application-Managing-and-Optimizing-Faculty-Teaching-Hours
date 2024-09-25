@@ -176,7 +176,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI) => {
     let SOTHUTUHOCKI = tinhSoThuTuHocKi(n, number);
 
     let [results_ctdt_bomon, fields1] = await pool.execute(
-      `select * from lop,
+      `select lop.*,monhoc.*,ctdt.* from lop,
       monhoc,
       chuongtrinhdaotao as ctdt,
       thuoc 
