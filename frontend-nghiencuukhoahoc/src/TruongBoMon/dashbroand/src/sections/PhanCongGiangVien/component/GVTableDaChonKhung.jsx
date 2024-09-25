@@ -46,7 +46,6 @@ const GVTableDaChonKhung = ({ data, selectNamHoc, select_HocKiNienKhoa }) => {
   };
 
   const handleRowClick = (row) => {
-    handlePhanCong(row.MAGV);
     if (selectedGV === row.MAGV) {
       setSelectedGV(null);
       setDetails(null);
@@ -56,23 +55,7 @@ const GVTableDaChonKhung = ({ data, selectNamHoc, select_HocKiNienKhoa }) => {
     }
   };
   console.log("check data=>", data);
-  const handlePhanCong = async (MAGV) => {
-    console.log("check select_HocKiNienKhoa", select_HocKiNienKhoa);
-    console.log("check MAGV", MAGV);
-    if (select_HocKiNienKhoa && MAGV) {
-      try {
-        const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/dachonkhung/chitiet`,
-          { HOCKINIENKHOA: select_HocKiNienKhoa, MAGV: MAGV }
-        );
-        if (response.data.EC === 1) {
-          
-        }
-      } catch (error) {
-        console.error("Failed to fetch details", error);
-      }
-    }
-  };
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
