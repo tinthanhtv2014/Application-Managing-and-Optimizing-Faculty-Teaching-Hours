@@ -501,7 +501,7 @@ const XuLy_data_GV = async (dataAutoPhanCong) => {
         JOIN bomon BM ON BM.MABOMON = CTDT.MABOMON
         JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
         WHERE L.MALOP = ? AND T.SOTHUTUHOCKI = ?
-        GROUP BY L.MALOP, BM.TENBOMON, GV.MAGV, GV.TENGV;`,
+        GROUP BY L.MALOP, BM.TENBOMON, GV.MAGV, GV.TENGV AND GV.TRANGTHAITAIKHOAN= 'Đang hoạt động';`,
     [dataAutoPhanCong.data[0].MALOP, dataAutoPhanCong.data[0].SOTHUTUHOCKI]
   );
 
@@ -543,7 +543,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
     let data_GV_TungDay = await XuLy_data_GV_TungDay(dataAutoPhanCong);
     // console.log("data_GV_TungDay: ", data_GV_TungDay);
 
-    //Lấy ds giảng viên từng dạy ở lớp này
+    //Lấy ds giảng viên từng dạy ở lớp này theo học kỳ
     let data_GV_TungDay_HocKy = await XuLy_data_GV_TungDay_HocKy(
       dataAutoPhanCong
     );
