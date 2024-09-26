@@ -21,7 +21,11 @@ import {
 import { Form, Dropdown } from "react-bootstrap";
 import "../style/StylePhanCong.scss";
 import CookiesAxios from "../../CookiesAxios";
-const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
+const LopMonHocTable = ({
+  data,
+  handleUpdateGiangVien,
+  select_HocKiNienKhoa,
+}) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [open, setOpen] = useState(false);
   const [searchEmail, setSearchEmail] = useState(""); // State cho ô tìm kiếm email
@@ -54,15 +58,24 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
 
   useEffect(() => {
     const fetchDataAllGV = async () => {
+      console.log("searchEmail value:", searchEmail);
+      console.log("select_HocKiNienKhoa value:", select_HocKiNienKhoa);
+
       try {
-        if (searchEmail.length > 2) {
+        if (searchEmail && select_HocKiNienKhoa) {
+          // Safer check
           // Gọi API khi có hơn 2 ký tự
           const response = await CookiesAxios.post(
-            `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/giangvien/email/search`,
-            { TENGIANGVIEN: searchEmail }
+            `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/timkiem/email`,
+            {
+              TENGIANGVIEN: searchEmail,
+              select_HocKiNienKhoa: select_HocKiNienKhoa,
+            }
           );
           console.log("Dữ liệu tìm kiếm:", response.data);
-          setSuggestedTeachers(response.data.DT); // Giả sử response.data.DT chứa danh sách giảng viên
+          if (response.data.EC === 1) {
+            setSuggestedTeachers(response.data.DT);
+          }
         } else {
           setSuggestedTeachers([]); // Reset danh sách gợi ý nếu ký tự ít hơn 3
         }

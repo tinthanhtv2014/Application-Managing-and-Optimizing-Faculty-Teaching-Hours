@@ -369,6 +369,7 @@ const IndexPhanCongGiangVien = () => {
                 <LopMonHocTable
                   data={data_MonHoc}
                   handleUpdateGiangVien={handleUpdateGiangVien}
+                  select_HocKiNienKhoa={select_HocKiNienKhoa}
                 />
               </Box>
             </Grid>
