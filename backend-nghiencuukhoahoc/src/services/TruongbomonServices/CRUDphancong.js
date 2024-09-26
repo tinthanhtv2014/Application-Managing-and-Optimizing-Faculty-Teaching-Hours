@@ -202,7 +202,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK, TEN_NAM_HOC) => {
     } else {
       let [results_ctdt_bomon, fields1] = await pool.execute(
         ` 
-      select giangvien.*,chitietphancong.*,sum(chitietphancong.TONG_SO_GIO) as TONG_SO_GIO_DAY, bangphancong.*,lop.*,monhoc.*,hockynienkhoa.* 
+      select giangvien.*,chitietphancong.*, bangphancong.*,lop.*,monhoc.*,hockynienkhoa.* 
       from giangvien, chitietphancong,bangphancong,lop,monhoc,hockynienkhoa,thuoc
       where giangvien.MAGV = bangphancong.MAGV
       and bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
