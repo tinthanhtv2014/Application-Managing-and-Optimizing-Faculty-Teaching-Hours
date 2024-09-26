@@ -16,6 +16,7 @@ const {
 
   deleteGiangVienController,
   searchEmailGiangVienController,
+  FakeChonKhungController,
 } = require("../../controllers/AdminController/giangVienAdminController");
 
 const {
@@ -81,6 +82,7 @@ const CRUDGiangVien = (app) => {
   );
   router.delete("/xoachucdanh", checkUserJWT, deleteChucdanhController);
   router.post("/email/search", checkUserJWT, searchEmailGiangVienController);
+  router.post("/tao/fake/chonkhung/excel", FakeChonKhungController);
   return app.use("/api/v1/admin/giangvien", router);
 };
 

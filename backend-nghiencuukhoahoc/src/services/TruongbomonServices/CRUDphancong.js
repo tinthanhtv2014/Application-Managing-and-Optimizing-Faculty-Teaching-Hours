@@ -160,7 +160,7 @@ function tinhSoThuTuHocKi(n, SOHOCKI) {
   return 2 * (nNumber - 1) + soHocKiNumber;
 }
 
-const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK) => {
+const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK, TEN_NAM_HOC) => {
   try {
     const sothutu = SOHOCKI.split(" ");
     const number = sothutu[sothutu.length - 1];
@@ -202,7 +202,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK) => {
     } else {
       let [results_ctdt_bomon, fields1] = await pool.execute(
         ` 
-      select giangvien.*,chitietphancong.*,bangphancong.*,lop.*,monhoc.*,hockynienkhoa.* 
+      select giangvien.*,chitietphancong.*, bangphancong.*,lop.*,monhoc.*,hockynienkhoa.* 
       from giangvien, chitietphancong,bangphancong,lop,monhoc,hockynienkhoa,thuoc
       where giangvien.MAGV = bangphancong.MAGV
       and bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
@@ -217,6 +217,58 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK) => {
   `,
         [MALOP, MAHKNK, SOTHUTUHOCKI]
       );
+
+      // ------------TÔI LẤY CHỌN GIỜ CHỌN KHUNG--------------------------PHUC NOTE
+      let [results_MANAMHOC, fields_MANAMHOC] = await pool.execute(
+        `select MANAMHOC from namhoc where TENNAMHOC =?`,
+        [TEN_NAM_HOC]
+      );
+      console.log("results_MANAMHOC", results_MANAMHOC);
+      if (results_MANAMHOC.length === 0) {
+        return {
+          EM: "Xem thông tin môn học theo lớp thành công, nhưng bị lỗi năm học",
+          EC: 1,
+          DT: results_ctdt_bomon,
+        };
+      }
+      let [results_chonkhung, fields_chonkhung] = await pool.execute(
+        `select * from chon_khung where MANAMHOC =?`,
+        [results_MANAMHOC[0].MANAMHOC]
+      );
+
+      // Truy vấn thêm thông tin từ bảng khunggiochuan dựa trên MAKHUNG của giảng viên
+      for (let i = 0; i < results_chonkhung.length; i++) {
+        const MAKHUNG = results_chonkhung[i].MAKHUNG;
+
+        // Truy vấn GIOGIANGDAY_CHUAN từ bảng khunggiochuan
+        let [results_khunggiochuan, fields_khunggiochuan] = await pool.execute(
+          `select GIOGIANGDAY_CHUAN from khunggiochuan where MAKHUNG = ?`,
+          [MAKHUNG]
+        );
+
+        // Gắn GIOGIANGDAY_CHUAN vào results_chonkhung
+        if (results_khunggiochuan.length > 0) {
+          results_chonkhung[i].GIOGIANGDAY_CHUAN =
+            results_khunggiochuan[0].GIOGIANGDAY_CHUAN;
+        } else {
+          results_chonkhung[i].GIOGIANGDAY_CHUAN = null; // Nếu không tìm thấy thông tin
+        }
+      }
+
+      // ------------TÔI LẤY CHỌN GIỜ CHỌN KHUNG--------------------------
+      results_ctdt_bomon = results_ctdt_bomon.map((item) => {
+        const chonkhung = results_chonkhung.find(
+          (khung) => khung.MAGV === item.MAGV
+        );
+
+        return {
+          ...item,
+          chonkhung: chonkhung || null, // Gắn chonkhung, bao gồm cả GIOGIANGDAY_CHUAN
+        };
+      });
+      // ------------TÔI LẤY CHỌN GIỜ CHỌN KHUNG--------------------------PHUC NOTE
+
+      // Do giảng viên chưa có danh sách chọn khung nên...tui cmt lại
       return {
         EM: "Xem thông tin môn học theo lớp thành công",
         EC: 1,

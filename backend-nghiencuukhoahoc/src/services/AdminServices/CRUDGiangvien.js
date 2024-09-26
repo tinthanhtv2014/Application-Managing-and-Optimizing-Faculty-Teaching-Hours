@@ -460,6 +460,46 @@ const searchTenGiangVien = async (TENGIANGVIEN) => {
     };
   }
 };
+const fakeChonKhungGV = async (data) => {
+  try {
+    let results = [];
+    console.log(data);
+    // Lặp qua từng phần tử trong mảng data
+    for (var i = 0; i < data.length; i++) {
+      // Chuẩn bị các giá trị cần chèn cho từng bản ghi
+      let MAGV = data[i].MAGV;
+      let MAKHUNG = data[i].MAKHUNG;
+      let MANAMHOC = data[i].MANAMHOC;
+
+      // Chèn bản ghi vào bảng chon_khung
+      await pool.execute(
+        `INSERT INTO chon_khung (MAGV, MAKHUNG, MANAMHOC) VALUES (?, ?, ?)`,
+        [MAGV, MAKHUNG, MANAMHOC]
+      );
+
+      // Lưu kết quả trả về sau mỗi lần chèn thành công
+      results.push({
+        EM: `Chèn giảng viên với MAGV: ${MAGV} thành công`,
+        EC: 0,
+        DT: [],
+      });
+    }
+
+    return {
+      EM: "Tất cả giảng viên đã được chèn thành công",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    console.log("Lỗi services fakeChonKhungGV", error);
+    return {
+      EM: "Lỗi trong quá trình chèn giảng viên",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   selectGiangVien,
   selectOnlyGiangVien,
@@ -471,4 +511,5 @@ module.exports = {
 
   deleteGiangVien,
   searchTenGiangVien,
+  fakeChonKhungGV,
 };

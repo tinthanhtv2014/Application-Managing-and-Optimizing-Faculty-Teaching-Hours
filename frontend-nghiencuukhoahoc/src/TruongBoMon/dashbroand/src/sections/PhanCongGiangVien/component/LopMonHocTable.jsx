@@ -131,7 +131,14 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
                     )}
                   </TableCell>
                   <TableCell align="center">{row.TENGV}</TableCell>
-                  <TableCell align="center">{row.TONG_SO_GIO}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      color: row.TONG_SO_GIO < 500 ? "green" : "red",
+                    }}
+                  >
+                    {row.TONG_SO_GIO}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

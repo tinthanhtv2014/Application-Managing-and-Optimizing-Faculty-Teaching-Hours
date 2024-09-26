@@ -13,6 +13,7 @@ import ChucDanhGiangVien from "./modals/ChucDanhGV";
 import ModalChucVu from "./modals/ChucVuGV";
 import HockyNienKhoaModal from "./modals/HocKiNienKhoa";
 import ModalChiTietPhanCong from "./modals/ChiTietPhanCong";
+import FakeChonKhung from "./modals/FakeChonKhung";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -27,6 +28,7 @@ const DanhMucGioChuan = () => {
     chucVuGiangVien: false,
     hocKiNienKhoa: false,
     chiTietPhanCong: false,
+    fakeChonKhung: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -150,6 +152,15 @@ const DanhMucGioChuan = () => {
             >
               Chi Tiết Phân Công Test
             </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("fakeChonKhung")}
+            >
+              FakeChonKhung
+            </Button>
           </Col>
         </Row>
         <QuyDinhModal
@@ -199,6 +210,10 @@ const DanhMucGioChuan = () => {
         <ModalChiTietPhanCong
           open={open.chiTietPhanCong}
           handleClose={() => handleClose("chiTietPhanCong")}
+        />{" "}
+        <FakeChonKhung
+          open={open.fakeChonKhung}
+          handleClose={() => handleClose("fakeChonKhung")}
         />{" "}
       </Container>
     </>

@@ -108,6 +108,7 @@ const get_monhoc_lop_hocki = async (req, res) => {
     const MALOP = req.body.MALOP;
     const SOHOCKI = req.body.HOCKINIENKHOA.TENHKNK;
     const MAHKNK = req.body.HOCKINIENKHOA.MAHKNK;
+    const TEN_NAM_HOC = req.body.HOCKINIENKHOA.TEN_NAM_HOC;
     if (!MALOP || !SOHOCKI) {
       return res.status(400).json({
         EM: "Dữ liệu không hợp lệ",
@@ -115,12 +116,18 @@ const get_monhoc_lop_hocki = async (req, res) => {
         DT: null,
       });
     }
-    let results = await select_lophoc_monhoc(MALOP, SOHOCKI, MAHKNK);
+    let results = await select_lophoc_monhoc(
+      MALOP,
+      SOHOCKI,
+      MAHKNK,
+      TEN_NAM_HOC
+    );
 
     return res.status(200).json({
       EM: results.EM,
       EC: results.EC,
       DT: results.DT,
+      DT_2: results.DT_2,
     });
   } catch (error) {
     console.log(error);
