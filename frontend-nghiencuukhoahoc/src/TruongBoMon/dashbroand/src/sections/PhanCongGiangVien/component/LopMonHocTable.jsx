@@ -38,6 +38,7 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
   const handleRowClick = (index, row) => {
     setSelectedRow(row);
     setOpen(true);
+    console.log("check row", row);
     setIndexSelect(index);
   };
 
@@ -82,10 +83,19 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
     setSelectedRow(updatedTeacher); // Cập nhật selectedRow
     setSearchEmail(""); // Reset ô tìm kiếm sau khi chọn giảng viên
     setSuggestedTeachers([]); // Xóa danh sách gợi ý sau khi chọn
-
+    console.log("teacher", teacher);
     handleUpdateGiangVien(updatedTeacher, indexSelect); // `index` là chỉ số của hàng muốn cập nhật
   };
+  // Hàm xử lý khi hover vào một giảng viên
+  const handleHoverTeacher = (teacher) => {
+    const updatedTeacher = {
+      ...selectedRow,
+      TENGV: teacher.TENGV,
+      MAGV: teacher.MAGV,
+    };
 
+    setSelectedRow(updatedTeacher); // Cập nhật selectedRow khi hover
+  };
   return (
     <>
       <TableContainer component={Paper}>
@@ -176,8 +186,9 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
       >
         <DialogTitle>Thông Tin Giảng Viên</DialogTitle>
         <DialogContent>
+          {" "}
           {selectedRow && (
-            <>
+            <div style={{ flex: 1 }}>
               <p>
                 <strong>Mã Giảng Viên:</strong> {selectedRow.MAGV}
               </p>
@@ -188,46 +199,60 @@ const LopMonHocTable = ({ data, handleUpdateGiangVien }) => {
                 <strong>Số Giờ Đã Phân Công:</strong>{" "}
                 {selectedRow.TONG_SO_GIO || "Chưa có"}
               </p>
-              <div style={{ width: "300px", position: "relative" }}>
-                <Form.Control
-                  type="text"
-                  placeholder="Tìm kiếm giảng viên theo email"
-                  value={searchEmail}
-                  onChange={handleSearch}
-                />
-                {suggestedTeachers.length > 0 && (
-                  <div
-                    ref={suggestionsRef}
-                    style={{
-                      position: "absolute",
-                      zIndex: 10,
-                      maxHeight: "400px",
-                      overflowY: "auto",
-                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
-                      width: "100%",
-                      backgroundColor: "white",
-                    }}
-                  >
-                    {suggestedTeachers.map((teacher) => (
-                      <div
-                        key={teacher.id}
-                        onClick={() => handleSelectTeacher(teacher)}
-                        className="suggestion-item"
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "8px 16px",
-                          cursor: "pointer", // Thêm con trỏ để thể hiện đây là phần tử có thể nhấp
-                        }}
-                      >
-                        {teacher.TENGV}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
+
+              {/* Bạn có thể thêm các trường thông tin khác tại đây */}
+            </div>
           )}
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
+            {/* Hiển thị thông tin giảng viên bên phải input */}
+
+            <div
+              style={{
+                width: "300px",
+                position: "relative",
+                marginRight: "20px",
+              }}
+            >
+              {/* Ô input và danh sách gợi ý */}
+              <Form.Control
+                type="text"
+                placeholder="Tìm kiếm giảng viên theo email"
+                value={searchEmail}
+                onChange={handleSearch}
+              />
+              {suggestedTeachers.length > 0 && (
+                <div
+                  ref={suggestionsRef}
+                  style={{
+                    position: "absolute",
+                    zIndex: 10,
+                    maxHeight: "400px",
+                    overflowY: "auto",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
+                    width: "100%",
+                    backgroundColor: "white",
+                  }}
+                >
+                  {suggestedTeachers.map((teacher) => (
+                    <div
+                      key={teacher.id}
+                      onClick={() => handleSelectTeacher(teacher)}
+                      onMouseEnter={() => handleHoverTeacher(teacher)} // Thêm sự kiện onMouseEnter
+                      className="suggestion-item"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "8px 16px",
+                        cursor: "pointer", // Thêm con trỏ để thể hiện đây là phần tử có thể nhấp
+                      }}
+                    >
+                      {teacher.TENGV}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
