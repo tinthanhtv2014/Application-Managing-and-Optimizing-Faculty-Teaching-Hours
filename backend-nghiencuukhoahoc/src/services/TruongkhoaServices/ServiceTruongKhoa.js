@@ -123,11 +123,10 @@ ORDER BY
 };
 
 const timkiem_email_taikhoan = async (TENGV) => {
-
   try {
     const connection = await pool.getConnection();
     const query =
-      "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,taikhoan.TENDANGNHAP FROM giangvien ,taikhoan, khoa as k , bomon WHERE k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and taikhoan.MAGV = giangvien.MAGV and giangvien.TENGV LIKE ? LIMIT 5";
+      "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,sum(chitietphancong.TONG_SO_GIO) as TONG_SO_GIO_DAY ,khunggiochuan.*,taikhoan.TENDANGNHAP FROM giangvien ,taikhoan,chon_khung,khunggiochuan, khoa as k , bomon,chitietphancong,bangphancong WHERE chon_khung.MAGV = giangvien.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and bangphancong.MAGV = giangvien.MAGV and k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and taikhoan.MAGV = giangvien.MAGV and chon_khung.MAGV is not null and giangvien.TENGV LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [`%${TENGV}%`]);
     connection.release();
     if (rows.length > 0) {
@@ -154,7 +153,6 @@ const timkiem_email_taikhoan = async (TENGV) => {
 };
 
 const timkiem_email_taikhoan_ngoaitruong = async (TENGV) => {
-
   try {
     const connection = await pool.getConnection();
     const query =
