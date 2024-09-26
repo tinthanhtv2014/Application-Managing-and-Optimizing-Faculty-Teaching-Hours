@@ -334,7 +334,7 @@ const IndexPhanCongGiangVien = () => {
             </FormControl>
           </Box>
         </Grid>{" "}
-        {isOpenXemPhanCong === "Thực Hiện Phân Công" ? (
+        {/* {isOpenXemPhanCong === "Thực Hiện Phân Công" ? (
           <>
             {" "}
             <Grid item xs={12} md={2}>
@@ -354,7 +354,7 @@ const IndexPhanCongGiangVien = () => {
           </>
         ) : (
           <></>
-        )}
+        )} */}
       </Grid>
 
       {/* -----------TABLE SHOW GIANGVIEN----------- */}
@@ -377,7 +377,7 @@ const IndexPhanCongGiangVien = () => {
                 {" "}
                 <Grid item xs={12} md={3}>
                   {" "}
-                  <Box sx={{ mt: 3 }}>Gợi Ý</Box>
+                  {/* <Box sx={{ mt: 3 }}>Gợi Ý</Box> */}
                 </Grid>{" "}
               </>
             ) : (

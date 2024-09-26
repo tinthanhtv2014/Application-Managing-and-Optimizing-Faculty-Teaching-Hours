@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const ComponentExcelChonKhung = () => {
+const ComponentExcelChuyenMonGV = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const auth = Cookies.get("accessToken");
@@ -93,7 +93,7 @@ const ComponentExcelChonKhung = () => {
         onClick={handleAddUser}
         sx={{ ml: 2 }}
       >
-        Thêm Danh Sách Chọn Khung
+        Thêm Danh Sách Chuyên Môn Giảng Viên
       </Button>
 
       {data.length > 0 && (
@@ -151,4 +151,4 @@ const ComponentExcelChonKhung = () => {
   );
 };
 
-export default ComponentExcelChonKhung;
+export default ComponentExcelChuyenMonGV;

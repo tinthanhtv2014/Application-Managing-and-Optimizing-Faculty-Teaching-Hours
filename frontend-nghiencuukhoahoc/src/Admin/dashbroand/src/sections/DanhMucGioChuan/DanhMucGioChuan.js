@@ -14,6 +14,7 @@ import ModalChucVu from "./modals/ChucVuGV";
 import HockyNienKhoaModal from "./modals/HocKiNienKhoa";
 import ModalChiTietPhanCong from "./modals/ChiTietPhanCong";
 import FakeChonKhung from "./modals/FakeChonKhung";
+import FakeChuyenMonGV from "./modals/FakeChuyenMonGV";
 const DanhMucGioChuan = () => {
   const [open, setOpen] = useState({
     quyDinh: false,
@@ -29,6 +30,7 @@ const DanhMucGioChuan = () => {
     hocKiNienKhoa: false,
     chiTietPhanCong: false,
     fakeChonKhung: false,
+    fakeChuyenMonGV: false,
   });
 
   const handleClickOpen = (modal) => {
@@ -161,6 +163,15 @@ const DanhMucGioChuan = () => {
             >
               FakeChonKhung
             </Button>
+          </Col>{" "}
+          <Col md={4} sm={6} xs={12} className="mb-3">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleClickOpen("fakeChuyenMonGV")}
+            >
+              FakeChuyenMonGV
+            </Button>
           </Col>
         </Row>
         <QuyDinhModal
@@ -214,6 +225,10 @@ const DanhMucGioChuan = () => {
         <FakeChonKhung
           open={open.fakeChonKhung}
           handleClose={() => handleClose("fakeChonKhung")}
+        />{" "}
+        <FakeChuyenMonGV
+          open={open.fakeChuyenMonGV}
+          handleClose={() => handleClose("fakeChuyenMonGV")}
         />{" "}
       </Container>
     </>
