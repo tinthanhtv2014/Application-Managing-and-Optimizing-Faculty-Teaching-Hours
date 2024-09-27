@@ -4,7 +4,11 @@ const moment = require("moment");
 
 const selectAll_hockinienkhoa = async () => {
   try {
-    let [results1, fields1] = await pool.execute(`select * from hockynienkhoa`);
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM hockynienkhoa 
+       ORDER BY MAHKNK DESC`
+    );
+
     return {
       EM: " xem thông tin học kì niên khóa thành công",
       EC: 1,

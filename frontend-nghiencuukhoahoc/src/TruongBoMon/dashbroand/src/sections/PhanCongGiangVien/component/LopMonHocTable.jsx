@@ -18,8 +18,10 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { Form, Dropdown } from "react-bootstrap";
 import "../style/StylePhanCong.scss";
+import AddIcon from "@mui/icons-material/Add";
 import CookiesAxios from "../../CookiesAxios";
 const LopMonHocTable = ({
   data,
@@ -129,11 +131,9 @@ const LopMonHocTable = ({
               data.map((row, index) => (
                 <TableRow
                   key={index}
-                  onClick={() => handleRowClick(index, row)}
                   sx={{
                     backgroundColor:
                       selectedRow === row ? "#f0f0f0" : "inherit",
-                    cursor: "pointer",
                   }}
                   title={
                     row.TONG_SO_GIO
@@ -161,6 +161,20 @@ const LopMonHocTable = ({
                     }}
                   >
                     {row.TONG_SO_GIO}
+                  </TableCell>
+                  <TableCell>
+                    <EditIcon
+                      onClick={() => handleRowClick(index, row)}
+                      sx={{
+                        cursor: "pointer",
+                        transition:
+                          "transform 0.2s ease-in-out, color 0.2s ease-in-out", // Tạo hiệu ứng mượt cho cả phóng to và thay đổi màu
+                        ":hover": {
+                          transform: "scale(1.2)", // Phóng to biểu tượng khi hover
+                          color: "#6092db", // Đổi màu biểu tượng khi hover
+                        },
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))
@@ -266,6 +280,82 @@ const LopMonHocTable = ({
               )}
             </div>
           </div>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Mã Giảng Viên</TableCell>
+                <TableCell align="center">Tên Giảng Viên</TableCell>
+                <TableCell align="center">
+                  Tổng Số Giờ Đã Được Phân Công
+                </TableCell>
+                <TableCell align="center">Số Giờ Giảng Dạy Chuẩn</TableCell>
+                <TableCell align="center">Chuyên Môn Lĩnh Vực</TableCell>
+
+                <TableCell align="center"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Array.isArray(data) && data.length > 0 ? (
+                data.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      backgroundColor:
+                        selectedRow === row ? "#f0f0f0" : "inherit",
+                    }}
+                    title={
+                      row.TONG_SO_GIO
+                        ? `Giảng Viên Đang Có Số Giờ Là ${row.TONG_SO_GIO} giờ`
+                        : `Giảng Viên Chưa Được Phân Công`
+                    }
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.MALOP}
+                    </TableCell>
+                    <TableCell align="center">{row.TENMONHOC}</TableCell>
+                    <TableCell align="center">{row.SOTHUTUHOCKI}</TableCell>
+                    <TableCell align="center">
+                      {calculateTeachingHours(
+                        row.SISO,
+                        row.SOTINCHILYTHUYET,
+                        row.SOTINCHITHUCHANH
+                      )}
+                    </TableCell>
+                    <TableCell align="center">{row.TENGV}</TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: row.TONG_SO_GIO < 500 ? "green" : "red",
+                      }}
+                    >
+                      {row.TONG_SO_GIO}
+                    </TableCell>
+                    <TableCell>
+                      <AddIcon
+                        onClick={() => handleSelectTeacher(index, row)}
+                        // onMouseEnter={() => handleHoverTeacher(teacher)}
+                        sx={{
+                          cursor: "pointer",
+                          transition:
+                            "transform 0.2s ease-in-out, color 0.2s ease-in-out", // Tạo hiệu ứng mượt cho cả phóng to và thay đổi màu
+                          ":hover": {
+                            transform: "scale(1.2)", // Phóng to biểu tượng khi hover
+                            color: "#6092db", // Đổi màu biểu tượng khi hover
+                          },
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    Không có dữ liệu
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

@@ -44,6 +44,7 @@ const IndexPhanCongGiangVien = () => {
   const [isOpenXemPhanCong, setIsOpenXemPhanCong] = useState(
     "Thực Hiện Phân Công"
   );
+  const [SelectKhoaNamHoc, setSelectKhoaNamHoc] = useState("");
 
   const [isOpenButton, setIsOpenButton] = useState(false);
   const [isOpenSwap, setIsOpenSwap] = useState(true);
@@ -66,6 +67,19 @@ const IndexPhanCongGiangVien = () => {
     // console.log("check useEffect");
     fetchDataMonHoc_byLop();
   }, [select_Lop, select_HocKiNienKhoa]);
+  // useEffect để tự động set lớp mới nhất khi khóa được chọn
+  useEffect(() => {
+    if (SelectKhoaNamHoc) {
+      const lopTheoKhoa = filterLopByKhoa(SelectKhoaNamHoc);
+      if (lopTheoKhoa.length > 0) {
+        // Sắp xếp danh sách lớp theo thứ tự cũ nhất
+        const lopCuNhat = lopTheoKhoa.sort((a, b) => {
+          return a.MALOP.localeCompare(b.MALOP); // Sắp xếp lớp theo mã lớp từ cũ nhất
+        })[0]; // Lấy lớp cũ nhất
+        setSelect_Lop(lopCuNhat.MALOP); // Set giá trị lớp cũ nhất
+      }
+    }
+  }, [SelectKhoaNamHoc]);
 
   const fetchDataGV = async (taikhoan) => {
     try {
@@ -133,6 +147,7 @@ const IndexPhanCongGiangVien = () => {
       );
 
       if (response_Lop.data.EC === 1) {
+        console.log(response_Lop.data.DT);
         setData_Lop(response_Lop.data.DT);
         setSelect_Lop(response_Lop.data.DT[0].MALOP);
       }
@@ -157,22 +172,7 @@ const IndexPhanCongGiangVien = () => {
       console.error("Error fetching BoMon data:", error);
     }
   };
-  const handlePhanCong = async (id) => {
-    if (id) {
-      try {
-        const response = await CookiesAxios.post(
-          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/danhsach/monhoc/giangvien`,
-          { MAMONHOC: id }
-        );
 
-        if (response.data.EC === 1) {
-          setData_ListGVDaChonKhung(response.data.DT);
-        }
-      } catch (error) {
-        console.error("Error fetching BoMon data:", error);
-      }
-    }
-  };
   const handleChange = (event) => {
     setIsOpenSwap(event.target.checked);
   };
@@ -243,6 +243,26 @@ const IndexPhanCongGiangVien = () => {
     );
   };
 
+  const getKhoaFromMALOP = (malop) => {
+    const khoa = malop.match(/\d{2}/); // Lấy 2 chữ số đầu tiên
+    return khoa ? khoa[0] : null;
+  };
+
+  // Hàm xử lý khi thay đổi khóa
+  const handleKhoaChange = (event) => {
+    setSelectKhoaNamHoc(event.target.value); // Cập nhật khóa được chọn
+  };
+
+  // Lọc danh sách lớp theo khóa
+  const filterLopByKhoa = (khoa) => {
+    return data_Lop.filter((lop) => lop.MALOP.includes(khoa));
+  };
+
+  // Lấy danh sách khóa học duy nhất từ data_Lop
+  const khoaHocList = Array.from(
+    new Set(data_Lop.map((lop) => getKhoaFromMALOP(lop.MALOP)))
+  );
+
   return (
     <>
       <Grid container spacing={2}>
@@ -266,6 +286,68 @@ const IndexPhanCongGiangVien = () => {
                 <MenuItem value="Thực Hiện Phân Công">
                   Thực Hiện Phân Công
                 </MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>{" "}
+        {/* Danh Sách Lớp */}
+        <Grid item xs={12} md={2}>
+          <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
+            <FormControl fullWidth className="profile-email-input">
+              <InputLabel id="select-label-lop" shrink={!!SelectKhoaNamHoc}>
+                Danh Sách Khóa
+              </InputLabel>
+              <Select
+                labelId="select-label-lop"
+                id="lop-select"
+                name="DANHSACHKHOA"
+                label="Danh Sách Khóa"
+                value={SelectKhoaNamHoc}
+                onChange={handleKhoaChange}
+                variant="outlined"
+              >
+                {khoaHocList && khoaHocList.length > 0 ? (
+                  khoaHocList.map((khoa, index) => (
+                    <MenuItem key={index} value={khoa}>
+                      Khóa {khoa}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Không có dữ liệu khóa...
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
+            <FormControl fullWidth className="profile-email-input">
+              <InputLabel id="select-label-lop" shrink={!!select_Lop}>
+                Danh Sách Lớp
+              </InputLabel>
+              <Select
+                labelId="select-label-lop"
+                id="lop-select"
+                name="DANHSACHLOP"
+                label="Danh Sách Lớp"
+                value={select_Lop}
+                onChange={(e) => setSelect_Lop(e.target.value)}
+                variant="outlined"
+              >
+                {filterLopByKhoa(SelectKhoaNamHoc) &&
+                filterLopByKhoa(SelectKhoaNamHoc).length > 0 ? (
+                  filterLopByKhoa(SelectKhoaNamHoc).map((lop, index) => (
+                    <MenuItem key={index} value={lop.MALOP}>
+                      {lop.MALOP}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Không có dữ liệu lớp...
+                  </MenuItem>
+                )}
               </Select>
             </FormControl>
           </Box>
@@ -302,38 +384,6 @@ const IndexPhanCongGiangVien = () => {
             </FormControl>
           </Box>
         </Grid>
-        {/* Danh Sách Lớp */}
-        <Grid item xs={12} md={2}>
-          <Box sx={{ maxWidth: { md: 320, xs: "100%" } }}>
-            <FormControl fullWidth className="profile-email-input">
-              <InputLabel id="select-label-lop" shrink={!!select_Lop}>
-                Danh Sách Lớp
-              </InputLabel>
-              <Select
-                labelId="select-label-lop"
-                id="lop-select"
-                name="DANHSACHLOP"
-                label="Danh Sách Lớp"
-                value={select_Lop}
-                defaultValue={select_Lop}
-                onChange={(e) => setSelect_Lop(e.target.value)}
-                variant="outlined"
-              >
-                {data_Lop && data_Lop.length > 0 ? (
-                  data_Lop.map((lop, index) => (
-                    <MenuItem key={index} value={lop.MALOP}>
-                      {lop.MALOP}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem value="" disabled>
-                    Không có dữ liệu lớp...
-                  </MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>{" "}
         {/* {isOpenXemPhanCong === "Thực Hiện Phân Công" ? (
           <>
             {" "}
