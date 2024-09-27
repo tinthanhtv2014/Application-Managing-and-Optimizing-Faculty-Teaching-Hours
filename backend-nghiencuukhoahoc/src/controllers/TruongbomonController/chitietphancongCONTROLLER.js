@@ -4,6 +4,7 @@ const {
   xem_chitietphancong_giangvien,
   xem_chitietphancong_lop,
   xem_chitietphancong_banthan,
+  xem_giophancong_giangvienkhac,
 } = require("../../services/TruongbomonServices/CRUDChitietphancong");
 
 const selectChitietphancongController_giangvien = async (req, res) => {
@@ -19,6 +20,34 @@ const selectChitietphancongController_giangvien = async (req, res) => {
       });
     }
     let results = await xem_chitietphancong_giangvien(MAHKNK);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      EM: "lỗi controller createChitietphancongExcelController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+const select_giophancong_giangvienkhac_CONTROLLER = async (req, res) => {
+  try {
+    const MAHKNK = req.body.MAHKNK;
+
+    if (!MAHKNK) {
+      return res.status(400).json({
+        EM: "Học kì niên khóa bị rỗng",
+        EC: 400,
+        DT: null,
+      });
+    }
+    let results = await xem_giophancong_giangvienkhac(MAHKNK);
 
     return res.status(200).json({
       EM: results.EM,
@@ -140,4 +169,5 @@ module.exports = {
   selectChitietphancongController_giangvien,
   selectChitietphancongController_lop,
   Xem_Chitietphancong_banthan_Controller,
+  select_giophancong_giangvienkhac_CONTROLLER,
 };

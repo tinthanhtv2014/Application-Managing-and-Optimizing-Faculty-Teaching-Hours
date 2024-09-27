@@ -28,6 +28,7 @@ const {
   selectChitietphancongController_giangvien,
   selectChitietphancongController_lop,
   Xem_Chitietphancong_banthan_Controller,
+  select_giophancong_giangvienkhac_CONTROLLER,
 } = require("../../controllers/TruongbomonController/chitietphancongCONTROLLER");
 
 const { checkUserJWT } = require("../../middlewares/JWTAction");
@@ -118,6 +119,12 @@ const CRUDgiangvien_CNTT = (app) => {
     "/phancong/tudong/giangvien",
     checkUserJWT,
     phancongtudong_giangvien_Controller
+  );
+
+  router.post(
+    "/xem/phancong/gio/giangvien",
+
+    select_giophancong_giangvienkhac_CONTROLLER
   );
 
   return app.use("/api/v1/truongbomon/giangvien", router);

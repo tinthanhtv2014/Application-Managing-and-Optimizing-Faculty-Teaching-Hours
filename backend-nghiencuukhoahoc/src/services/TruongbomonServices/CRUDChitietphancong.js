@@ -345,10 +345,57 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
   }
 };
 
+const xem_giophancong_giangvienkhac = async (MAHKNK) => {
+  try {
+    let [results_chitietphancong_data] = await pool.execute(
+      `SELECT giangvien.MAGV,giangvien.TENGV, khunggiochuan.GIOGIANGDAY_CHUAN,sum(chitietphancong.TONG_SO_GIO) as TONG_SO_GIO_DAY
+  FROM hockynienkhoa
+  LEFT JOIN bangphancong ON hockynienkhoa.MAHKNK = bangphancong.MAHKNK
+  LEFT JOIN chitietphancong ON bangphancong.MAPHANCONG = chitietphancong.MAPHANCONG
+  LEFT JOIN monhoc ON chitietphancong.MAMONHOC = monhoc.MAMONHOC
+  LEFT JOIN giangvien ON bangphancong.MAGV = giangvien.MAGV
+  LEFT JOIN chon_khung ON giangvien.MAGV = chon_khung.MAGV
+  LEFT JOIN khunggiochuan ON chon_khung.MAKHUNG = khunggiochuan.MAKHUNG
+  LEFT JOIN lop ON chitietphancong.MALOP = lop.MALOP
+  LEFT JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC
+  WHERE hockynienkhoa.MAHKNK = ?
+  and chon_khung.MAGV is not null
+  group by giangvien.TENGV;
+  `,
+      [MAHKNK]
+    );
+
+    let results = [];
+    for (let i = 0; i < results_chitietphancong_data.length; i++) {
+      results.push({
+        MAGV: results_chitietphancong_data[i].MAGV,
+        TENGV: results_chitietphancong_data[i].TENGV,
+        GIOGIANGDAY_CHUAN:
+          results_chitietphancong_data[i].GIOGIANGDAY_CHUAN + 300,
+        TONG_SO_GIO_DAY: results_chitietphancong_data[i].TONG_SO_GIO_DAY,
+      });
+    }
+
+    return {
+      EM: "xem thông tin phân công thành công",
+      EC: 1,
+      DT: results,
+    };
+  } catch (error) {
+    console.log("Lỗi services createchitietphancong_excel", error);
+    return {
+      EM: "Lỗi services createTaiKhoanExcel",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   createchitietphancong_excel,
   Dangky_chitietphancong,
   xem_chitietphancong_giangvien,
   xem_chitietphancong_lop,
   xem_chitietphancong_banthan,
+  xem_giophancong_giangvienkhac,
 };

@@ -125,9 +125,10 @@ ORDER BY
 const timkiem_email_taikhoan = async (TENGV, MANAMHOC) => {
   try {
     console.log(TENGV);
+    console.log(MANAMHOC);
     const connection = await pool.getConnection();
     const query =
-      "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV,sum(chitietphancong.TONG_SO_GIO) as TONG_SO_GIO_DAY ,khunggiochuan.*,taikhoan.TENDANGNHAP FROM giangvien,namhoc ,taikhoan,chon_khung,khunggiochuan, khoa as k , bomon,chitietphancong,bangphancong WHERE namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAGV = giangvien.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and chitietphancong.MAPHANCONG = bangphancong.MAPHANCONG and bangphancong.MAGV = giangvien.MAGV and k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and taikhoan.MAGV = giangvien.MAGV and chon_khung.MAGV is not null and namhoc.TENNAMHOC = ? and giangvien.TENGV LIKE ? LIMIT 5";
+      "SELECT k.TENKHOA, bomon.TENBOMON, giangvien.MAGV, giangvien.TENGV ,khunggiochuan.*,taikhoan.TENDANGNHAP FROM giangvien,namhoc ,taikhoan,chon_khung,khunggiochuan, khoa as k , bomon,bangphancong WHERE namhoc.MANAMHOC = chon_khung.MANAMHOC and chon_khung.MAGV = giangvien.MAGV and chon_khung.MAKHUNG = khunggiochuan.MAKHUNG and k.MAKHOA = bomon.MAKHOA and bomon.MABOMON = giangvien.MABOMON and taikhoan.MAGV = giangvien.MAGV and chon_khung.MAGV is not null and namhoc.TENNAMHOC = ? and giangvien.TENGV LIKE ? LIMIT 5";
     const [rows] = await connection.execute(query, [
       `${MANAMHOC}`,
       `%${TENGV}%`,
