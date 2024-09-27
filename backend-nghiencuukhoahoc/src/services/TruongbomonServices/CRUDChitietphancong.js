@@ -284,9 +284,10 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
   LEFT JOIN hinhthucdanhgia ON bao_cao_ket_thuc_mon.MADANHGIAKETTHUC = hinhthucdanhgia.MADANHGIAKETTHUC
   LEFT JOIN namhoc ON namhoc.MANAMHOC = chon_khung.MANAMHOC
   WHERE namhoc.TENNAMHOC = ?
-  AND giangvien.MAGV = ?;
+  AND giangvien.MAGV = ?
+  and hockynienkhoa.MAHKNK = ?;
   `,
-        [results_namhoc[0].TENNAMHOC, MAGV]
+        [results_namhoc[0].TENNAMHOC, MAGV, MAHKNK]
       );
     }
 
@@ -328,6 +329,7 @@ const xem_chitietphancong_banthan = async (MAGV, MAHKNK) => {
       //   monHoc.TENGV.push({ MAGV: dong.MAGV, TENGV: dong.TENGV });
       // }
     });
+
     return {
       EM: "xem thông tin phân công thành công",
       EC: 1,

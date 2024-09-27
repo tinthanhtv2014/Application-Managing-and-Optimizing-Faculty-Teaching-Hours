@@ -4,7 +4,11 @@ const moment = require("moment");
 
 const selectAll_hockinienkhoa = async () => {
   try {
-    let [results1, fields1] = await pool.execute(`select * from hockynienkhoa`);
+    let [results1, fields1] = await pool.execute(
+      `SELECT * FROM hockynienkhoa 
+       ORDER BY MAHKNK DESC`
+    );
+
     return {
       EM: " xem thông tin học kì niên khóa thành công",
       EC: 1,
@@ -54,83 +58,6 @@ const Sevicel_DongBoNamHoc_HocKy = async () => {
     console.error("Lỗi services đồng bộ: ", error);
     return {
       EM: "Lỗi services đồng bộ",
-      EC: -1,
-      DT: [],
-    };
-  }
-};
-
-const create_hockinienkhoa_ver2 = async (dataHockinienkhoa) => {
-  try {
-    // Kiểm tra xem năm học đã tồn tại hay chưa
-    let [results_namhoc] = await pool.execute(
-      `SELECT * FROM namhoc WHERE TENNAMHOC = ?`,
-      [dataHockinienkhoa.TEN_NAM_HOC]
-    );
-
-    // Nếu năm học chưa tồn tại, thêm vào bảng namhoc
-    if (results_namhoc.length === 0) {
-      await pool.execute(`INSERT INTO namhoc (TENNAMHOC) VALUES (?)`, [
-        dataHockinienkhoa.TEN_NAM_HOC,
-      ]);
-    }
-
-    // Kiểm tra xem học kỳ trong năm học đó đã có 2 học kỳ hay chưa
-    let [existingHocKy] = await pool.execute(
-      `SELECT * FROM hockynienkhoa WHERE TEN_NAM_HOC = ?`,
-      [dataHockinienkhoa.TEN_NAM_HOC]
-    );
-
-    if (existingHocKy.length >= 2) {
-      Sevicel_DongBoNamHoc_HocKy();
-      const results_data = await selectAll_hockinienkhoa();
-      return {
-        EM: "Học kì niên khóa này đã tồn tại đủ 2 học kỳ.",
-        EC: 0,
-        DT: results_data,
-      };
-    }
-
-    // Kiểm tra nếu học kỳ hiện tại đã tồn tại
-    let hocKyTonTai = existingHocKy.some(
-      (item) => item.TENHKNK === dataHockinienkhoa.TENHKNK
-    );
-
-    if (hocKyTonTai) {
-      Sevicel_DongBoNamHoc_HocKy();
-      const results_data = await selectAll_hockinienkhoa();
-      return {
-        EM: "Học kỳ này đã tồn tại.",
-        EC: 0,
-        DT: results_data,
-      };
-    }
-
-    // Thêm học kỳ mới
-    const ngayBatDauNienKhoa = moment(
-      dataHockinienkhoa.NGAYBATDAUNIENKHOA
-    ).format("YYYY-MM-DD");
-    await pool.execute(
-      `INSERT INTO hockynienkhoa (TENHKNK, TEN_NAM_HOC, NGAYBATDAUNIENKHOA) VALUES (?, ?, ?)`,
-      [
-        dataHockinienkhoa.TENHKNK,
-        dataHockinienkhoa.TEN_NAM_HOC,
-        ngayBatDauNienKhoa,
-      ]
-    );
-
-    // Lấy danh sách tất cả các học kỳ niên khóa để trả về
-    Sevicel_DongBoNamHoc_HocKy();
-    const results_data = await selectAll_hockinienkhoa();
-    return {
-      EM: "Tạo học kỳ niên khóa thành công.",
-      EC: 1,
-      DT: results_data.DT,
-    };
-  } catch (error) {
-    console.log("error", error);
-    return {
-      EM: "Lỗi khi tạo học kỳ niên khóa.",
       EC: -1,
       DT: [],
     };
@@ -304,7 +231,7 @@ const delete_hockinienkhoa = async (MAHKNK) => {
 module.exports = {
   selectAll_hockinienkhoa,
   create_hockinienkhoa,
-  create_hockinienkhoa_ver2,
+
   update_hockinienkhoa,
   delete_hockinienkhoa,
 };

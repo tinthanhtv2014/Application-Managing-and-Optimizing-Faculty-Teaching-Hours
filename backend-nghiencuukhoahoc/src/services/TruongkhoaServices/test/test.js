@@ -589,19 +589,24 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
           : (DO_UU_TIEN_PCGVTD += 25);
 
         // Kiểm tra xem giảng viên đã từng dạy lớp này chưa
-        let exists = data_GV_TungDay.some(
-          (giangvien) => giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
-        );
+        let exists
+        if (data_AutoPhanCongFor.length > 0) {
+          exists = data_GV_TungDay.some(
+            (giangvien) => giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
+          );
+        }
 
         // Tăng điểm ưu tiên nếu giảng viên đã từng dạy
         exists ? (DO_UU_TIEN_PCGVTD += 10) : (DO_UU_TIEN_PCGVTD += 20);
 
         // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay
-        countLop = data_GV_TungDay.reduce((acc, giangvien) => {
-          return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
-            ? acc + 1
-            : acc;
-        }, 0);
+        if (data_AutoPhanCongFor.length > 0) {
+          countLop = data_GV_TungDay.reduce((acc, giangvien) => {
+            return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
+              ? acc + 1
+              : acc;
+          }, 0);
+        }
 
         // Nếu giảng viên xuất hiện nhiều hơn 2 lần, đặt lại ưu tiên
         // console.log("countLop: ", countLop)
@@ -612,13 +617,16 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
         }
 
         // Đếm số lần giảng viên xuất hiện trong data_GV_TungDay_HocKy
-        if (data_GV_TungDay_HocKy.length > 0) {
-          countHocKy = data_GV_TungDay_HocKy.reduce((acc, giangvien) => {
-            return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
-              ? acc + (acc < 1 ? 1 : acc)
-              : acc;
-          }, 0);
+        if (data_AutoPhanCongFor.length > 0) {
+          if (data_GV_TungDay_HocKy.length > 0) {
+            countHocKy = data_GV_TungDay_HocKy.reduce((acc, giangvien) => {
+              return giangvien.MAGV === data_AutoPhanCongFor[0].MAGV_PCGVTD
+                ? acc + (acc < 1 ? 1 : acc)
+                : acc;
+            }, 0);
+          }
         }
+
         // console.log("data_GV_TungDay_HocKy.lengh: ", data_GV_TungDay_HocKy.length)
         // console.log("data_AutoPhanCongFor.lengh: ", data_AutoPhanCongFor.length)
         // console.log("countHocKy: ", countHocKy)
