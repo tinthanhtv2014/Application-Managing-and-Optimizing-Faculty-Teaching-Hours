@@ -134,6 +134,12 @@ const LopMonHocTable = ({
                   sx={{
                     backgroundColor:
                       selectedRow === row ? "#f0f0f0" : "inherit",
+                    ":hover": {
+                      backgroundColor: "#f0f2f4", // Màu nền giảm sáng khi hover
+                      "& .MuiTableCell-root": {
+                        color: "#3032ff", // Màu chữ giảm sáng khi hover
+                      },
+                    },
                   }}
                   title={
                     row.TONG_SO_GIO
@@ -168,10 +174,10 @@ const LopMonHocTable = ({
                       sx={{
                         cursor: "pointer",
                         transition:
-                          "transform 0.2s ease-in-out, color 0.2s ease-in-out", // Tạo hiệu ứng mượt cho cả phóng to và thay đổi màu
+                          "transform 0.2s ease-in-out, color 0.2s ease-in-out",
                         ":hover": {
-                          transform: "scale(1.2)", // Phóng to biểu tượng khi hover
-                          color: "#6092db", // Đổi màu biểu tượng khi hover
+                          transform: "scale(1.2)",
+                          color: "#6092db",
                         },
                       }}
                     />
