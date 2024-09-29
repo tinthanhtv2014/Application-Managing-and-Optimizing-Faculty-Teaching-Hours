@@ -46,6 +46,7 @@ const LopMonHocTable = ({
     setOpen(true);
     console.log("check row", row);
     setIndexSelect(index);
+    fetchTableGVModal();
   };
 
   const handleClose = () => {
@@ -110,6 +111,27 @@ const LopMonHocTable = ({
     };
 
     setSelectedRow(updatedTeacher); // Cập nhật selectedRow khi hover
+  };
+  const fetchTableGVModal = async () => {
+    try {
+      if (select_HocKiNienKhoa) {
+        // Safer check
+        // Gọi API khi có hơn 2 ký tự
+        const response = await CookiesAxios.post(
+          `${process.env.REACT_APP_URL_SERVER}/api/v1/truongbomon/giangvien/xem/phancong/gio/giangvien`,
+          {
+            MAHKNK: select_HocKiNienKhoa.MAHKNK,
+          }
+        );
+        console.log("Dữ liệu tìm kiếm:", response.data);
+        if (response.data.EC === 1) {
+        }
+      } else {
+        setSuggestedTeachers([]); // Reset danh sách gợi ý nếu ký tự ít hơn 3
+      }
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm giảng viên:", error);
+    }
   };
   return (
     <>
