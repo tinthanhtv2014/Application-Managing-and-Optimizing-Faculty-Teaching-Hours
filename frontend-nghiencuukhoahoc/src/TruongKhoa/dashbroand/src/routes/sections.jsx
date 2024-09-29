@@ -65,17 +65,6 @@ export default function Router() {
         </DashboardLayout>
       ),
     },
-
-    // {
-    //   path: "/Dang-ky-danh-muc",
-    //   element: (
-    //     <DashboardLayout>
-    //       <Suspense fallback={<div>Loading...</div>}>
-    //         <DangKyDanhMuc />
-    //       </Suspense>
-    //     </DashboardLayout>
-    //   ),
-    // },
     {
       path: "/dang-ky-danh-muc", // Thêm ký tự '*' vào cuối đường dẫn
       element: (

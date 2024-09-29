@@ -13,7 +13,7 @@ const ExcelReader = () => {
   });
   const navigate = useNavigate();
 
-  const handleAddUser = async () => {
+  const handleTestServces = async () => {
     if (!data) {
       toast.error("Chưa có dữ liệu excel");
       return;
@@ -21,7 +21,7 @@ const ExcelReader = () => {
     //api truyền dữ liệu excel về backend
     try {
       const response = await CookiesAxios.post(
-        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/test/tao/excel`,
+        `${process.env.REACT_APP_URL_SERVER}/api/v1/truongkhoa/test/python`,
         data,
         {
           headers: {
@@ -55,7 +55,7 @@ const ExcelReader = () => {
   return (
     <div>
       <input type="file" onChange={handleFileUpload} />
-      <button type="button" onClick={handleAddUser} className="btn btn-success">
+      <button type="button" onClick={handleTestServces} className="btn btn-success">
         Success
       </button>
       <table>

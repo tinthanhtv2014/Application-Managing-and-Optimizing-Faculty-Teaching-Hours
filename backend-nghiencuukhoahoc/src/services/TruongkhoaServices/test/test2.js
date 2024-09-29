@@ -1,4 +1,5 @@
 const pool = require("../../../config/database");
+const axios = require('axios');
 
 //đồng bộ năm học và học kỳ
 const Sevicel_DongBoNamHoc_HocKy = async () => {
@@ -38,6 +39,32 @@ const Sevicel_DongBoNamHoc_HocKy = async () => {
     }
 };
 
+const Sevicel_Training_RandomForest_Python = async () => {
+    try {
+        // Gọi API tới server Python (đúng route /api/hello)
+        const response = await axios.get('http://localhost:5000/api/hello'); // Đúng đường dẫn tới API Python
+
+        // Lấy dữ liệu từ response
+        const data = response.data;
+        console.log("Trả lời từ người AE Python: ", data);
+
+        return {
+            EM: "Success",
+            EC: 0,
+            DT: data, // Trả về dữ liệu từ API Python
+        };
+    } catch (error) {
+        console.error("Lỗi services Sevicel_RandomForest_Python: ", error);
+        return {
+            EM: "Lỗi services Sevicel_RandomForest_Python",
+            EC: -1,
+            DT: [],
+        };
+    }
+};
+
+
 module.exports = {
-    Sevicel_DongBoNamHoc_HocKy
+    Sevicel_DongBoNamHoc_HocKy,
+    Sevicel_Training_RandomForest_Python
 };

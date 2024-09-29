@@ -27,6 +27,11 @@ const navConfig = [
     path: '/Dang-ky-danh-muc',
     icon: icon('ic_user'),
   },
+  {
+    title: 'test',
+    path: '/test',
+    icon: icon('ic_user'),
+  },
 
 ];
 

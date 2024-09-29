@@ -9,7 +9,7 @@ def chao():
 
 @app.route('/api/hello', methods=['GET'])
 def hello():
-    return jsonify(message="Hello, World!")
+    return jsonify(message="Node gọi Python trả lời, lô lô lô!")
 
 # Chạy server
 if __name__ == '__main__':

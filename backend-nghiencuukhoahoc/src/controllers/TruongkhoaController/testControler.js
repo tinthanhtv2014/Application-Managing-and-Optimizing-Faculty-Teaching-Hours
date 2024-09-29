@@ -8,6 +8,11 @@ const {
   Sevicel_AutoPhanCong_Test,
 } = require("../../services/TruongkhoaServices/test/test");
 
+const {
+  Sevicel_DongBoNamHoc_HocKy,
+  Sevicel_Training_RandomForest_Python
+} = require("../../services/TruongkhoaServices/test/test2");
+
 const LoaiDanhMucExcelController = async (req, res) => {
   try {
     let data = req.body;
@@ -123,6 +128,26 @@ const PhanCongControllerTest = async (req, res) => {
   }
 };
 
+const Training_RandomForestControllerTest = async (req, res) => {
+  try {
+    console.log("Chạy Training_RandomForestControllerTest")
+    let results = await Sevicel_Training_RandomForest_Python();
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({
+      EM: "lỗi LoaiDanhMucExcelController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 module.exports = {
   LoaiDanhMucExcelController,
   DanhMucExcelController,
@@ -130,4 +155,6 @@ module.exports = {
   CoTyLeExcelController,
 
   PhanCongControllerTest,
+
+  Training_RandomForestControllerTest,
 };
