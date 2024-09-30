@@ -212,8 +212,8 @@ const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong) => {
             }
             console.log(`data_auto_phan_cong python:`, data_auto_phan_cong);
             return {
-                EM: response.data.EM,
-                EC: response.data.EC,
+                EM: "Đã nhận",
+                EC: 1,
                 DT: data_auto_phan_cong,
             };
         } else {

@@ -197,7 +197,7 @@ const IndexPhanCongGiangVien = () => {
         console.log("Phân công tự động thành công:", response.data);
         setData_MonHoc(response.data.DT.data);
       } else {
-        console.error("Phân công tự động thất bại:", response.data.EM);
+        console.error("Phân công tự động thất bại:", response.data);
         toast.error("Đã xảy ra lỗi, vui lòng liên hệ chúng tôi");
       }
     } catch (error) {
@@ -337,7 +337,7 @@ const IndexPhanCongGiangVien = () => {
                 variant="outlined"
               >
                 {filterLopByKhoa(SelectKhoaNamHoc) &&
-                filterLopByKhoa(SelectKhoaNamHoc).length > 0 ? (
+                  filterLopByKhoa(SelectKhoaNamHoc).length > 0 ? (
                   filterLopByKhoa(SelectKhoaNamHoc).map((lop, index) => (
                     <MenuItem key={index} value={lop.MALOP}>
                       {lop.MALOP}
