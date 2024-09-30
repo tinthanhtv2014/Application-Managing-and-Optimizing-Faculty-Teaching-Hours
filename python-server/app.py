@@ -38,8 +38,8 @@ def random_forest_predict():
         df_predict = pd.DataFrame(data_auto_phan_cong)
         df_gv = pd.DataFrame(data_gv)
 
-        # Kiểm tra các cột cần thiết (loại bỏ MAHKNK)
-        required_columns = ['MAGV', 'MAMONHOC', 'MALOP']  # Không bao gồm MAHKNK
+        # Kiểm tra các cột cần thiết
+        required_columns = ['MAGV', 'MAMONHOC']
         for col in required_columns:
             if col not in df_train.columns:
                 return jsonify({
@@ -49,32 +49,28 @@ def random_forest_predict():
                 }), 400
 
         # Xử lý dữ liệu huấn luyện
-        X_train = df_train[['MAMONHOC', 'MALOP']]
+        X_train = df_train[['MAMONHOC']]
         y_train = df_train['MAGV']
 
         # Xử lý dữ liệu dự đoán
-        X_predict = df_predict[['MAMONHOC', 'MALOP']]
+        X_predict = df_predict[['MAMONHOC']]
 
         # Encode các biến phân loại
-        le_MALOP = LabelEncoder()
         le_MAMONHOC = LabelEncoder()
         le_MAGV = LabelEncoder()
 
         # Fit và transform trên dữ liệu huấn luyện
-        X_train['MAMONHOC'] = le_MAMONHOC.fit_transform(X_train['MAMONHOC'])
-        X_train['MALOP'] = le_MALOP.fit_transform(X_train['MALOP'])
+        X_train.loc[:, 'MAMONHOC'] = le_MAMONHOC.fit_transform(X_train['MAMONHOC'])
         y_train_encoded = le_MAGV.fit_transform(y_train)
 
+        # Kiểm tra các giá trị chưa thấy trong X_predict
+        unseen_mamonhoc = set(X_predict['MAMONHOC']) - set(le_MAMONHOC.classes_)
+        if unseen_mamonhoc:
+            print("Có giá trị MAMONHOC chưa thấy:", unseen_mamonhoc)
+            # Có thể quyết định xử lý tại đây
+
         # Transform dữ liệu dự đoán
-        try:
-            X_predict['MAMONHOC'] = le_MAMONHOC.transform(X_predict['MAMONHOC'])
-            X_predict['MALOP'] = le_MALOP.transform(X_predict['MALOP'])
-        except ValueError as e:
-            return jsonify({
-                "EM": "Dữ liệu dự đoán chứa giá trị không hợp lệ: " + str(e),
-                "EC": -1,
-                "DT": []
-            }), 400
+        X_predict.loc[:, 'MAMONHOC'] = le_MAMONHOC.transform(X_predict['MAMONHOC'])
 
         # Xây dựng mô hình Random Forest
         clf = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -84,7 +80,7 @@ def random_forest_predict():
         y_pred_encoded = clf.predict(X_predict)
         y_pred = le_MAGV.inverse_transform(y_pred_encoded)
 
-        # Đảm bảo rằng MAGV được gán có trong data_gv
+        # Lấy danh sách MAGV hợp lệ từ data_gv
         valid_magv = set(df_gv['MAGV'].unique())
         y_pred_filtered = [magv if magv in valid_magv else None for magv in y_pred]
 

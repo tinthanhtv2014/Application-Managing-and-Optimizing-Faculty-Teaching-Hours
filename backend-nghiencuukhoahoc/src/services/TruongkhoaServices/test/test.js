@@ -788,7 +788,7 @@ const Sevicel_AutoPhanCong_Test = async (dataAutoPhanCong) => {
             `);
       // console.log(`dataAutoPhanCong cuối:`, dataAutoPhanCong.data[i]);
     }
-
+    console.log(`dataAutoPhanCong cuối:`, dataAutoPhanCong);
     return {
       EM: "Đã nhận",
       EC: 1,
