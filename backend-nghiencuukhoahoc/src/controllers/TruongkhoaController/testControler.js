@@ -130,8 +130,10 @@ const PhanCongControllerTest = async (req, res) => {
 
 const Training_RandomForestControllerTest = async (req, res) => {
   try {
-    console.log("Chạy Training_RandomForestControllerTest")
-    let results = await Sevicel_Training_RandomForest_Python();
+    // console.log("Chạy Training_RandomForestControllerTest")
+    let data = req.body;
+    let HOCKINIENKHOA = req.body.HOCKINIENKHOA;
+    let results = await Sevicel_Training_RandomForest_Python(data, HOCKINIENKHOA);
 
     return res.status(200).json({
       EM: results.EM,

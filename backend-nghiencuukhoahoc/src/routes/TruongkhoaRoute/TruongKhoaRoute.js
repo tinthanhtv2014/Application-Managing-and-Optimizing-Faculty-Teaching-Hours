@@ -32,7 +32,10 @@ const TruongKhoaRoute = (app) => {
     timkiem_email_taikhoan_ngoaitruongController
   );
   router.post("/test/tao/excel", checkUserJWT, CoTyLeExcelController); // Chạy CSDL bằng excel
-  router.post("/test/phancong", checkUserJWT, PhanCongControllerTest);
+  // router.post("/test/phancong", checkUserJWT, PhanCongControllerTest);
+  router.post("/test/phancong", checkUserJWT, Training_RandomForestControllerTest);
+
+
   router.post("/test/python", checkUserJWT, Training_RandomForestControllerTest);
 
   router.get("/test/dudoan", checkUserJWT, GOI_Y_SERVER);

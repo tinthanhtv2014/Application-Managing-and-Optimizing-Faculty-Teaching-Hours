@@ -223,7 +223,7 @@ const select_lophoc_monhoc = async (MALOP, SOHOCKI, MAHKNK, TEN_NAM_HOC) => {
         `select MANAMHOC from namhoc where TENNAMHOC =?`,
         [TEN_NAM_HOC]
       );
-      console.log("results_MANAMHOC", results_MANAMHOC);
+      // console.log("results_MANAMHOC", results_MANAMHOC);
       if (results_MANAMHOC.length === 0) {
         return {
           EM: "Xem thông tin môn học theo lớp thành công, nhưng bị lỗi năm học",
