@@ -219,8 +219,8 @@ const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong) => {
         } else {
             console.error("Lỗi từ Python:", response.data.EM);
             return {
-                EM: response.data.EM,
-                EC: response.data.EC,
+                EM: "Đã xảy ra lỗi khi phân công giảng viên tự động",
+                EC: -1,
                 DT: data_auto_phan_cong,
             };
         }
