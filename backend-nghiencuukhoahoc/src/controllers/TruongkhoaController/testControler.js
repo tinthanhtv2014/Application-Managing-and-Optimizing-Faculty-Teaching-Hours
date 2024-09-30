@@ -132,8 +132,7 @@ const Training_RandomForestControllerTest = async (req, res) => {
   try {
     // console.log("Chạy Training_RandomForestControllerTest")
     let data = req.body;
-    let HOCKINIENKHOA = req.body.HOCKINIENKHOA;
-    let results = await Sevicel_Training_RandomForest_Python(data, HOCKINIENKHOA);
+    let results = await Sevicel_Training_RandomForest_Python(data);
 
     return res.status(200).json({
       EM: results.EM,

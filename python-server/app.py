@@ -38,8 +38,8 @@ def random_forest_predict():
         df_predict = pd.DataFrame(data_auto_phan_cong)
         df_gv = pd.DataFrame(data_gv)
 
-        # Kiểm tra các cột cần thiết
-        required_columns = ['MAGV', 'MAHKNK', 'MAMONHOC', 'MALOP']
+        # Kiểm tra các cột cần thiết (loại bỏ MAHKNK)
+        required_columns = ['MAGV', 'MAMONHOC', 'MALOP']  # Không bao gồm MAHKNK
         for col in required_columns:
             if col not in df_train.columns:
                 return jsonify({
@@ -49,31 +49,32 @@ def random_forest_predict():
                 }), 400
 
         # Xử lý dữ liệu huấn luyện
-        X_train = df_train[['MAHKNK', 'MAMONHOC', 'MALOP']]
+        X_train = df_train[['MAMONHOC', 'MALOP']]
         y_train = df_train['MAGV']
 
         # Xử lý dữ liệu dự đoán
-        X_predict = df_predict[['MAHKNK', 'MAMONHOC', 'MALOP']]
+        X_predict = df_predict[['MAMONHOC', 'MALOP']]
 
         # Encode các biến phân loại
-        # Sử dụng LabelEncoder cho các biến phân loại
         le_MALOP = LabelEncoder()
-        le_MAHKNK = LabelEncoder()
         le_MAMONHOC = LabelEncoder()
         le_MAGV = LabelEncoder()
 
         # Fit và transform trên dữ liệu huấn luyện
-        X_train['MAHKNK'] = le_MAHKNK.fit_transform(X_train['MAHKNK'])
         X_train['MAMONHOC'] = le_MAMONHOC.fit_transform(X_train['MAMONHOC'])
         X_train['MALOP'] = le_MALOP.fit_transform(X_train['MALOP'])
+        y_train_encoded = le_MAGV.fit_transform(y_train)
 
         # Transform dữ liệu dự đoán
-        X_predict['MAHKNK'] = le_MAHKNK.transform(X_predict['MAHKNK'])
-        X_predict['MAMONHOC'] = le_MAMONHOC.transform(X_predict['MAMONHOC'])
-        X_predict['MALOP'] = le_MALOP.transform(X_predict['MALOP'])
-
-        # Encode target
-        y_train_encoded = le_MAGV.fit_transform(y_train)
+        try:
+            X_predict['MAMONHOC'] = le_MAMONHOC.transform(X_predict['MAMONHOC'])
+            X_predict['MALOP'] = le_MALOP.transform(X_predict['MALOP'])
+        except ValueError as e:
+            return jsonify({
+                "EM": "Dữ liệu dự đoán chứa giá trị không hợp lệ: " + str(e),
+                "EC": -1,
+                "DT": []
+            }), 400
 
         # Xây dựng mô hình Random Forest
         clf = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -93,7 +94,6 @@ def random_forest_predict():
         # Xử lý các trường hợp không hợp lệ (MAGV không trong data_gv)
         for index, row in df_predict.iterrows():
             if row['MAGV'] is None:
-                # Bạn có thể xử lý theo cách khác, ở đây tôi sẽ gán MAGV ngẫu nhiên từ data_gv
                 df_predict.at[index, 'MAGV'] = df_gv.sample(1)['MAGV'].values[0]
 
         # Chuyển DataFrame dự đoán thành danh sách dict

@@ -44,7 +44,6 @@ const Lay_data_training = async () => {
         let [datat_training] = await pool.execute(
             `SELECT 
             GV.MAGV, 
-            HKNK.MAHKNK,
             MH.MAMONHOC, 
             L.MALOP
             FROM bangphancong BPC
@@ -77,10 +76,10 @@ const Lay_data_training = async () => {
 const Lay_data_GV = async (dataAutoPhanCong) => {
     try {
         let [data_GV] = await pool.execute(
-            `SELECT BM.MABOMON, GV.MAGV, GV.TENGV
+            `SELECT GV.MAGV
             FROM bomon BM
             JOIN giangvien GV ON GV.MABOMON = BM.MABOMON
-            WHERE BM.MABOMON = 16;`,
+            WHERE BM.MABOMON = ?;`,
             [dataAutoPhanCong.data[0].MABOMON]
         );
 
@@ -102,19 +101,31 @@ const Lay_data_GV = async (dataAutoPhanCong) => {
  * @param {Array} data_gv - Danh sách các MAGV hợp lệ
  * @returns {Object} Kết quả dự đoán
  */
-const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong, HOCKINIENKHOA) => {
+const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong) => {
     try {
         let data_training = await Lay_data_training();
-        let data_gv = await Lay_data_GV(data_auto_phan_cong)
-        // console.log("datat_training: ", data_training);
-        console.log("data_auto_phan_cong: ", data_auto_phan_cong);
+        let data_gv = await Lay_data_GV(data_auto_phan_cong);
+        console.log("datat_training: ", data_training);
+
+        // Khởi tạo mảng data_phan_cong
+        let data_phan_cong = [];
+
+        // Lọc lấy MALOP và MAMONHOC từ data_auto_phan_cong
+        for (let i = 0; i < data_auto_phan_cong.data.length; i++) {
+            data_phan_cong.push({
+                MALOP: data_auto_phan_cong.data[i].MALOP,
+                MAMONHOC: data_auto_phan_cong.data[i].MAMONHOC
+            });
+        }
+
+        console.log("data_phan_cong: ", data_phan_cong);
         console.log("data_gv: ", data_gv);
 
         console.log("Gọi API Random Forest của Python...");
 
         const response = await axios.post('http://localhost:5000/api/randomforest', {
             data_training: data_training,
-            data_auto_phan_cong: data_auto_phan_cong,
+            data_auto_phan_cong: data_phan_cong,
             data_gv: data_gv
         }, {
             headers: {
@@ -148,7 +159,6 @@ const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong, HOCKINI
         };
     }
 };
-
 
 module.exports = {
     Sevicel_DongBoNamHoc_HocKy,
