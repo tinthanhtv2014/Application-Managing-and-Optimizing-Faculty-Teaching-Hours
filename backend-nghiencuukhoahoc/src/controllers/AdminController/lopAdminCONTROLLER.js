@@ -55,13 +55,15 @@ const creatNEWLopcontroller = async (req, res) => {
 const createLopcontrollerExcel = async (req, res) => {
   try {
     const dataexcel = req.body;
-    if (!dataexcel.TENBOMON || !dataexcel.MALOP || !dataexcel.TENCHUONGTRINH) {
-      return res.status(400).json({
-        EM: " mã lớp hoặc chương trình hoặc tên bộ môn bị rỗng",
-        EC: 400,
-        DT: null,
-      });
-    }
+    console.log(dataexcel);
+    // if (!dataexcel.TENBOMON || !dataexcel.MALOP || !dataexcel.TENCHUONGTRINH) {
+    //   return res.status(400).json({
+    //     EM: " mã lớp hoặc chương trình hoặc tên bộ môn bị rỗng",
+    //     EC: 400,
+    //     DT: null,
+    //   });
+    // }
+    console.log("check");
     let results = await createLopExcel(dataexcel);
     return res.status(200).json({
       EM: results.EM,

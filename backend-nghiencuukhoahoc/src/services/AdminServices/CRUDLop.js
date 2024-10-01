@@ -144,6 +144,8 @@ const deleteLop = async (MALOP) => {
 
 const createLopExcel = async (dataLopExcelArray) => {
   try {
+    console.log("cjecl");
+
     let results = [];
     // Kiểm tra thông tin trong file excel
     for (var i = 0; i < dataLopExcelArray.length; i++) {
@@ -216,7 +218,7 @@ const createLopExcel = async (dataLopExcelArray) => {
           dataLopExcelArray[i].SISO,
         ]
       );
-
+      console.log("cjecl");
       results.push({
         EM: `Tạo lớp hàng loạt thành công`,
         EC: 0,
@@ -227,7 +229,7 @@ const createLopExcel = async (dataLopExcelArray) => {
     let [results1, fields1] = await pool.execute(
       `select bomon.TENBOMON,ctdt.*,lop.* from lop,chuongtrinhdaotao as ctdt,bomon where bomon.MABOMON = ctdt.MABOMON and ctdt.MACHUONGTRINH = lop.MACHUONGTRINH`
     );
-
+    console.log(results1);
     return {
       EM: "Tất cả lớp đã được tạo",
       EC: 1,

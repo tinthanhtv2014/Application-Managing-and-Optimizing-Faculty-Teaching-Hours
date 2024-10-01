@@ -107,8 +107,8 @@ const Sevicel_Training_RandomForest_Python = async (data_auto_phan_cong) => {
   try {
     let data_training = await Lay_data_training();
     let data_gv = await Lay_data_GV(data_auto_phan_cong);
-    console.log("datat_training: ", data_gv);
-    console.log("data_auto_phan_cong: ", data_training);
+    // console.log("datat_training: ", data_gv);
+    // console.log("data_auto_phan_cong: ", data_training);
 
     // Khởi tạo mảng data_phan_cong
     let data_phan_cong = [];

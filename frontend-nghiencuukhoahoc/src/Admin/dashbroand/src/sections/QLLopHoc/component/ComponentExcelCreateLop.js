@@ -28,6 +28,7 @@ const ComponentExcelLop = () => {
   const handleAddUser = async () => {
     if (data.length > 0) {
       try {
+        console.log(data);
         const response = await CookiesAxios.post(
           `${process.env.REACT_APP_URL_SERVER}/api/v1/admin/monhoc/lop/tao/excel`,
           data,
