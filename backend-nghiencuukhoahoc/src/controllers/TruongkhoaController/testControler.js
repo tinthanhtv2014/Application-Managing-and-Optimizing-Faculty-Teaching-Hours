@@ -133,6 +133,7 @@ const Training_RandomForestControllerTest = async (req, res) => {
     // console.log("Chạy Training_RandomForestControllerTest")
     let data = req.body;
     let results = await Sevicel_Training_RandomForest_Python(data);
+    results.EC !== 1 ? results = await Sevicel_AutoPhanCong_Test(data) : results
 
     return res.status(200).json({
       EM: results.EM,

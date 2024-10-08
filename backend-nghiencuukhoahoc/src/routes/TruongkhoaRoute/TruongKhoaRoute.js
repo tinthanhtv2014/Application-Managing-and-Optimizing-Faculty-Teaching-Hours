@@ -36,7 +36,7 @@ const TruongKhoaRoute = (app) => {
   router.post("/test/phancong", checkUserJWT, Training_RandomForestControllerTest);
 
 
-  router.post("/test/python", checkUserJWT, Training_RandomForestControllerTest);
+  // router.post("/test/python", checkUserJWT, Training_RandomForestControllerTest);
 
   router.get("/test/dudoan", checkUserJWT, GOI_Y_SERVER);
   router.post("/test/dudoan/rf", checkUserJWT, GOI_Y_SERVER_rf);
