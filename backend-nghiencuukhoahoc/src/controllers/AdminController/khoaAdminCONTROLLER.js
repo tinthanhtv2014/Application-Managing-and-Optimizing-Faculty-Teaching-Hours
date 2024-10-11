@@ -221,7 +221,7 @@ const createBOMON = async (req, res) => {
     const tenbomon = req.body.TENBOMON;
     // console.log(makhoa);
     // console.log(tenbomon);
-    if (!MAKHOA || !tenbomon) {
+    if (!makhoa || !tenbomon) {
       return res.status(400).json({
         EM: " MAKHOA ,tenbomon bị rỗng",
         EC: 400,
